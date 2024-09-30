@@ -23,6 +23,7 @@ logs
 .env.*
 !.env.example
 
+package-lock.json
 
 # Todo
 todo.md

@@ -2,6 +2,15 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+  runtimeConfig: {
+    mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
+    mailtrapSender: process.env.MAILTRAP_SENDER,
+    mailtrapPassword: process.env.MAILTRAP_PASSWORD,
+    mailtrapTemplateUuidResetPassword:
+      process.env.MAILTRAP_TEMPLATE_UUID_RESET_PASSWORD,
+    mailtrapTemplateUuidVerifyEmail:
+      process.env.MAILTRAP_TEMPLATE_UUID_VERIFY_EMAIL,
+  },
   modules: [
     "@nuxtjs/tailwindcss",
     "@nuxt/icon",

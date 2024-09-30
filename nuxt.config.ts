@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "shadcn-nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "shadcn-nuxt", "@nuxt/fonts"],
   css: ["~/assets/css/main.css"],
   icon: {
     serverBundle: {
@@ -22,5 +22,13 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: "./components/ui",
+  },
+  fonts: {
+    families: [
+      {
+        name: "Inter",
+        provider: "google",
+      },
+    ],
   },
 });

@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/gg": "^1.2.0",
+    "@iconify-json/material-symbols": "^1.2.2",
+    "@iconify-json/mdi": "^1.2.0",
     "@nuxt/fonts": "^0.9.2",
     "@nuxt/icon": "^1.5.2",
     "@pinia/nuxt": "^0.5.5",

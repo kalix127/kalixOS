@@ -1,6 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
+  app: {
+    head: {
+      bodyAttrs: {
+        class: "dark",
+      },
+    },
+  },
   devtools: { enabled: true },
   runtimeConfig: {
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
@@ -42,6 +49,10 @@ export default defineNuxtConfig({
     families: [
       {
         name: "Inter",
+        provider: "google",
+      },
+      {
+        name: "Cantarell",
         provider: "google",
       },
     ],

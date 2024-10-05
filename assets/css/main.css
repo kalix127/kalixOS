@@ -4,48 +4,66 @@
 
 @layer base {
   :root {
+    /* Light theme variables */
     --background: #ffffff;
     --foreground: RGB(0 0 0 / 80%);
+
     --card: #ffffff;
     --card-foreground: RGB(0 0 0 / 80%);
+
     --popover: #ffffff;
     --popover-foreground: RGB(0 0 0 / 80%);
-    --primary: #2a9d8f;
-    --primary-foreground: RGB(0 0 0 / 98%);
+
+    --primary: #3584e4; /* Updated to blue */
+    --primary-foreground: #ffffff; /* Foreground for better contrast on blue */
+
     --secondary: #ebebeb;
     --secondary-foreground: RGB(0 0 0 / 80%);
+
     --muted: #ebebeb;
     --muted-foreground: RGB(0 0 0 / 46%);
-    --accent: #2a9d8f;
+
+    --accent: #3584e4; /* Also updated to match primary */
     --accent-foreground: RGB(0 0 0 / 80%);
+
     --destructive: #e63946;
     --destructive-foreground: #ffffff;
+
     --border: RGB(0 0 0 / 7%);
     --input: #ffffff;
-    --ring: #2a9d8f;
+    --ring: #3584e4; /* Updated to blue to match primary */
     --radius: 0.5rem;
   }
 
   .dark {
+    /* Dark theme variables */
     --background: #1e1e1e;
     --foreground: #ffffff;
+
     --card: rgba(255, 255, 255, 0.08);
     --card-foreground: #ffffff;
+
     --popover: #383838;
     --popover-foreground: #ffffff;
-    --primary: #319795;
-    --primary-foreground: #ffffff;
+
+    --primary: #3584e4; /* Updated to blue */
+    --primary-foreground: #ffffff; /* Foreground for contrast */
+
     --secondary: #303030;
     --secondary-foreground: #ffffff;
+
     --muted: #303030;
     --muted-foreground: RGB(240 5% 64.9%);
-    --accent: #319795;
+
+    --accent: #3584e4; /* Updated to blue */
     --accent-foreground: #ffffff;
+
     --destructive: #c53030;
     --destructive-foreground: #ffffff;
+
     --border: RGB(0 0 0 / 36%);
     --input: #303030;
-    --ring: #319795;
+    --ring: #3584e4; /* Updated to blue */
   }
 }
 

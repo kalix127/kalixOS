@@ -20,6 +20,8 @@
     "@nuxt/icon": "^1.5.2",
     "@pinia/nuxt": "^0.5.5",
     "@vueuse/core": "^11.1.0",
+    "@vueuse/nuxt": "^11.1.0",
+    "@vee-validate/zod": "^4.13.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.446.0",
@@ -30,9 +32,11 @@
     "shadcn-nuxt": "^0.10.4",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "vee-validate": "^4.13.2",
     "vue": "latest",
     "vue-router": "latest",
-    "vue-sonner": "^1.2.1"
+    "vue-sonner": "^1.2.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",

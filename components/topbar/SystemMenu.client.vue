@@ -155,11 +155,11 @@ const bottomItems = computed(() => [
     <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]">
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
-        class="topbar-menu-transition flex flex-col gap-4 p-4"
+        class="topbar-menu-transition flex flex-1 flex-col p-4"
       >
         <!-- Top items -->
         <div
-          class="topbar-menu-transition flex justify-between gap-4"
+          class="topbar-menu-transition mb-2 flex justify-between gap-4"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <!-- Battery item -->
@@ -193,7 +193,7 @@ const bottomItems = computed(() => [
 
         <!-- Volume slider -->
         <div
-          class="topbar-menu-transition flex min-h-8 items-center gap-4"
+          class="topbar-menu-transition mb-4 mt-2 flex min-h-8 items-center gap-4"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <Icon
@@ -222,7 +222,7 @@ const bottomItems = computed(() => [
 
         <!-- Wifi, Bluetooth, Dark theme, Airplane mode buttons -->
         <div
-          class="topbar-menu-transition grid grid-cols-1 gap-2 sm:grid-cols-2"
+          class="topbar-menu-transition mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <div
@@ -275,7 +275,6 @@ const bottomItems = computed(() => [
 
         <!-- Wifi, Wired and bluetooth menu -->
         <TopbarMenuWifi />
-        
       </div>
     </PopoverContent>
   </Popover>

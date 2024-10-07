@@ -189,7 +189,7 @@ const bottomItems = computed(() => [
         </div>
 
         <!-- TODO: Fix the gap created on those menus -->
-        <TopbarActionsPowerOff />
+        <TopbarMenuPowerOff />
 
         <!-- Volume slider -->
         <div
@@ -274,7 +274,8 @@ const bottomItems = computed(() => [
         </div>
 
         <!-- Wifi, Wired and bluetooth menu -->
-        <TopbarActionsWifi />
+        <TopbarMenuWifi />
+        
       </div>
     </PopoverContent>
   </Popover>

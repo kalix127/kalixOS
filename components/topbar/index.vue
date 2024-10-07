@@ -15,7 +15,7 @@ const route = useRoute();
 
     <!-- Main menu -->
     <div class="flex w-1/3 items-center justify-end">
-      <TopbarActions />
+      <TopbarSystemMenu />
     </div>
   </header>
 </template>

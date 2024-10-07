@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import type { WifiNetwork } from "@/types";
+import { generateRandomWifiDelays } from "@/lib/utils";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",

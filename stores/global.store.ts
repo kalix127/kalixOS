@@ -76,6 +76,13 @@ export const useGlobalStore = defineStore({
         state.isWiredMenuOpen
       );
     },
+    getTopbarMenuOpen(state) {
+      if (state.isPowerOffMenuOpen) return "poweroff";
+      if (state.isWifiMenuOpen) return "wifi";
+      if (state.isBluetoothMenuOpen) return "bluetooth";
+      if (state.isWiredMenuOpen) return "wired";
+      return "";
+    },
   },
 });
 

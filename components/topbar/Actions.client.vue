@@ -12,7 +12,12 @@ const {
   isAirplaneModeEnabled,
   isPowerOffMenuOpen,
   isAnyTopbarMenuOpen,
+  isWifiMenuOpen,
+  getTopbarMenuOpen,
+  connectedWifiNetwork,
 } = storeToRefs(globalStore);
+
+const { toggleWifi } = globalStore;
 
 const topItems = [
   {
@@ -40,22 +45,10 @@ const topItems = [
 
 const bottomItems = computed(() => [
   {
-    model: isWifiEnabled,
-    name: "Wi-Fi",
-    icon: isWifiEnabled.value
-      ? "material-symbols:signal-wifi-4-bar"
-      : "material-symbols:signal-wifi-off",
-    handler: () => {
-      isWifiEnabled.value = !isWifiEnabled.value;
-      isAirplaneModeEnabled.value = false; // disable airplane mode when wifi is toggled
-    },
-    get isActive() {
-      return isWifiEnabled.value;
-    },
-  },
-  {
     model: isWiredEnabled,
+    menu: true,
     name: "Wired",
+    label: "wired",
     icon: "lucide:ethernet-port",
     handler: () => {
       isWiredEnabled.value = !isWiredEnabled.value;
@@ -66,8 +59,30 @@ const bottomItems = computed(() => [
     },
   },
   {
+    model: isWifiEnabled,
+    menu: true,
+    name: "Wi-Fi",
+    label: "wifi",
+    icon: isWifiEnabled.value
+      ? connectedWifiNetwork.value
+        ? `ic:baseline-signal-wifi-${connectedWifiNetwork.value?.signal}-bar`
+        : "ic:baseline-wifi-find"
+      : "ic:baseline-signal-wifi-connected-no-internet-4",
+    handler: () => {
+      toggleWifi();
+    },
+    menuHandler: () => {
+      isWifiMenuOpen.value = !isWifiMenuOpen.value;
+    },
+    get isActive() {
+      return isWifiEnabled.value;
+    },
+  },
+  {
     model: isBluetoothEnabled,
+    menu: true,
     name: "Bluetooth",
+    label: "bluetooth",
     icon: isBluetoothEnabled.value
       ? "material-symbols:bluetooth"
       : "material-symbols:bluetooth-disabled",
@@ -103,8 +118,8 @@ const bottomItems = computed(() => [
         class="flex items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
       >
         <Icon
-          v-show="isWifiEnabled"
-          name="material-symbols:signal-wifi-4-bar"
+          v-show="connectedWifiNetwork"
+          :name="`ic:baseline-signal-wifi-${connectedWifiNetwork?.signal}-bar`"
           size="18"
         />
         <Icon v-show="isWiredEnabled" name="lucide:ethernet-port" size="18" />
@@ -137,7 +152,7 @@ const bottomItems = computed(() => [
       </div>
     </PopoverTrigger>
 
-    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 xs:w-[360px]">
+    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]">
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
         class="topbar-menu-transition flex flex-col gap-4 p-4"
@@ -148,14 +163,14 @@ const bottomItems = computed(() => [
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <!-- Battery item -->
-          <Button
+          <button
             variant="ghost"
             class="flex select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
             :disabled="isAnyTopbarMenuOpen"
           >
             <Icon name="mdi:battery-charging" size="20" />
             <span class="text-sm font-semibold">100%</span>
-          </Button>
+          </button>
 
           <!-- Lock, settings and poweroff buttons -->
           <div class="flex gap-4">
@@ -207,24 +222,59 @@ const bottomItems = computed(() => [
 
         <!-- Wifi, Bluetooth, Dark theme, Airplane mode buttons -->
         <div
-          class="topbar-menu-transition grid grid-cols-1 gap-2 xs:grid-cols-2"
+          class="topbar-menu-transition grid grid-cols-1 gap-2 sm:grid-cols-2"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
-          <Button
-            variant="ghost"
-            class="flex min-h-12 cursor-pointer select-none items-center justify-start gap-2.5 rounded-full p-2 px-4 text-sm transition-all duration-500 ease-in-out"
+          <div
             v-for="item in bottomItems"
             :key="item.name"
-            :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
-            :disabled="isAnyTopbarMenuOpen"
-            @click="item.handler"
+            class="flex max-h-12 min-h-12 items-center"
           >
-            <Icon :name="item.icon" size="20" />
-            <span class="font-semibold">
-              {{ item.name }}
-            </span>
-          </Button>
+            <button
+              class="flex h-full w-full items-center justify-start gap-2.5 rounded-l-full p-2 px-4 transition-all duration-500 ease-in-out"
+              :class="[
+                item.isActive ? 'bg-primary' : 'bg-secondary',
+                !item.menu ? 'rounded-full' : '',
+              ]"
+              @click="item.handler"
+            >
+              <Icon :name="item.icon" size="18" />
+
+              <!-- Only for the Wifi Button -->
+              <div
+                class="flex flex-col items-start"
+                v-if="item.label === 'wifi'"
+              >
+                <span class="text-sm font-bold">
+                  {{ item.name }}
+                </span>
+                <span
+                  v-if="connectedWifiNetwork"
+                  class="w-40 truncate text-start text-xs sm:w-20"
+                >
+                  {{ connectedWifiNetwork.name }}
+                </span>
+              </div>
+
+              <span v-else class="text-nowrap text-sm font-bold">
+                {{ item.name }}
+              </span>
+            </button>
+
+            <button
+              v-if="item.menu"
+              :disabled="getTopbarMenuOpen === item.label || !item.model.value"
+              class="grid h-full place-content-center rounded-r-full border-l border-white/50 p-2 py-2 transition-all duration-500 ease-in-out"
+              :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
+              @click="item.menuHandler"
+            >
+              <Icon name="ion:arrow-forward-outline" size="18" />
+            </button>
+          </div>
         </div>
+
+        <!-- Wifi, Wired and bluetooth menu -->
+        <TopbarActionsWifi />
       </div>
     </PopoverContent>
   </Popover>

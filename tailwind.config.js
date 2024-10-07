@@ -49,6 +49,7 @@ module.exports = {
         accent: {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
+          light: "var(--accent-light)",
         },
         popover: {
           DEFAULT: "var(--popover)",
@@ -84,10 +85,10 @@ module.exports = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "collapsible-down": "collapsible-down 0.2s ease-in-out",
-        "collapsible-up": "collapsible-up 0.2s ease-in-out",
+        "accordion-down": "accordion-down 0.3s ease-out",
+        "accordion-up": "accordion-up 0.3s ease-out",
+        "collapsible-down": "collapsible-down 0.3s ease-in-out",
+        "collapsible-up": "collapsible-up 0.3s ease-in-out",
       },
     },
   },

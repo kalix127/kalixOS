@@ -102,7 +102,6 @@ const bottomItems = computed(() => [
     handler: () => {
       isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;
       isWifiEnabled.value = false; // disable wifi when airplane mode is toggled
-      isWiredEnabled.value = false; // disable wired when airplane mode is toggled
     },
     get isActive() {
       return isAirplaneModeEnabled.value;

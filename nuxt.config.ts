@@ -28,7 +28,14 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   icon: {
     serverBundle: {
-      collections: ["material-symbols", "lucide", "ic", "mdi", "ion", "svg-spinners"],
+      collections: [
+        "material-symbols",
+        "lucide",
+        "ic",
+        "mdi",
+        "ion",
+        "svg-spinners",
+      ],
     },
     clientBundle: {
       scan: true,
@@ -52,7 +59,7 @@ export default defineNuxtConfig({
         provider: "google",
       },
       {
-        name: "Cantarell",
+        name: "Noto Sans",
         provider: "google",
       },
     ],

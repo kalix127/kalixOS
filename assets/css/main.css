@@ -74,6 +74,6 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Cantarell", sans-serif;
+    font-family: "Noto Sans Medium", sans-serif;
   }
 }

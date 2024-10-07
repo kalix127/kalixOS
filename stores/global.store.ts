@@ -16,6 +16,12 @@ export const useGlobalStore = defineStore({
     isBluetoothMenuOpen: false,
     isWiredMenuOpen: false,
 
+    // Wifi
+    connectedWifiNetwork: null,
+    availableWifiNetworks: [],
+    isConnectingToWifi: false,
+    isSearchingWifiNetworks: false,
+
     // Auth
     isAuthenticated: false,
   }),
@@ -46,6 +52,12 @@ interface GlobalStore {
   isWifiMenuOpen: boolean;
   isBluetoothMenuOpen: boolean;
   isWiredMenuOpen: boolean;
+
+  // Wifi
+  connectedWifiNetwork: WifiNetwork | null;
+  availableWifiNetworks: WifiNetwork[];
+  isConnectingToWifi: boolean;
+  isSearchingWifiNetworks: boolean;
 
   // Auth
   isAuthenticated: boolean;

@@ -1,0 +1,245 @@
+<script lang="ts" setup>
+import { useGlobalStore } from "~/stores/global.store";
+import { storeToRefs } from "pinia";
+
+const globalStore = useGlobalStore();
+
+const {
+  volume,
+  isWifiEnabled,
+  isWiredEnabled,
+  isBluetoothEnabled,
+  isAirplaneModeEnabled,
+  isPowerOffMenuOpen,
+  isAnyTopbarMenuOpen,
+} = storeToRefs(globalStore);
+
+const topItems = [
+  {
+    name: "Settings",
+    icon: "material-symbols:settings-rounded",
+    handler: () => {
+      console.log("Settings");
+    },
+  },
+  {
+    name: "Lock",
+    icon: "material-symbols:lock",
+    handler: () => {
+      console.log("Lock");
+    },
+  },
+  {
+    name: "Poweroff",
+    icon: "material-symbols:power-settings-new-rounded",
+    handler: () => {
+      isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;
+    },
+  },
+];
+
+const bottomItems = computed(() => [
+  {
+    model: isWifiEnabled,
+    name: "Wi-Fi",
+    icon: isWifiEnabled.value
+      ? "material-symbols:signal-wifi-4-bar"
+      : "material-symbols:signal-wifi-off",
+    handler: () => {
+      isWifiEnabled.value = !isWifiEnabled.value;
+      isAirplaneModeEnabled.value = false; // disable airplane mode when wifi is toggled
+    },
+    get isActive() {
+      return isWifiEnabled.value;
+    },
+  },
+  {
+    model: isWiredEnabled,
+    name: "Wired",
+    icon: "lucide:ethernet-port",
+    handler: () => {
+      isWiredEnabled.value = !isWiredEnabled.value;
+      isAirplaneModeEnabled.value = false; // disable airplane mode when wired is toggled
+    },
+    get isActive() {
+      return isWiredEnabled.value;
+    },
+  },
+  {
+    model: isBluetoothEnabled,
+    name: "Bluetooth",
+    icon: isBluetoothEnabled.value
+      ? "material-symbols:bluetooth"
+      : "material-symbols:bluetooth-disabled",
+    handler: () => {
+      isBluetoothEnabled.value = !isBluetoothEnabled.value;
+    },
+    get isActive() {
+      return isBluetoothEnabled.value;
+    },
+  },
+  {
+    model: isAirplaneModeEnabled.value,
+    name: "Airplane mode",
+    icon: isAirplaneModeEnabled.value
+      ? "ic:baseline-airplanemode-active"
+      : "ic:baseline-airplanemode-inactive",
+    handler: () => {
+      isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;
+      isWifiEnabled.value = false; // disable wifi when airplane mode is toggled
+      isWiredEnabled.value = false; // disable wired when airplane mode is toggled
+    },
+    get isActive() {
+      return isAirplaneModeEnabled.value;
+    },
+  },
+]);
+</script>
+
+<template>
+  <Popover>
+    <PopoverTrigger>
+      <div
+        class="flex items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
+      >
+        <Icon
+          v-show="isWifiEnabled"
+          name="material-symbols:signal-wifi-4-bar"
+          size="18"
+        />
+        <Icon v-show="isWiredEnabled" name="lucide:ethernet-port" size="18" />
+        <Icon
+          v-show="isBluetoothEnabled"
+          name="material-symbols:bluetooth"
+          size="18"
+        />
+        <Icon
+          v-show="isAirplaneModeEnabled"
+          name="ic:baseline-airplanemode-active"
+          size="18"
+        />
+        <Icon
+          v-show="volume[0] > 50"
+          name="material-symbols:volume-up"
+          size="18"
+        />
+        <Icon
+          v-show="volume[0] > 0 && volume[0] <= 50"
+          name="material-symbols:volume-down"
+          size="18"
+        />
+        <Icon
+          v-show="volume[0] === 0"
+          name="material-symbols:volume-off"
+          size="18"
+        />
+        <Icon name="mdi:battery-charging" size="18" />
+      </div>
+    </PopoverTrigger>
+
+    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 xs:w-[360px]">
+      <div
+        :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
+        class="topbar-menu-transition flex flex-col gap-4 p-4"
+      >
+        <!-- Top items -->
+        <div
+          class="topbar-menu-transition flex justify-between gap-4"
+          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+        >
+          <!-- Battery item -->
+          <Button
+            variant="ghost"
+            class="flex select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
+            :disabled="isAnyTopbarMenuOpen"
+          >
+            <Icon name="mdi:battery-charging" size="20" />
+            <span class="text-sm font-semibold">100%</span>
+          </Button>
+
+          <!-- Lock, settings and poweroff buttons -->
+          <div class="flex gap-4">
+            <Button
+              v-for="item in topItems"
+              :key="item.name"
+              :disabled="isAnyTopbarMenuOpen"
+              size="icon"
+              variant="ghost"
+              class="rounded-full bg-secondary"
+              @click="item.handler"
+            >
+              <Icon :name="item.icon" size="18" />
+            </Button>
+          </div>
+        </div>
+
+        <!-- TODO: Fix the gap created on those menus -->
+        <TopbarActionsPowerOff />
+
+        <!-- Volume slider -->
+        <div
+          class="topbar-menu-transition flex min-h-8 items-center gap-4"
+          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+        >
+          <Icon
+            v-show="volume[0] > 50"
+            name="material-symbols:volume-up"
+            size="24"
+          />
+          <Icon
+            v-show="volume[0] > 0 && volume[0] <= 50"
+            name="material-symbols:volume-down"
+            size="24"
+          />
+          <Icon
+            v-show="volume[0] === 0"
+            name="material-symbols:volume-off"
+            size="24"
+          />
+          <Slider
+            v-model="volume"
+            :disabled="isAnyTopbarMenuOpen"
+            :default-value="volume"
+            :max="100"
+            :step="1"
+          />
+        </div>
+
+        <!-- Wifi, Bluetooth, Dark theme, Airplane mode buttons -->
+        <div
+          class="topbar-menu-transition grid grid-cols-1 gap-2 xs:grid-cols-2"
+          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+        >
+          <Button
+            variant="ghost"
+            class="flex min-h-12 cursor-pointer select-none items-center justify-start gap-2.5 rounded-full p-2 px-4 text-sm transition-all duration-500 ease-in-out"
+            v-for="item in bottomItems"
+            :key="item.name"
+            :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
+            :disabled="isAnyTopbarMenuOpen"
+            @click="item.handler"
+          >
+            <Icon :name="item.icon" size="20" />
+            <span class="font-semibold">
+              {{ item.name }}
+            </span>
+          </Button>
+        </div>
+      </div>
+    </PopoverContent>
+  </Popover>
+</template>
+
+<style scoped>
+.bg-secondary {
+  background-color: #464647;
+}
+
+.bg-secondary:hover {
+  background-color: #4e4e4e;
+}
+
+.topbar-menu-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+</style>

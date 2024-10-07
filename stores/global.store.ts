@@ -25,7 +25,48 @@ export const useGlobalStore = defineStore({
     // Auth
     isAuthenticated: false,
   }),
-  actions: {},
+  actions: {
+    toggleWifi() {
+      this.isWifiEnabled = !this.isWifiEnabled;
+      this.availableWifiNetworks = [];
+
+      if (this.isWifiEnabled) {
+        this.isAirplaneModeEnabled = false;
+        this.searchWifiNetworks();
+      } else {
+        // If the Wifi has been disabled, reset the connected network
+        this.connectedWifiNetwork = null;
+      }
+    },
+
+    async searchWifiNetworks() {
+      this.isSearchingWifiNetworks = true;
+      this.availableWifiNetworks = []; // Reset available networks
+      const totalTime = 5000; // 5 seconds in total to add all the networks
+
+      // Generate random delays for each network
+      const randomDelays = generateRandomWifiDelays(
+        fakeNetworks.length,
+        totalTime,
+      );
+
+      for (let i = 0; i < fakeNetworks.length; i++) {
+        if (!this.isWifiEnabled) break;
+        await this.addNetworkWithDelay(fakeNetworks[i], randomDelays[i]);
+      }
+      this.isSearchingWifiNetworks = false;
+    },
+
+    // Helper function to add network after delay
+    addNetworkWithDelay(network: WifiNetwork, delay: number) {
+      return new Promise<void>((resolve) => {
+        setTimeout(() => {
+          this.availableWifiNetworks.push(network);
+          resolve();
+        }, delay);
+      });
+    },
+  },
   getters: {
     isAnyTopbarMenuOpen(state) {
       return (

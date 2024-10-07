@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomWifiDelays } from "@/lib/utils";
+import { defaultNetworks } from "@/constants";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -48,13 +49,13 @@ export const useGlobalStore = defineStore({
 
       // Generate random delays for each network
       const randomDelays = generateRandomWifiDelays(
-        fakeNetworks.length,
+        defaultNetworks.length,
         totalTime,
       );
 
-      for (let i = 0; i < fakeNetworks.length; i++) {
+      for (let i = 0; i < defaultNetworks.length; i++) {
         if (!this.isWifiEnabled) break;
-        await this.addNetworkWithDelay(fakeNetworks[i], randomDelays[i]);
+        await this.addNetworkWithDelay(defaultNetworks[i], randomDelays[i]);
       }
       this.isSearchingWifiNetworks = false;
     },

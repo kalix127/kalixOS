@@ -241,7 +241,11 @@ const bottomItems = computed(() => [
               ]"
               @click="item.handler"
             >
-              <Icon :name="item.icon" size="18" />
+              <Icon
+                :name="item.icon"
+                size="18"
+                :class="[item.isActive ? '' : 'bg-accent-light']"
+              />
 
               <!-- Only for the Wifi Button -->
               <div

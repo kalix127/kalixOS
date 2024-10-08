@@ -14,7 +14,7 @@
     --popover: #ffffff;
     --popover-foreground: rgba(0, 0, 0, 0.8);
 
-    --primary: #3584e4; 
+    --primary: #3584e4;
     --primary-foreground: #ffffff;
 
     --secondary: #ebebeb;
@@ -23,7 +23,7 @@
     --muted: #ebebeb;
     --muted-foreground: rgba(0, 0, 0, 0.46);
 
-    --accent: #3584e4; 
+    --accent: #3584e4;
     --accent-foreground: rgba(0, 0, 0, 0.8);
 
     --destructive: #e63946;
@@ -64,7 +64,7 @@
 
     --border: rgba(0, 0, 0, 0.36);
     --input: #303030;
-    --ring: #3584e4; 
+    --ring: #3584e4;
   }
 }
 
@@ -77,4 +77,16 @@
     @apply bg-background text-foreground;
     font-family: "Noto Sans Medium", sans-serif;
   }
+}
+
+.bg-secondary {
+  background-color: #464647;
+}
+
+.bg-secondary:hover {
+  background-color: #4e4e4e;
+}
+
+.topbar-menu-transition {
+  @apply transition-all duration-300 ease-in-out;
 }

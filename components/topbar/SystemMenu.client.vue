@@ -6,110 +6,12 @@ const globalStore = useGlobalStore();
 
 const {
   volume,
-  isWifiEnabled,
   isWiredEnabled,
   isBluetoothEnabled,
   isAirplaneModeEnabled,
-  isPowerOffMenuOpen,
   isAnyTopbarMenuOpen,
-  isWifiMenuOpen,
-  isWiredMenuOpen,
-  getTopbarMenuOpen,
   connectedWifiNetwork,
 } = storeToRefs(globalStore);
-
-const { toggleWifi } = globalStore;
-
-const topItems = [
-  {
-    name: "Settings",
-    icon: "material-symbols:settings-rounded",
-    handler: () => {
-      console.log("Settings");
-    },
-  },
-  {
-    name: "Lock",
-    icon: "material-symbols:lock",
-    handler: () => {
-      console.log("Lock");
-    },
-  },
-  {
-    name: "Poweroff",
-    icon: "fa6-solid:power-off",
-    handler: () => {
-      isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;
-    },
-  },
-];
-
-const bottomItems = computed(() => [
-  {
-    model: isWiredEnabled,
-    menu: true,
-    name: "Wired",
-    label: "wired",
-    icon: "lucide:ethernet-port",
-    handler: () => {
-      isWiredEnabled.value = !isWiredEnabled.value;
-      isAirplaneModeEnabled.value = false; // disable airplane mode when wired is toggled
-    },
-    menuHandler: () => {
-      isWiredMenuOpen.value = !isWiredMenuOpen.value;
-    },
-    get isActive() {
-      return isWiredEnabled.value;
-    },
-  },
-  {
-    model: isWifiEnabled,
-    menu: true,
-    name: "Wi-Fi",
-    label: "wifi",
-    icon: isWifiEnabled.value
-      ? connectedWifiNetwork.value
-        ? `ic:baseline-signal-wifi-${connectedWifiNetwork.value?.signal}-bar`
-        : "ic:baseline-wifi-find"
-      : "ic:baseline-signal-wifi-connected-no-internet-4",
-    handler: () => {
-      toggleWifi();
-    },
-    menuHandler: () => {
-      isWifiMenuOpen.value = !isWifiMenuOpen.value;
-    },
-    get isActive() {
-      return isWifiEnabled.value;
-    },
-  },
-  {
-    model: isBluetoothEnabled,
-    menu: true,
-    name: "Bluetooth",
-    label: "bluetooth",
-    icon: isBluetoothEnabled.value
-      ? "material-symbols:bluetooth"
-      : "material-symbols:bluetooth-disabled",
-    handler: () => {
-      isBluetoothEnabled.value = !isBluetoothEnabled.value;
-    },
-    get isActive() {
-      return isBluetoothEnabled.value;
-    },
-  },
-  {
-    model: isAirplaneModeEnabled.value,
-    name: "Airplane mode",
-    icon: "ion:airplane-sharp",
-    handler: () => {
-      isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;
-      isWifiEnabled.value = false; // disable wifi when airplane mode is toggled
-    },
-    get isActive() {
-      return isAirplaneModeEnabled.value;
-    },
-  },
-]);
 </script>
 
 <template>
@@ -158,125 +60,17 @@ const bottomItems = computed(() => [
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
         class="topbar-menu-transition flex flex-1 flex-col rounded-3xl p-4"
       >
-        <!-- Top items -->
-        <div
-          class="topbar-menu-transition flex justify-between gap-4"
-          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
-        >
-          <!-- Battery item -->
-          <Button
-            variant="ghost"
-            class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
-            :disabled="isAnyTopbarMenuOpen"
-          >
-            <Icon name="mdi:battery-charging" size="20" />
-            <span class="text-sm font-semibold">100%</span>
-          </Button>
-
-          <!-- Lock, settings and poweroff buttons -->
-          <div class="flex gap-4">
-            <Button
-              v-for="item in topItems"
-              :key="item.name"
-              :disabled="isAnyTopbarMenuOpen"
-              size="icon"
-              variant="ghost"
-              class="cursor-default rounded-full bg-secondary"
-              @click="item.handler"
-            >
-              <Icon :name="item.icon" size="17" />
-            </Button>
-          </div>
-        </div>
+        <!-- User Actions -->
+        <TopbarSectionUserActions />
 
         <!-- TODO: Fix the gap created on those menus -->
         <TopbarMenuPowerOff />
 
-        <!-- Volume slider -->
-        <div
-          class="topbar-menu-transition mb-4 mt-2 flex min-h-8 items-center gap-4"
-          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
-        >
-          <Icon
-            v-show="volume[0] > 50"
-            name="material-symbols:volume-up"
-            size="24"
-          />
-          <Icon
-            v-show="volume[0] > 0 && volume[0] <= 50"
-            name="material-symbols:volume-down"
-            size="24"
-          />
-          <Icon
-            v-show="volume[0] === 0"
-            name="material-symbols:volume-off"
-            size="24"
-          />
-          <Slider
-            v-model="volume"
-            :disabled="isAnyTopbarMenuOpen"
-            :default-value="volume"
-            :max="100"
-            :step="1"
-          />
-        </div>
+        <!-- Sliders -->
+        <TopbarSectionControls />
 
         <!-- Wifi, Bluetooth, Dark theme, Airplane mode buttons -->
-        <div
-          class="topbar-menu-transition grid grid-cols-1 gap-2 sm:grid-cols-2"
-          :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
-        >
-          <div
-            v-for="item in bottomItems"
-            :key="item.name"
-            class="flex max-h-12 min-h-12 items-center"
-          >
-            <button
-              class="flex h-full w-full cursor-default items-center justify-start gap-2.5 rounded-l-full p-2 px-4"
-              :class="[
-                item.isActive ? 'bg-primary' : 'bg-secondary',
-                !item.menu ? 'rounded-full' : '',
-              ]"
-              @click="item.handler"
-            >
-              <Icon
-                :name="item.icon"
-                size="18"
-                :class="[item.isActive ? '' : 'bg-accent-light']"
-              />
-
-              <!-- Only for the Wifi Button -->
-              <div
-                class="flex flex-col items-start"
-                v-if="item.label === 'wifi'"
-              >
-                <span class="text-sm font-bold">
-                  {{ item.name }}
-                </span>
-                <span
-                  v-if="connectedWifiNetwork"
-                  class="w-40 truncate text-start text-xs sm:w-20"
-                >
-                  {{ connectedWifiNetwork.name }}
-                </span>
-              </div>
-
-              <span v-else class="text-nowrap text-sm font-bold">
-                {{ item.name }}
-              </span>
-            </button>
-
-            <Button
-              v-if="item.menu"
-              :disabled="getTopbarMenuOpen === item.label || !item.model.value"
-              class="grid h-full cursor-default place-content-center rounded-r-full border-l border-white/50 p-2 py-2"
-              :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
-              @click="item.menuHandler"
-            >
-              <Icon name="ion:arrow-forward-outline" size="18" />
-            </Button>
-          </div>
-        </div>
+        <TopbarSectionConnectivity />
 
         <!-- Wifi, Wired and bluetooth menu -->
         <TopbarMenuWired />
@@ -285,17 +79,3 @@ const bottomItems = computed(() => [
     </PopoverContent>
   </Popover>
 </template>
-
-<style scoped>
-.bg-secondary {
-  background-color: #464647;
-}
-
-.bg-secondary:hover {
-  background-color: #4e4e4e;
-}
-
-.topbar-menu-transition {
-  @apply transition-all duration-300 ease-in-out;
-}
-</style>

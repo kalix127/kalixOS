@@ -15,6 +15,8 @@ const {
 } = storeToRefs(globalStore);
 
 const { label } = defineProps<{
+  title: string;
+  icon: string;
   label: "poweroff" | "wired" | "wifi" | "bluetooth";
 }>();
 
@@ -57,20 +59,20 @@ function closeMenu() {
 <template>
   <Collapsible :open="isOpen">
     <CollapsibleContent v-on-click-outside="closeMenu">
-      <div class="select-none space-y-4 rounded-2xl bg-accent p-4 mt-4">
+      <div class="mt-4 select-none space-y-4 rounded-2xl bg-accent p-4">
         <div class="flex items-center gap-4">
           <div
-            class="grid place-content-center rounded-full p-2"
+            class="grid place-content-center rounded-full p-3"
             :class="[isEnabled ? 'bg-primary' : 'bg-accent-light']"
           >
-            <slot name="icon" />
+            <Icon :name="icon" size="24" />
           </div>
           <span class="text-xl font-bold">
-            <slot name="title" />
+            {{ title }}
           </span>
         </div>
         <div class="space-y-2">
-          <slot name="content" />
+          <slot />
         </div>
       </div>
     </CollapsibleContent>

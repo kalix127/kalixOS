@@ -37,37 +37,31 @@ function connectToWifi(network: WifiNetwork) {
 </script>
 
 <template>
-  <TopbarMenu label="wifi">
-    <template #icon>
-      <Icon name="ic:baseline-signal-wifi-4-bar" size="24" />
-    </template>
-    <template #title> Wi-Fi </template>
-    <template #content>
-      <Button
-        v-for="network in availableWifiNetworks"
-        :key="network.name"
-        variant="ghost"
-        class="flex w-full cursor-default justify-start gap-2 rounded-xl font-medium duration-0 last:mt-2 last:rounded-none last:border-t last:border-t-accent hover:bg-accent-light last:hover:rounded-xl"
-        @click="() => connectToWifi(network)"
-      >
-        <Icon
-          :name="`ic:baseline-signal-wifi-${network.signal}-bar${network.isProtected ? '-lock' : ''}`"
-          size="18"
-        />
-        {{ network.name }}
+  <TopbarMenu title="Wi-Fi" icon="ic:baseline-signal-wifi-4-bar" label="wifi">
+    <Button
+      v-for="network in availableWifiNetworks"
+      :key="network.name"
+      variant="ghost"
+      class="flex w-full cursor-default justify-start gap-2 rounded-xl font-medium duration-0 last:mt-2 last:rounded-none last:border-t last:border-t-accent hover:bg-accent-light last:hover:rounded-xl"
+      @click="() => connectToWifi(network)"
+    >
+      <Icon
+        :name="`ic:baseline-signal-wifi-${network.signal}-bar${network.isProtected ? '-lock' : ''}`"
+        size="18"
+      />
+      {{ network.name }}
 
-        <Icon
-          name="ic:outline-check"
-          size="18"
-          v-show="connectedWifiNetwork?.id === network.id"
-        />
-        <Icon
-          name="svg-spinners:tadpole"
-          size="20"
-          v-show="idConnectingNetwork === network.id"
-        />
-      </Button>
-    </template>
+      <Icon
+        name="ic:outline-check"
+        size="18"
+        v-show="connectedWifiNetwork?.id === network.id"
+      />
+      <Icon
+        name="svg-spinners:tadpole"
+        size="20"
+        v-show="idConnectingNetwork === network.id"
+      />
+    </Button>
   </TopbarMenu>
 </template>
 

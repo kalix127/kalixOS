@@ -7,7 +7,6 @@ const globalStore = useGlobalStore();
 const {
   volume,
   isWiredEnabled,
-  isBluetoothEnabled,
   isAirplaneModeEnabled,
   isAnyTopbarMenuOpen,
   connectedWifiNetwork,
@@ -26,11 +25,6 @@ const {
           size="18"
         />
         <Icon v-show="isWiredEnabled" name="lucide:ethernet-port" size="18" />
-        <Icon
-          v-show="isBluetoothEnabled"
-          name="material-symbols:bluetooth"
-          size="18"
-        />
         <Icon
           v-show="isAirplaneModeEnabled"
           name="ic:baseline-airplanemode-active"

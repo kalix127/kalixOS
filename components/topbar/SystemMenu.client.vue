@@ -36,7 +36,7 @@ const topItems = [
   },
   {
     name: "Poweroff",
-    icon: "material-symbols:power-settings-new-rounded",
+    icon: "fa6-solid:power-off",
     handler: () => {
       isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;
     },

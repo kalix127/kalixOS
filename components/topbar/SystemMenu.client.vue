@@ -13,6 +13,7 @@ const {
   isPowerOffMenuOpen,
   isAnyTopbarMenuOpen,
   isWifiMenuOpen,
+  isWiredMenuOpen,
   getTopbarMenuOpen,
   connectedWifiNetwork,
 } = storeToRefs(globalStore);
@@ -53,6 +54,9 @@ const bottomItems = computed(() => [
     handler: () => {
       isWiredEnabled.value = !isWiredEnabled.value;
       isAirplaneModeEnabled.value = false; // disable airplane mode when wired is toggled
+    },
+    menuHandler: () => {
+      isWiredMenuOpen.value = !isWiredMenuOpen.value;
     },
     get isActive() {
       return isWiredEnabled.value;
@@ -273,6 +277,7 @@ const bottomItems = computed(() => [
         </div>
 
         <!-- Wifi, Wired and bluetooth menu -->
+        <TopbarMenuWired />
         <TopbarMenuWifi />
       </div>
     </PopoverContent>

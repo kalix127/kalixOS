@@ -116,7 +116,7 @@ const bottomItems = computed(() => [
   <Popover>
     <PopoverTrigger>
       <div
-        class="flex items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
+        class="flex cursor-default items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
       >
         <Icon
           v-show="connectedWifiNetwork"
@@ -166,7 +166,7 @@ const bottomItems = computed(() => [
           <!-- Battery item -->
           <Button
             variant="ghost"
-            class="flex select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
+            class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
             :disabled="isAnyTopbarMenuOpen"
           >
             <Icon name="mdi:battery-charging" size="20" />
@@ -181,7 +181,7 @@ const bottomItems = computed(() => [
               :disabled="isAnyTopbarMenuOpen"
               size="icon"
               variant="ghost"
-              class="rounded-full bg-secondary"
+              class="cursor-default rounded-full bg-secondary"
               @click="item.handler"
             >
               <Icon :name="item.icon" size="17" />
@@ -232,7 +232,7 @@ const bottomItems = computed(() => [
             class="flex max-h-12 min-h-12 items-center"
           >
             <button
-              class="flex h-full w-full items-center justify-start gap-2.5 rounded-l-full p-2 px-4 transition-all duration-500 ease-in-out"
+              class="flex h-full w-full cursor-default items-center justify-start gap-2.5 rounded-l-full p-2 px-4"
               :class="[
                 item.isActive ? 'bg-primary' : 'bg-secondary',
                 !item.menu ? 'rounded-full' : '',
@@ -269,7 +269,7 @@ const bottomItems = computed(() => [
             <Button
               v-if="item.menu"
               :disabled="getTopbarMenuOpen === item.label || !item.model.value"
-              class="grid h-full place-content-center rounded-r-full border-l border-white/50 p-2 py-2 transition-all duration-500 ease-in-out"
+              class="grid h-full cursor-default place-content-center rounded-r-full border-l border-white/50 p-2 py-2"
               :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
               @click="item.menuHandler"
             >

@@ -34,7 +34,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
   <Popover>
     <PopoverTrigger>
       <div
-        class="flex select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
+        class="flex cursor-default select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
       >
         <span class="text-nowrap text-sm font-bold">
           {{ formattedDate }}

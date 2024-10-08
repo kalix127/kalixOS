@@ -35,6 +35,7 @@ export default defineNuxtConfig({
         "mdi",
         "ion",
         "svg-spinners",
+        "fa6",
       ],
     },
     clientBundle: {

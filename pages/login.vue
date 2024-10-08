@@ -57,9 +57,9 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
       <Transition mode="out-in">
         <!-- Login Home / Users list -->
         <div class="flex flex-col gap-2" v-if="!isAuthenticating">
-          <button @click="isAuthenticating = true">
+          <button class="cursor-default" @click="isAuthenticating = true">
             <div
-              class="flex min-h-14 min-w-72 cursor-pointer items-center gap-2 rounded-xl bg-secondary p-1.5 hover:ring-2 hover:ring-primary"
+              class="flex min-h-14 min-w-72 items-center gap-2 rounded-xl bg-secondary p-1.5 hover:ring-2 hover:ring-primary"
             >
               <div class="grid place-content-center rounded-full bg-accent p-2">
                 <Icon name="material-symbols:person" size="28" />
@@ -71,7 +71,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
             @click="handleNotListed"
             variant="ghost"
             size="xs"
-            class="w-fit rounded-md p-2 hover:bg-secondary"
+            class="w-fit rounded-md p-2 hover:bg-secondary cursor-default"
           >
             <p class="select-none text-sm font-semibold">Not listed?</p>
           </Button>

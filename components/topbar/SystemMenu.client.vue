@@ -158,7 +158,7 @@ const bottomItems = computed(() => [
       >
         <!-- Top items -->
         <div
-          class="topbar-menu-transition mb-2 flex justify-between gap-4"
+          class="topbar-menu-transition flex justify-between gap-4"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <!-- Battery item -->
@@ -221,7 +221,7 @@ const bottomItems = computed(() => [
 
         <!-- Wifi, Bluetooth, Dark theme, Airplane mode buttons -->
         <div
-          class="topbar-menu-transition mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2"
+          class="topbar-menu-transition grid grid-cols-1 gap-2 sm:grid-cols-2"
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <div
@@ -260,7 +260,7 @@ const bottomItems = computed(() => [
               </span>
             </button>
 
-            <button
+            <Button
               v-if="item.menu"
               :disabled="getTopbarMenuOpen === item.label || !item.model.value"
               class="grid h-full place-content-center rounded-r-full border-l border-white/50 p-2 py-2 transition-all duration-500 ease-in-out"
@@ -268,7 +268,7 @@ const bottomItems = computed(() => [
               @click="item.menuHandler"
             >
               <Icon name="ion:arrow-forward-outline" size="18" />
-            </button>
+            </Button>
           </div>
         </div>
 

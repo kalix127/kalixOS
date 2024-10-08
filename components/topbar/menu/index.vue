@@ -57,7 +57,7 @@ function closeMenu() {
 <template>
   <Collapsible :open="isOpen">
     <CollapsibleContent v-on-click-outside="closeMenu">
-      <div class="select-none space-y-4 rounded-2xl bg-accent p-4">
+      <div class="select-none space-y-4 rounded-2xl bg-accent p-4 mt-4">
         <div class="flex items-center gap-4">
           <div
             class="grid place-content-center rounded-full p-2"

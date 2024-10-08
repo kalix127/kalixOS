@@ -154,7 +154,7 @@ const bottomItems = computed(() => [
     <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]">
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
-        class="topbar-menu-transition flex flex-1 flex-col p-4"
+        class="topbar-menu-transition rounded-3xl flex flex-1 flex-col p-4"
       >
         <!-- Top items -->
         <div

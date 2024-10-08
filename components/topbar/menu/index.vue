@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
-import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
 const {
@@ -47,18 +46,11 @@ const isEnabled = computed(() => {
       return false;
   }
 });
-
-function closeMenu() {
-  isPowerOffMenuOpen.value = false;
-  isWiredMenuOpen.value = false;
-  isWifiMenuOpen.value = false;
-  isBluetoothMenuOpen.value = false;
-}
 </script>
 
 <template>
   <Collapsible :open="isOpen">
-    <CollapsibleContent v-on-click-outside="closeMenu">
+    <CollapsibleContent>
       <div class="mt-4 select-none space-y-4 rounded-2xl bg-accent p-4">
         <div class="flex items-center gap-4">
           <div

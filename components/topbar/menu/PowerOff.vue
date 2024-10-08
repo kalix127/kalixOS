@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { useGlobalStore } from "@/stores/global.store";
+import { storeToRefs } from "pinia";
+import { vOnClickOutside } from "@vueuse/components";
+
+const globalStore = useGlobalStore();
+const { isPowerOffMenuOpen } = storeToRefs(globalStore);
+
 const options = [
   {
     name: "Suspend",
@@ -25,10 +32,19 @@ const options = [
     },
   },
 ];
+
+function closeMenu() {
+  isPowerOffMenuOpen.value = false;
+}
 </script>
 
 <template>
-  <TopbarMenu title="Power Off" icon="fa6-solid:power-off" label="poweroff">
+  <TopbarMenu
+    v-on-click-outside="closeMenu"
+    title="Power Off"
+    icon="fa6-solid:power-off"
+    label="poweroff"
+  >
     <!-- TODO: Maybe add spacing between the last button and its border top -->
     <Button
       v-for="option in options"

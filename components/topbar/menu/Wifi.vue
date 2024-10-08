@@ -2,10 +2,15 @@
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
 import type { WifiNetwork } from "@/types";
+import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
-const { isConnectingToWifi, availableWifiNetworks, connectedWifiNetwork } =
-  storeToRefs(globalStore);
+const {
+  isConnectingToWifi,
+  isWifiMenuOpen,
+  availableWifiNetworks,
+  connectedWifiNetwork,
+} = storeToRefs(globalStore);
 
 // The ID of the network we are currently connecting to
 const idConnectingNetwork = ref<number | null>(null);
@@ -34,10 +39,19 @@ function connectToWifi(network: WifiNetwork) {
     isConnectingToWifi.value = false;
   }, 3000);
 }
+
+function closeMenu() {
+  isWifiMenuOpen.value = false;
+}
 </script>
 
 <template>
-  <TopbarMenu title="Wi-Fi" icon="ic:baseline-signal-wifi-4-bar" label="wifi">
+  <TopbarMenu
+    v-on-click-outside="closeMenu"
+    title="Wi-Fi"
+    icon="ic:baseline-signal-wifi-4-bar"
+    label="wifi"
+  >
     <Button
       v-for="network in availableWifiNetworks"
       :key="network.name"

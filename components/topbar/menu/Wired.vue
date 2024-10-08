@@ -1,7 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useGlobalStore } from "@/stores/global.store";
+import { storeToRefs } from "pinia";
+import { vOnClickOutside } from "@vueuse/components";
+
+const globalStore = useGlobalStore();
+const { isWiredMenuOpen } = storeToRefs(globalStore);
+
+function closeMenu() {
+  isWiredMenuOpen.value = false;
+}
+</script>
 
 <template>
-  <TopbarMenu title="Wired" icon="lucide:ethernet-port" label="wired">
+  <TopbarMenu
+    v-on-click-outside="closeMenu"
+    title="Wired"
+    icon="lucide:ethernet-port"
+    label="wired"
+  >
     <Button
       variant="ghost"
       class="flex w-full cursor-default items-center justify-between rounded-xl font-medium duration-0 last:mt-2 last:rounded-none last:border-t last:border-t-accent hover:bg-accent-light last:hover:rounded-xl"

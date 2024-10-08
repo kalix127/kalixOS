@@ -162,14 +162,14 @@ const bottomItems = computed(() => [
           :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
         >
           <!-- Battery item -->
-          <button
+          <Button
             variant="ghost"
             class="flex select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
             :disabled="isAnyTopbarMenuOpen"
           >
             <Icon name="mdi:battery-charging" size="20" />
             <span class="text-sm font-semibold">100%</span>
-          </button>
+          </Button>
 
           <!-- Lock, settings and poweroff buttons -->
           <div class="flex gap-4">
@@ -182,7 +182,7 @@ const bottomItems = computed(() => [
               class="rounded-full bg-secondary"
               @click="item.handler"
             >
-              <Icon :name="item.icon" size="18" />
+              <Icon :name="item.icon" size="17" />
             </Button>
           </div>
         </div>

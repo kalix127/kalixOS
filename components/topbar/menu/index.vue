@@ -51,11 +51,11 @@ const isEnabled = computed(() => {
 <template>
   <Collapsible :open="isOpen">
     <CollapsibleContent>
-      <div class="mt-4 select-none space-y-4 rounded-2xl bg-accent p-4">
+      <div class="mt-4 select-none space-y-4 rounded-2xl bg-secondary p-4">
         <div class="flex items-center gap-4">
           <div
             class="grid place-content-center rounded-full p-3"
-            :class="[isEnabled ? 'bg-primary' : 'bg-accent-light']"
+            :class="[isEnabled ? 'bg-primary' : 'bg-accent']"
           >
             <Icon :name="icon" size="24" />
           </div>

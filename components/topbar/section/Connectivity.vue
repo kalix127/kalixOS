@@ -119,7 +119,7 @@ const items = computed(() => [
 
         <!-- Only for the Wifi Button -->
         <div class="flex flex-col items-start" v-if="item.label === 'wifi'">
-          <span class="text-sm font-bold">
+          <span class="text-sm font-extrabold">
             {{ item.name }}
           </span>
           <span
@@ -130,7 +130,7 @@ const items = computed(() => [
           </span>
         </div>
 
-        <span v-else class="text-nowrap text-sm font-bold">
+        <span v-else class="text-nowrap text-sm font-extrabold">
           {{ item.name }}
         </span>
       </button>
@@ -142,7 +142,7 @@ const items = computed(() => [
         :class="[
           item.isActive
             ? 'bg-primary/90 hover:bg-primary'
-            : 'hover:bg-accent-hover/60 bg-accent/60',
+            : 'bg-accent/60 hover:bg-accent-hover/60',
           item.isActive ? 'border-white/40' : 'border-white/10',
         ]"
         @click="item.menuHandler"

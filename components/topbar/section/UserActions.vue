@@ -39,10 +39,10 @@ const items = [
     <!-- Battery item -->
     <Button
       variant="ghost"
-      class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3"
+      class="hover:bg-secondary-hover flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0"
       :disabled="isAnyTopbarMenuOpen"
     >
-      <Icon name="mdi:battery-charging" size="20" />
+      <Icon name="mdi:battery-charging" size="18" />
       <span class="text-sm font-semibold">100%</span>
     </Button>
 
@@ -54,10 +54,10 @@ const items = [
         :disabled="isAnyTopbarMenuOpen"
         size="icon"
         variant="ghost"
-        class="cursor-default rounded-full bg-secondary"
+        class="hover:bg-secondary-hover cursor-default rounded-full bg-secondary duration-0"
         @click="item.handler"
       >
-        <Icon :name="item.icon" size="17" />
+        <Icon :name="item.icon" size="16" />
       </Button>
     </div>
   </div>

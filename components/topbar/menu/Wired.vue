@@ -14,7 +14,7 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    title="Wired"
+    title="Wired Connections"
     icon="lucide:ethernet-port"
     label="wired"
   >

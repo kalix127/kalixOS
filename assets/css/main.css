@@ -37,34 +37,35 @@
 
   .dark {
     /* Dark theme variables */
-    --background: #1e1e1e;
-    --foreground: #ffffff;
+    --background: 0 0% 12%;
+    --foreground: 0 0% 98%;
 
-    --card: rgba(255, 255, 255, 0.08);
-    --card-foreground: #ffffff;
+    --card: 0 0% 22%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: #383838;
-    --popover-foreground: #ffffff;
+    --popover: 0 0% 22%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: #3584e4;
-    --primary-foreground: #ffffff;
+    --primary: 211 78% 58%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: #303030;
-    --secondary-foreground: #ffffff;
+    --secondary: 0 0% 28%;
+    --secondary-hover: 0 0% 32%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: #303030;
-    --muted-foreground: #ffffff;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: #464647;
-    --accent-foreground: #ffffff;
-    --accent-light: #636363;
+    --accent: 0 0% 40%;
+    --accent-hover: 0 0% 45%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: #c53030;
-    --destructive-foreground: #ffffff;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: rgba(0, 0, 0, 0.36);
-    --input: #303030;
-    --ring: #3584e4;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 211 78% 58%;
   }
 }
 
@@ -77,14 +78,6 @@
     @apply bg-background text-foreground;
     font-family: "Noto Sans Medium", sans-serif;
   }
-}
-
-.bg-secondary {
-  background-color: #464647;
-}
-
-.bg-secondary:hover {
-  background-color: #4e4e4e;
 }
 
 .topbar-menu-transition {

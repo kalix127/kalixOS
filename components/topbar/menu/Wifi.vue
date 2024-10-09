@@ -56,7 +56,7 @@ function closeMenu() {
       v-for="network in availableWifiNetworks"
       :key="network.name"
       variant="ghost"
-      class="flex w-full cursor-default justify-start gap-2 rounded-xl font-medium duration-0 last:mt-2 last:rounded-none last:border-t last:border-t-accent hover:bg-accent-light last:hover:rounded-xl"
+      class="flex w-full cursor-default justify-start gap-2 rounded-xl font-medium duration-0 hover:bg-accent"
       @click="() => connectToWifi(network)"
     >
       <Icon

@@ -69,6 +69,7 @@ const {
         <!-- Wifi, Wired and bluetooth menu -->
         <TopbarMenuWired />
         <TopbarMenuWifi />
+        <TopbarMenuBluetooth />
       </div>
     </PopoverContent>
   </Popover>

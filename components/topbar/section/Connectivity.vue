@@ -13,6 +13,7 @@ const {
   isAnyTopbarMenuOpen,
   isWifiMenuOpen,
   isWiredMenuOpen,
+  isBluetoothMenuOpen,
   getTopbarMenuOpen,
   connectedWifiNetwork,
 } = storeToRefs(globalStore);
@@ -67,6 +68,9 @@ const items = computed(() => [
       : "material-symbols:bluetooth-disabled",
     handler: () => {
       isBluetoothEnabled.value = !isBluetoothEnabled.value;
+    },
+    menuHandler: () => {
+      isBluetoothMenuOpen.value = !isBluetoothMenuOpen.value;
     },
     get isActive() {
       return isBluetoothEnabled.value;

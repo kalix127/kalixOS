@@ -89,7 +89,7 @@ const items = computed(() => [
 
 <template>
   <div
-    class="topbar-menu-transition grid grid-cols-1 gap-2 sm:grid-cols-2"
+    class="topbar-menu-transition grid grid-cols-1 gap-3 sm:grid-cols-2"
     :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
   >
     <div
@@ -100,7 +100,9 @@ const items = computed(() => [
       <button
         class="flex h-full w-full cursor-default items-center justify-start gap-2.5 rounded-l-full p-2 px-4"
         :class="[
-          item.isActive ? 'bg-primary' : 'bg-secondary',
+          item.isActive
+            ? 'bg-primary/80 hover:bg-primary/90'
+            : 'bg-secondary/80 hover:bg-secondary-hover',
           !item.menu ? 'rounded-full' : '',
         ]"
         @click="item.handler"
@@ -108,7 +110,7 @@ const items = computed(() => [
         <Icon
           :name="item.icon"
           size="18"
-          :class="[item.isActive ? '' : 'bg-accent-light']"
+          :class="[item.isActive ? '' : 'bg-muted-foreground']"
         />
 
         <!-- Only for the Wifi Button -->
@@ -129,15 +131,20 @@ const items = computed(() => [
         </span>
       </button>
 
-      <Button
+      <button
         v-if="item.menu"
         :disabled="getTopbarMenuOpen === item.label || !item.model.value"
-        class="grid h-full cursor-default place-content-center rounded-r-full border-l border-white/50 p-2 py-2"
-        :class="[item.isActive ? 'bg-primary' : 'bg-secondary']"
+        class="grid h-full cursor-default place-content-center rounded-r-full border-l p-2 py-2"
+        :class="[
+          item.isActive
+            ? 'bg-primary/90 hover:bg-primary'
+            : 'hover:bg-accent-hover/60 bg-accent/60',
+          item.isActive ? 'border-white/40' : 'border-white/10',
+        ]"
         @click="item.menuHandler"
       >
         <Icon name="ion:arrow-forward-outline" size="18" />
-      </Button>
+      </button>
     </div>
   </div>
 </template>

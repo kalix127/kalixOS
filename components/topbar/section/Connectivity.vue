@@ -82,7 +82,8 @@ const items = computed(() => [
     icon: "ion:airplane-sharp",
     handler: () => {
       isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;
-      isWifiEnabled.value = false; // disable wifi when airplane mode is toggled
+      isWifiEnabled.value = false;
+      connectedWifiNetwork.value = null;
     },
     get isActive() {
       return isAirplaneModeEnabled.value;

@@ -4,39 +4,6 @@
 
 @layer base {
   :root {
-    /* Light theme variables */
-    --background: #ffffff;
-    --foreground: rgba(0, 0, 0, 0.8);
-
-    --card: #ffffff;
-    --card-foreground: rgba(0, 0, 0, 0.8);
-
-    --popover: #ffffff;
-    --popover-foreground: rgba(0, 0, 0, 0.8);
-
-    --primary: #3584e4;
-    --primary-foreground: #ffffff;
-
-    --secondary: #ebebeb;
-    --secondary-foreground: rgba(0, 0, 0, 0.8);
-
-    --muted: #ebebeb;
-    --muted-foreground: rgba(0, 0, 0, 0.46);
-
-    --accent: #3584e4;
-    --accent-foreground: rgba(0, 0, 0, 0.8);
-
-    --destructive: #e63946;
-    --destructive-foreground: #ffffff;
-
-    --border: RGB(0 0 0 / 7%);
-    --input: #ffffff;
-    --ring: #3584e4;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    /* Dark theme variables */
     --background: 0 0% 12%;
     --foreground: 0 0% 98%;
 
@@ -66,6 +33,7 @@
     --border: 240 4% 16%;
     --input: 240 4% 16%;
     --ring: 211 78% 58%;
+    --radius: 0.5rem;
   }
 }
 

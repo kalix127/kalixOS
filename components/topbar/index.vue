@@ -14,7 +14,8 @@ const route = useRoute();
     <TopbarCalendar />
 
     <!-- Main menu -->
-    <div class="flex w-1/3 items-center justify-end">
+    <div class="flex w-1/3 items-center justify-end gap-4">
+      <TopbarResources />
       <TopbarSystemMenu />
     </div>
   </header>

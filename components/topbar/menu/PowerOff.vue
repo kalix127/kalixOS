@@ -25,12 +25,7 @@ const options = [
       console.log("Power off");
     },
   },
-  {
-    name: "Log out...",
-    handler: () => {
-      console.log("Log out");
-    },
-  },
+  // TODO: Add logout option
 ];
 
 function closeMenu() {

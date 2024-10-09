@@ -44,7 +44,6 @@ export const useGlobalStore = defineStore({
 
     async searchWifiNetworks() {
       this.isSearchingWifiNetworks = true;
-      this.availableWifiNetworks = []; // Reset available networks
       const totalTime = 5000; // 5 seconds in total to add all the networks
 
       // Generate random delays for each network
@@ -54,7 +53,12 @@ export const useGlobalStore = defineStore({
       );
 
       for (let i = 0; i < defaultNetworks.length; i++) {
-        if (!this.isWifiEnabled) break;
+        // Stop if Wi-Fi gets disabled during the process
+        if (!this.isWifiEnabled) {
+          this.isSearchingWifiNetworks = false;
+          this.availableWifiNetworks = [];
+          return;
+        }
         await this.addNetworkWithDelay(defaultNetworks[i], randomDelays[i]);
       }
       this.isSearchingWifiNetworks = false;
@@ -64,7 +68,16 @@ export const useGlobalStore = defineStore({
     addNetworkWithDelay(network: WifiNetwork, delay: number) {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
-          this.availableWifiNetworks.push(network);
+          // Check if the network is already present in the available list
+          const isNetworkAlreadyAdded = this.availableWifiNetworks.some(
+            (n) => n.id === network.id,
+          );
+
+          // If the network is not already added, add it to the list
+          if (!isNetworkAlreadyAdded) {
+            this.availableWifiNetworks.push(network);
+          }
+
           resolve();
         }, delay);
       });

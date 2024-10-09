@@ -46,7 +46,7 @@ function closeMenu() {
       :key="option.name"
       @click="option.handler"
       variant="ghost"
-      class="w-full cursor-default justify-start rounded-xl font-medium duration-0 last:mt-2 last:rounded-none last:border-t last:border-t-gray-500 last:border-opacity-50 hover:bg-accent-light last:hover:rounded-xl"
+      class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
       >{{ option.name }}</Button
     >
   </TopbarMenu>

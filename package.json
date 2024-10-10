@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@iconify-json/fa6-solid": "^1.2.0",
+    "@iconify-json/fa6-solid": "^1.2.1",
     "@iconify-json/ic": "^1.2.0",
     "@iconify-json/ion": "^1.2.0",
     "@iconify-json/lucide": "^1.2.7",

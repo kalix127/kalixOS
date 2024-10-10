@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
-import { toast } from "vue-sonner";
-
-// TODO: Implement the easter egg
-function handleNotListed() {
-  toast.error("Not implemented", {
-    duration: 10000,
-  });
-}
 
 const globalStore = useGlobalStore();
-const { loginView } = storeToRefs(globalStore);
+const { loginView, username } = storeToRefs(globalStore);
 
 function handleSelectUser() {
+  username.value = "Gianluca";
   loginView.value = "enterPassword";
+}
+
+function handleNotListed() {
+  loginView.value = "addUser";
 }
 </script>
 

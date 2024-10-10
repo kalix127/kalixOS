@@ -8,7 +8,6 @@ definePageMeta({
 
 const globalStore = useGlobalStore();
 const { loginView } = storeToRefs(globalStore);
-
 </script>
 
 <template>
@@ -17,6 +16,9 @@ const { loginView } = storeToRefs(globalStore);
       <Transition mode="out-in">
         <!-- Select User -->
         <LoginSelectUser v-if="loginView === 'selectUser'" />
+
+        <!-- Add user -->
+        <LoginAddUser v-else-if="loginView === 'addUser'" />
 
         <!-- Form -->
         <LoginForm v-else-if="loginView === 'enterPassword'" />

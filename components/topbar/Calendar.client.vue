@@ -9,6 +9,12 @@ import { Calendar } from "@/components/ui/calendar";
 
 const currentDate = ref(new Date());
 
+const weekDay = new Intl.DateTimeFormat("it-IT", {
+  dateStyle: "full",
+})
+  .format(new Date())
+  .split(" ")[0];
+
 onMounted(() => {
   const intervalId = setInterval(() => {
     currentDate.value = new Date();
@@ -42,8 +48,12 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
       </div>
     </PopoverTrigger>
     <PopoverContent class="ml-1.5 mt-1.5 rounded-3xl xs:w-80">
-      <div class="flex flex-col items-center select-none">
-        <!-- TODO: Add week day  -->
+      <div class="flex select-none flex-col items-center">
+        <span
+          class="text-md w-full text-left font-bold text-muted-foreground xs:pl-4"
+        >
+          {{ weekDay }}
+        </span>
         <span
           class="mb-2 w-full text-left text-xl font-extrabold text-muted-foreground xs:pl-4"
         >

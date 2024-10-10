@@ -19,9 +19,9 @@ function handleNotListed() {
   <div class="flex flex-col gap-2">
     <button class="cursor-default" @click="handleSelectUser">
       <div
-        class="flex min-h-14 min-w-72 items-center gap-4 rounded-xl bg-secondary p-1.5 hover:ring-2 hover:ring-primary"
+        class="flex min-h-16 min-w-72 items-center gap-4 rounded-xl bg-secondary p-1.5 hover:ring-2 hover:ring-primary"
       >
-        <div class="grid place-content-center rounded-full bg-accent p-2">
+        <div class="grid place-content-center rounded-full bg-accent p-3">
           <Icon name="material-symbols:person" size="28" />
         </div>
         <span class="font-bold"> Gianluca </span>

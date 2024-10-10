@@ -31,7 +31,7 @@ function handleNotListed() {
       @click="handleNotListed"
       variant="ghost"
       size="xs"
-      class="w-fit cursor-default rounded-md p-2 duration-0 hover:bg-secondary"
+      class="w-fit cursor-default rounded-md p-2.5 duration-0 hover:bg-secondary"
     >
       <p class="select-none text-sm font-semibold">Not listed?</p>
     </Button>

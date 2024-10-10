@@ -15,6 +15,14 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    screens: {
+      xs: "375px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1200px",
+      "2xl": "1400px",
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -28,6 +36,7 @@ module.exports = {
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
+          hover: "hsl(var(--secondary-hover))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -40,6 +49,7 @@ module.exports = {
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
+          hover: "hsl(var(--accent-hover))",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
@@ -76,10 +86,10 @@ module.exports = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "collapsible-down": "collapsible-down 0.2s ease-in-out",
-        "collapsible-up": "collapsible-up 0.2s ease-in-out",
+        "accordion-down": "accordion-down 0.3s ease-out",
+        "accordion-up": "accordion-up 0.3s ease-out",
+        "collapsible-down": "collapsible-down 0.3s ease-in-out",
+        "collapsible-up": "collapsible-up 0.3s ease-in-out",
       },
     },
   },

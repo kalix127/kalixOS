@@ -46,7 +46,7 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
       <!-- Username Input -->
       <form @submit.prevent="onSubmit">
         <FormField v-slot="{ componentField }" name="username">
-          <FormItem>
+          <FormItem class="space-y-4">
             <FormControl>
               <Input
                 class="h-9 bg-secondary pr-10"
@@ -56,7 +56,7 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
                 v-bind="componentField"
               />
             </FormControl>
-            <FormMessage class="absolute text-sm text-red-500" />
+            <FormMessage class="absolute text-sm text-foreground" />
           </FormItem>
         </FormField>
       </form>

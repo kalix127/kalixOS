@@ -34,7 +34,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
     await navigateTo("/");
   } else {
     setErrors({
-      password: "Incorrect password",
+      password: "Sorry, password authentication didn't work.",
     });
   }
 
@@ -50,61 +50,56 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
 
     <h1 class="text-2xl font-bold">{{ username }}</h1>
 
-    <div class="flex items-center gap-4">
-      <!-- Back button -->
-      <Button
-        variant="ghost"
-        size="icon"
-        class="grid h-9 w-9 cursor-pointer place-content-center rounded-full bg-secondary p-2"
-        type="button"
-        :disabled="isLoading"
-        @click="handleBack"
-      >
-        <Icon name="ion:md-arrow-round-back" size="18" />
-      </Button>
+    <!-- Password Input -->
+    <form @submit.prevent="onSubmit">
+      <FormField v-slot="{ componentField }" name="password">
+        <FormItem class="space-y-4">
+          <FormControl>
+            <div class="relative flex items-center gap-4">
+              <!-- Back button -->
+              <Button
+                variant="ghost"
+                size="icon"
+                class="grid h-9 w-9 cursor-pointer place-content-center rounded-full bg-secondary p-2"
+                type="button"
+                :disabled="isLoading"
+                @click="handleBack"
+              >
+                <Icon name="ion:md-arrow-round-back" size="18" />
+              </Button>
 
-      <!-- Password Input -->
-      <form @submit.prevent="onSubmit">
-        <FormField v-slot="{ componentField }" name="password">
-          <FormItem>
-            <FormControl>
-              <div class="relative flex items-center gap-1.5">
-                <Input
-                  class="h-9 bg-secondary pr-10"
-                  aria-label="Password"
-                  placeholder="Password"
-                  autofocus
-                  v-bind="componentField"
-                  :type="isPasswordVisible ? 'text' : 'password'"
-                  :disabled="isLoading"
-                />
-                <button
-                  type="button"
-                  aria-label="Toggle password visibility"
-                  class="absolute inset-y-0 end-0 flex items-center justify-center px-3"
-                  @click="isPasswordVisible = !isPasswordVisible"
-                >
-                  <Icon name="mdi:eye" size="20" v-show="!isPasswordVisible" />
-                  <Icon
-                    name="mdi:eye-off"
-                    size="20"
-                    v-show="isPasswordVisible"
-                  />
-                </button>
-                <!-- Loading Icon -->
-                <Icon
-                  class="absolute -end-10 hidden xs:block"
-                  v-show="isLoading"
-                  name="svg-spinners:ring-resize"
-                  size="20"
-                />
-              </div>
-            </FormControl>
-            <FormMessage class="absolute text-sm text-red-500" />
-          </FormItem>
-        </FormField>
-      </form>
-    </div>
+              <Input
+                class="h-9 bg-secondary pr-10"
+                aria-label="Password"
+                placeholder="Password"
+                autofocus
+                v-bind="componentField"
+                :type="isPasswordVisible ? 'text' : 'password'"
+                :disabled="isLoading"
+              />
+              <button
+                type="button"
+                aria-label="Toggle password visibility"
+                class="absolute inset-y-0 end-0 flex items-center justify-center px-3"
+                @click="isPasswordVisible = !isPasswordVisible"
+              >
+                <Icon name="mdi:eye" size="20" v-show="!isPasswordVisible" />
+                <Icon name="mdi:eye-off" size="20" v-show="isPasswordVisible" />
+              </button>
+
+              <!-- Loading Icon -->
+              <Icon
+                class="absolute -end-10 hidden xs:block"
+                v-show="isLoading"
+                name="svg-spinners:ring-resize"
+                size="20"
+              />
+            </div>
+          </FormControl>
+          <FormMessage class="absolute text-center text-sm text-foreground" />
+        </FormItem>
+      </FormField>
+    </form>
   </div>
 </template>
 

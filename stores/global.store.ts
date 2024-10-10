@@ -26,6 +26,8 @@ export const useGlobalStore = defineStore({
     isSearchingWifiNetworks: false,
 
     // Auth
+    loginView: "selectUser",
+    username: "Gianluca",
     isAuthenticated: false,
   }),
   actions: {
@@ -124,5 +126,7 @@ interface GlobalStore {
   isSearchingWifiNetworks: boolean;
 
   // Auth
+  loginView: "selectUser" | "enterPassword" | "addUser";
+  username: string;
   isAuthenticated: boolean;
 }

@@ -66,7 +66,6 @@ export const useGlobalStore = defineStore({
       this.isSearchingWifiNetworks = false;
     },
 
-    // Helper function to add network after delay
     addNetworkWithDelay(network: WifiNetwork, delay: number) {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -83,6 +82,39 @@ export const useGlobalStore = defineStore({
           resolve();
         }, delay);
       });
+    },
+
+    // Boot handlers
+    async boot() {
+      // Reset some state
+      this.isAuthenticated = false;
+      this.isPowerOffMenuOpen = false;
+      this.loginView = "selectUser";
+
+      await navigateTo("/booting");
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    },
+    async handlePoweroff() {
+      await this.boot();
+      await navigateTo("poweroff");
+    },
+    async handlePowerUp() {
+      await this.boot();
+      await navigateTo("login");
+    },
+    async handleRestart() {
+      await this.boot();
+      await navigateTo("/"); // blank page
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await navigateTo("booting");
+      await this.boot();
+      await navigateTo("login");
+    },
+    async handleSuspend() {
+      console.log("suspended");
+    },
+    handleLogout() {
+      console.log("handleLogout");
     },
   },
   getters: {

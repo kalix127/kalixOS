@@ -4,28 +4,24 @@ import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
-const { isPowerOffMenuOpen } = storeToRefs(globalStore);
+const { isPowerOffMenuOpen, isAuthenticated } = storeToRefs(globalStore);
+
+const { handleSuspend, handlePoweroff, handleRestart, handleLogout } =
+  globalStore;
 
 const options = [
   {
     name: "Suspend",
-    handler: () => {
-      console.log("Suspend");
-    },
+    handler: handleSuspend,
   },
   {
     name: "Restart...",
-    handler: () => {
-      console.log("Restart");
-    },
+    handler: handleRestart,
   },
   {
-    name: "Power off...",
-    handler: () => {
-      console.log("Power off");
-    },
+    name: "Power Off...",
+    handler: handlePoweroff,
   },
-  // TODO: Add logout option
 ];
 
 function closeMenu() {
@@ -40,7 +36,6 @@ function closeMenu() {
     icon="fa6-solid:power-off"
     label="poweroff"
   >
-    <!-- TODO: Maybe add spacing between the last button and its border top -->
     <Button
       v-for="option in options"
       :key="option.name"

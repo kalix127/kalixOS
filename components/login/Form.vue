@@ -31,7 +31,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
   // Check if the password is correct
   if (values.password === "password") {
     isAuthenticated.value = true;
-    await navigateTo("/");
+    await navigateTo("/desktop");
   } else {
     setErrors({
       password: "Sorry, password authentication didn't work.",

@@ -128,8 +128,14 @@ export const useGlobalStore = defineStore({
     async handleSuspend() {
       console.log("suspended");
     },
-    handleLogout() {
-      console.log("handleLogout");
+    async handleLogout() {
+      // TODO: When implementing the desktop, make sure to reset the desktop store
+      this.isAuthenticated = false;
+      this.username = "";
+      this.loginView = "selectUser";
+      this.isLogoutModalOpen = false;
+
+      await navigateTo("/login");
     },
   },
   getters: {

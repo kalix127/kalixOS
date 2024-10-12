@@ -12,7 +12,7 @@ const route = useRoute();
 
 <template>
   <header
-    class="flex items-center justify-between bg-[#080404] px-1"
+    class="flex items-center justify-between bg-[#080404] p-1"
     :class="[route.name === 'login' ? '!bg-transparent' : '']"
   >
     <!-- Left empty div for spacing -->

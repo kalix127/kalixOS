@@ -1,7 +1,7 @@
 <template>
   <svg
-    width="800px"
-    height="800px"
+    width="240px"
+    height="141px"
     viewBox="-5.3 -1792.9 8666.25 8666.25"
     clip-rule="evenodd"
     fill-rule="evenodd"

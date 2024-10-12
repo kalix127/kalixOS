@@ -34,6 +34,7 @@ export default defineNuxtConfig({
         "ion",
         "svg-spinners",
         "fa6-solid",
+        "eos-icons",
       ],
     },
     clientBundle: {
@@ -64,6 +65,7 @@ export default defineNuxtConfig({
         "fa6-solid:power-off",
         "svg-spinners:tadpole",
         "svg-spinners:ring-resize",
+        "eos-icons:three-dots-loading",
       ],
       scan: true,
 

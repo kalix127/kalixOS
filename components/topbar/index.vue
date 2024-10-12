@@ -30,6 +30,7 @@ const route = useRoute();
     <!-- Power off modals -->
     <TopbarPowerOffModal
       title="Power Off"
+      label="Power Off"
       description="The system will power off automatically in 60 seconds."
       :seconds="60"
       :isOpen="isPowerOffModalOpen"
@@ -38,6 +39,7 @@ const route = useRoute();
     />
     <TopbarPowerOffModal
       title="Restart"
+      label="Restart"
       description="The system will restart automatically in 50 seconds."
       :seconds="50"
       :isOpen="isRestartModalOpen"
@@ -46,8 +48,9 @@ const route = useRoute();
     />
     <TopbarPowerOffModal
       :title="`Log Out ${username}`"
+      label="Log Out"
       :description="`${username} will be logged out automatically in 60 seconds.`"
-      :seconds="60"
+      :seconds="10"
       :isOpen="isLogoutModalOpen"
       @closeModal="isLogoutModalOpen = false"
       @action="handleLogout"

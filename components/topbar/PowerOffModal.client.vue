@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { isOpen, seconds } = defineProps<{
   title: string;
+  label: string;
   description: string;
   seconds: number;
   isOpen: boolean;
@@ -53,7 +54,7 @@ watchEffect(() => {
           variant="ghost"
           class="w-1/2 rounded-none rounded-br-xl bg-secondary"
           @click="() => emit('action')"
-          >{{ title }}</Button
+          >{{ label }}</Button
         >
       </div>
     </AlertDialogContent>

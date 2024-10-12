@@ -29,12 +29,13 @@ export const useGlobalStore = defineStore({
     loginView: "selectUser",
     username: "Gianluca",
     isAuthenticated: false,
-    
+
     // Boot states
     // isSuspended: false,
+    isBooting: false,
     isPowerOffModalOpen: false,
     isRestartModalOpen: false,
-    isLogoutModalOpen: false, 
+    isLogoutModalOpen: false,
   }),
   actions: {
     toggleWifi() {
@@ -92,6 +93,8 @@ export const useGlobalStore = defineStore({
 
     // Boot handlers
     async boot() {
+      this.isBooting = true;
+
       // Reset some state
       this.isAuthenticated = false;
       this.isPowerOffMenuOpen = false;
@@ -106,10 +109,12 @@ export const useGlobalStore = defineStore({
     async handlePoweroff() {
       await this.boot();
       await navigateTo("poweroff");
+      this.isBooting = false;
     },
     async handlePowerUp() {
       await this.boot();
       await navigateTo("login");
+      this.isBooting = false;
     },
     async handleRestart() {
       await this.boot();
@@ -118,6 +123,7 @@ export const useGlobalStore = defineStore({
       await navigateTo("booting");
       await this.boot();
       await navigateTo("login");
+      this.isBooting = false;
     },
     async handleSuspend() {
       console.log("suspended");
@@ -173,6 +179,7 @@ interface GlobalStore {
 
   // Boot states
   // isSuspended: boolean;
+  isBooting: boolean; // This represents if the user is booting/rebooting the system
   isPowerOffModalOpen: boolean;
   isRestartModalOpen: boolean;
   isLogoutModalOpen: boolean;

@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <main>
     <slot />
-  </div>
+  </main>
 </template>
 
-<script></script>
+<script setup lang="ts">
 
-<style lang="scss" scoped></style>
+</script>
+
+<style scoped>
+
+</style>

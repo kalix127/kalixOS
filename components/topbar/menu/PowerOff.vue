@@ -44,6 +44,16 @@ function closeMenu() {
       class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
       >{{ option.name }}</Button
     >
+    <template v-if="isAuthenticated">
+      <!-- Separator -->
+      <div class="h-1 border-t border-gray-500/40 px-2"></div>
+      <Button
+        @click="handleLogout"
+        variant="ghost"
+        class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
+        >Log Out...
+      </Button>
+    </template>
   </TopbarMenu>
 </template>
 

@@ -29,6 +29,12 @@ export const useGlobalStore = defineStore({
     loginView: "selectUser",
     username: "Gianluca",
     isAuthenticated: false,
+    
+    // Boot states
+    // isSuspended: false,
+    isPowerOffModalOpen: false,
+    isRestartModalOpen: false,
+    isLogoutModalOpen: false, 
   }),
   actions: {
     toggleWifi() {
@@ -89,6 +95,9 @@ export const useGlobalStore = defineStore({
       // Reset some state
       this.isAuthenticated = false;
       this.isPowerOffMenuOpen = false;
+      this.isRestartModalOpen = false;
+      this.isPowerOffModalOpen = false;
+      this.isLogoutModalOpen = false;
       this.loginView = "selectUser";
 
       await navigateTo("/booting");
@@ -161,4 +170,10 @@ interface GlobalStore {
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
   isAuthenticated: boolean;
+
+  // Boot states
+  // isSuspended: boolean;
+  isPowerOffModalOpen: boolean;
+  isRestartModalOpen: boolean;
+  isLogoutModalOpen: boolean;
 }

@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useGlobalStore } from "@/stores/global.store";
+import { storeToRefs } from "pinia";
+
+const globalStore = useGlobalStore();
+const { isPowerOffMenuOpen } = storeToRefs(globalStore);
+
 const { isOpen, seconds } = defineProps<{
   title: string;
   label: string;
@@ -13,6 +19,9 @@ let timer: NodeJS.Timeout;
 
 watchEffect(() => {
   if (isOpen) {
+    // Close the poweroff menu when the modal is opened
+    isPowerOffMenuOpen.value = false;
+
     timer = setTimeout(() => {
       emit("action");
     }, seconds * 1000);

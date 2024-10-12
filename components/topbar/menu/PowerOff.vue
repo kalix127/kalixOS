@@ -4,10 +4,15 @@ import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
-const { isPowerOffMenuOpen, isAuthenticated } = storeToRefs(globalStore);
+const {
+  isPowerOffMenuOpen,
+  isRestartModalOpen,
+  isPowerOffModalOpen,
+  isLogoutModalOpen,
+  isAuthenticated,
+} = storeToRefs(globalStore);
 
-const { handleSuspend, handlePoweroff, handleRestart, handleLogout } =
-  globalStore;
+const { handleSuspend } = globalStore;
 
 const options = [
   {
@@ -16,13 +21,21 @@ const options = [
   },
   {
     name: "Restart...",
-    handler: handleRestart,
+    handler: () => {
+      isRestartModalOpen.value = true;
+    },
   },
   {
     name: "Power Off...",
-    handler: handlePoweroff,
+    handler: () => {
+      isPowerOffModalOpen.value = true;
+    },
   },
 ];
+
+function handleLogout() {
+  isLogoutModalOpen.value = true;
+}
 
 function closeMenu() {
   isPowerOffMenuOpen.value = false;

@@ -1,9 +1,13 @@
 <script lang="js" setup>
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from "@/components/ui/sonner";
+import { useGlobalStore } from "@/stores/global.store";
+import { storeToRefs } from "pinia";
+const { isSuspended } = storeToRefs(useGlobalStore());
 </script>
 
 <template>
-  <NuxtLayout>
+  <SuspendedOverlay v-if="isSuspended" />
+  <NuxtLayout v-else>
     <NuxtPage />
     <Toaster />
   </NuxtLayout>

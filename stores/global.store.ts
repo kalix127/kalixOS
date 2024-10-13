@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomWifiDelays } from "@/lib/utils";
 import { defaultNetworks } from "@/constants";
+import { useIdle, watchOnce } from "@vueuse/core";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -31,7 +32,7 @@ export const useGlobalStore = defineStore({
     isAuthenticated: false,
 
     // Boot states
-    // isSuspended: false,
+    isSuspended: false,
     isBooting: false,
     isPowerOffModalOpen: false,
     isRestartModalOpen: false,
@@ -126,7 +127,17 @@ export const useGlobalStore = defineStore({
       this.isBooting = false;
     },
     async handleSuspend() {
-      console.log("suspended");
+      // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
+      this.isSuspended = true;
+      this.isPowerOffMenuOpen = false;
+
+      const { idle } = useIdle(0);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
+
+      // Start watching after 1 seconds
+      watchOnce(idle, () => {
+        this.isSuspended = false;
+      });
     },
     async handleLogout() {
       // TODO: When implementing the desktop, make sure to reset the desktop store
@@ -184,7 +195,7 @@ interface GlobalStore {
   isAuthenticated: boolean;
 
   // Boot states
-  // isSuspended: boolean;
+  isSuspended: boolean;
   isBooting: boolean; // This represents if the user is booting/rebooting the system
   isPowerOffModalOpen: boolean;
   isRestartModalOpen: boolean;

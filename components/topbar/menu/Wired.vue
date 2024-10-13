@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
-const { isWiredMenuOpen } = storeToRefs(globalStore);
+const { isWiredMenuOpen, isWiredEnabled } = storeToRefs(globalStore);
 
 function closeMenu() {
   isWiredMenuOpen.value = false;
@@ -14,9 +14,10 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
+    :isOpen="isWiredMenuOpen"
+    :isEnabled="isWiredEnabled"
     title="Wired Connections"
     icon="lucide:ethernet-port"
-    label="wired"
   >
     <Button
       variant="ghost"

@@ -1,51 +1,10 @@
 <script setup lang="ts">
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
-
-const globalStore = useGlobalStore();
-const {
-  isPowerOffMenuOpen,
-  isWiredMenuOpen,
-  isWifiMenuOpen,
-  isBluetoothMenuOpen,
-  isWiredEnabled,
-  isWifiEnabled,
-  isBluetoothEnabled,
-} = storeToRefs(globalStore);
-
-const { label } = defineProps<{
+defineProps<{
   title: string;
   icon: string;
-  label: "poweroff" | "wired" | "wifi" | "bluetooth";
+  isOpen: boolean;
+  isEnabled?: boolean;
 }>();
-
-const isOpen = computed(() => {
-  switch (label) {
-    case "poweroff":
-      return isPowerOffMenuOpen.value;
-    case "wired":
-      return isWiredMenuOpen.value;
-    case "wifi":
-      return isWifiMenuOpen.value;
-    case "bluetooth":
-      return isBluetoothMenuOpen.value;
-    default:
-      return false;
-  }
-});
-
-const isEnabled = computed(() => {
-  switch (label) {
-    case "wifi":
-      return isWifiEnabled;
-    case "wired":
-      return isWiredEnabled;
-    case "bluetooth":
-      return isBluetoothEnabled;
-    default:
-      return false;
-  }
-});
 </script>
 
 <template>

@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
-const { isBluetoothMenuOpen } = storeToRefs(globalStore);
+const { isBluetoothMenuOpen, isBluetoothEnabled } = storeToRefs(globalStore);
 
 function closeMenu() {
   isBluetoothMenuOpen.value = false;
@@ -14,9 +14,10 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
+    :isOpen="isBluetoothMenuOpen"
+    :isEnabled="isBluetoothEnabled"
     title="Bluetooth"
     icon="material-symbols:bluetooth"
-    label="bluetooth"
   >
     <div
       class="grid place-content-center p-6 text-center text-lg font-extrabold text-muted-foreground/70"

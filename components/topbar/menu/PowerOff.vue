@@ -45,9 +45,9 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
+    :isOpen="isPowerOffMenuOpen"
     title="Power Off"
     icon="fa6-solid:power-off"
-    label="poweroff"
   >
     <Button
       v-for="option in options"

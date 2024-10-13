@@ -9,6 +9,11 @@ const { isWiredMenuOpen, isWiredEnabled } = storeToRefs(globalStore);
 function closeMenu() {
   isWiredMenuOpen.value = false;
 }
+
+function handleDisconnect() {
+  isWiredEnabled.value = false;
+  isWiredMenuOpen.value = false;
+}
 </script>
 
 <template>
@@ -22,6 +27,7 @@ function closeMenu() {
     <Button
       variant="ghost"
       class="flex w-full cursor-default items-center justify-between rounded-xl font-medium duration-0 hover:bg-accent"
+      @click="handleDisconnect"
     >
       <div class="flex items-center gap-2">
         <Icon name="lucide:ethernet-port" size="18" />

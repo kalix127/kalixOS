@@ -13,6 +13,8 @@ export const useGlobalStore = defineStore({
     isBluetoothEnabled: false,
     isAirplaneModeEnabled: false,
     volume: [100],
+    isLocked: false,
+    isSuspended: false,
 
     // Topbar Menus
     isPowerOffMenuOpen: false,
@@ -32,13 +34,13 @@ export const useGlobalStore = defineStore({
     isAuthenticated: false,
 
     // Boot states
-    isSuspended: false,
     isBooting: false,
     isPowerOffModalOpen: false,
     isRestartModalOpen: false,
     isLogoutModalOpen: false,
   }),
   actions: {
+    // Wifi
     toggleWifi() {
       this.isWifiEnabled = !this.isWifiEnabled;
       this.availableWifiNetworks = [];
@@ -92,6 +94,25 @@ export const useGlobalStore = defineStore({
       });
     },
 
+    // General handlers
+    async handleLock() {
+      this.isLocked = true;
+    },
+
+    async handleSuspend() {
+      // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
+      this.isSuspended = true;
+      this.isPowerOffMenuOpen = false;
+
+      const { idle } = useIdle(0);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Start watching after 1 seconds
+      watchOnce(idle, () => {
+        this.isSuspended = false;
+      });
+    },
+
     // Boot handlers
     async boot() {
       this.isBooting = true;
@@ -125,19 +146,6 @@ export const useGlobalStore = defineStore({
       await this.boot();
       await navigateTo("login");
       this.isBooting = false;
-    },
-    async handleSuspend() {
-      // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
-      this.isSuspended = true;
-      this.isPowerOffMenuOpen = false;
-
-      const { idle } = useIdle(0);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); 
-
-      // Start watching after 1 seconds
-      watchOnce(idle, () => {
-        this.isSuspended = false;
-      });
     },
     async handleLogout() {
       // TODO: When implementing the desktop, make sure to reset the desktop store
@@ -176,6 +184,8 @@ interface GlobalStore {
   isBluetoothEnabled: boolean;
   isAirplaneModeEnabled: boolean;
   volume: number[];
+  isLocked: boolean;
+  isSuspended: boolean;
 
   // Topbar Menus
   isPowerOffMenuOpen: boolean;
@@ -195,7 +205,6 @@ interface GlobalStore {
   isAuthenticated: boolean;
 
   // Boot states
-  isSuspended: boolean;
   isBooting: boolean; // This represents if the user is booting/rebooting the system
   isPowerOffModalOpen: boolean;
   isRestartModalOpen: boolean;

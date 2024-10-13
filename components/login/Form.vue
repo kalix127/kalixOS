@@ -48,7 +48,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
       <Icon name="material-symbols:person" size="140" />
     </div>
 
-    <h1 class="text-2xl font-bold">{{ username }}</h1>
+    <h1 class="text-2xl font-extrabold">{{ username }}</h1>
 
     <!-- Password Input -->
     <form @submit.prevent="onSubmit">

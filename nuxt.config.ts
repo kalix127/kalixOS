@@ -3,6 +3,8 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   app: {
     head: {},
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
   },
   devtools: { enabled: true },
   runtimeConfig: {
@@ -20,6 +22,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxt/fonts",
     "@pinia/nuxt",
+    "@nuxt/image",
   ],
   css: ["~/assets/css/main.css"],
   icon: {
@@ -32,6 +35,7 @@ export default defineNuxtConfig({
         "ion",
         "svg-spinners",
         "fa6-solid",
+        "eos-icons",
       ],
     },
     clientBundle: {
@@ -62,6 +66,7 @@ export default defineNuxtConfig({
         "fa6-solid:power-off",
         "svg-spinners:tadpole",
         "svg-spinners:ring-resize",
+        "eos-icons:three-dots-loading",
       ],
       scan: true,
 

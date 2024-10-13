@@ -27,7 +27,7 @@ const { loginView } = storeToRefs(globalStore);
 
     <!-- Bottom logo -->
     <div class="grid place-content-center">
-      <ManjaroFullLogo class="max-w-48" />
+      <LogoManjaroFull class="max-w-48" />
     </div>
   </div>
 </template>

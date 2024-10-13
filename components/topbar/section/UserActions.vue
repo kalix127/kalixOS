@@ -4,23 +4,29 @@ import { storeToRefs } from "pinia";
 
 const globalStore = useGlobalStore();
 
-const { isPowerOffMenuOpen, isAnyTopbarMenuOpen } = storeToRefs(globalStore);
+const { isPowerOffMenuOpen, isAnyTopbarMenuOpen, isAuthenticated, isLocked } =
+  storeToRefs(globalStore);
+
+const { handleLock } = globalStore;
 
 const items = [
-  {
-    name: "Settings",
-    icon: "material-symbols:settings-rounded",
-    handler: () => {
-      console.log("Settings");
-    },
-  },
-  {
-    name: "Lock",
-    icon: "material-symbols:lock",
-    handler: () => {
-      console.log("Lock");
-    },
-  },
+  // If authenticated and not locked, show the settings and lock buttons
+  ...(isAuthenticated.value && !isLocked.value
+    ? [
+        {
+          name: "Settings",
+          icon: "material-symbols:settings-rounded",
+          handler: () => {
+            console.log("Settings");
+          },
+        },
+        {
+          name: "Lock",
+          icon: "material-symbols:lock",
+          handler: handleLock,
+        },
+      ]
+    : []),
   {
     name: "Poweroff",
     icon: "fa6-solid:power-off",
@@ -39,7 +45,7 @@ const items = [
     <!-- Battery item -->
     <Button
       variant="ghost"
-      class="hover:bg-secondary-hover flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0"
+      class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
       :disabled="isAnyTopbarMenuOpen"
     >
       <Icon name="mdi:battery-charging" size="18" />
@@ -54,7 +60,7 @@ const items = [
         :disabled="isAnyTopbarMenuOpen"
         size="icon"
         variant="ghost"
-        class="hover:bg-secondary-hover cursor-default rounded-full bg-secondary duration-0"
+        class="cursor-default rounded-full bg-secondary duration-0 hover:bg-secondary-hover"
         @click="item.handler"
       >
         <Icon :name="item.icon" size="16" />

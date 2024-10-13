@@ -6,6 +6,7 @@ import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
 const {
+  isWifiEnabled,
   isConnectingToWifi,
   isWifiMenuOpen,
   availableWifiNetworks,
@@ -48,9 +49,10 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
+    :isOpen="isWifiMenuOpen"
+    :isEnabled="isWifiEnabled"
     title="Wi-Fi"
     icon="ic:baseline-signal-wifi-4-bar"
-    label="wifi"
   >
     <Button
       v-for="network in availableWifiNetworks"

@@ -1,9 +1,7 @@
-<script lang="ts" setup>
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-  </div>
+  <main class="bg-black h-[100vh]"></main>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

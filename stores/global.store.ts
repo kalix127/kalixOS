@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomWifiDelays } from "@/lib/utils";
 import { defaultNetworks } from "@/constants";
+import { useIdle, watchOnce } from "@vueuse/core";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -12,6 +13,8 @@ export const useGlobalStore = defineStore({
     isBluetoothEnabled: false,
     isAirplaneModeEnabled: false,
     volume: [100],
+    isLocked: false,
+    isSuspended: false,
 
     // Topbar Menus
     isPowerOffMenuOpen: false,
@@ -29,8 +32,15 @@ export const useGlobalStore = defineStore({
     loginView: "selectUser",
     username: "Gianluca",
     isAuthenticated: false,
+
+    // Boot states
+    isBooting: false,
+    isPowerOffModalOpen: false,
+    isRestartModalOpen: false,
+    isLogoutModalOpen: false,
   }),
   actions: {
+    // Wifi
     toggleWifi() {
       this.isWifiEnabled = !this.isWifiEnabled;
       this.availableWifiNetworks = [];
@@ -66,7 +76,6 @@ export const useGlobalStore = defineStore({
       this.isSearchingWifiNetworks = false;
     },
 
-    // Helper function to add network after delay
     addNetworkWithDelay(network: WifiNetwork, delay: number) {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -83,6 +92,69 @@ export const useGlobalStore = defineStore({
           resolve();
         }, delay);
       });
+    },
+
+    // General handlers
+    async handleLock() {
+      this.isLocked = true;
+    },
+
+    async handleSuspend() {
+      // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
+      this.isSuspended = true;
+      this.isPowerOffMenuOpen = false;
+
+      const { idle } = useIdle(0);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Start watching after 1 seconds
+      watchOnce(idle, () => {
+        this.isSuspended = false;
+      });
+    },
+
+    // Boot handlers
+    async boot() {
+      this.isBooting = true;
+
+      // Reset some state
+      this.isAuthenticated = false;
+      this.isPowerOffMenuOpen = false;
+      this.isRestartModalOpen = false;
+      this.isPowerOffModalOpen = false;
+      this.isLogoutModalOpen = false;
+      this.loginView = "selectUser";
+
+      await navigateTo("/booting");
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    },
+    async handlePoweroff() {
+      await this.boot();
+      await navigateTo("poweroff");
+      this.isBooting = false;
+    },
+    async handlePowerUp() {
+      await this.boot();
+      await navigateTo("login");
+      this.isBooting = false;
+    },
+    async handleRestart() {
+      await this.boot();
+      await navigateTo("/"); // blank page
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await navigateTo("booting");
+      await this.boot();
+      await navigateTo("login");
+      this.isBooting = false;
+    },
+    async handleLogout() {
+      // TODO: When implementing the desktop, make sure to reset the desktop store
+      this.isAuthenticated = false;
+      this.username = "";
+      this.loginView = "selectUser";
+      this.isLogoutModalOpen = false;
+
+      await navigateTo("/login");
     },
   },
   getters: {
@@ -112,6 +184,8 @@ interface GlobalStore {
   isBluetoothEnabled: boolean;
   isAirplaneModeEnabled: boolean;
   volume: number[];
+  isLocked: boolean;
+  isSuspended: boolean;
 
   // Topbar Menus
   isPowerOffMenuOpen: boolean;
@@ -129,4 +203,10 @@ interface GlobalStore {
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
   isAuthenticated: boolean;
+
+  // Boot states
+  isBooting: boolean; // This represents if the user is booting/rebooting the system
+  isPowerOffModalOpen: boolean;
+  isRestartModalOpen: boolean;
+  isLogoutModalOpen: boolean;
 }

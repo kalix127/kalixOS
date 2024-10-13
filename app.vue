@@ -6,7 +6,7 @@ const { isSuspended } = storeToRefs(useGlobalStore());
 </script>
 
 <template>
-  <SuspendedOverlay v-if="isSuspended" />
+  <OverlaySuspended v-if="isSuspended" />
   <NuxtLayout v-else>
     <NuxtPage />
     <Toaster />

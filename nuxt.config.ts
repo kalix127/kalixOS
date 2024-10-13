@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxt/fonts",
     "@pinia/nuxt",
+    "@nuxt/image",
   ],
   css: ["~/assets/css/main.css"],
   icon: {

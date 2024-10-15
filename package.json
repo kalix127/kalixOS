@@ -32,6 +32,7 @@
     "lucide-vue-next": "^0.446.0",
     "mailtrap": "^3.4.0",
     "nuxt": "^3.13.0",
+    "nuxt-zod-i18n": "^1.10.0",
     "pinia": "^2.2.3",
     "radix-vue": "^1.9.6",
     "shadcn-nuxt": "^0.10.4",

@@ -17,14 +17,16 @@ export default defineNuxtConfig({
       process.env.MAILTRAP_TEMPLATE_UUID_VERIFY_EMAIL,
   },
   modules: [
+    "nuxt-zod-i18n",
     "@nuxtjs/tailwindcss",
-    "@nuxt/icon",
     "shadcn-nuxt",
+    "@nuxt/icon",
     "@nuxt/fonts",
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
   ],
+
   i18n: {
     // TODO: Add baseUrl for prod
     defaultLocale: "en-US",
@@ -46,6 +48,9 @@ export default defineNuxtConfig({
       cookieKey: "i18n",
       redirectOn: "root",
     },
+  },
+  zodI18n: {
+    useModuleLocale: false,
   },
   css: ["~/assets/css/main.css"],
   icon: {
@@ -90,6 +95,7 @@ export default defineNuxtConfig({
         "svg-spinners:tadpole",
         "svg-spinners:ring-resize",
         "eos-icons:three-dots-loading",
+        "lucide:languages",
       ],
       scan: true,
 

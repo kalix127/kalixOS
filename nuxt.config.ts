@@ -23,7 +23,30 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@pinia/nuxt",
     "@nuxt/image",
+    "@nuxtjs/i18n",
   ],
+  i18n: {
+    // TODO: Add baseUrl for prod
+    defaultLocale: "en-US",
+    lazy: true,
+    langDir: "locales",
+    strategy: "no_prefix",
+    locales: [
+      {
+        code: "en-US",
+        file: "en-US.json",
+      },
+      {
+        code: "it-IT",
+        file: "it-IT.json",
+      },
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n",
+      redirectOn: "root",
+    },
+  },
   css: ["~/assets/css/main.css"],
   icon: {
     serverBundle: {

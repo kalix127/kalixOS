@@ -33,8 +33,8 @@ export default defineNuxtConfig({
   ],
   sentry: {
     sourceMapsUploadOptions: {
-      org: "personal-9r0",
-      project: "gianluca-os",
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
     },
   },

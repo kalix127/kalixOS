@@ -16,7 +16,7 @@ COPY . .
 EXPOSE 3000
 
 # Build the application for production
-RUN npm run build
+RUN NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
 # Command to run the app for production
 CMD [ "node", ".output/server/index.mjs" ]

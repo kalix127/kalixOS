@@ -4,7 +4,8 @@
     "en": "English",
     "it": "Italian"
   },
-
+  "settings": "Settings",
+  "lock": "Lock",
   "wired": "Wired",
   "wired_connection": "Wired connection",
   "wifi": "Wi-Fi",

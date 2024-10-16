@@ -2,7 +2,7 @@
 import { useGlobalStore } from "~/stores/global.store";
 import { storeToRefs } from "pinia";
 
-const { locale, setLocale } = useI18n();
+const { t } = useI18n();
 
 const globalStore = useGlobalStore();
 
@@ -21,21 +21,21 @@ const items = [
   ...(isAuthenticated.value && !isLocked.value
     ? [
         {
-          name: "Settings",
+          name: t("settings"),
           icon: "material-symbols:settings-rounded",
           handler: () => {
             console.log("Settings");
           },
         },
         {
-          name: "Lock",
+          name: t("lock"),
           icon: "material-symbols:lock",
           handler: handleLock,
         },
       ]
     : []),
   {
-    name: "Poweroff",
+    name: t("power_off"),
     icon: "fa6-solid:power-off",
     handler: () => {
       isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;

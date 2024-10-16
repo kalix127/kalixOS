@@ -4,6 +4,8 @@
     "en": "Inglese",
     "it": "Italiano"
   },
+  "settings": "Impostazioni",
+  "lock": "Blocca",
   "wired": "Ethernet",
   "wired_connection": "Connessione Ethernet",
   "wifi": "Wi-Fi",

@@ -9,29 +9,39 @@ import { Calendar } from "@/components/ui/calendar";
 
 const currentDate = ref(new Date());
 
-const weekDay = new Intl.DateTimeFormat("it-IT", {
-  dateStyle: "full",
-})
-  .format(new Date())
-  .split(" ")[0];
+const { locale } = useI18n();
 
 onMounted(() => {
   const intervalId = setInterval(() => {
     currentDate.value = new Date();
   }, 100);
-
+  
   onUnmounted(() => {
     clearInterval(intervalId);
   });
 });
 
-// Computed property to format the date
-const formattedDate = computed(() => {
-  return Intl.DateTimeFormat("it-IT", {
+const formattedDateTime = computed(() => {
+  return Intl.DateTimeFormat(locale.value, {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(currentDate.value);
 });
+
+const weekDay = computed(
+  () =>
+    new Intl.DateTimeFormat(locale.value, {
+      dateStyle: "full",
+    })
+      .format(new Date())
+      .split(" ")[0],
+);
+
+const formattedDate = computed(() =>
+  Intl.DateTimeFormat(locale.value, {
+    dateStyle: "long",
+  }).format(new Date()),
+);
 
 const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
 </script>
@@ -43,7 +53,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         class="flex cursor-default select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
       >
         <span class="text-nowrap text-sm font-extrabold">
-          {{ formattedDate }}
+          {{ formattedDateTime }}
         </span>
       </div>
     </PopoverTrigger>
@@ -57,11 +67,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         <span
           class="mb-2 w-full text-left text-xl font-extrabold text-muted-foreground xs:pl-4"
         >
-          {{
-            Intl.DateTimeFormat("it-IT", {
-              dateStyle: "long",
-            }).format(new Date())
-          }}
+          {{ formattedDate }}
         </span>
         <Calendar v-model="calendarDate" />
       </div>

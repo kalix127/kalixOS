@@ -65,19 +65,7 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/css/main.css"],
   icon: {
-    serverBundle: {
-      collections: [
-        "material-symbols",
-        "lucide",
-        "ic",
-        "mdi",
-        "ion",
-        "svg-spinners",
-        "fa6-solid",
-        "eos-icons",
-        "flag",
-      ],
-    },
+    serverBundle: false,
     clientBundle: {
       icons: [
         "material-symbols:person",

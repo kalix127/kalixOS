@@ -99,7 +99,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
               />
             </div>
           </FormControl>
-          <FormMessage class="absolute text-center text-sm text-foreground" />
+          <FormMessage class="text-center text-sm text-foreground" />
         </FormItem>
       </FormField>
     </form>

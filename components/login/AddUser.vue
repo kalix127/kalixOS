@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { addUserValidationSchema } from "@/validations/auth";
-import type { AddUserForm } from "@/types";
+import { addUserSchema, type AddUserForm } from "~/validations/auth.schema";
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -55,12 +54,12 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
                 autofocus
                 v-bind="componentField"
               />
-            </FormControl>
-            <FormMessage class="absolute text-sm text-foreground" />
-          </FormItem>
-        </FormField>
-      </form>
-    </div>
+            </div>
+          </FormControl>
+          <FormMessage class="text-sm text-center text-foreground" />
+        </FormItem>
+      </FormField>
+    </form>
   </div>
 </template>
 

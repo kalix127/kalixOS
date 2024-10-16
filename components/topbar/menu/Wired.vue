@@ -21,7 +21,7 @@ function handleDisconnect() {
     v-on-click-outside="closeMenu"
     :isOpen="isWiredMenuOpen"
     :isEnabled="isWiredEnabled"
-    title="Wired Connections"
+    :title="$t('wired_connection')"
     icon="lucide:ethernet-port"
   >
     <Button
@@ -31,9 +31,9 @@ function handleDisconnect() {
     >
       <div class="flex items-center gap-2">
         <Icon name="lucide:ethernet-port" size="18" />
-        <span>Wired</span>
+        <span>{{ $t("wired") }}</span>
       </div>
-      <span class="text-muted-foreground"> Disconnect </span>
+      <span class="text-muted-foreground"> {{ $t("disconnect") }} </span>
     </Button>
   </TopbarMenu>
 </template>

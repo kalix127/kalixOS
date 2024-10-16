@@ -2,6 +2,9 @@
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const globalStore = useGlobalStore();
 const {
@@ -14,24 +17,24 @@ const {
 
 const { handleSuspend } = globalStore;
 
-const options = [
+const options = computed(() => [
   {
-    name: "Suspend",
+    name: t("suspend"),
     handler: handleSuspend,
   },
   {
-    name: "Restart...",
+    name: `${t("restart")}...`,
     handler: () => {
       isRestartModalOpen.value = true;
     },
   },
   {
-    name: "Power Off...",
+    name: `${t("power_off")}...`,
     handler: () => {
       isPowerOffModalOpen.value = true;
     },
   },
-];
+]);
 
 function handleLogout() {
   isLogoutModalOpen.value = true;
@@ -46,7 +49,7 @@ function closeMenu() {
   <TopbarMenu
     v-on-click-outside="closeMenu"
     :isOpen="isPowerOffMenuOpen"
-    title="Power Off"
+    :title="$t('power_off')"
     icon="fa6-solid:power-off"
   >
     <Button
@@ -64,7 +67,7 @@ function closeMenu() {
         @click="handleLogout"
         variant="ghost"
         class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
-        >Log Out...
+        >{{ $t("logout") }}...
       </Button>
     </template>
   </TopbarMenu>

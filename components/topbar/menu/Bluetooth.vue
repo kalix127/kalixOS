@@ -16,14 +16,13 @@ function closeMenu() {
     v-on-click-outside="closeMenu"
     :isOpen="isBluetoothMenuOpen"
     :isEnabled="isBluetoothEnabled"
-    title="Bluetooth"
+    :title="$t('bluetooth')"
     icon="material-symbols:bluetooth"
   >
     <div
       class="grid place-content-center p-6 text-center text-lg font-extrabold text-muted-foreground/70"
     >
-      No available or <br />
-      connected device
+      {{ $t("bluetooth_not_available") }}
     </div>
   </TopbarMenu>
 </template>

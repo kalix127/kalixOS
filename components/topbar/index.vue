@@ -29,28 +29,28 @@ const route = useRoute();
 
     <!-- Power off modals -->
     <TopbarPowerOffModal
-      title="Power Off"
-      label="Power Off"
-      description="The system will power off automatically in 60 seconds."
+      :title="$t('power_off')"
+      :label="$t('power_off')"
+      :description="$t('power_off_modal', { seconds: 60 })"
       :seconds="60"
       :isOpen="isPowerOffModalOpen"
       @closeModal="isPowerOffModalOpen = false"
       @action="handlePoweroff"
     />
     <TopbarPowerOffModal
-      title="Restart"
-      label="Restart"
-      description="The system will restart automatically in 50 seconds."
+      :title="$t('restart')"
+      :label="$t('restart')"
+      :description="$t('restart_modal', { seconds: 50 })"
       :seconds="50"
       :isOpen="isRestartModalOpen"
       @closeModal="isRestartModalOpen = false"
       @action="handleRestart"
     />
     <TopbarPowerOffModal
-      :title="`Log Out ${username}`"
-      label="Log Out"
-      :description="`${username} will be logged out automatically in 60 seconds.`"
-      :seconds="10"
+      :title="`${$t('logout')} ${username}`"
+      :label="$t('logout')"
+      :description="$t('logout_modal', { username, seconds: 60 })"
+      :seconds="60"
       :isOpen="isLogoutModalOpen"
       @closeModal="isLogoutModalOpen = false"
       @action="handleLogout"

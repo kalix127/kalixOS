@@ -17,8 +17,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./certs/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-      - ./certs/privkey.pem:/etc/nginx/ssl/privkey.pem
+      - ./certs:/etc/nginx/ssl
     restart: unless-stopped
     environment:
       - SERVER_NAME=${SERVER_NAME}

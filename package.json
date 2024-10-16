@@ -24,6 +24,7 @@
     "@nuxt/image": "^1.8.1",
     "@nuxtjs/i18n": "^8.5.5",
     "@pinia/nuxt": "^0.5.5",
+    "@sentry/nuxt": "^8.34.0",
     "@vee-validate/zod": "^4.13.2",
     "@vueuse/components": "^11.1.0",
     "@vueuse/core": "^11.1.0",

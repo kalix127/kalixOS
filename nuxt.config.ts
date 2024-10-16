@@ -8,6 +8,10 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   runtimeConfig: {
+    public: {
+      sentryDsn: process.env.SENTRY_DSN,
+      serverName: process.env.SERVER_NAME,
+    },
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
     mailtrapSender: process.env.MAILTRAP_SENDER,
     mailtrapPassword: process.env.MAILTRAP_PASSWORD,
@@ -25,6 +29,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
+    "@sentry/nuxt/module",
   ],
 
   i18n: {

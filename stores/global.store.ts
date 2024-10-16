@@ -143,7 +143,6 @@ export const useGlobalStore = defineStore({
       await this.boot();
       await navigateTo("/"); // blank page
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await navigateTo("booting");
       await this.boot();
       await navigateTo("login");
       this.isBooting = false;

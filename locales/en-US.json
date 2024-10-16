@@ -1,0 +1,24 @@
+{
+  "language": {
+    "switch": "Switch language",
+    "en": "English",
+    "it": "Italian"
+  },
+
+  "wired": "Wired",
+  "wired_connection": "Wired connection",
+  "wifi": "Wi-Fi",
+  "bluetooth": "Bluetooth",
+  "bluetooth_not_available": "Bluetooth not available or connected device",
+  "airplane_mode": "Airplane mode",
+  "disconnect": "Disconnect",
+  "suspend": "Suspend",
+  "restart": "Restart",
+  "restart_modal": "The system will restart automatically in {seconds} seconds.",
+  "power_off": "Power Off",
+  "power_off_modal": "The system will power off automatically in {seconds} seconds.",
+  "logout": "Log Out",
+  "logout_modal": "{username} will be logged out automatically in {seconds} seconds.",
+  "cancel": "Cancel",
+  "not_listed": "Not listed?"
+}

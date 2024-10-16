@@ -1,0 +1,23 @@
+{
+  "language": {
+    "switch": "Cambia lingua",
+    "en": "Inglese",
+    "it": "Italiano"
+  },
+  "wired": "Ethernet",
+  "wired_connection": "Connessione Ethernet",
+  "wifi": "Wi-Fi",
+  "bluetooth": "Bluetooth",
+  "bluetooth_not_available": "Bluetooth non disponibile o dispositivo collegato",
+  "airplane_mode": "Modalità aereo",
+  "disconnect": "Disconnetti",
+  "suspend": "Sospendi",
+  "restart": "Riavvia",
+  "restart_modal": "Il sistema riavvierà automaticamente in {seconds} secondi.",
+  "power_off": "Spegni",
+  "power_off_modal": "Il sistema si spegnerà automaticamente in {seconds} secondi.",
+  "logout": "Disconnetti",
+  "logout_modal": "{username} sarà disconnesso automaticamente in {seconds} secondi.",
+  "cancel": "Annulla",
+  "not_listed": "Non elencato?"
+}

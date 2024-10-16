@@ -31,7 +31,13 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@sentry/nuxt/module",
   ],
-
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: "personal-9r0",
+      project: "gianluca-os",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    },
+  },
   i18n: {
     // TODO: Add baseUrl for prod
     defaultLocale: "en-US",

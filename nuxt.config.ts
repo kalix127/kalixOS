@@ -64,6 +64,7 @@ export default defineNuxtConfig({
         "svg-spinners",
         "fa6-solid",
         "eos-icons",
+        "flag",
       ],
     },
     clientBundle: {
@@ -96,6 +97,8 @@ export default defineNuxtConfig({
         "svg-spinners:ring-resize",
         "eos-icons:three-dots-loading",
         "lucide:languages",
+        "flag:it-4x3",
+        "flag:us-4x3",
       ],
       scan: true,
 

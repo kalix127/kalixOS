@@ -64,8 +64,9 @@ const props = defineProps<{ class?: HTMLAttributes["class"] }>();
         <!-- User Actions -->
         <TopbarSectionUserActions />
 
-        <!-- TODO: Fix the gap created on those menus -->
+        <!-- User actions menus -->
         <TopbarMenuPowerOff />
+        <TopbarMenuLanguage />
 
         <!-- Sliders -->
         <TopbarSectionControls />

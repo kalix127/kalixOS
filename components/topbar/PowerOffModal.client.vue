@@ -57,7 +57,7 @@ watchEffect(() => {
           variant="ghost"
           class="w-1/2 rounded-none rounded-bl-xl border-2 border-primary/60 bg-secondary"
           @click="() => emit('closeModal')"
-          >Cancel</Button
+          >{{ $t("cancel") }}</Button
         >
         <Button
           variant="ghost"

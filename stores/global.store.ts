@@ -17,6 +17,7 @@ export const useGlobalStore = defineStore({
     isSuspended: false,
 
     // Topbar Menus
+    isLanguageMenuOpen: false,
     isPowerOffMenuOpen: false,
     isWifiMenuOpen: false,
     isBluetoothMenuOpen: false,
@@ -142,7 +143,6 @@ export const useGlobalStore = defineStore({
       await this.boot();
       await navigateTo("/"); // blank page
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await navigateTo("booting");
       await this.boot();
       await navigateTo("login");
       this.isBooting = false;
@@ -163,7 +163,8 @@ export const useGlobalStore = defineStore({
         state.isPowerOffMenuOpen ||
         state.isWifiMenuOpen ||
         state.isBluetoothMenuOpen ||
-        state.isWiredMenuOpen
+        state.isWiredMenuOpen ||
+        state.isLanguageMenuOpen
       );
     },
     getTopbarMenuOpen(state) {
@@ -171,6 +172,7 @@ export const useGlobalStore = defineStore({
       if (state.isWifiMenuOpen) return "wifi";
       if (state.isBluetoothMenuOpen) return "bluetooth";
       if (state.isWiredMenuOpen) return "wired";
+      if (state.isLanguageMenuOpen) return "language";
       return "";
     },
   },
@@ -188,6 +190,7 @@ interface GlobalStore {
   isSuspended: boolean;
 
   // Topbar Menus
+  isLanguageMenuOpen: boolean;
   isPowerOffMenuOpen: boolean;
   isWifiMenuOpen: boolean;
   isBluetoothMenuOpen: boolean;

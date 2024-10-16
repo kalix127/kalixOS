@@ -1,0 +1,99 @@
+{
+  "language": {
+    "switch": "Cambia lingua",
+    "en": "Inglese",
+    "it": "Italiano"
+  },
+  "settings": "Impostazioni",
+  "lock": "Blocca",
+  "wired": "Ethernet",
+  "wired_connection": "Connessione Ethernet",
+  "wifi": "Wi-Fi",
+  "bluetooth": "Bluetooth",
+  "bluetooth_not_available": "Bluetooth non disponibile o dispositivo collegato",
+  "airplane_mode": "Modalità aereo",
+  "disconnect": "Disconnetti",
+  "suspend": "Sospendi",
+  "restart": "Riavvia",
+  "restart_modal": "Il sistema riavvierà automaticamente in {seconds} secondi.",
+  "power_off": "Spegni",
+  "power_off_modal": "Il sistema si spegnerà automaticamente in {seconds} secondi.",
+  "logout": "Disconnetti",
+  "logout_modal": "{username} sarà disconnesso automaticamente in {seconds} secondi.",
+  "cancel": "Annulla",
+  "not_listed": "Non elencato?",
+
+  "zodI18n": {
+    "errors": {
+      "password_authentication_failed": "Spiacente, l'autenticazione con la password non è riuscita.",
+      "custom": "Dato non valido",
+      "invalid_arguments": "Argomenti della funzione non validi",
+      "invalid_date": "Data non valida",
+      "invalid_enum_value": "Valore enum non valido. Atteso {options} per la revisione, ricevuto '{received}'.",
+      "invalid_intersection_types": "Non è stato possibile unire i risultati delle intersezioni",
+      "invalid_literal": "Valore letterale non valido, atteso {expected}",
+      "invalid_return_type": "Tipo di ritorno della funzione non valido",
+      "invalid_string": {
+        "cuid": "{validation} non valido",
+        "datetime": "{validation} non valide",
+        "email": "{validation} non valida",
+        "endsWith": "Dato non valido: deve terminare con \"{endsWith}\".",
+        "regex": "Invalido",
+        "startsWith": "Dato non valido: deve iniziare con \"{startsWith}\".",
+        "url": "{validation} non valido",
+        "uuid": "{validation} non valido"
+      },
+      "invalid_type": "Previsto {expected}, ricevuto {received}",
+      "invalid_type_received_undefined": "Questo campo è obbligatorio",
+      "invalid_union": "Dato non valido",
+      "invalid_union_discriminator": "Valore discriminante non valido. Previsto {options} da rivedere",
+      "not_finite": "Il numero deve essere finito",
+      "not_multiple_of": "Il numero deve essere un multiplo di {multipleOf}",
+      "required": "Questo campo è obbligatorio",
+      "too_big": {
+        "string": {
+          "exact": "Questo campo deve contenere esattamente {maximum} caratteri.",
+          "inclusive": "Questo campo deve contenere al massimo {maximum} caratteri.",
+          "not_inclusive": "Questo campo deve contenere meno di {maximum} caratteri."
+        }
+      },
+      "too_small": {
+        "string": {
+          "exact": "Questo campo deve contenere esattamente {minimum} caratteri.",
+          "inclusive": "Questo campo deve contenere almeno {minimum} caratteri.",
+          "not_inclusive": "Questo campo deve contenere più di {minimum} caratteri."
+        }
+      }
+    },
+    "types": {
+      "array": "vettore",
+      "bigint": "intero grande",
+      "boolean": "booleano",
+      "date": "data",
+      "float": "float",
+      "function": "funzione",
+      "integer": "intero",
+      "map": "mappa",
+      "nan": "nan",
+      "never": "never",
+      "null": "null",
+      "number": "numero",
+      "object": "oggetto",
+      "promise": "promessa",
+      "set": "set",
+      "string": "stringa",
+      "symbol": "simbolo",
+      "undefined": "undefined",
+      "unknown": "unknown",
+      "void": "void"
+    },
+    "validations": {
+      "cuid": "CUID",
+      "datetime": "Data e ora",
+      "email": "Email",
+      "regex": "Regex",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

@@ -15,6 +15,9 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+const { locale } = useI18n()
+
 </script>
 
 <template>
@@ -22,7 +25,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     v-slot="{ grid, weekDays }"
     :class="cn('p-3', props.class)"
     v-bind="forwarded"
-    locale="it"
+    :locale="locale"
   >
     <CalendarHeader>
       <CalendarPrevButton />

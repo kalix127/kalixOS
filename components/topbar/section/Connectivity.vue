@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useGlobalStore } from "~/stores/global.store";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const globalStore = useGlobalStore();
 
@@ -24,7 +27,7 @@ const items = computed(() => [
   {
     model: isWiredEnabled,
     menu: true,
-    name: "Wired",
+    name: t("wired"),
     label: "wired",
     icon: "lucide:ethernet-port",
     handler: () => {
@@ -41,7 +44,7 @@ const items = computed(() => [
   {
     model: isWifiEnabled,
     menu: true,
-    name: "Wi-Fi",
+    name: t("wifi"),
     label: "wifi",
     icon: isWifiEnabled.value
       ? connectedWifiNetwork.value
@@ -61,7 +64,7 @@ const items = computed(() => [
   {
     model: isBluetoothEnabled,
     menu: true,
-    name: "Bluetooth",
+    name: t("bluetooth"),
     label: "bluetooth",
     icon: isBluetoothEnabled.value
       ? "material-symbols:bluetooth"
@@ -78,7 +81,7 @@ const items = computed(() => [
   },
   {
     model: isAirplaneModeEnabled.value,
-    name: "Airplane mode",
+    name: t("airplane_mode"),
     icon: "ion:airplane-sharp",
     handler: () => {
       isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;

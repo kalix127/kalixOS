@@ -1,0 +1,100 @@
+{
+  "language": {
+    "switch": "Switch language",
+    "en": "English",
+    "it": "Italian"
+  },
+  "settings": "Settings",
+  "lock": "Lock",
+  "wired": "Wired",
+  "wired_connection": "Wired connection",
+  "wifi": "Wi-Fi",
+  "bluetooth": "Bluetooth",
+  "bluetooth_not_available": "Bluetooth not available or connected device",
+  "airplane_mode": "Airplane mode",
+  "disconnect": "Disconnect",
+  "suspend": "Suspend",
+  "restart": "Restart",
+  "restart_modal": "The system will restart automatically in {seconds} seconds.",
+  "power_off": "Power Off",
+  "power_off_modal": "The system will power off automatically in {seconds} seconds.",
+  "logout": "Log Out",
+  "logout_modal": "{username} will be logged out automatically in {seconds} seconds.",
+  "cancel": "Cancel",
+  "not_listed": "Not listed?",
+
+  "zodI18n": {
+    "errors": {
+      "password_authentication_failed": "Sorry, password authentication didn't work.",
+      "custom": "Invalid input",
+      "invalid_arguments": "Invalid function arguments",
+      "invalid_date": "Invalid date",
+      "invalid_enum_value": "Invalid enum value. Expected {options} to review, received '{received}'",
+      "invalid_intersection_types": "Intersection results could not be merged",
+      "invalid_literal": "Invalid literal value, expected {expected}",
+      "invalid_return_type": "Invalid function return type",
+      "invalid_string": {
+        "cuid": "Invalid {validation}",
+        "datetime": "Invalid {validation}",
+        "email": "Invalid {validation}",
+        "endsWith": "Invalid input: must end with \"{endsWith}\"",
+        "regex": "Invalid",
+        "startsWith": "Invalid input: must start with \"{startsWith}\"",
+        "url": "Invalid {validation}",
+        "uuid": "Invalid {validation}"
+      },
+      "invalid_type": "Expected {expected}, received {received}",
+      "invalid_type_received_undefined": "This field is required",
+      "invalid_union": "Invalid input",
+      "invalid_union_discriminator": "Invalid discriminator value. Expected {options} to review",
+      "not_finite": "Number must be finite",
+      "not_multiple_of": "Number must be a multiple of {multipleOf}",
+      "required": "This field is required",
+      "too_big": {
+        "string": {
+          "exact": "This field must contain exactly {maximum} character(s)",
+          "inclusive": "This field must contain at most {maximum} character(s)",
+          "not_inclusive": "This field must contain under {maximum} character(s)"
+        }
+      },
+      "too_small": {
+        "string": {
+          "exact": "This field must contain exactly {minimum} character(s)",
+          "inclusive": "This field must contain at least {minimum} character(s)",
+          "not_inclusive": "This field must contain over {minimum} character(s)"
+        }
+      },
+      "unrecognized_keys": "Unrecognized key(s) in object: {keys} to review"
+    },
+    "types": {
+      "array": "array",
+      "bigint": "bigint",
+      "boolean": "boolean",
+      "date": "date",
+      "float": "float",
+      "function": "function",
+      "integer": "integer",
+      "map": "map",
+      "nan": "nan",
+      "never": "never",
+      "null": "null",
+      "number": "number",
+      "object": "object",
+      "promise": "promise",
+      "set": "set",
+      "string": "string",
+      "symbol": "symbol",
+      "undefined": "undefined",
+      "unknown": "unknown",
+      "void": "void"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "datetime",
+      "email": "email",
+      "regex": "regex",
+      "url": "url",
+      "uuid": "uuid"
+    }
+  }
+}

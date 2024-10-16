@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { loginValidationSchema } from "@/validations/auth";
-import type { LoginForm } from "@/types";
+import { loginSchema, type LoginForm } from "@/validations/auth.schema";
 import { useGlobalStore } from "@/stores/global.store";
 import { storeToRefs } from "pinia";
 
+import { toTypedSchema } from "@vee-validate/zod";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 const globalStore = useGlobalStore();
 const { username, isLocked } = storeToRefs(globalStore);
 
@@ -12,7 +15,7 @@ const isLoading = ref(false);
 const isPasswordVisible = ref(false);
 
 const { handleSubmit, setErrors } = useForm({
-  validationSchema: loginValidationSchema,
+  validationSchema: toTypedSchema(loginSchema),
   initialValues: {
     password: "password",
   },
@@ -29,7 +32,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
     isLocked.value = false;
   } else {
     setErrors({
-      password: "Sorry, password authentication didn't work.",
+      password: t("zodI18n.errors.password_authentication_failed"),
     });
   }
 
@@ -94,7 +97,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                 />
               </div>
             </FormControl>
-            <FormMessage class="absolute text-center text-sm text-foreground" />
+            <FormMessage class="text-center text-sm text-foreground" />
           </FormItem>
         </FormField>
       </form>

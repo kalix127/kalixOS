@@ -51,7 +51,7 @@ function closeMenu() {
     v-on-click-outside="closeMenu"
     :isOpen="isWifiMenuOpen"
     :isEnabled="isWifiEnabled"
-    title="Wi-Fi"
+    :title="$t('wifi')"
     icon="ic:baseline-signal-wifi-4-bar"
   >
     <Button

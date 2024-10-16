@@ -2,10 +2,17 @@
 import { useGlobalStore } from "~/stores/global.store";
 import { storeToRefs } from "pinia";
 
+const { t } = useI18n();
+
 const globalStore = useGlobalStore();
 
-const { isPowerOffMenuOpen, isAnyTopbarMenuOpen, isAuthenticated, isLocked } =
-  storeToRefs(globalStore);
+const {
+  isLanguageMenuOpen,
+  isPowerOffMenuOpen,
+  isAnyTopbarMenuOpen,
+  isAuthenticated,
+  isLocked,
+} = storeToRefs(globalStore);
 
 const { handleLock } = globalStore;
 
@@ -14,21 +21,21 @@ const items = [
   ...(isAuthenticated.value && !isLocked.value
     ? [
         {
-          name: "Settings",
+          name: t("settings"),
           icon: "material-symbols:settings-rounded",
           handler: () => {
             console.log("Settings");
           },
         },
         {
-          name: "Lock",
+          name: t("lock"),
           icon: "material-symbols:lock",
           handler: handleLock,
         },
       ]
     : []),
   {
-    name: "Poweroff",
+    name: t("power_off"),
     icon: "fa6-solid:power-off",
     handler: () => {
       isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;
@@ -42,15 +49,27 @@ const items = [
     class="topbar-menu-transition flex justify-between gap-4"
     :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
   >
-    <!-- Battery item -->
-    <Button
-      variant="ghost"
-      class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
-      :disabled="isAnyTopbarMenuOpen"
-    >
-      <Icon name="mdi:battery-charging" size="18" />
-      <span class="text-sm font-semibold">100%</span>
-    </Button>
+    <div class="flex items-center gap-2">
+      <!-- Battery item -->
+      <Button
+        variant="ghost"
+        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
+        :disabled="isAnyTopbarMenuOpen"
+      >
+        <Icon name="mdi:battery-charging" size="18" />
+        <span class="text-sm font-semibold">100%</span>
+      </Button>
+      <!-- Language Switcher -->
+      <Button
+        variant="ghost"
+        size="icon"
+        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
+        :disabled="isAnyTopbarMenuOpen"
+        @click="isLanguageMenuOpen = !isLanguageMenuOpen"
+      >
+        <Icon name="lucide:languages" size="18" />
+      </Button>
+    </div>
 
     <!-- Lock, settings and poweroff buttons -->
     <div class="flex gap-4">

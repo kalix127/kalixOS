@@ -9,7 +9,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
-      sentryDsn: process.env.SENTRY_DSN,
       serverName: process.env.SERVER_NAME,
     },
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,

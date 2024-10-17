@@ -9,7 +9,7 @@ const { locale, setLocale, t } = useI18n();
 const globalStore = useGlobalStore();
 const { isLanguageMenuOpen } = storeToRefs(globalStore);
 
-const items = [
+const items = computed(() => [
   {
     icon: "flag:it-4x3",
     name: t("language.it"),
@@ -20,7 +20,7 @@ const items = [
     name: t("language.en"),
     value: "en-US",
   },
-];
+]);
 
 function closeMenu() {
   isLanguageMenuOpen.value = false;

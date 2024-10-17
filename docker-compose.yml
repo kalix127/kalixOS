@@ -1,0 +1,29 @@
+services:
+  gianluca-os-app:
+    build:
+      context: .
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    networks:
+      - gianluca-os-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/ssl
+    restart: unless-stopped
+    environment:
+      - SERVER_NAME=${SERVER_NAME}
+    networks:
+      - gianluca-os-network
+
+# Define custom network
+networks:
+  gianluca-os-network:
+    driver: bridge

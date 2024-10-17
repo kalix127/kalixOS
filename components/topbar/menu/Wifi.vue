@@ -7,6 +7,7 @@ import { vOnClickOutside } from "@vueuse/components";
 const globalStore = useGlobalStore();
 const {
   isWifiEnabled,
+  isAirplaneModeEnabled,
   isConnectingToWifi,
   isWifiMenuOpen,
   availableWifiNetworks,
@@ -28,7 +29,13 @@ function connectToWifi(network: WifiNetwork) {
 
   // Fake delay of 3 seconds to simulate connecting to a network
   setTimeout(() => {
-    // TODO: Add toaster after connecting to a network
+
+    // Check if the wifi is still enabled and the airplane mode is not enabled
+    if (!isWifiEnabled.value || isAirplaneModeEnabled.value) {
+      isConnectingToWifi.value = false;
+      idConnectingNetwork.value = null;
+      return;
+    }
 
     // If the network we are trying to connect to is not the same as the one we are connecting to, return
     if (idConnectingNetwork.value !== network.id) {

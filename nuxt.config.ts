@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   runtimeConfig: {
+    public: {
+      serverName: process.env.SERVER_NAME,
+    },
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
     mailtrapSender: process.env.MAILTRAP_SENDER,
     mailtrapPassword: process.env.MAILTRAP_PASSWORD,
@@ -25,8 +28,15 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
+    "@sentry/nuxt/module",
   ],
-
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    },
+  },
   i18n: {
     // TODO: Add baseUrl for prod
     defaultLocale: "en-US",
@@ -54,19 +64,7 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/css/main.css"],
   icon: {
-    serverBundle: {
-      collections: [
-        "material-symbols",
-        "lucide",
-        "ic",
-        "mdi",
-        "ion",
-        "svg-spinners",
-        "fa6-solid",
-        "eos-icons",
-        "flag",
-      ],
-    },
+    serverBundle: false,
     clientBundle: {
       icons: [
         "material-symbols:person",

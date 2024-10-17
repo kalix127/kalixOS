@@ -7,13 +7,14 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "node --env-file=.env --import ./.output/server/sentry.server.config.mjs .output/server/index.mjs"
   },
   "dependencies": {
     "@iconify-json/eos-icons": "^1.2.1",
     "@iconify-json/fa6-solid": "^1.2.1",
     "@iconify-json/flag": "^1.2.2",
-    "@iconify-json/ic": "^1.2.0",
+    "@iconify-json/ic": "^1.2.1",
     "@iconify-json/ion": "^1.2.0",
     "@iconify-json/lucide": "^1.2.7",
     "@iconify-json/material-symbols": "^1.2.2",
@@ -24,6 +25,7 @@
     "@nuxt/image": "^1.8.1",
     "@nuxtjs/i18n": "^8.5.5",
     "@pinia/nuxt": "^0.5.5",
+    "@sentry/nuxt": "^8.34.0",
     "@vee-validate/zod": "^4.13.2",
     "@vueuse/components": "^11.1.0",
     "@vueuse/core": "^11.1.0",

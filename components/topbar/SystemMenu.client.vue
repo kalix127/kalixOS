@@ -29,7 +29,7 @@ const props = defineProps<{ class?: HTMLAttributes["class"] }>();
     >
       <Icon
         v-show="connectedWifiNetwork"
-        :name="`ic:baseline-signal-wifi-${connectedWifiNetwork?.signal}-bar`"
+        :name="`ic:baseline-signal-wifi-${connectedWifiNetwork?.signal || 1}-bar`"
         size="18"
       />
       <Icon v-show="isWiredEnabled" name="lucide:ethernet-port" size="18" />

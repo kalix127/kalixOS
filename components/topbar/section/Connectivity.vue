@@ -48,7 +48,7 @@ const items = computed(() => [
     label: "wifi",
     icon: isWifiEnabled.value
       ? connectedWifiNetwork.value
-        ? `ic:baseline-signal-wifi-${connectedWifiNetwork.value?.signal}-bar`
+        ? `ic:baseline-signal-wifi-${connectedWifiNetwork.value?.signal || 1}-bar`
         : "ic:baseline-wifi-find"
       : "ic:baseline-signal-wifi-connected-no-internet-4",
     handler: () => {

@@ -53,7 +53,7 @@ const items = [
       <!-- Battery item -->
       <Button
         variant="ghost"
-        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
+        class="cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover hidden sm:flex"
         :disabled="isAnyTopbarMenuOpen"
       >
         <Icon name="mdi:battery-charging" size="18" />

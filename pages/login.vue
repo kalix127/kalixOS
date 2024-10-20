@@ -11,7 +11,7 @@ const { loginView } = storeToRefs(globalStore);
 </script>
 
 <template>
-  <div class="grid h-full grid-rows-[90%_10%]">
+  <div class="grid h-full grid-rows-[1fr_100px]">
     <div class="grid place-content-center">
       <Transition mode="out-in">
         <!-- Select User -->

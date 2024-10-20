@@ -64,6 +64,20 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/css/main.css"],
   icon: {
+    customCollections: [
+      {
+        dir: "./icons/app",
+        prefix: "app",
+      },
+      {
+        dir: "./icons/file",
+        prefix: "file",
+      },
+      {
+        dir: "./icons/folder",
+        prefix: "folder",
+      },
+    ],
     serverBundle: false,
     clientBundle: {
       icons: [

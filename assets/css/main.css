@@ -64,3 +64,8 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+
+/* Fix the context menu not working on desktop */
+body {
+  @apply !pointer-events-auto;
+}

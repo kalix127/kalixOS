@@ -55,7 +55,7 @@ const menuOptions = computed(() => {
     case "file":
       return [
         { label: "Open", action: () => openFile(targetNode.value) },
-        { label: "Rename...", action: () => console.log("Rename...") },
+        { label: "Rename...", action: () => renameNode(targetNode.value) },
         { label: "Move to Trash", action: () => console.log("Move to Trash") },
         { isSeparator: true },
         {

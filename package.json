@@ -11,6 +11,7 @@
     "start": "node --env-file=.env --import ./.output/server/sentry.server.config.mjs .output/server/index.mjs"
   },
   "dependencies": {
+    "@formkit/drag-and-drop": "^0.2.4",
     "@iconify-json/eos-icons": "^1.2.1",
     "@iconify-json/fa6-solid": "^1.2.1",
     "@iconify-json/flag": "^1.2.2",

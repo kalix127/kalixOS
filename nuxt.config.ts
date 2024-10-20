@@ -145,4 +145,7 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ["./stores/**"],
   },
+  image: {
+    format: ["webp"],
+  },
 });

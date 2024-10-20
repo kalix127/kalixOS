@@ -4,3 +4,15 @@ export interface WifiNetwork {
   signal: number;
   isProtected: boolean;
 }
+
+export interface FileSystemNode {
+  id: string;
+  icon: string;
+  name: string;
+  type: "folder" | "file" | "app";
+  children?: FileSystemNode[];
+  // Permission flags
+  canEdit?: boolean;
+  canMove?: boolean;
+  canDelete?: boolean;
+}

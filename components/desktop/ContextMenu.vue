@@ -90,7 +90,6 @@ const menuOptions = computed(() => {
     case "app":
       return [
         { label: "Open", action: () => openApp(targetNode.value) },
-        { label: "Rename", action: () => renameNode(targetNode.value) },
         { label: "Pin to Dock", action: () => console.log("Pin to Dock") },
       ];
     default:

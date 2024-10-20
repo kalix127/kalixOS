@@ -47,6 +47,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
       src="/img/bg-desktop.jpg"
       class="h-[100vh] w-[100vw] select-none object-cover blur-2xl"
       style="-webkit-user-drag: none"
+      :placeholder="true"
     />
 
     <!-- Login Form -->

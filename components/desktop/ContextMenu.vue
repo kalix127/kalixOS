@@ -12,7 +12,7 @@ const { isOpen, x, y, targetType, targetNode } = storeToRefs(contextMenuStore);
 const { closeContextMenu } = contextMenuStore;
 
 const { desktopNode } = storeToRefs(desktopStore);
-const { createItem } = desktopStore;
+const { createItem, editItem } = desktopStore;
 
 // Close context menu on clicking outside or pressing Escape
 useEventListener("click", () => {
@@ -66,7 +66,7 @@ const menuOptions = computed(() => {
     case "folder":
       return [
         { label: "Open", action: () => openFolder(targetNode.value) },
-        { label: "Rename", action: () => console.log("Rename...") },
+        { label: "Rename", action: () => renameNode(targetNode.value) },
         { label: "Move to Trash", action: () => console.log("Move to Trash") },
         { isSeparator: true },
         {
@@ -90,6 +90,7 @@ const menuOptions = computed(() => {
     case "app":
       return [
         { label: "Open", action: () => openApp(targetNode.value) },
+        { label: "Rename", action: () => renameNode(targetNode.value) },
         { label: "Pin to Dock", action: () => console.log("Pin to Dock") },
       ];
     default:
@@ -103,6 +104,7 @@ const createNewFolder = () => {
       name: "New Folder",
       type: "folder",
       icon: "folder:folder",
+      isRenaming: true,
       children: [],
     });
   } else {
@@ -114,12 +116,12 @@ const createNewFolder = () => {
 const createNewDocument = () => {
   if (desktopNode.value) {
     createItem(desktopNode.value.id, {
-      name: "New Document",
+      name: "New File",
       type: "file",
       icon: "file:file",
+      isRenaming: true,
       children: [],
     });
-    console.log("createNewDocument");
   } else {
     console.error("Desktop node not found.");
   }
@@ -153,8 +155,9 @@ const openFile = (node: FileSystemNode | null) => {
 // TODO: Implement
 const renameNode = (node: FileSystemNode | null) => {
   if (node) {
-    console.log(`Renaming node: ${node.name}`);
+    editItem(node.id, { isRenaming: true });
   }
+  
   closeContextMenu();
 };
 

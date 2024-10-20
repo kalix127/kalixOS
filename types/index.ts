@@ -11,6 +11,7 @@ export interface FileSystemNode {
   name: string;
   type: "folder" | "file" | "app";
   children?: FileSystemNode[];
+  isRenaming?: boolean;
   // Permission flags
   canEdit?: boolean;
   canMove?: boolean;

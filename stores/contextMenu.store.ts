@@ -1,4 +1,3 @@
-// stores/contextMenuStore.ts
 import { defineStore } from "pinia";
 import type { FileSystemNode } from "@/types";
 

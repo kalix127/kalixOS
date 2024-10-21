@@ -43,10 +43,6 @@ const menuOptions = computed(() => {
         { label: t("desktop.new_document"), action: () => createNewDocument() },
         { isSeparator: true },
         {
-          label: t("desktop.show_x_in_files", { target: t("desktop.folder") }),
-          action: () => console.log("Show Desktop in files"),
-        },
-        {
           label: `${t("desktop.change_background")}...`,
           action: () => console.log("Change Background"),
         },

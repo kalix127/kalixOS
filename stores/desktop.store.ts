@@ -60,11 +60,10 @@ export const useDesktopStore = defineStore({
       const item = this.nodeMap.get(itemId);
       const targetFolder = this.nodeMap.get(targetFolderId);
 
-      if (!item || !targetFolder || targetFolder.type !== "folder")
-        return false;
+      if (!item || !targetFolder || targetFolder.type === "file") return false;
 
       // Check permissions
-      if (!canMove(item) || !canMove(targetFolder)) return false;
+      if (!canMove(item)) return false;
 
       const currentParent = findParentById(this.fileSystem, itemId);
       if (!currentParent || currentParent.type !== "folder") return false;

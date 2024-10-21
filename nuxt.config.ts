@@ -105,7 +105,7 @@ export default defineNuxtConfig({
         "ic:outline-check",
         "lucide:ethernet-port",
         "fa6-solid:power-off",
-        "svg-spinners:tadpole",
+        "mingcute:loading-fill",
         "svg-spinners:ring-resize",
         "eos-icons:three-dots-loading",
         "lucide:languages",

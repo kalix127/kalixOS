@@ -66,7 +66,7 @@ const handleStopRenaming = () => {
           @submit.prevent="handleStopRenaming"
         >
           <Input
-            class="w-32 border-0 bg-secondary ring-0 focus-visible:ring-primary/70"
+            class="w-32 border-0 bg-secondary focus-visible:ring-primary/70"
             v-model="item.name"
           />
           <Button size="sm" class="font-extrabold" @click="handleStopRenaming"

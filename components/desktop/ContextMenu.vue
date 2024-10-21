@@ -4,6 +4,9 @@ import { useDesktopStore } from "@/stores/desktop.store";
 import { useEventListener } from "@vueuse/core";
 import type { FileSystemNode } from "@/types";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const contextMenuStore = useContextMenuStore();
 const desktopStore = useDesktopStore();
@@ -36,61 +39,61 @@ const menuOptions = computed(() => {
   switch (targetType.value) {
     case "desktop":
       return [
-        { label: "New Folder", action: () => createNewFolder() },
-        { label: "New Document", action: () => createNewDocument() },
+        { label: t("desktop.new_folder"), action: () => createNewFolder() },
+        { label: t("desktop.new_document"), action: () => createNewDocument() },
         { isSeparator: true },
         {
-          label: "Show Desktop in files",
+          label: t("desktop.show_x_in_files", { target: t("desktop.folder") }),
           action: () => console.log("Show Desktop in files"),
         },
         {
-          label: "Change Background...",
+          label: `${t("desktop.change_background")}...`,
           action: () => console.log("Change Background"),
         },
         {
-          label: "Display Settings",
+          label: t("desktop.display_settings"),
           action: () => console.log("Display Settings"),
         },
       ];
     case "file":
       return [
         { label: "Open", action: () => openFile(targetNode.value) },
-        { label: "Rename...", action: () => renameNode(targetNode.value) },
-        { label: "Move to Trash", action: () => moveToTrash(targetNode.value) },
+        { label: `${t("desktop.rename")}...`, action: () => renameNode(targetNode.value) },
+        { label: t("desktop.move_to_trash"), action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
-          label: "Properties",
+          label: t("desktop.properties"),
           action: () => console.log("Properties"),
         },
       ];
     case "folder":
       return [
-        { label: "Open", action: () => openFolder(targetNode.value) },
-        { label: "Rename...", action: () => renameNode(targetNode.value) },
-        { label: "Move to Trash", action: () => moveToTrash(targetNode.value) },
+        { label: t("desktop.open"), action: () => openFolder(targetNode.value) },
+        { label: `${t("desktop.rename")}...`, action: () => renameNode(targetNode.value) },
+        { label: t("desktop.move_to_trash"), action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
-          label: "Compress folder",
+          label: t("desktop.compress_folder"),
           action: () => console.log("Compress 1 folder"),
         },
         {
-          label: "New folder with 1 item",
+          label: t("desktop.new_folder_with_1_item"),
           action: () => console.log("New folder with 1 item"),
         },
         { isSeparator: true },
         {
-          label: "Properties",
+          label: t("desktop.properties"),
           action: () => console.log("Properties"),
         },
         {
-          label: "Show in Files",
+          label: t("desktop.show_x_in_files", { target: t("desktop.folder") }),
           action: () => console.log("Show in Files"),
         },
       ];
     case "app":
       return [
-        { label: "Open", action: () => openApp(targetNode.value) },
-        { label: "Pin to Dock", action: () => console.log("Pin to Dock") },
+        { label: t("desktop.open"), action: () => openApp(targetNode.value) },
+        { label: t("desktop.pin_to_dock"), action: () => console.log("Pin to Dock") },
       ];
     default:
       return [];
@@ -100,7 +103,7 @@ const menuOptions = computed(() => {
 const createNewFolder = () => {
   if (desktopNode.value) {
     createItem(desktopNode.value.id, {
-      name: "New Folder",
+      name: t("desktop.new_folder"),
       type: "folder",
       icon: "folder:folder",
       isRenaming: true,
@@ -115,7 +118,7 @@ const createNewFolder = () => {
 const createNewDocument = () => {
   if (desktopNode.value) {
     createItem(desktopNode.value.id, {
-      name: "New File",
+      name: t("desktop.new_document"),
       type: "file",
       icon: "file:file",
       isRenaming: true,
@@ -169,7 +172,7 @@ const moveToTrash = (node: FileSystemNode | null) => {
 <template>
   <Teleport to="body">
     <DropdownMenu :open="isOpen">
-      <DropdownMenuContent class="!w-56" :style="contextMenuStyle">
+      <DropdownMenuContent class="!w-72" :style="contextMenuStyle">
         <template v-for="option in menuOptions" :key="option.label">
           <DropdownMenuSeparator v-if="option.isSeparator" />
           <DropdownMenuItem

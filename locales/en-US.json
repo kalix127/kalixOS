@@ -4,6 +4,8 @@
     "en": "English",
     "it": "Italian"
   },
+
+  "-----------------TOPBAR-LOGIN----------------": "",
   "settings": "Settings",
   "lock": "Lock",
   "wired": "Wired",
@@ -23,6 +25,31 @@
   "cancel": "Cancel",
   "not_listed": "Not listed?",
 
+  "-----------------DESKTOP-------------------": "",
+  "desktop": {
+    "rename_file_title": "File name",
+    "rename_folder_title": "Folder name",
+    "folder": "Folder",
+    "file": "File",
+    "desktop": "Desktop",
+    "application": "Application",
+    "name": "Name",
+    "new_folder": "New Folder",
+    "new_document": "New Document",
+    "show_x_in_files": "Show {target} in files",
+    "change_background": "Change Background",
+    "display_settings": "Display Settings",
+    "rename": "Rename",
+    "move_to_trash": "Move to Trash",
+    "properties": "Properties",
+    "compress_folder": "Compress folder",
+    "new_folder_with_1_item": "New folder with 1 item",
+    "compress_1_folder": "Compress 1 folder",
+    "open": "Open",
+    "pin_to_dock": "Pin to Dock"
+  },
+
+  "-----------------VALIDATIONS-------------------": "",
   "zodI18n": {
     "errors": {
       "password_authentication_failed": "Sorry, password authentication didn't work.",

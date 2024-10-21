@@ -18,7 +18,7 @@ defineProps<{
           >
             <Icon :name="icon" size="26" />
           </div>
-          <span class="text-xl font-extrabold">
+          <span class="sm:text-xl text-lg font-extrabold">
             {{ title }}
           </span>
           <slot name="loading-icon" />

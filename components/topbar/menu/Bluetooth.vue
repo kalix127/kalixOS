@@ -20,7 +20,7 @@ function closeMenu() {
     icon="material-symbols:bluetooth"
   >
     <div
-      class="grid place-content-center p-6 text-center text-lg font-extrabold text-muted-foreground/70"
+      class="grid place-content-center p-6 text-center sm:text-lg text-md font-extrabold text-muted-foreground/70"
     >
       {{ $t("bluetooth_not_available") }}
     </div>

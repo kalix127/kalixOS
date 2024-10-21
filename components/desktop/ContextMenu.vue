@@ -89,7 +89,6 @@ const menuOptions = computed(() => {
     case "app":
       return [
         { label: t("desktop.open"), action: () => openApp(targetNode.value) },
-        { label: t("desktop.pin_to_dock"), action: () => console.log("Pin to Dock") },
       ];
     default:
       return [];

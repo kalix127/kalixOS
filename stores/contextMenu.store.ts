@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import type { FileSystemNode } from "@/types";
+import { useWindowSize } from "@vueuse/core";
 
 export type TargetType = "desktop" | "file" | "folder" | "app" | null;
 
@@ -33,8 +34,18 @@ export const useContextMenuStore = defineStore("contextMenu", {
       targetType: TargetType,
       targetNode: FileSystemNode | null = null,
     ) {
+      const { width } = useWindowSize();
+      const isOutside = x + 288 > width.value;
+
+      let difference = 0;
+      let updatedX = x;
+      if (isOutside) {
+        difference = width.value - (x + 288);
+        updatedX = x + difference;
+      }
+
       this.isOpen = true;
-      this.x = x;
+      this.x = updatedX;
       this.y = y;
       this.targetType = targetType;
       this.targetNode = targetNode;

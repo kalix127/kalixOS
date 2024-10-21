@@ -130,3 +130,50 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
       },
     ],
   });
+
+
+// TODO: Add more defaults apps without any functionality
+export const defaultDockApps: FileSystemNode[] = [
+  {
+    name: "Settings",
+    type: "app",
+    icon: "app:settings",
+    id: "settings-app",
+  },
+  {
+    name: "Files",
+    type: "app",
+    icon: "app:files",
+    id: "files-app",
+  },
+  {
+    name: "Terminal",
+    type: "app",
+    icon: "app:terminal",
+    id: "terminal-app",
+  },
+  {
+    name: "Brave",
+    type: "app",
+    icon: "app:brave",
+    id: "brave-app",
+  },
+  {
+    name: "Thunderbird",
+    type: "app",
+    icon: "app:thunderbird",
+    id: "thunderbird-app",
+  },
+  {
+    name: "Visual Studio Code",
+    type: "app",
+    icon: "app:vscode",
+    id: "vscode-app",
+  },
+  {
+    name: "Kate",
+    type: "app",
+    icon: "app:kate",
+    id: "kate-app",
+  },
+];

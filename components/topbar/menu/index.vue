@@ -21,6 +21,7 @@ defineProps<{
           <span class="text-xl font-extrabold">
             {{ title }}
           </span>
+          <slot name="loading-icon" />
         </div>
         <div class="space-y-2">
           <slot />

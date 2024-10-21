@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
-import { animations } from "@formkit/drag-and-drop";
+import { dragAndDrop } from "@formkit/drag-and-drop/vue";
+import type { FileSystemNode } from "@/types";
 import { useDesktopStore } from "@/stores/desktop.store";
 import { storeToRefs } from "pinia";
 
@@ -9,26 +9,54 @@ definePageMeta({
   middleware: "login",
 });
 
-// Initialize the store's nodeMap
 const desktopStore = useDesktopStore();
 const { desktopItems, maxDesktopGridSlot } = storeToRefs(desktopStore);
-const { init } = desktopStore;
+const { init, moveItem, updateDesktopItems } = desktopStore;
 
-init();
-
-// Initialize drag-and-drop with desktop items
-const [desktopGridRef, sortableDesktopItems] = useDragAndDrop(desktopItems.value, {
-  plugins: [animations()],
+const desktopGridRef = ref<HTMLElement | null>(null);
+const draggableItems = computed({
+  get: () => desktopItems.value,
+  set: (newItems: FileSystemNode[]) => {
+    updateDesktopItems(newItems);
+  },
 });
 
-// Watch for changes in sortableDesktopItems and update the store
-watch(
-  () => sortableDesktopItems.value,
-  (newOrder) => {
-    desktopStore.reorderDesktopItems(newOrder);
-  },
-  { deep: true }
-);
+onMounted(() => {
+  // Initialize the FileSystem
+  init();
+
+  if (!desktopGridRef.value) {
+    return;
+  }
+
+  // Initialize drag-and-drop
+  dragAndDrop({
+    parent: desktopGridRef.value,
+    values: draggableItems,
+    sortable: false,
+    handleNodeDrop(data, state) {
+      const draggedNode: FileSystemNode = state.draggedNode.data.value;
+      if (!draggedNode) {
+        return;
+      }
+
+      // Check if the dragged node is the trash
+      if (draggedNode.name === "Trash") {
+        return;
+      }
+
+      const targetNode: FileSystemNode = data.targetData.node.data.value;
+      if (!targetNode) {
+        return;
+      }
+
+      // Move the item
+      if (targetNode) {
+        moveItem(draggedNode.id, targetNode.id);
+      }
+    },
+  });
+});
 </script>
 
 <template>
@@ -43,7 +71,7 @@ watch(
     <!-- Desktop grid wrapper -->
     <DesktopGridWrapper ref="desktopGridRef">
       <DesktopGridCell
-        v-for="(item, index) in sortableDesktopItems"
+        v-for="(item, index) in desktopItems"
         :key="item.id"
         :item="item"
         :class="[index >= maxDesktopGridSlot ? 'hidden' : '']"

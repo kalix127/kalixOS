@@ -158,27 +158,22 @@ export const useDesktopStore = defineStore({
     },
 
     /**
-     * Reorders the desktop items based on the new order.
-     * @param newOrder An array of FileSystemNode objects in the desired order.
-     * @returns True if successful, false otherwise.
-     */
-    reorderDesktopItems(newOrder: FileSystemNode[]): boolean {
-      const username = storeToRefs(useGlobalStore()).username.value;
-      const path = `/home/${username}/Desktop`;
-      const desktopNode = findNodeByAbsolutePath(this.fileSystem, path);
-      if (!desktopNode || desktopNode.type !== "folder") return false;
+     * Updates the desktopItems based on the new list from the UI.
+     * This should handle reordering or moving items as needed.
+     * @param newItems The updated list of FileSystemNodes.
+    */
+    // TODO: Implement this better
+    updateDesktopItems(newItems: FileSystemNode[]) {
+      // Clear the current children
+      if (this.desktopNode) {
+        this.desktopNode.children = [];
 
-      // Verify that newOrder contains the same items
-      const currentIds = desktopNode.children?.map((child) => child.id).sort();
-      const newIds = newOrder.map((child) => child.id).sort();
-      if (JSON.stringify(currentIds) !== JSON.stringify(newIds)) {
-        // The new order does not have the same items
-        return false;
+        // Re-populate based on newItems
+        newItems.forEach((item) => {
+          this.desktopNode!.children!.push(item);
+          this.nodeMap.set(item.id, item);
+        });
       }
-
-      // Assign the new order
-      desktopNode.children = newOrder;
-      return true;
     },
   },
 });

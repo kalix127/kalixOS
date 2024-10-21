@@ -26,9 +26,20 @@ export const useDesktopStore = defineStore({
       return findNodeByAbsolutePath(state.fileSystem, path);
     },
 
+    trashNode(state): FileSystemNode | null {
+      const username = storeToRefs(useGlobalStore()).username.value;
+      const path = `/home/${username}/Desktop/Trash`;
+      return findNodeByAbsolutePath(state.fileSystem, path);
+    },
+
     desktopItems(state): FileSystemNode[] {
       if (!this.desktopNode) return [];
       return this.desktopNode.children ? this.desktopNode.children : [];
+    },
+
+    trashItems(state): FileSystemNode[] {
+      if (!this.trashNode) return [];
+      return this.trashNode.children ? this.trashNode.children : [];
     },
   },
   actions: {

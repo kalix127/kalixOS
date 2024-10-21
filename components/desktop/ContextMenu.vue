@@ -11,8 +11,8 @@ const desktopStore = useDesktopStore();
 const { isOpen, x, y, targetType, targetNode } = storeToRefs(contextMenuStore);
 const { closeContextMenu } = contextMenuStore;
 
-const { desktopNode } = storeToRefs(desktopStore);
-const { createItem, editItem } = desktopStore;
+const { desktopNode, trashNode } = storeToRefs(desktopStore);
+const { createItem, editItem, moveItem } = desktopStore;
 
 // Close context menu on clicking outside or pressing Escape
 useEventListener("click", () => {
@@ -56,7 +56,7 @@ const menuOptions = computed(() => {
       return [
         { label: "Open", action: () => openFile(targetNode.value) },
         { label: "Rename...", action: () => renameNode(targetNode.value) },
-        { label: "Move to Trash", action: () => console.log("Move to Trash") },
+        { label: "Move to Trash", action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
           label: "Properties",
@@ -66,8 +66,8 @@ const menuOptions = computed(() => {
     case "folder":
       return [
         { label: "Open", action: () => openFolder(targetNode.value) },
-        { label: "Rename", action: () => renameNode(targetNode.value) },
-        { label: "Move to Trash", action: () => console.log("Move to Trash") },
+        { label: "Rename...", action: () => renameNode(targetNode.value) },
+        { label: "Move to Trash", action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
           label: "Compress folder",
@@ -151,19 +151,16 @@ const openFile = (node: FileSystemNode | null) => {
   closeContextMenu();
 };
 
-// TODO: Implement
 const renameNode = (node: FileSystemNode | null) => {
   if (node) {
     editItem(node.id, { isRenaming: true });
   }
-  
   closeContextMenu();
 };
 
-// TODO: Implement
 const moveToTrash = (node: FileSystemNode | null) => {
-  if (node) {
-    console.log(`Moving to Trash: ${node.name}`);
+  if (node && trashNode.value) {
+    moveItem(node.id, trashNode.value.id);
   }
   closeContextMenu();
 };

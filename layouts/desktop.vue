@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { useGlobalStore } from "~/stores/global.store";
-
 const globalStore = useGlobalStore();
-
 const { isLocked } = storeToRefs(globalStore);
 </script>
 
 <template>
-  <div class="wrapper-desktop">
+  <div class="wrapper-desktop relative">
     <Transition name="lock">
       <OverlayLock v-if="isLocked" />
     </Transition>
     <Topbar />
     <slot />
+    <DesktopDock />
   </div>
 </template>
 

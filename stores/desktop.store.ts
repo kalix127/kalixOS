@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { defaultFileSystem } from "@/constants";
+import { defaultFileSystem, defaultDockApps } from "@/constants";
 import { useGlobalStore } from "@/stores/global.store";
 import type { FileSystemNode } from "~/types";
 import {
@@ -15,9 +15,16 @@ import { storeToRefs } from "pinia";
 export const useDesktopStore = defineStore({
   id: "desktopStore",
   state: (): DesktopStore => ({
+    // Filesystem
     fileSystem: defaultFileSystem(storeToRefs(useGlobalStore()).username.value),
     nodeMap: new Map<string, FileSystemNode>(),
+
+    // Desktop
     maxDesktopGridSlot: 0,
+
+    // Docks
+    dockApps: defaultDockApps,
+    isDockVisible: true,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
@@ -161,7 +168,7 @@ export const useDesktopStore = defineStore({
      * Updates the desktopItems based on the new list from the UI.
      * This should handle reordering or moving items as needed.
      * @param newItems The updated list of FileSystemNodes.
-    */
+     */
     // TODO: Implement this better
     updateDesktopItems(newItems: FileSystemNode[]) {
       // Clear the current children
@@ -179,7 +186,14 @@ export const useDesktopStore = defineStore({
 });
 
 interface DesktopStore {
+  // Filesystem
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
+
+  // Desktop
   maxDesktopGridSlot: number;
+
+  // Docks
+  dockApps: FileSystemNode[];
+  isDockVisible: boolean;
 }

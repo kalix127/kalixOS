@@ -54,7 +54,7 @@ const handleStopRenaming = () => {
     <!-- Renaming popover -->
     <Popover :open="item.isRenaming" @update:open="handleStopRenaming">
       <PopoverTrigger></PopoverTrigger>
-      <PopoverContent class="flex w-60 flex-col gap-2 p-3">
+      <PopoverContent class="flex w-64 flex-col gap-2 p-3">
         <span class="text-sm font-medium"
           >{{
             item.type.charAt(0).toUpperCase() + item.type.slice(1)
@@ -66,10 +66,13 @@ const handleStopRenaming = () => {
           @submit.prevent="handleStopRenaming"
         >
           <Input
-            class="w-32 border-0 bg-secondary focus-visible:ring-primary/70"
+            class="w-2/3 border-0 h-9 bg-secondary focus-visible:ring-primary/60"
             v-model="item.name"
           />
-          <Button size="sm" class="font-extrabold" @click="handleStopRenaming"
+          <Button
+            size="sm"
+            class="font-extrabold w-1/3 cursor-default"
+            @click="handleStopRenaming"
             >Rename</Button
           >
         </form>

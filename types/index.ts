@@ -12,6 +12,7 @@ export interface FileSystemNode {
   type: "folder" | "file" | "app";
   children?: FileSystemNode[];
   isRenaming?: boolean;
+  isNewlyCreated?: boolean; // Indicates if the node has just been created
   // Permission flags
   canEdit?: boolean;
   canMove?: boolean;

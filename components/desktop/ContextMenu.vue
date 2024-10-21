@@ -103,6 +103,7 @@ const createNewFolder = () => {
       type: "folder",
       icon: "folder:folder",
       isRenaming: true,
+      isNewlyCreated: true,
       children: [],
     });
   } else {
@@ -118,6 +119,7 @@ const createNewDocument = () => {
       type: "file",
       icon: "file:file",
       isRenaming: true,
+      isNewlyCreated: true,
       children: [],
     });
   } else {

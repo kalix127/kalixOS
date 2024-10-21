@@ -30,7 +30,7 @@ const handleContextMenu = (event: MouseEvent) => {
 };
 
 const handleStopRenaming = () => {
-  editItem(props.item.id, { isRenaming: false });
+  editItem(props.item.id, { isRenaming: false, isNewlyCreated: false });
 };
 </script>
 
@@ -49,10 +49,9 @@ const handleStopRenaming = () => {
     </div>
     <!-- Renaming popover -->
     <Popover :open="item.isRenaming" @update:open="handleStopRenaming">
-      <PopoverTrigger>
-      </PopoverTrigger>
+      <PopoverTrigger> </PopoverTrigger>
       <PopoverContent
-        class="flex w-72 flex-col gap-2 bg-secondary p-3 border-none"
+        class="flex w-72 flex-col gap-2 border-none bg-secondary p-3"
       >
         <span class="text-sm font-medium">
           {{
@@ -67,15 +66,15 @@ const handleStopRenaming = () => {
           @submit.prevent="handleStopRenaming"
         >
           <Input
-            class="h-9 w-2/3 border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
+            class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
             v-model="item.name"
           />
           <Button
             size="sm"
-            class="w-1/3 cursor-default font-extrabold"
+            class="w-fit cursor-default font-extrabold"
             @click="handleStopRenaming"
           >
-            {{ $t("desktop.rename") }}
+            {{ item.isNewlyCreated ? "OK" : $t("desktop.rename") }}
           </Button>
         </form>
       </PopoverContent>

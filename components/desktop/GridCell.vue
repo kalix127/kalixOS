@@ -52,13 +52,8 @@ const handleStopRenaming = () => {
       <PopoverTrigger>
       </PopoverTrigger>
       <PopoverContent
-        class="relative flex w-72 flex-col gap-2 bg-secondary p-3"
+        class="flex w-72 flex-col gap-2 bg-secondary p-3 border-none"
       >
-        <!-- Triangle shape -->
-        <div
-          class="sm:block hidden absolute left-1/2 top-0 h-0 w-0 -translate-x-1/2 -translate-y-full transform border-b-[10px] border-l-[8px] border-r-[8px] border-b-secondary border-l-transparent border-r-transparent"
-        ></div>
-
         <span class="text-sm font-medium">
           {{
             item.type === "file"

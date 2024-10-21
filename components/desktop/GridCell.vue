@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { FileSystemNode } from "@/types";
-import { useContextMenuStore } from "@/stores/contextMenu.store";
-import { useDesktopStore } from "@/stores/desktop.store";
 import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 

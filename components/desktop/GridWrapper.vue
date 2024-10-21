@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useContextMenuStore } from "@/stores/contextMenu.store";
-import { useDesktopStore } from "@/stores/desktop.store";
 import { storeToRefs } from "pinia";
 import { useEventListener } from "@vueuse/core";
 

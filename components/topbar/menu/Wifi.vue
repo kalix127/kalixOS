@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { vOnClickOutside } from "@vueuse/components";
 

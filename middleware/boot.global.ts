@@ -1,6 +1,3 @@
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
-
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { isBooting } = storeToRefs(useGlobalStore());
 

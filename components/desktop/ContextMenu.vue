@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { useContextMenuStore } from "@/stores/contextMenu.store";
-import { useDesktopStore } from "@/stores/desktop.store";
 import { useEventListener } from "@vueuse/core";
 import type { FileSystemNode } from "@/types";
-import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 

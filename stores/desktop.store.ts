@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { defaultFileSystem, defaultDockApps } from "@/constants";
-import { useGlobalStore } from "@/stores/global.store";
 import type { FileSystemNode } from "~/types";
 import {
   findParentById,
@@ -10,7 +9,6 @@ import {
   canDelete,
 } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { storeToRefs } from "pinia";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",

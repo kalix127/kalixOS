@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useGlobalStore } from "~/stores/global.store";
-import { storeToRefs } from "pinia";
-
 const { t } = useI18n();
 
 const globalStore = useGlobalStore();

@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import { loginSchema, type LoginForm } from "~/validations/auth.schema";
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 import { toTypedSchema } from "@vee-validate/zod";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import { addUserSchema, type AddUserForm } from "~/validations/auth.schema";
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 import { toTypedSchema } from "@vee-validate/zod";
 
 const globalStore = useGlobalStore();
@@ -56,7 +54,7 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
               />
             </div>
           </FormControl>
-          <FormMessage class="text-sm text-center text-foreground" />
+          <FormMessage class="text-center text-sm text-foreground" />
         </FormItem>
       </FormField>
     </form>

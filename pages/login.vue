@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
-
 definePageMeta({
   layout: "login",
 });

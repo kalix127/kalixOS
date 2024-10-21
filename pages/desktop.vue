@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import type { FileSystemNode } from "@/types";
-import { useDesktopStore } from "@/stores/desktop.store";
-import { storeToRefs } from "pinia";
 
 definePageMeta({
   layout: "desktop",

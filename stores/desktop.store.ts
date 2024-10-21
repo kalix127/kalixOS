@@ -180,6 +180,14 @@ export const useDesktopStore = defineStore({
         });
       }
     },
+
+    /**
+     * Updates the dockApps based on the new list from the UI.
+     * @param newItems The updated list of FileSystemNodes.
+     */
+    updateDockApps(newItems: FileSystemNode[]) {
+      this.dockApps = newItems;
+    },
   },
 });
 

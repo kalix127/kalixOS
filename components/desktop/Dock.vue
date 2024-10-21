@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const desktopStore = useDesktopStore();
-const { dockApps, isDockVisible } = storeToRefs(desktopStore);
+const { isDockVisible } = storeToRefs(desktopStore);
 
 const handleTooltip = (open: boolean) => {
   isDockVisible.value = open;
@@ -16,13 +16,8 @@ const handleTooltip = (open: boolean) => {
         @mouseleave="handleTooltip(false)"
       >
       </TooltipTrigger>
-      <TooltipContent
-        :side-offset="-6"
-        class="h-fit w-full rounded-3xl px-3 py-2"
-      >
-        <div class="grid h-full grid-cols-4 items-center gap-4 sm:flex">
-          <DesktopDockApp v-for="app in dockApps" :key="app.id" :app="app" />
-        </div>
+      <TooltipContent :side-offset="-6" class="rounded-3xl p-0">
+        <DesktopDockContent />
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

@@ -80,7 +80,8 @@ function closeMenu() {
         v-show="connectedWifiNetwork?.id === network.id"
       />
       <Icon
-        name="svg-spinners:tadpole"
+        name="mingcute:loading-fill"
+        class="animate-spin"
         size="20"
         v-show="idConnectingNetwork === network.id"
       />

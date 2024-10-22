@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
-import { generateRandomWifiDelays } from "@/lib/utils";
-import { defaultNetworks } from "@/constants";
+import { generateRandomDelays } from "@/lib/utils";
+import { defaultNetworks, defaultBootDuration } from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
+import type { SystemLog } from "@/types";
+import { powerOffSystemLogs, powerUpSystemLogs } from "@/constants";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -39,6 +41,7 @@ export const useGlobalStore = defineStore({
     isPowerOffModalOpen: false,
     isRestartModalOpen: false,
     isLogoutModalOpen: false,
+    systemLogs: [],
   }),
   actions: {
     // Wifi
@@ -60,7 +63,7 @@ export const useGlobalStore = defineStore({
       const totalTime = 2500; // 2.5 seconds in total to add all the networks
 
       // Generate random delays for each network
-      const randomDelays = generateRandomWifiDelays(
+      const randomDelays = generateRandomDelays(
         defaultNetworks.length,
         totalTime,
       );
@@ -101,7 +104,6 @@ export const useGlobalStore = defineStore({
     },
 
     async handleSuspend() {
-      // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
       this.isSuspended = true;
       this.isPowerOffMenuOpen = false;
 
@@ -111,10 +113,15 @@ export const useGlobalStore = defineStore({
       // Start watching after 1 seconds
       watchOnce(idle, () => {
         this.isSuspended = false;
+        // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
       });
     },
 
     // Boot handlers
+    resetBootingState() {
+      this.isBooting = false;
+      this.systemLogs = [];
+    },
     async boot() {
       this.isBooting = true;
 
@@ -127,25 +134,28 @@ export const useGlobalStore = defineStore({
       this.loginView = "selectUser";
 
       await navigateTo("/booting");
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, defaultBootDuration));
     },
+
     async handlePoweroff() {
-      await this.boot();
+      await Promise.all([this.addSystemLogs("poweroff"), this.boot()]);
       await navigateTo("poweroff");
-      this.isBooting = false;
+      this.resetBootingState();
     },
     async handlePowerUp() {
-      await this.boot();
+      await Promise.all([this.addSystemLogs("powerup"), this.boot()]);
       await navigateTo("login");
-      this.isBooting = false;
+      this.resetBootingState();
     },
     async handleRestart() {
-      await this.boot();
+      await Promise.all([this.addSystemLogs("poweroff"), this.boot()]);
       await navigateTo("/"); // blank page
+      // Reset the system logs
+      this.systemLogs = [];
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await this.boot();
+      await Promise.all([this.addSystemLogs("powerup"), this.boot()]);
       await navigateTo("login");
-      this.isBooting = false;
+      this.resetBootingState();
     },
     async handleLogout() {
       // TODO: When implementing the desktop, make sure to reset the desktop store
@@ -155,6 +165,26 @@ export const useGlobalStore = defineStore({
       this.isLogoutModalOpen = false;
 
       await navigateTo("/login");
+    },
+
+    async addSystemLogs(type: "powerup" | "poweroff") {
+      const totalTime = defaultBootDuration - 500;
+      const logs = type === "powerup" ? powerUpSystemLogs : powerOffSystemLogs;
+
+      const randomDelays = generateRandomDelays(logs.length, totalTime);
+
+      for (let i = 0; i < logs.length; i++) {
+        await this.addSystemLogWithDelay(logs[i], randomDelays[i]);
+      }
+    },
+
+    addSystemLogWithDelay(log: SystemLog, delay: number) {
+      return new Promise<void>((resolve) => {
+        setTimeout(() => {
+          this.systemLogs.push(log);
+          resolve();
+        }, delay);
+      });
     },
   },
   getters: {
@@ -212,4 +242,5 @@ interface GlobalStore {
   isPowerOffModalOpen: boolean;
   isRestartModalOpen: boolean;
   isLogoutModalOpen: boolean;
+  systemLogs: SystemLog[];
 }

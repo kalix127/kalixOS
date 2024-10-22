@@ -131,7 +131,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
     ],
   });
 
-
 // TODO: Add more defaults apps without any functionality
 export const defaultDockApps: FileSystemNode[] = [
   {
@@ -180,7 +179,277 @@ export const defaultDockApps: FileSystemNode[] = [
 
 export const defaultBootDuration = 5000;
 
-export const powerUpSystemLogs: SystemLog[] = [];
+export const powerUpSystemLogs: SystemLog[] = [
+  {
+    message:
+      "/dev/nvme0n1p6: clean, 2545035/12296192 files, 31314881/49164645 block",
+  },
+  {
+    ok: true,
+    action: "Finished",
+    message: "Tell Plymouth To Write  Out Runtime Data.",
+  },
+  {
+    ok: true,
+    action: "Mounted",
+    message: "Arbitrary Executable File Format File System.",
+  },
+  {
+    ok: true,
+    action: "Finished",
+    message: "Set Up Additional Binary Formats.",
+  },
+  {
+    action: "Starting",
+    message: "Network Time Synchronization...",
+  },
+  {
+    action: "Starting",
+    message: "Record System Boot/Shutdown in UTMP...",
+  },
+  {
+    ok: true,
+    action: "Finished",
+    message: "Record System Boot/Shutdown in UTMP.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Network Time Synchronization.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "System Initialization.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Daily Cleanup of Temporary Directories.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "System Time Set.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Refresh Existing PGP keys of archlinux-keyring regularly.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Balance block groups on btrfs filesystem.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Scrub btrfs filesystem, verify block checksums.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Discard unused block on a mounted filesystem.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Discard unused filesystem block once a week.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Daily rotation of log files.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Daily man-db regeneration.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Monthly clean packages cache.",
+  },
+
+  {
+    ok: true,
+    action: "Started",
+    message: "Generate mirrorlist weekly.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Daily verification of password and group files.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "Timer Units.",
+  },
+  {
+    ok: true,
+    action: "Listening on",
+    message: "D-Bus System Message Bus Socket.",
+  },
+  {
+    action: "Starting",
+    message: "Docker Socket for the API...",
+  },
+  {
+    action: "Starting",
+    message: "Socket activation for snappy daemon...",
+  },
+  {
+    ok: true,
+    action: "Listening on",
+    message: "OpenSSH Server Socket (systemd-ssh-generator, AF_UNIX Local).",
+  },
+  {
+    ok: true,
+    action: "Listening on",
+    message: "Hostname Service Socket.",
+  },
+  {
+    action: "Starting",
+    message: "D-Bus System Message Bus...",
+  },
+  {
+    ok: true,
+    action: "Listening on",
+    message: "Socket activation for snappy daemon.",
+  },
+  {
+    ok: true,
+    action: "Listening on",
+    message: "Docker Socket for the API.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "Socket Units.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "D-Bus System Message Bus.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "Basic System.",
+  },
+  {
+    action: "Starting",
+    message: "Network Manager...",
+  },
+  {
+    action: "Starting",
+    message: "Bluetooth service...",
+  },
+  {
+    action: "Starting",
+    message: "Optimus Manager Commands Daemon...",
+  },
+  {
+    action: "Starting",
+    message: "User Login Management...",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Bluetooth service.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "Bluetooth Support.",
+  },
+  {
+    action: "Starting",
+    message: "Hostname Service...",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "User Login Management.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Hostname Service.",
+  },
+  {
+    action: "Starting",
+    message: "Network Manager Script Dispatcher Service...",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Network Manager Script Dispatcher Service.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Optimus Manager Commands Daemon.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Network Manager.",
+  },
+  {
+    ok: true,
+    action: "Reached target",
+    message: "Network.",
+  },
+  {
+    action: "Starting",
+    message: "Network Manager Wait Online...",
+  },
+  {
+    action: "Starting",
+    message: "containerd container runtime...",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Service for snap application cups.cups-browsed.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Service for snap application cups.cupsd.",
+  },
+  {
+    action: "Starting",
+    message: "Permit User Sessions...",
+  },
+  {
+    ok: true,
+    action: "Finished",
+    message: "Permit User Sessions.",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "Command Scheduler.",
+  },
+  {
+    action: "Starting",
+    message: "GNOME Display Manager...",
+  },
+  {
+    action: "Starting",
+    message: "Hold until boot process finishes up...",
+  },
+  {
+    ok: true,
+    action: "Started",
+    message: "GNOME Display Manager.",
+  },
+];
 
 export const powerOffSystemLogs: SystemLog[] = [
   {
@@ -191,7 +460,7 @@ export const powerOffSystemLogs: SystemLog[] = [
   {
     ok: true,
     action: "Stopped",
-    message: "Permit User Session.",
+    message: "Permit User Sessions.",
   },
   {
     ok: true,
@@ -338,7 +607,7 @@ export const powerOffSystemLogs: SystemLog[] = [
   {
     ok: true,
     action: "Closed",
-    message: "OpenSSH Server Socket (systemd-ssh-generator, AP_UNIX Local).",
+    message: "OpenSSH Server Socket (systemd-ssh-generator, AF_UNIX Local).",
   },
   {
     ok: true,

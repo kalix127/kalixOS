@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { desktopEnvironments } from "@/constants";
+
 definePageMeta({
   layout: "login",
 });

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { defaultFileSystem, defaultDockApps } from "@/constants";
+import { getNodeIcon } from "@/helpers";
 import type { FileSystemNode } from "~/types";
 import {
   findParentById,
@@ -134,6 +135,14 @@ export const useDesktopStore = defineStore({
 
       // Check permissions
       if (!canEdit(item)) return false;
+
+      // If the item is a file, check the extension if present, and update the icon
+      if (item.type === "file") {
+        const extension = item.name.split(".").pop();
+        if (extension) {
+          item.icon = getNodeIcon(extension);
+        }
+      }
 
       Object.assign(item, updatedData);
       return true;

@@ -144,3 +144,68 @@ export const canEdit = (node: FileSystemNode): boolean => {
 export const canDelete = (node: FileSystemNode): boolean => {
   return node.canDelete !== false;
 };
+
+/**
+ * Gets the appropriate icon for a file based on its extension.
+ * @param extension The file extension (without the dot).
+ * @returns A string representing the icon name.
+ */
+export const getNodeIcon = (extension: string): string => {
+  switch (extension.toLowerCase()) {
+    case "css":
+      return "file:css";
+    case "js":
+      return "file:javascript";
+    case "html":
+      return "file:html";
+    case "json":
+      return "file:json";
+    case "md":
+      return "file:markdown";
+    case "txt":
+      return "file:text";
+    case "py":
+      return "file:python";
+    case "java":
+      return "file:java";
+    case "vue":
+      return "file:vue";
+    case "deb":
+      return "file:deb";
+    case "sh":
+      return "file:bash";
+    case "pdf":
+      return "file:pdf";
+    case "doc":
+    case "docx":
+      return "file:docx";
+    case "xlsx":
+      return "file:xlsx";
+    case "mp3":
+    case "wav":
+      return "file:audio";
+    case "mp4":
+    case "mov":
+      return "file:video";
+    case "png":
+    case "jpg":
+    case "jpeg":
+    case "bmp":
+      return "file:image";
+    case "zip":
+    case "rar":
+    case "tar":
+    case "7z":
+      return "file:archive";
+    case "pem":
+    case "crt":
+    case "key":
+      return "file:certificate";
+    case "enc":
+      return "file:encrypt";
+    case "bin":
+      return "file:bin";
+    default:
+      return "file:file";
+  }
+};

@@ -30,7 +30,7 @@ const socialLinks = [
 </script>
 
 <template>
-  <div class="grid h-full grid-rows-[1fr_75px]">
+  <div class="grid h-full grid-rows-[1fr_125px] sm:grid-rows-[1fr_75px]">
     <div class="grid place-content-center">
       <Transition mode="out-in">
         <!-- Select User -->
@@ -44,9 +44,11 @@ const socialLinks = [
       </Transition>
     </div>
 
-    <div class="flex items-center justify-between px-4 sm:px-8">
+    <div
+      class="relative grid grid-cols-1 px-4 sm:grid-cols-3 sm:flex-row sm:px-8"
+    >
       <!-- Socials -->
-      <div class="flex items-center gap-4">
+      <div class="flex items-center justify-center gap-4 sm:justify-start">
         <ClientOnly>
           <TooltipProvider
             v-for="social in socialLinks"
@@ -77,10 +79,20 @@ const socialLinks = [
         </ClientOnly>
       </div>
 
+      <div class="grid place-content-center">
+        <div class="flex items-center gap-2">
+          <Icon name="logo:manjaro" size="40" />
+          <span
+            class="font-comfortaa select-none text-3xl font-bold"
+            >manjaro</span
+          >
+        </div>
+      </div>
+
       <!-- Desktop Environment Options -->
       <Popover v-if="loginView === 'enterPassword'">
         <PopoverTrigger
-          class="grid place-items-center rounded-full bg-secondary p-3"
+          class="absolute bottom-4 right-4 grid place-items-center rounded-full bg-secondary p-3 sm:right-8"
         >
           <Icon name="material-symbols:settings-rounded" size="16" />
         </PopoverTrigger>

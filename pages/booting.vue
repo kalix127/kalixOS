@@ -3,7 +3,7 @@ import { useMagicKeys } from "@vueuse/core";
 
 definePageMeta({
   pageTransition: false,
-})
+});
 
 const areSystemLogsVisible = ref(false);
 
@@ -17,18 +17,22 @@ watch(escape, (v) => {
 </script>
 
 <template>
-  <div class="grid min-h-[100vh] grid-rows-[90%_10%] bg-black relative">
+  <div class="relative grid min-h-[100vh] grid-rows-[1fr_75px] bg-black">
     <div class="flex flex-col items-center justify-center">
-      <LogoAsusRog class="size-48" />
       <Icon name="eos-icons:three-dots-loading" size="80" />
     </div>
 
     <div class="grid place-content-center">
-      <LogoManjaroFull class="max-w-48" />
+      <div class="flex items-center gap-2">
+        <Icon name="logo:manjaro" size="46" />
+        <span class="font-comfortaa select-none text-3xl font-bold sm:text-4xl"
+          >manjaro</span
+        >
+      </div>
     </div>
 
     <!-- System Logs on escape -->
-    <OverlaySystemLogs v-show="areSystemLogsVisible"  />
+    <OverlaySystemLogs v-show="areSystemLogsVisible" />
   </div>
 </template>
 

@@ -142,7 +142,7 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: "Inter",
+        name: "Comfortaa",
         provider: "google",
       },
       {

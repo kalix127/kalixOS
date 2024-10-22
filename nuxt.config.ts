@@ -10,6 +10,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       serverName: process.env.SERVER_NAME,
+      socialUrl: {
+        linkedin: process.env.SOCIAL_LINKEDIN_URL,
+        github: process.env.SOCIAL_GITHUB_URL,
+        twitter: process.env.SOCIAL_TWITTER_URL,
+      },
     },
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
     mailtrapSender: process.env.MAILTRAP_SENDER,

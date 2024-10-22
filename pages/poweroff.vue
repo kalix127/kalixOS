@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  pageTransition: false,
+});
 const globalStore = useGlobalStore();
 
 const { handlePowerUp } = globalStore;

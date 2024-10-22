@@ -18,3 +18,9 @@ export interface FileSystemNode {
   canMove?: boolean;
   canDelete?: boolean;
 }
+
+export interface SystemLog {
+  ok: boolean;
+  action: string;
+  message: string;
+}

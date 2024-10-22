@@ -8,10 +8,10 @@ const { handlePowerUp } = globalStore;
   <div class="grid h-full min-h-[100vh] place-content-center bg-black">
     <div class="group relative inline-flex">
       <div
-        class="transitiona-all absolute -inset-px rounded-full bg-primary opacity-70 blur-xl duration-1000 group-active:-inset-1 group-active:opacity-100 group-active:duration-100 group-hover:opacity-90"
+        class="transitiona-all absolute -inset-px rounded-full bg-primary opacity-70 blur-xl duration-1000 group-hover:opacity-90 group-active:-inset-1 group-active:opacity-100 group-active:duration-100"
       ></div>
       <button
-        class="relative inline-flex items-center justify-center rounded-full bg-secondary group-hover:bg-secondary/95 p-7 transition-all duration-200"
+        class="relative inline-flex items-center justify-center rounded-full bg-secondary p-7 transition-all duration-200 group-hover:bg-secondary/95"
         @click="handlePowerUp"
       >
         <Icon name="fa6-solid:power-off" size="72" />

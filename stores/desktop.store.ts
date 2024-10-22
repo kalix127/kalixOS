@@ -22,7 +22,7 @@ export const useDesktopStore = defineStore({
 
     // Docks
     dockApps: defaultDockApps,
-    isDockVisible: true,
+    isDockVisible: false,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {

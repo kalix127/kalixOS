@@ -31,11 +31,12 @@ watch(
         :key="log.message"
       >
         <!-- Type -->
-        <div class="w-20 select-none">
-          <template v-if="log.ok">
-            [<span class="px-5 font-extrabold text-green-500"> OK </span>]
-          </template>
-        </div>
+        <template v-if="log.action">
+          <div class="w-20 select-none">
+            <template v-if="log.ok">
+              [<span class="px-5 font-extrabold text-green-500"> OK </span>]
+            </template>
+          </div>
 
         <!-- Action  -->
         <span class="font-extrabold text-muted-foreground">{{

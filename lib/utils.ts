@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateRandomWifiDelays(
+export function generateRandomDelays(
   count: number,
   totalTime: number,
 ): number[] {

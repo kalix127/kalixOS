@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 import { vOnClickOutside } from "@vueuse/components";
 
 const globalStore = useGlobalStore();
@@ -20,7 +18,7 @@ function closeMenu() {
     icon="material-symbols:bluetooth"
   >
     <div
-      class="grid place-content-center p-6 text-center text-lg font-extrabold text-muted-foreground/70"
+      class="grid place-content-center p-6 text-center sm:text-lg text-md font-extrabold text-muted-foreground/70"
     >
       {{ $t("bluetooth_not_available") }}
     </div>

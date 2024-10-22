@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 const globalStore = useGlobalStore();
 
 const { isPowerOffModalOpen, isRestartModalOpen, isLogoutModalOpen, username } =

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useGlobalStore } from "~/stores/global.store";
-import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
 
 const globalStore = useGlobalStore();

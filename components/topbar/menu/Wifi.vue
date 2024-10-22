@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -12,6 +10,7 @@ const {
   isWifiMenuOpen,
   availableWifiNetworks,
   connectedWifiNetwork,
+  isSearchingWifiNetworks
 } = storeToRefs(globalStore);
 
 // The ID of the network we are currently connecting to
@@ -29,7 +28,6 @@ function connectToWifi(network: WifiNetwork) {
 
   // Fake delay of 3 seconds to simulate connecting to a network
   setTimeout(() => {
-
     // Check if the wifi is still enabled and the airplane mode is not enabled
     if (!isWifiEnabled.value || isAirplaneModeEnabled.value) {
       isConnectingToWifi.value = false;
@@ -61,6 +59,9 @@ function closeMenu() {
     :title="$t('wifi')"
     icon="ic:baseline-signal-wifi-4-bar"
   >
+    <template #loading-icon>
+      <Icon v-show="isSearchingWifiNetworks" name="mingcute:loading-fill" class="animate-spin" size="20" />
+    </template>
     <Button
       v-for="network in availableWifiNetworks"
       :key="network.name"
@@ -76,11 +77,12 @@ function closeMenu() {
 
       <Icon
         name="ic:outline-check"
-        size="18"
+        size="20"
         v-show="connectedWifiNetwork?.id === network.id"
       />
       <Icon
-        name="svg-spinners:tadpole"
+        name="mingcute:loading-fill"
+        class="animate-spin"
         size="20"
         v-show="idConnectingNetwork === network.id"
       />

@@ -64,6 +64,20 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/css/main.css"],
   icon: {
+    customCollections: [
+      {
+        dir: "./icons/app",
+        prefix: "app",
+      },
+      {
+        dir: "./icons/file",
+        prefix: "file",
+      },
+      {
+        dir: "./icons/folder",
+        prefix: "folder",
+      },
+    ],
     serverBundle: false,
     clientBundle: {
       icons: [
@@ -91,7 +105,7 @@ export default defineNuxtConfig({
         "ic:outline-check",
         "lucide:ethernet-port",
         "fa6-solid:power-off",
-        "svg-spinners:tadpole",
+        "mingcute:loading-fill",
         "svg-spinners:ring-resize",
         "eos-icons:three-dots-loading",
         "lucide:languages",
@@ -130,5 +144,8 @@ export default defineNuxtConfig({
   },
   pinia: {
     storesDirs: ["./stores/**"],
+  },
+  image: {
+    format: ["webp"],
   },
 });

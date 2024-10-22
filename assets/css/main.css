@@ -51,3 +51,21 @@
 .topbar-menu-transition {
   @apply transition-all duration-300 ease-in-out;
 }
+
+/* Hide scrollbar for body */
+body {
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fix the context menu not working on desktop */
+body {
+  @apply !pointer-events-auto;
+}

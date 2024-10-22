@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import { loginSchema, type LoginForm } from "@/validations/auth.schema";
-import { useGlobalStore } from "@/stores/global.store";
-import { storeToRefs } from "pinia";
-
 import { toTypedSchema } from "@vee-validate/zod";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const globalStore = useGlobalStore();
@@ -47,6 +43,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
       src="/img/bg-desktop.jpg"
       class="h-[100vh] w-[100vw] select-none object-cover blur-2xl"
       style="-webkit-user-drag: none"
+      :placeholder="true"
     />
 
     <!-- Login Form -->

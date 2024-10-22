@@ -1,22 +1,37 @@
 <script setup lang="ts">
-import { useGlobalStore } from "~/stores/global.store";
-
 const globalStore = useGlobalStore();
-
 const { isLocked } = storeToRefs(globalStore);
 </script>
 
 <template>
-  <div>
+  <div class="wrapper-desktop relative">
     <Transition name="lock">
       <OverlayLock v-if="isLocked" />
     </Transition>
     <Topbar />
     <slot />
+    <DesktopDock />
   </div>
 </template>
 
-<style scoped>
+<style>
+.wrapper-desktop {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 35px 1fr;
+  grid-template-areas:
+    "topbar"
+    "main";
+}
+
+header {
+  grid-area: topbar;
+}
+
+main {
+  grid-area: main;
+}
+
 .lock-enter-active,
 .lock-leave-active {
   transition: all 0.5s ease;

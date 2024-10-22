@@ -2,6 +2,13 @@
 import type { WifiNetwork, FileSystemNode, SystemLog } from "@/types";
 import { assignIds } from "~/helpers";
 
+export const desktopEnvironments = [
+  "GNOME",
+  "GNOME Classic",
+  "GNOME Classic on Xorg",
+  "GNOME on Xorg",
+];
+
 export const defaultNetworks: WifiNetwork[] = [
   { id: 1, name: "FASTWEB-7632798", signal: 4, isProtected: true },
   { id: 2, name: "TIM-1234567", signal: 3, isProtected: true },

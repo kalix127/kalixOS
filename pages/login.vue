@@ -74,6 +74,27 @@ const socialLinks = [
           </TooltipProvider>
         </ClientOnly>
       </div>
+
+      <!-- Desktop Environment Options -->
+      <Popover v-if="loginView === 'enterPassword'">
+        <PopoverTrigger
+          class="grid place-items-center rounded-full bg-secondary p-3"
+        >
+          <Icon name="material-symbols:settings-rounded" size="16" />
+        </PopoverTrigger>
+        <PopoverContent class="w-fit rounded-2xl">
+          <RadioGroup v-model="desktopEnvironment">
+            <div
+              v-for="environment in desktopEnvironments"
+              :key="environment"
+              class="flex items-center space-x-2"
+            >
+              <RadioGroupItem :id="environment" :value="environment" />
+              <Label :for="environment">{{ environment }}</Label>
+            </div>
+          </RadioGroup>
+        </PopoverContent>
+      </Popover>
     </div>
   </div>
 </template>

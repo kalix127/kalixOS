@@ -40,7 +40,7 @@ watchDebounced(
       >
         <TooltipTrigger
           ref="dockTriggerRef"
-          class="absolute bottom-0 left-0 z-50 h-10 w-full cursor-default transition-all duration-300 sm:h-6"
+          class="absolute bottom-0 left-0 z-50 h-10 w-full cursor-default sm:h-6"
           @mouseenter="isTriggerHovered = true"
           @mouseleave="isTriggerHovered = false"
         >

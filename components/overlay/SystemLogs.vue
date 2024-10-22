@@ -38,10 +38,11 @@ watch(
             </template>
           </div>
 
-        <!-- Action  -->
-        <span class="font-extrabold text-muted-foreground">{{
-          log.action
-        }}</span>
+          <!-- Action  -->
+          <span class="font-extrabold text-muted-foreground">{{
+            log.action
+          }}</span>
+        </template>
 
         <!-- Message -->
         <span>{{ log.message }}</span>

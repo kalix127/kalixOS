@@ -69,3 +69,12 @@ body::-webkit-scrollbar {
 body {
   @apply !pointer-events-auto;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

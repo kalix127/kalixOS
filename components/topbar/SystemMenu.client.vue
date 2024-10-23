@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 const globalStore = useGlobalStore();
@@ -11,19 +10,12 @@ const {
   isAnyTopbarMenuOpen,
   connectedWifiNetwork,
 } = storeToRefs(globalStore);
-
-const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 </script>
 
 <template>
   <Popover>
     <PopoverTrigger
-      :class="
-        cn(
-          'flex cursor-default items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4',
-          props.class,
-        )
-      "
+      class="flex cursor-default items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
     >
       <Icon
         v-show="connectedWifiNetwork"

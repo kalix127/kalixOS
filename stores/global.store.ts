@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomDelays } from "@/lib/utils";
-import { defaultNetworks, defaultBootDuration, desktopEnvironments } from "@/constants";
+import {
+  defaultNetworks,
+  defaultBootDuration,
+  desktopEnvironments,
+} from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
 import type { SystemLog } from "@/types";
 import { powerOffSystemLogs, powerUpSystemLogs } from "@/constants";
@@ -35,7 +39,7 @@ export const useGlobalStore = defineStore({
     // Auth
     loginView: "selectUser",
     username: "Gianluca",
-    isAuthenticated: false,
+    isAuthenticated: useCookie("isAuthenticated"),
 
     // Boot states
     isBooting: false,
@@ -237,7 +241,7 @@ interface GlobalStore {
   // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
-  isAuthenticated: boolean;
+  isAuthenticated: Ref<boolean>;
 
   // Boot states
   isBooting: boolean; // This represents if the user is booting/rebooting the system

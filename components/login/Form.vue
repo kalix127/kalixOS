@@ -31,6 +31,11 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
   // Check if the password is correct
   if (values.password === "password") {
     isAuthenticated.value = true;
+
+    // Persist the login
+    const cookie = useCookie<boolean>("isAuthenticated");
+    cookie.value = true;
+
     await navigateTo("/desktop");
   } else {
     setErrors({

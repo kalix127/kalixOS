@@ -10,12 +10,19 @@ const { isLocked } = storeToRefs(globalStore);
     </Transition>
     <Topbar />
     <slot />
+    <ClientOnly>
+      <!-- Context menu -->
+      <DesktopContextMenu />
+
+      <!-- Dockbar -->
+      <DesktopDock />
+    </ClientOnly>
   </div>
 </template>
 
 <style>
 .wrapper-desktop {
-  min-height: 100vh;
+  height: 100svh;
   display: grid;
   grid-template-rows: 35px 1fr;
   grid-template-areas:

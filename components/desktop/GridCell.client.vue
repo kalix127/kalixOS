@@ -37,7 +37,7 @@ const handleStopRenaming = () => {
     @contextmenu.prevent.stop="handleContextMenu"
     :class="
       cn(
-        'group flex aspect-square h-full w-full flex-col items-center justify-start text-center transition-all duration-150',
+        'group  flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
         props.class,
       )
     "

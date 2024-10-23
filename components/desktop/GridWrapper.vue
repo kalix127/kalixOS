@@ -1,52 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useEventListener } from "@vueuse/core";
-
-const contextMenuStore = useContextMenuStore();
-const { openContextMenu } = contextMenuStore;
-
-const desktopStore = useDesktopStore();
-const { maxDesktopGridSlot } = storeToRefs(desktopStore);
-
-const desktopGridRef = ref<HTMLElement | null>(null);
-
-defineExpose({
-  desktopGridRef,
-});
-
-const handleContextMenu = (event: MouseEvent) => {
-  openContextMenu(event.clientX, event.clientY, "desktop");
-};
-
-function countGridSlots(el: HTMLElement | null): number {
-  if (!el) return 0;
-
-  const style = getComputedStyle(el);
-
-  const rows = style.getPropertyValue("grid-template-rows").split(" ").length;
-  const columns = style
-    .getPropertyValue("grid-template-columns")
-    .split(" ").length;
-
-  return columns * rows;
-}
-
-const updateGridSlotCount = () => {
-  maxDesktopGridSlot.value = countGridSlots(desktopGridRef.value);
-};
-
-useEventListener("resize", updateGridSlotCount);
-
-onMounted(() => {
-  updateGridSlotCount();
-});
+defineEmits(["context"]);
 </script>
 
 <template>
   <div
-    ref="desktopGridRef"
-    @contextmenu.prevent="handleContextMenu"
-    class="desktop-grid-wrapper z-[2] h-full w-full px-4 py-2 md:px-6"
+    @contextmenu.prevent="$emit('context', $event)"
+    class="desktop-grid-wrapper hide-scrollbar z-[2] w-full overflow-y-scroll px-4 py-2 md:px-6"
+    :style="{
+      height: `calc(100svh - 35px)`,
+    }"
   >
     <slot />
   </div>
@@ -54,12 +16,8 @@ onMounted(() => {
 
 <style scoped>
 .desktop-grid-wrapper {
-  @apply grid gap-6;
+  @apply grid gap-16 sm:gap-8;
 
-  @apply grid-cols-[repeat(auto-fill,minmax(100px,1fr))];
-
-  grid-template-rows: repeat(auto-fit, 110px);
-  
-  max-height: calc(100vh - 35px);
+  @apply grid-cols-[repeat(auto-fill,minmax(90px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] sm:grid-rows-[repeat(auto-fill,minmax(100px,1fr))];
 }
 </style>

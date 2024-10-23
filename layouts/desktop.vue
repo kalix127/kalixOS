@@ -10,7 +10,6 @@ const { isLocked } = storeToRefs(globalStore);
     </Transition>
     <Topbar />
     <slot />
-    <DesktopDock />
   </div>
 </template>
 

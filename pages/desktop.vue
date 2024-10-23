@@ -22,7 +22,6 @@ const draggableItems = computed({
 onMounted(() => {
   // Initialize the FileSystem
   init();
-
   if (!desktopGridRef.value) {
     return;
   }
@@ -64,7 +63,6 @@ onMounted(() => {
       src="/img/bg-desktop.jpg"
       class="absolute -z-[1] h-full w-full object-cover"
       style="-webkit-user-drag: none"
-      :placeholder="true"
     />
     <!-- Desktop grid wrapper -->
     <DesktopGridWrapper ref="desktopGridRef">
@@ -75,7 +73,14 @@ onMounted(() => {
         :class="[index >= maxDesktopGridSlot ? 'hidden' : '']"
       />
     </DesktopGridWrapper>
-    <DesktopContextMenu />
+
+    <ClientOnly>
+      <!-- Context menu -->
+      <DesktopContextMenu />
+
+      <!-- Dockbar -->
+      <DesktopDock />
+    </ClientOnly>
   </main>
 </template>
 

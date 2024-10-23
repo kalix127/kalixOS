@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import type { FileSystemNode } from "@/types";
+import { until } from "@vueuse/core";
 
 definePageMeta({
   layout: "desktop",
@@ -8,8 +9,11 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, maxDesktopGridSlot } = storeToRefs(desktopStore);
+const { desktopItems } = storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
+
+const contextMenuStore = useContextMenuStore();
+const { openContextMenu } = contextMenuStore;
 
 const desktopGridRef = ref<HTMLElement | null>(null);
 const draggableItems = computed({
@@ -19,38 +23,65 @@ const draggableItems = computed({
   },
 });
 
-onMounted(() => {
-  // Initialize the FileSystem
-  init();
-  if (!desktopGridRef.value) {
+// Context menu handler
+const handleContextMenu = (event: MouseEvent) => {
+  openContextMenu(event.clientX, event.clientY, "desktop");
+};
+
+const draggedNodeId = ref<string | null>(null);
+const targetNodeId = ref<string | null>(null);
+
+function handleDrop() {
+  if (!draggedNodeId.value || !targetNodeId.value) {
+    console.error("No dragged or target node id");
     return;
   }
+
+  moveItem(draggedNodeId.value, targetNodeId.value);
+}
+
+onMounted(async () => {
+  // Initialize the FileSystem
+  init();
+
+  await until(desktopGridRef).toBeTruthy();
 
   // Initialize drag-and-drop
   dragAndDrop({
     parent: desktopGridRef.value,
     values: draggableItems,
     sortable: false,
+
+    // Assign dragged and target node ids on mobile
+    handleNodePointerover(data, state) {
+      if (!data.detail.state?.currentTargetValue) {
+        console.error("No current target value");
+        return;
+      }
+
+      draggedNodeId.value = data.detail.state?.currentTargetValue.id;
+      targetNodeId.value = data.detail.targetData.node.data.value.id;
+    },
+
+    // Assign dragged and target node ids on desktop
+    handleNodeDragover(data, state) {
+      if (!state.currentTargetValue) {
+        console.error("No current target value");
+        return;
+      }
+
+      draggedNodeId.value = state.currentTargetValue.id;
+      targetNodeId.value = data.targetData.node.data.value.id;
+    },
+
+    // Handle drop node for desktop
     handleNodeDrop(data, state) {
-      const draggedNode: FileSystemNode = state.draggedNode.data.value;
-      if (!draggedNode) {
-        return;
-      }
+      handleDrop();
+    },
 
-      // Check if the dragged node is the trash
-      if (draggedNode.name === "Trash") {
-        return;
-      }
-
-      const targetNode: FileSystemNode = data.targetData.node.data.value;
-      if (!targetNode) {
-        return;
-      }
-
-      // Move the item
-      if (targetNode) {
-        moveItem(draggedNode.id, targetNode.id);
-      }
+    // Handle drop node for mobile
+    handleNodePointerup(data, state) {
+      handleDrop();
     },
   });
 });
@@ -64,22 +95,16 @@ onMounted(() => {
       class="absolute -z-[1] h-full w-full object-cover"
       style="-webkit-user-drag: none"
     />
+
     <!-- Desktop grid wrapper -->
-    <DesktopGridWrapper ref="desktopGridRef">
-      <DesktopGridCell
-        v-for="(item, index) in desktopItems"
-        :key="item.id"
-        :item="item"
-        :class="[index >= maxDesktopGridSlot ? 'hidden' : '']"
-      />
-    </DesktopGridWrapper>
-
     <ClientOnly>
-      <!-- Context menu -->
-      <DesktopContextMenu />
-
-      <!-- Dockbar -->
-      <DesktopDock />
+      <DesktopGridWrapper @context="handleContextMenu" ref="desktopGridRef">
+        <DesktopGridCell
+          v-for="item in desktopItems"
+          :key="item.id"
+          :item="item"
+        />
+      </DesktopGridWrapper>
     </ClientOnly>
   </main>
 </template>

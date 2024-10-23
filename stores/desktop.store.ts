@@ -18,9 +18,6 @@ export const useDesktopStore = defineStore({
     fileSystem: defaultFileSystem(storeToRefs(useGlobalStore()).username.value),
     nodeMap: new Map<string, FileSystemNode>(),
 
-    // Desktop
-    maxDesktopGridSlot: 0,
-
     // Docks
     dockApps: defaultDockApps,
     isDockVisible: false,
@@ -81,6 +78,9 @@ export const useDesktopStore = defineStore({
 
       // Check permissions
       if (!canMove(item)) return false;
+
+      // Prevent moving an item to itself
+      if (itemId === targetFolderId) return false;
 
       const currentParent = findParentById(this.fileSystem, itemId);
       if (!currentParent || currentParent.type !== "folder") return false;
@@ -204,9 +204,6 @@ interface DesktopStore {
   // Filesystem
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
-
-  // Desktop
-  maxDesktopGridSlot: number;
 
   // Docks
   dockApps: FileSystemNode[];

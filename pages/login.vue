@@ -31,7 +31,7 @@ const socialLinks = [
 
 <template>
   <div class="grid h-full grid-rows-[1fr_125px] sm:grid-rows-[1fr_75px]">
-    <div class="grid place-content-center">
+    <div class="grid place-content-center m-8">
       <Transition mode="out-in">
         <!-- Select User -->
         <LoginSelectUser v-if="loginView === 'selectUser'" />

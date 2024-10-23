@@ -26,7 +26,7 @@ watch(
   >
     <div class="flex flex-col items-start justify-end p-2">
       <div
-        class="flex items-center justify-center gap-2 text-sm"
+        class="flex items-center justify-center gap-2 text-xs"
         v-for="log in systemLogs"
         :key="log.message"
       >
@@ -51,6 +51,4 @@ watch(
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

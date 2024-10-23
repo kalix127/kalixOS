@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomDelays } from "@/lib/utils";
-import { defaultNetworks, defaultBootDuration } from "@/constants";
+import { defaultNetworks, defaultBootDuration, desktopEnvironments } from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
 import type { SystemLog } from "@/types";
 import { powerOffSystemLogs, powerUpSystemLogs } from "@/constants";
@@ -10,6 +10,7 @@ export const useGlobalStore = defineStore({
   id: "globalStore",
   state: (): GlobalStore => ({
     // General
+    desktopEnvironment: desktopEnvironments[0],
     isWiredEnabled: true,
     isWifiEnabled: false,
     isBluetoothEnabled: false,
@@ -211,6 +212,7 @@ export const useGlobalStore = defineStore({
 // Define the type for the state
 interface GlobalStore {
   // General
+  desktopEnvironment: string;
   isWiredEnabled: boolean;
   isWifiEnabled: boolean;
   isBluetoothEnabled: boolean;

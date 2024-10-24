@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/i18n",
     "@sentry/nuxt/module",
+    "@nuxtjs/device",
   ],
   sentry: {
     sourceMapsUploadOptions: {

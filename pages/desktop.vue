@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems } = storeToRefs(desktopStore);
+const { desktopItems, openApps } = storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
 const contextMenuStore = useContextMenuStore();
@@ -96,6 +96,11 @@ onMounted(async () => {
       style="-webkit-user-drag: none"
     />
 
+    <!-- Apps -->
+    <TransitionGroup name="apps">
+      <DesktopApps v-for="app in openApps" :key="app.id" :app="app" />
+    </TransitionGroup>
+
     <!-- Desktop grid wrapper -->
     <ClientOnly>
       <DesktopGridWrapper @context="handleContextMenu" ref="desktopGridRef">
@@ -106,7 +111,18 @@ onMounted(async () => {
         />
       </DesktopGridWrapper>
     </ClientOnly>
+
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.apps-enter-active,
+.apps-leave-active {
+  transition: all 0.2s ease;
+}
+
+.apps-enter-from,
+.apps-leave-to {
+  opacity: 0;
+}
+</style>

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { defaultFileSystem, defaultDockApps } from "@/constants";
+import { defaultFileSystem, defaultApps } from "@/constants";
 import { getNodeIcon } from "@/helpers";
-import type { FileSystemNode } from "~/types";
+import type { AppNode, FileSystemNode } from "~/types";
 import {
   findParentById,
   findNodeByAbsolutePath,
@@ -19,8 +19,11 @@ export const useDesktopStore = defineStore({
     nodeMap: new Map<string, FileSystemNode>(),
 
     // Docks
-    dockApps: defaultDockApps,
     isDockVisible: false,
+
+    // Apps
+    apps: defaultApps,
+    activeApp: null,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
@@ -43,6 +46,10 @@ export const useDesktopStore = defineStore({
     trashItems(state): FileSystemNode[] {
       if (!this.trashNode) return [];
       return this.trashNode.children ? this.trashNode.children : [];
+    },
+
+    openApps(state): AppNode[] {
+      return state.apps.filter((app) => app.isOpen && !app.isMinimized);
     },
   },
   actions: {
@@ -191,11 +198,61 @@ export const useDesktopStore = defineStore({
     },
 
     /**
-     * Updates the dockApps based on the new list from the UI.
-     * @param newItems The updated list of FileSystemNodes.
+     * Updates the apps based on the new list from the UI.
+     * @param newItems The updated list of AppNodes.
      */
-    updateDockApps(newItems: FileSystemNode[]) {
-      this.dockApps = newItems;
+    updateDockApps(newItems: AppNode[]) {
+      // Filter out duplicates based on app id
+      this.apps = newItems.filter((app, index, self) =>
+        index === self.findIndex((t) => t.id === app.id)
+      );
+    },
+
+    /**
+     * Opens an app.
+     * @param appId The ID of the app to open.
+     */
+    openApp(appId: string) {
+      this.apps = this.apps.map((app) => ({
+        ...app,
+        isOpen: app.id === appId ? true : app.isOpen,
+        isMinimized: app.id === appId ? false : app.isMinimized,
+      }));
+    },
+
+    /**
+     * Closes an app.
+     * @param appId The ID of the app to close.
+     */
+    closeApp(appId: string) {
+      this.apps = this.apps.map((app) => ({
+        ...app,
+        isOpen: app.id === appId ? false : app.isOpen,
+        isMinimized: app.id === appId ? false : app.isMinimized,
+        isFullscreen: app.id === appId ? false : app.isFullscreen,
+      }));
+    },
+
+    /**
+     * Minimizes an app.
+     * @param appId The ID of the app to minimize.
+     */
+    minimizeApp(appId: string) {
+      this.apps = this.apps.map((app) => ({
+        ...app,
+        isMinimized: app.id === appId ? true : app.isMinimized,
+      }));
+    },
+
+    /**
+     * Enters fullscreen mode for an app.
+     * @param appId The ID of the app to enter fullscreen mode.
+     */
+    enterFullscreen(appId: string) {
+      this.apps = this.apps.map((app) => ({
+        ...app,
+        isFullscreen: app.id === appId ? true : app.isFullscreen,
+      }));
     },
   },
 });
@@ -206,6 +263,9 @@ interface DesktopStore {
   nodeMap: Map<string, FileSystemNode>;
 
   // Docks
-  dockApps: FileSystemNode[];
   isDockVisible: boolean;
+
+  // Apps
+  apps: AppNode[];
+  activeApp: AppNode | null;
 }

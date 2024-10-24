@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { animations } from "@formkit/drag-and-drop";
-import type { FileSystemNode } from "@/types";
+import type { AppNode } from "@/types";
 import { until } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -10,16 +10,24 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { dockApps } = storeToRefs(desktopStore);
-const { updateDockApps } = desktopStore;
+const { apps } = storeToRefs(desktopStore);
+const { updateDockApps, openApp, minimizeApp } = desktopStore;
 
 const dockRef = ref<HTMLElement | null>(null);
 const draggableDockItems = computed({
-  get: () => dockApps.value,
-  set: (newItems: FileSystemNode[]) => {
+  get: () => apps.value,
+  set: (newItems: AppNode[]) => {
     updateDockApps(newItems);
   },
 });
+
+function handleAppClick(app: AppNode) {
+  // If the app is open and not minimized, minimize it
+  if (app.isOpen && !app.isMinimized) {
+    minimizeApp(app.id);
+  }
+  openApp(app.id);
+}
 
 onBeforeMount(async () => {
   await until(dockRef).toBeTruthy();
@@ -41,7 +49,12 @@ onBeforeMount(async () => {
     ref="dockRef"
     class="grid h-full w-full grid-cols-4 items-center gap-4 rounded-3xl px-3 py-2 sm:flex"
   >
-    <DesktopDockApp v-for="app in dockApps" :key="app.id" :app="app" />
+    <DesktopDockApp
+      v-for="app in apps"
+      :key="app.id"
+      :app="app"
+      @click="() => handleAppClick(app)"
+    />
   </div>
 </template>
 

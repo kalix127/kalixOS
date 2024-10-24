@@ -97,6 +97,9 @@ export default defineNuxtConfig({
         "material-symbols:volume-off",
         "material-symbols:volume-down",
         "material-symbols:volume-up",
+        "material-symbols:minimize-rounded",
+        "material-symbols:expand-content-rounded",
+        "material-symbols:close-small-outline-rounded",
         "mdi:eye",
         "mdi:eye-off",
         "mdi:battery-charging",
@@ -122,9 +125,7 @@ export default defineNuxtConfig({
         "flag:us-4x3",
       ],
       scan: true,
-
       includeCustomCollections: true,
-
       sizeLimitKb: 256,
     },
   },

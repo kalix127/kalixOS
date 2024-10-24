@@ -1,59 +1,132 @@
 <script setup lang="ts">
-import VueDraggableResizable from "vue-draggable-resizable";
 import type { AppNode } from "@/types";
+import { useWindowSize } from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
-const { activeApp } = storeToRefs(desktopStore);
-const { closeApp, minimizeApp, enterFullscreen } = desktopStore;
+const { activeApp, desktopRef } = storeToRefs(desktopStore);
+storeToRefs(desktopStore);
+const { closeApp, minimizeApp, enterFullscreen, updateApp } = desktopStore;
 
-const { app } = defineProps<{
+const { isMobileOrTablet } = useDevice();
+const { width: windowWidth, height: windowHeight } = useWindowSize();
+
+const props = defineProps<{
   app: AppNode;
 }>();
 
-function handleFocusApp() {
-  activeApp.value = app;
+const app = computed(() => props.app);
+
+const initialAppSizes = computed(() => {
+  if (isMobileOrTablet) {
+    // Mobile
+    const width = Math.min(300, windowWidth.value * 0.9);
+    const height = (width * 16) / 9;
+    return { width: Math.round(width), height: Math.round(height) };
+  }
+
+  // Desktop
+  const width = windowWidth.value * 0.7;
+  const height = (width * 9) / 16;
+
+  return { width: Math.round(width), height: Math.round(height) };
+});
+
+const initialAppPositions = computed(() => {
+  const { width, height } = initialAppSizes.value;
+  const desktopWidth = desktopRef.value?.offsetWidth || windowWidth.value;
+  const desktopHeight = desktopRef.value?.offsetHeight || windowHeight.value;
+
+  const x = Math.max(0, Math.floor((desktopWidth - width) / 2));
+  const y = Math.max(0, Math.floor((desktopHeight - height) / 2));
+
+  return { x: Math.round(x), y: Math.round(y) };
+});
+
+function handleActivated() {
+  activeApp.value = app.value;
 }
 
-// TODO: Implement this
-function handleResizeEnd() {
-  // Update width and height
+function handleDeactivated() {
+  activeApp.value = null;
 }
 
-// TODO: Implement this
-function handleDragEnd() {
-  // Check if the topbar is out of the viewport
-  // Update x,y values
+function handleResizeStop(x: number, y: number, width: number, height: number) {
+  const updatedData = {
+    width: Math.round(width),
+    height: Math.round(height),
+  };
+  updateApp(app.value.id, updatedData);
 }
+
+function handleDragStop(x: number, y: number) {
+  // Prevent the app from being dragged outside the desktop bounds
+  // Set 1 to avoid animation bug when the value is 0
+  if (x <= 0) {
+    x = 1;
+  }
+  if (y <= 0) {
+    y = 1;
+  }
+
+  const updatedData = {
+    x: Math.round(x),
+    y: Math.round(y),
+  };
+  updateApp(app.value.id, updatedData);
+}
+
+onMounted(() => {
+  // Update the app's size and position if it's the first open
+  if (!app.value.width || !app.value.height || !app.value.x || !app.value.y) {
+    const updatedData = {
+      ...initialAppSizes.value,
+      ...initialAppPositions.value,
+    };
+    updateApp(app.value.id, updatedData);
+  }
+});
 </script>
 
 <template>
   <vue-draggable-resizable
-    :w="700"
-    :h="400"
+    :x="app.x || initialAppPositions.x"
+    :y="app.y || initialAppPositions.y"
+    :w="app.width || initialAppSizes.width"
+    :h="app.height || initialAppSizes.height"
     :resizable="true"
     :draggable="true"
-    :drag-handle="'.app-topbar'"
-    @activated="handleFocusApp"
-    @on-resize-end="handleResizeEnd"
-    @on-drag-end="handleDragEnd"
+    :parent="true"
+    @dragStop="handleDragStop"
+    @resizeStop="handleResizeStop"
+    @click="handleActivated"
+    @activated="handleActivated"
+    @deactivated="handleDeactivated"
+    dragHandle=".app-topbar"
+    className="resize-handle"
     :style="{
       zIndex: activeApp?.id === app.id ? 20000 : 'auto',
     }"
-    @click="handleFocusApp"
-    class="absolute left-1/2 top-1/2"
+    class="absolute left-0 top-0 rounded-t-xl"
   >
-    <!-- Top bar -->
-    <DesktopAppsTopBar
-      @minimize="() => minimizeApp(app.id)"
-      @fullscreen="() => enterFullscreen(app.id)"
-      @close="() => closeApp(app.id)"
-      :title="app.name"
-      class="app-topbar"
-    />
+  
+    <!-- Resize handles -->
+    <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
+      <!-- Top bar -->
+      <DesktopAppsTopBar
+        @minimize="() => minimizeApp(app.id)"
+        @fullscreen="() => enterFullscreen(app.id)"
+        @close="() => closeApp(app.id)"
+        :title="app.name"
+        class="app-topbar"
+      />
 
-    <!-- Content -->
-    <DesktopAppsContent :app="app" />
+      <!-- Content -->
+      <DesktopAppsContent :app="app" />
+    </div>
+    <div class="absolute bottom-0 left-0"></div>
   </vue-draggable-resizable>
 </template>
 
-<style scoped></style>
+<style>
+@import "vue-draggable-resizable/style.css";
+</style>

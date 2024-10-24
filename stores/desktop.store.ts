@@ -24,6 +24,9 @@ export const useDesktopStore = defineStore({
     // Apps
     apps: defaultApps,
     activeApp: null,
+
+    // Desktop
+    desktopRef: null,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
@@ -230,6 +233,10 @@ export const useDesktopStore = defineStore({
         isOpen: app.id === appId ? false : app.isOpen,
         isMinimized: app.id === appId ? false : app.isMinimized,
         isFullscreen: app.id === appId ? false : app.isFullscreen,
+        width: app.id === appId ? 0 : app.width,
+        height: app.id === appId ? 0 : app.height,
+        x: app.id === appId ? 0 : app.x,
+        y: app.id === appId ? 0 : app.y,
       }));
     },
 
@@ -254,6 +261,17 @@ export const useDesktopStore = defineStore({
         isFullscreen: app.id === appId ? true : app.isFullscreen,
       }));
     },
+
+    /**
+     * Update the app.
+     * @param appId The ID of the app to update.
+     * @param changes The changes to apply to the app.
+     */
+    updateApp(appId: string, changes: Partial<AppNode>) {
+      this.apps = this.apps.map((app) =>
+        app.id === appId ? { ...app, ...changes } : app,
+      );
+    },
   },
 });
 
@@ -268,4 +286,7 @@ interface DesktopStore {
   // Apps
   apps: AppNode[];
   activeApp: AppNode | null;
+
+  // Desktop
+  desktopRef: HTMLElement | null;
 }

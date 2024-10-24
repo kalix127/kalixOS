@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps } = storeToRefs(desktopStore);
+const { desktopItems, openApps, desktopRef } = storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
 const contextMenuStore = useContextMenuStore();
@@ -88,7 +88,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="relative">
+  <main ref="desktopRef" class="relative select-none">
     <!-- Background image -->
     <NuxtImg
       src="/img/bg-desktop.jpg"
@@ -111,7 +111,6 @@ onMounted(async () => {
         />
       </DesktopGridWrapper>
     </ClientOnly>
-
   </main>
 </template>
 

@@ -9,7 +9,8 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef } = storeToRefs(desktopStore);
+const { desktopItems, openApps, desktopRef } =
+  storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
 const contextMenuStore = useContextMenuStore();
@@ -89,13 +90,6 @@ onMounted(async () => {
 
 <template>
   <main ref="desktopRef" class="relative select-none">
-    <!-- Background image -->
-    <NuxtImg
-      src="/img/bg-desktop.jpg"
-      class="absolute -z-[1] h-full w-full object-cover"
-      style="-webkit-user-drag: none"
-    />
-
     <!-- Apps -->
     <TransitionGroup name="apps">
       <DesktopApps v-for="app in openApps" :key="app.id" :app="app" />

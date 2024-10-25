@@ -146,7 +146,7 @@ onBeforeUpdate(() => {
     :style="{
       zIndex: activeApp?.id === app.id ? 20000 : 'auto',
     }"
-    class="absolute left-0 top-0 rounded-t-xl"
+    class="absolute left-0 top-0 rounded-t-xl !border-none"
   >
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->

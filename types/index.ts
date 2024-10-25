@@ -21,18 +21,18 @@ export interface FileSystemNode {
 
 export interface AppNode extends FileSystemNode {
   // General
-  isOpen?: boolean;
-  isActive?: boolean;
-  isMinimized?: boolean;
-  isFullscreen?: boolean;
+  isOpen: boolean;
+  isActive: boolean;
+  isMinimized: boolean;
+  isFullscreen: boolean;
 
   // Size
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
 
   // Position
-  x?: number;
-  y?: number;
+  x: number;
+  y: number;
 }
 
 export interface SystemLog {

@@ -67,7 +67,17 @@ export const defaultApps: AppNode[] = [
     icon: "app:kate",
     id: "kate",
   },
-].map((app) => ({ ...app,  width: 0, height: 0, x: 0, y: 0 }));
+].map((app) => ({
+  ...app,
+  isOpen: false,
+  isActive: false,
+  isMinimized: false,
+  isFullscreen: false,
+  width: 0,
+  height: 0,
+  x: 0,
+  y: 0,
+}));
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
   assignIds({

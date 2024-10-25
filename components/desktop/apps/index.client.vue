@@ -132,6 +132,7 @@ onBeforeUpdate(() => {
     :y="app.y || initialAppPositions.y"
     :w="app.width || initialAppSizes.width"
     :h="app.height || initialAppSizes.height"
+    :active="activeApp?.id === app.id"
     :resizable="true"
     :draggable="true"
     :parent="true"
@@ -169,7 +170,7 @@ onBeforeUpdate(() => {
 @import "vue-draggable-resizable/style.css";
 
 .handle {
-  @apply z-10 h-2 w-2 border-none bg-transparent;
+  @apply z-10 h-2 w-2 border-none bg-transparent !block;
 }
 
 /* Top */

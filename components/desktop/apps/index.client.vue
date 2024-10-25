@@ -61,6 +61,18 @@ function handleResizeStop(x: number, y: number, width: number, height: number) {
   updateApp(app.value.id, updatedData);
 }
 
+function handleDragging(x: number, y: number) {
+  // Update the app's position only if the user is dragging the app to the top bar, to prevent spam and update the hasAppsAtTop state
+
+  // Those updates triggers hasAppsAtTop computed property to update topbar background
+  if (y < 2) {
+    handleDragStop(x, y);
+  } else if (y > 2 && y < 20) {
+    handleDragStop(x, y);
+  }
+
+}
+
 function handleDragStop(x: number, y: number) {
   // Prevent the app from being dragged outside the desktop bounds
   // Set 1 to avoid animation bug when the value is 0
@@ -124,6 +136,7 @@ onBeforeUpdate(() => {
     :resizable="true"
     :draggable="true"
     :parent="true"
+    @dragging="handleDragging"
     @dragStop="handleDragStop"
     @resizeStop="handleResizeStop"
     @click="handleActivated"

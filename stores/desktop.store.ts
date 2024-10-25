@@ -54,6 +54,11 @@ export const useDesktopStore = defineStore({
     openApps(state): AppNode[] {
       return state.apps.filter((app) => app.isOpen && !app.isMinimized);
     },
+
+    hasAppsAtTop(state): boolean {
+      return this.openApps.some((app) => app.y <= 1);
+    },
+
   },
   actions: {
     /**

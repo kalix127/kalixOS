@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import { useWindowSize } from "@vueuse/core";
+import VueDraggableResizable from "vue-draggable-resizable";
 
 const desktopStore = useDesktopStore();
 const { activeApp, desktopRef } = storeToRefs(desktopStore);
 storeToRefs(desktopStore);
-const { closeApp, minimizeApp, enterFullscreen, updateApp } = desktopStore;
+const { closeApp, minimizeApp, enterFullscreen, exitFullscreen, updateApp } =
+  desktopStore;
 
 const { isMobileOrTablet } = useDevice();
 const { width: windowWidth, height: windowHeight } = useWindowSize();
@@ -15,6 +17,7 @@ const props = defineProps<{
 }>();
 
 const app = computed(() => props.app);
+const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
 const initialAppSizes = computed(() => {
   if (isMobileOrTablet) {
@@ -75,6 +78,23 @@ function handleDragStop(x: number, y: number) {
   updateApp(app.value.id, updatedData);
 }
 
+function handleFullscreen() {
+  // If the app is already fullscreen, exit fullscreen
+  if (app.value.isFullscreen) {
+    exitFullscreen(
+      app.value.id,
+      initialAppSizes.value.width,
+      initialAppSizes.value.height,
+      initialAppPositions.value.x,
+      initialAppPositions.value.y,
+    );
+    return;
+  }
+
+  // Else, enter fullscreen
+  enterFullscreen(app.value.id);
+}
+
 onMounted(() => {
   // Update the app's size and position if it's the first open
   if (!app.value.width || !app.value.height || !app.value.x || !app.value.y) {
@@ -85,10 +105,18 @@ onMounted(() => {
     updateApp(app.value.id, updatedData);
   }
 });
+
+onBeforeUpdate(() => {
+  if (appRef.value) {
+    appRef.value.width = app.value.width;
+    appRef.value.height = app.value.height;
+  }
+});
 </script>
 
 <template>
   <vue-draggable-resizable
+    ref="appRef"
     :x="app.x || initialAppPositions.x"
     :y="app.y || initialAppPositions.y"
     :w="app.width || initialAppSizes.width"
@@ -108,13 +136,12 @@ onMounted(() => {
     }"
     class="absolute left-0 top-0 rounded-t-xl"
   >
-  
     <!-- Resize handles -->
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
       <DesktopAppsTopBar
         @minimize="() => minimizeApp(app.id)"
-        @fullscreen="() => enterFullscreen(app.id)"
+        @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
         :title="app.name"
         class="app-topbar"

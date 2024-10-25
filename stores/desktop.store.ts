@@ -206,8 +206,8 @@ export const useDesktopStore = defineStore({
      */
     updateDockApps(newItems: AppNode[]) {
       // Filter out duplicates based on app id
-      this.apps = newItems.filter((app, index, self) =>
-        index === self.findIndex((t) => t.id === app.id)
+      this.apps = newItems.filter(
+        (app, index, self) => index === self.findIndex((t) => t.id === app.id),
       );
     },
 
@@ -259,6 +259,35 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map((app) => ({
         ...app,
         isFullscreen: app.id === appId ? true : app.isFullscreen,
+        width: app.id === appId ? this.desktopRef?.offsetWidth : app.width,
+        height: app.id === appId ? this.desktopRef?.offsetHeight : app.height,
+        x: app.id === appId ? 1 : app.x,
+        y: app.id === appId ? 1 : app.y,
+      }));
+    },
+
+    /**
+     * Exits fullscreen mode for an app.
+     * @param appId The ID of the app to exit fullscreen mode.
+     * @param defaultWidth The default width of the app.
+     * @param defaultHeight The default height of the app.
+     * @param defaultX The default x position of the app.
+     * @param defaultY The default y position of the app.
+     */
+    exitFullscreen(
+      appId: string,
+      defaultWidth: number,
+      defaultHeight: number,
+      defaultX: number,
+      defaultY: number,
+    ) {
+      this.apps = this.apps.map((app) => ({
+        ...app,
+        isFullscreen: app.id === appId ? false : app.isFullscreen,
+        width: app.id === appId ? defaultWidth : app.width,
+        height: app.id === appId ? defaultHeight : app.height,
+        x: app.id === appId ? defaultX : app.x,
+        y: app.id === appId ? defaultY : app.y,
       }));
     },
 

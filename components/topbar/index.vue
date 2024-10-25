@@ -23,7 +23,7 @@ const route = useRoute();
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',
-      hasAppsAtTop ? 'bg-opacity-100' : '',
+      hasAppsAtTop ? '!bg-opacity-100' : '',
     ]"
   >
     <!-- Left empty div for spacing -->

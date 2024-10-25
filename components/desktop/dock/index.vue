@@ -40,14 +40,14 @@ watchDebounced(
       >
         <TooltipTrigger
           ref="dockTriggerRef"
-          class="absolute bottom-0 left-0 z-50 h-10 w-full cursor-default sm:h-6"
+          class="absolute bottom-0 left-0 z-[50000] h-10 w-full cursor-default sm:h-6"
           @mouseenter="isTriggerHovered = true"
           @mouseleave="isTriggerHovered = false"
         >
         </TooltipTrigger>
         <TooltipContent
           :side-offset="-12"
-          class="rounded-3xl p-0"
+          class="rounded-3xl p-0 z-[50000]" 
           @mouseenter="isContentHovered = true"
           @mouseleave="isContentHovered = false"
         >

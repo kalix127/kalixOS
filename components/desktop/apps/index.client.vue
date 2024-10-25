@@ -145,7 +145,7 @@ onBeforeUpdate(() => {
     dragHandle=".app-topbar"
     classNameHandle="handle"
     :style="{
-      zIndex: activeApp?.id === app.id ? 20000 : 'auto',
+      zIndex: activeApp?.id === app.id ? 10000 : 5000,
     }"
     class="absolute left-0 top-0 rounded-t-xl !border-none"
   >

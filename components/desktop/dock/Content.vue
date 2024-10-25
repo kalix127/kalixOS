@@ -47,7 +47,7 @@ onBeforeMount(async () => {
   <div
     v-on-click-outside="() => $emit('close')"
     ref="dockRef"
-    class="grid h-full w-full grid-cols-4 items-center gap-4 rounded-3xl px-3 py-2 sm:flex"
+    class="grid z-[50000] h-full w-full grid-cols-4 items-center gap-4 rounded-3xl px-3 py-2 sm:flex"
   >
     <DesktopDockApp
       v-for="app in apps"

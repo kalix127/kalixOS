@@ -86,6 +86,10 @@ onMounted(async () => {
     },
   });
 });
+
+onUnmounted(() => {
+  desktopStore.$reset();
+});
 </script>
 
 <template>

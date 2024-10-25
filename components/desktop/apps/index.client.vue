@@ -70,7 +70,6 @@ function handleDragging(x: number, y: number) {
   } else if (y > 2 && y < 20) {
     handleDragStop(x, y);
   }
-
 }
 
 function handleDragStop(x: number, y: number) {
@@ -143,13 +142,12 @@ onBeforeUpdate(() => {
     @activated="handleActivated"
     @deactivated="handleDeactivated"
     dragHandle=".app-topbar"
-    className="resize-handle"
+    classNameHandle="handle"
     :style="{
       zIndex: activeApp?.id === app.id ? 20000 : 'auto',
     }"
     class="absolute left-0 top-0 rounded-t-xl"
   >
-    <!-- Resize handles -->
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
       <DesktopAppsTopBar
@@ -169,4 +167,44 @@ onBeforeUpdate(() => {
 
 <style>
 @import "vue-draggable-resizable/style.css";
+
+.handle {
+  @apply z-10 h-2 w-2 border-none bg-transparent;
+}
+
+/* Top */
+.handle-tl {
+  @apply left-0 top-0;
+}
+
+.handle-tm {
+  @apply -top-1 left-4 w-[calc(100%-22px)];
+}
+
+.handle-tr {
+  @apply right-0 top-0;
+}
+
+/* Middle */
+
+.handle-ml {
+  @apply -left-1 top-4 h-[calc(100%-18px)];
+}
+
+.handle-mr {
+  @apply -right-1 top-4 h-[calc(100%-18px)];
+}
+
+/* Bottom */
+.handle-bl {
+  @apply -bottom-1 -left-1;
+}
+
+.handle-bm {
+  @apply -bottom-1 left-3 h-2 w-[calc(100%-13px)];
+}
+
+.handle-br {
+  @apply -bottom-1 -right-1;
+}
 </style>

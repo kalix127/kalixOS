@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 const currentDate = ref(new Date());
 
 const { locale } = useI18n();
+const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 onMounted(() => {
   const intervalId = setInterval(() => {
@@ -51,6 +52,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
     <PopoverTrigger>
       <div
         class="flex cursor-default select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
+        :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
       >
         <span class="text-nowrap text-sm font-extrabold">
           {{ formattedDateTime }}

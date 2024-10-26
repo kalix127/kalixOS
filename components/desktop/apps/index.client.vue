@@ -84,42 +84,42 @@ const {
 }
 
 .handle {
-  @apply z-10 !block h-2 w-2 border-none bg-transparent;
+  @apply z-10 !block h-1 w-1 border-none bg-transparent sm:h-2 sm:w-2;
 }
 
 /* Top */
 .handle-tl {
-  @apply left-0 top-0;
+  @apply left-1 top-1;
 }
 
 .handle-tm {
-  @apply -top-1 left-4 w-[calc(100%-22px)];
+  @apply left-4 top-0 w-[calc(100%-22px)];
 }
 
 .handle-tr {
-  @apply right-0 top-0;
+  @apply right-1 top-1;
 }
 
 /* Middle */
 
 .handle-ml {
-  @apply -left-1 top-4 h-[calc(100%-18px)];
+  @apply left-0 top-4 h-[calc(100%-18px)];
 }
 
 .handle-mr {
-  @apply -right-1 top-4 h-[calc(100%-18px)];
+  @apply right-0 top-4 h-[calc(100%-18px)];
 }
 
 /* Bottom */
 .handle-bl {
-  @apply -bottom-1 -left-1;
+  @apply bottom-0 left-0;
 }
 
 .handle-bm {
-  @apply -bottom-1 left-3 h-2 w-[calc(100%-13px)];
+  @apply bottom-0 left-3 w-[calc(100%-13px)];
 }
 
 .handle-br {
-  @apply -bottom-1 -right-1;
+  @apply bottom-0 right-0;
 }
 </style>

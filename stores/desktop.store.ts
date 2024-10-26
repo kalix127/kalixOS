@@ -104,7 +104,7 @@ export const useDesktopStore = defineStore({
           (newApps) => {
             localStorage.setItem("apps", JSON.stringify(newApps));
           },
-          { deep: true },
+          { deep: true, throttle: 200 },
         );
       }
     },

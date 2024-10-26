@@ -12,10 +12,17 @@ defineProps<{
 <template>
   <div
     :class="
-      cn('grid h-full w-full shadow-lg place-content-center bg-background', $props.class)
+      cn(
+        'grid h-full w-full place-content-center bg-background',
+        $props.class,
+      )
     "
   >
     CONTENT
+    <p>X: {{ app.x }}</p>
+    <p>Y: {{ app.y }}</p>
+    <p>Width: {{ app.width }}</p>
+    <p>Height: {{ app.height }}</p>
   </div>
 </template>
 

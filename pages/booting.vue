@@ -17,7 +17,7 @@ watch(escape, (v) => {
 </script>
 
 <template>
-  <div class="relative grid min-h-[100vh] grid-rows-[1fr_75px] bg-black">
+  <div class="relative grid min-h-[100svh] grid-rows-[1fr_75px] bg-black">
     <div class="flex flex-col items-center justify-center">
       <Icon name="eos-icons:three-dots-loading" size="80" />
     </div>

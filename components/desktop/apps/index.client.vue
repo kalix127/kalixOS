@@ -48,6 +48,7 @@ const {
     dragHandle=".app-topbar"
     classNameHandle="handle"
     classNameDragging="app-dragging"
+    classNameResizing="app-resizing"
     :style="{
       zIndex: app.isActive ? 10000 : 5000,
     }"
@@ -75,6 +76,10 @@ const {
 @import "vue-draggable-resizable/style.css";
 
 .app-dragging {
+  @apply duration-0;
+}
+
+.app-resizing {
   @apply duration-0;
 }
 

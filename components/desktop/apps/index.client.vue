@@ -47,10 +47,11 @@ const {
     @click="() => handleActive(true)"
     dragHandle=".app-topbar"
     classNameHandle="handle"
+    classNameDragging="app-dragging"
     :style="{
       zIndex: app.isActive ? 10000 : 5000,
     }"
-    class="absolute left-0 top-0 rounded-t-xl !border-none"
+    class="absolute left-0 top-0 rounded-t-xl !border-none duration-300"
   >
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
@@ -72,6 +73,10 @@ const {
 
 <style>
 @import "vue-draggable-resizable/style.css";
+
+.app-dragging {
+  @apply duration-0;
+}
 
 .handle {
   @apply z-10 !block h-2 w-2 border-none bg-transparent;

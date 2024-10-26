@@ -26,10 +26,6 @@ export function useAppHandlers(
   };
 
   /*  Resize Handlers */
-  const handleResizeStart = (side: string, handle: MouseEvent) => {
-    // Just disable the sullscreen
-    app.value.isFullscreen = false;
-  };
   const handleResizeStop = (
     x: number,
     y: number,
@@ -95,7 +91,6 @@ export function useAppHandlers(
 
   return {
     handleActive,
-    handleResizeStart,
     handleResizeStop,
     handleDragging,
     handleDragStop,

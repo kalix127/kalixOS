@@ -19,7 +19,6 @@ const {
   handleActive,
   handleDragStop,
   handleDragging,
-  handleResizeStart,
   handleResizeStop,
   handleFullscreen,
 } = useAppHandlers(app, appRef);
@@ -38,7 +37,6 @@ const {
     :parent="true"
     @dragging="handleDragging"
     @dragStop="handleDragStop"
-    @resizeStart="handleResizeStart"
     @resizeStop="handleResizeStop"
     @activated="() => handleActive(true)"
     @deactivated="() => handleActive(false)"

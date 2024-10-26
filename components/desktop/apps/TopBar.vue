@@ -19,20 +19,20 @@ const { title, isFullscreen, isActive } = toRefs(props);
 
 const actions = computed(() => [
   {
-    icon: "material-symbols:minimize-rounded",
+    icon: "gnome:minimize",
     emit: "minimize",
   },
   isFullscreen.value
     ? {
-        icon: "material-symbols:fullscreen-exit-rounded",
+        icon: "gnome:collapse",
         emit: "fullscreen",
       }
     : {
-        icon: "material-symbols:expand-content-rounded",
+        icon: "gnome:expand",
         emit: "fullscreen",
       },
   {
-    icon: "material-symbols:close-small-outline-rounded",
+    icon: "gnome:close",
     emit: "close",
   },
 ]);
@@ -68,7 +68,7 @@ const actions = computed(() => [
         v-for="action in actions"
         :key="action.icon"
       >
-        <Icon :name="action.icon" size="20" @click="$emit(action.emit)" />
+        <Icon :name="action.icon" size="18" @click="$emit(action.emit)" />
       </Button>
     </div>
   </div>

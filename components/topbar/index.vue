@@ -19,7 +19,7 @@ const route = useRoute();
   <header
     :class="[
       cn(
-        'flex min-h-[35px] items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
+        'flex min-h-[35px] items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500 select-none',
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',

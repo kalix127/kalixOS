@@ -57,6 +57,7 @@ const {
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
         :title="app.name"
+        :isFullscreen="app.isFullscreen"
         class="app-topbar"
       />
 

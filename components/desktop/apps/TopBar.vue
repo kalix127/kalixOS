@@ -2,7 +2,19 @@
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
 
-const isFullscreen = ref(false);
+defineEmits<{
+  (e: "close"): void;
+  (e: "minimize"): void;
+  (e: "fullscreen"): void;
+}>();
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"];
+  title: string;
+  isFullscreen: boolean;
+}>();
+
+const { title, isFullscreen } = toRefs(props);
 
 const actions = computed(() => [
   {
@@ -23,17 +35,6 @@ const actions = computed(() => [
     emit: "close",
   },
 ]);
-
-defineProps<{
-  class?: HTMLAttributes["class"];
-  title: string;
-}>();
-
-defineEmits<{
-  (e: "close"): void;
-  (e: "minimize"): void;
-  (e: "fullscreen"): void;
-}>();
 </script>
 
 <template>
@@ -57,7 +58,7 @@ defineEmits<{
       <Button
         variant="ghost"
         size="icon"
-        class="cursor-default rounded-full bg-secondary duration-0 hover:bg-secondary-hover size-6"
+        class="size-6 cursor-default rounded-full bg-secondary duration-0 hover:bg-secondary-hover"
         v-for="action in actions"
         :key="action.icon"
       >

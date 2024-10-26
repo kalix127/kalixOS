@@ -55,14 +55,18 @@ export function useAppHandlers(
     // If the app is already fullscreen, exit fullscreen
     if (app.value.isFullscreen) {
       app.value.isFullscreen = false;
-      updateAppSizes(initialAppSizes.value.width, initialAppSizes.value.height);
-      updateAppPosition(
-        initialAppPositions.value.x,
-        initialAppPositions.value.y,
-      );
+      updateAppSizes(app.value.prev.width, app.value.prev.height);
+      updateAppPosition(app.value.prev.x, app.value.prev.y);
       return;
     }
 
+    // Store the size and position now in order to restore them later
+    app.value.prev.width = app.value.width;
+    app.value.prev.height = app.value.height;
+    app.value.prev.x = app.value.x;
+    app.value.prev.y = app.value.y;
+
+    // Set the full screen
     app.value.isFullscreen = true;
     updateAppSizes(desktopRef.value.offsetWidth, desktopRef.value.offsetWidth);
     updateAppPosition(1, 1);

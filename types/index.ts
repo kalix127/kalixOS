@@ -33,6 +33,13 @@ export interface AppNode extends FileSystemNode {
   // Position
   x: number;
   y: number;
+
+  prev: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
 }
 
 export interface SystemLog {

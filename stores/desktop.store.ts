@@ -22,6 +22,7 @@ export const useDesktopStore = defineStore({
     isDockVisible: false,
 
     // Apps
+    hasAppsLoading: false,
     apps: defaultApps,
     activeApp: null,
 
@@ -281,6 +282,7 @@ interface DesktopStore {
   isDockVisible: boolean;
 
   // Apps
+  hasAppsLoading: boolean;
   apps: AppNode[];
   activeApp: AppNode | null;
 

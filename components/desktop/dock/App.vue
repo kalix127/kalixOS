@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { AppNode } from "~/types";
 
+const { hasAppsLoading } = storeToRefs(useDesktopStore());
+
 defineProps<{
   app: AppNode;
 }>();
@@ -12,6 +14,7 @@ defineProps<{
       variant="ghost"
       size="icon"
       class="relative grid cursor-default place-content-center rounded-2xl p-7 duration-0 hover:bg-accent/70"
+      :class="[hasAppsLoading ? 'cursor-progress' : '']"
     >
       <Icon :name="app.icon" size="40" />
       <div

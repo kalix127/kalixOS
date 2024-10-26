@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef } =
+const { desktopItems, openApps, desktopRef, hasAppsLoading } =
   storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
@@ -93,7 +93,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main ref="desktopRef" class="relative select-none">
+  <main ref="desktopRef" class="relative select-none" :class="[
+    hasAppsLoading ? 'cursor-progress' : ''
+  ]">
     <!-- Apps -->
     <TransitionGroup name="apps">
       <DesktopApps v-for="app in openApps" :key="app.id" :app="app" />

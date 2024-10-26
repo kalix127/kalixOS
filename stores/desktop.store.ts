@@ -10,6 +10,7 @@ import {
   canDelete,
 } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
+import { watchThrottled } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -59,7 +60,6 @@ export const useDesktopStore = defineStore({
     hasAppsAtTop(state): boolean {
       return this.openApps.some((app) => app.y <= 1);
     },
-
   },
   actions: {
     /**
@@ -67,6 +67,7 @@ export const useDesktopStore = defineStore({
      */
     init(): void {
       this.initializeNodeMap(this.fileSystem);
+      this.syncAppsWithLocalStorage();
     },
 
     /**
@@ -77,6 +78,34 @@ export const useDesktopStore = defineStore({
       this.nodeMap.set(node.id, node);
       if (node.children) {
         node.children.forEach((child) => this.initializeNodeMap(child));
+      }
+    },
+
+    /**
+     * Synchronizes the apps state with localStorage on the client-side.
+     */
+    syncAppsWithLocalStorage() {
+      if (import.meta.client) {
+        const storedApps = localStorage.getItem("apps");
+        if (storedApps) {
+          try {
+            this.apps = JSON.parse(storedApps);
+          } catch (e) {
+            console.error("Failed to parse apps from localStorage:", e);
+            this.apps = defaultApps;
+          }
+        } else {
+          this.apps = defaultApps;
+        }
+
+        // Watch for changes and update localStorage accordingly
+        watchThrottled(
+          () => this.apps,
+          (newApps) => {
+            localStorage.setItem("apps", JSON.stringify(newApps));
+          },
+          { deep: true },
+        );
       }
     },
 
@@ -258,7 +287,6 @@ export const useDesktopStore = defineStore({
         isMinimized: app.id === appId ? true : app.isMinimized,
       }));
     },
-
 
     /**
      * Update the app.

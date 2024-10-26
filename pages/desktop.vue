@@ -93,12 +93,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main ref="desktopRef" class="relative select-none" :class="[
-    hasAppsLoading ? 'cursor-progress' : ''
-  ]">
+  <main
+    ref="desktopRef"
+    class="relative select-none"
+    :class="[hasAppsLoading ? 'cursor-progress' : '']"
+  >
     <!-- Apps -->
     <TransitionGroup name="apps">
-      <DesktopApps v-for="app in openApps" :key="app.id" :app="app" />
+      <LazyDesktopApps v-for="app in openApps" :key="app.id" :app="app" />
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->

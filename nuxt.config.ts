@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   app: {
-    head: {},
+    head: {
+      htmlAttrs: {
+        class: "overflow-hidden"
+      }
+    },
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
   },

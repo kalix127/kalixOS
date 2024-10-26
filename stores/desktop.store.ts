@@ -225,6 +225,7 @@ export const useDesktopStore = defineStore({
         ...app,
         isOpen: app.id === appId ? true : app.isOpen,
         isMinimized: app.id === appId ? false : app.isMinimized,
+        isActive: app.id === appId ? true : app.isActive,
       }));
     },
 
@@ -236,6 +237,7 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map((app) => ({
         ...app,
         isOpen: app.id === appId ? false : app.isOpen,
+        isActive: app.id === appId ? false : app.isActive,
         isMinimized: app.id === appId ? false : app.isMinimized,
         isFullscreen: app.id === appId ? false : app.isFullscreen,
         width: app.id === appId ? 0 : app.width,

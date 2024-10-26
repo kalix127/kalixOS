@@ -12,9 +12,10 @@ const props = defineProps<{
   class?: HTMLAttributes["class"];
   title: string;
   isFullscreen: boolean;
+  isActive: boolean;
 }>();
 
-const { title, isFullscreen } = toRefs(props);
+const { title, isFullscreen, isActive } = toRefs(props);
 
 const actions = computed(() => [
   {
@@ -39,9 +40,13 @@ const actions = computed(() => [
 
 <template>
   <div
-    :class="
-      cn('grid h-10 grid-cols-3 rounded-t-xl bg-popover p-2', $props.class)
-    "
+    :class="[
+      cn(
+        'grid h-10 grid-cols-3 rounded-t-xl p-2 transition-colors duration-300',
+        $props.class,
+      ),
+      isActive ? 'bg-popover' : 'bg-muted',
+    ]"
   >
     <!-- Empty div -->
     <div></div>
@@ -58,7 +63,8 @@ const actions = computed(() => [
       <Button
         variant="ghost"
         size="icon"
-        class="size-6 cursor-default rounded-full bg-secondary duration-0 hover:bg-secondary-hover"
+        class="size-6 cursor-default rounded-full duration-300 hover:bg-secondary-hover"
+        :class="[isActive ? 'bg-secondary' : 'bg-popover']"
         v-for="action in actions"
         :key="action.icon"
       >

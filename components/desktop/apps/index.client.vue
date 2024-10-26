@@ -58,13 +58,13 @@ const {
         @close="() => closeApp(app.id)"
         :title="app.name"
         :isFullscreen="app.isFullscreen"
+        :isActive="app.isActive"
         class="app-topbar"
       />
 
       <!-- Content -->
       <DesktopAppsContent :app="app" />
     </div>
-    <div class="absolute bottom-0 left-0"></div>
   </vue-draggable-resizable>
 </template>
 

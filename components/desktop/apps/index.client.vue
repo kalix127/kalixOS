@@ -15,6 +15,8 @@ const { app } = toRefs(props);
 
 const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
+const { minAppSizes } = useAppSizes();
+
 const {
   handleActive,
   handleDragStop,
@@ -27,10 +29,12 @@ const {
 <template>
   <vue-draggable-resizable
     ref="appRef"
-    :x="app.x"
-    :y="app.y"
+    :min-width="minAppSizes.minWidth"
+    :min-height="minAppSizes.minHeight"
     :w="app.width"
     :h="app.height"
+    :x="app.x"
+    :y="app.y"
     :active="app.isActive"
     :resizable="app.isFullscreen ? false : true"
     :draggable="app.isFullscreen ? false : true"

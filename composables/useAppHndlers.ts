@@ -6,45 +6,48 @@ export function useAppHandlers(
   appRef: Ref<InstanceType<typeof VueDraggableResizable>>,
 ) {
   const desktopStore = useDesktopStore();
-  const { enterFullscreen, exitFullscreen, updateApp } = desktopStore;
+  const { desktopRef } = storeToRefs(desktopStore);
 
   const { initialAppSizes } = useAppSizes();
   const { initialAppPositions } = useAppPositions();
 
-  const handleActivated = () => {
-    desktopStore.activeApp = app.value;
+  const updateAppSizes = (w: number, h: number) => {
+    app.value.width = Math.round(w);
+    app.value.height = Math.round(h);
   };
 
-  const handleDeactivated = () => {
-    desktopStore.activeApp = null;
+  const updateAppPosition = (x: number, y: number) => {
+    app.value.x = Math.round(x);
+    app.value.y = Math.round(y);
   };
 
+  const handleActive = (value: boolean) => {
+    app.value.isActive = value;
+  };
+
+  /*  Resize Handlers */
+  const handleResizeStart = (side: string, handle: MouseEvent) => {
+    // Just disable the sullscreen
+    app.value.isFullscreen = false;
+  };
   const handleResizeStop = (
     x: number,
     y: number,
     width: number,
     height: number,
   ) => {
-    const updatedData = {
-      width: Math.round(width),
-      height: Math.round(height),
-    };
-    updateApp(app.value.id, updatedData);
+    updateAppSizes(width, height);
   };
 
+  /* Drag handlers */
   const handleDragStop = (x: number, y: number) => {
     // Prevent the app from being dragged outside the desktop bounds
     // Set 1 to avoid animation bug when the value is 0
     if (x <= 0) x = 1;
     if (y <= 0) y = 1;
 
-    const updatedData = {
-      x: Math.round(x),
-      y: Math.round(y),
-    };
-    updateApp(app.value.id, updatedData);
+    updateAppPosition(x, y);
   };
-
   const handleDragging = (x: number, y: number) => {
     // Update the app's position only if the user is dragging the app to the top bar
     if (y < 2 || (y > 2 && y < 20)) {
@@ -55,31 +58,34 @@ export function useAppHandlers(
   const handleFullscreen = () => {
     // If the app is already fullscreen, exit fullscreen
     if (app.value.isFullscreen) {
-      exitFullscreen(
-        app.value.id,
-        initialAppSizes.value.width,
-        initialAppSizes.value.height,
+      app.value.isFullscreen = false;
+      updateAppSizes(initialAppSizes.value.width, initialAppSizes.value.height);
+      updateAppPosition(
         initialAppPositions.value.x,
         initialAppPositions.value.y,
       );
       return;
     }
 
-    // Else, enter fullscreen
-    enterFullscreen(app.value.id);
+    app.value.isFullscreen = true;
+    updateAppSizes(desktopRef.value.offsetWidth, desktopRef.value.offsetWidth);
+    updateAppPosition(1, 1);
   };
 
-  onMounted(() => {
+  // Hooks
+
+  onBeforeMount(() => {
     // Update the app's size and position if it's the first open
     if (!app.value.width || !app.value.height || !app.value.x || !app.value.y) {
-      const updatedData = {
-        ...initialAppSizes.value,
-        ...initialAppPositions.value,
-      };
-      updateApp(app.value.id, updatedData);
+      updateAppSizes(initialAppSizes.value.width, initialAppSizes.value.height);
+      updateAppPosition(
+        initialAppPositions.value.x,
+        initialAppPositions.value.y,
+      );
     }
   });
 
+  // Needed to fix the fullscreen logic and make sure to update the sizes
   onUpdated(() => {
     if (appRef.value) {
       appRef.value.width = app.value.width;
@@ -88,8 +94,8 @@ export function useAppHandlers(
   });
 
   return {
-    handleActivated,
-    handleDeactivated,
+    handleActive,
+    handleResizeStart,
     handleResizeStop,
     handleDragging,
     handleDragStop,

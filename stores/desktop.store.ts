@@ -256,45 +256,6 @@ export const useDesktopStore = defineStore({
       }));
     },
 
-    /**
-     * Enters fullscreen mode for an app.
-     * @param appId The ID of the app to enter fullscreen mode.
-     */
-    enterFullscreen(appId: string) {
-      this.apps = this.apps.map((app) => ({
-        ...app,
-        isFullscreen: app.id === appId ? true : app.isFullscreen,
-        width: app.id === appId ? this.desktopRef?.offsetWidth : app.width,
-        height: app.id === appId ? this.desktopRef?.offsetHeight : app.height,
-        x: app.id === appId ? 1 : app.x,
-        y: app.id === appId ? 1 : app.y,
-      }));
-    },
-
-    /**
-     * Exits fullscreen mode for an app.
-     * @param appId The ID of the app to exit fullscreen mode.
-     * @param defaultWidth The default width of the app.
-     * @param defaultHeight The default height of the app.
-     * @param defaultX The default x position of the app.
-     * @param defaultY The default y position of the app.
-     */
-    exitFullscreen(
-      appId: string,
-      defaultWidth: number,
-      defaultHeight: number,
-      defaultX: number,
-      defaultY: number,
-    ) {
-      this.apps = this.apps.map((app) => ({
-        ...app,
-        isFullscreen: app.id === appId ? false : app.isFullscreen,
-        width: app.id === appId ? defaultWidth : app.width,
-        height: app.id === appId ? defaultHeight : app.height,
-        x: app.id === appId ? defaultX : app.x,
-        y: app.id === appId ? defaultY : app.y,
-      }));
-    },
 
     /**
      * Update the app.

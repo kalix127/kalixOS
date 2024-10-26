@@ -5,24 +5,21 @@ import VueDraggableResizable from "vue-draggable-resizable";
 const desktopStore = useDesktopStore();
 const { activeApp } = storeToRefs(desktopStore);
 storeToRefs(desktopStore);
-const { closeApp, minimizeApp, enterFullscreen, exitFullscreen, updateApp } =
-  desktopStore;
+const { closeApp, minimizeApp } = desktopStore;
 
 const props = defineProps<{
   app: AppNode;
 }>();
 
-const app = computed(() => props.app);
+const { app } = toRefs(props);
+
 const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
-const { initialAppSizes } = useAppSizes();
-const { initialAppPositions } = useAppPositions();
-
 const {
-  handleActivated,
-  handleDeactivated,
+  handleActive,
   handleDragStop,
   handleDragging,
+  handleResizeStart,
   handleResizeStop,
   handleFullscreen,
 } = useAppHandlers(app, appRef);
@@ -31,24 +28,25 @@ const {
 <template>
   <vue-draggable-resizable
     ref="appRef"
-    :x="app.x || initialAppPositions.x"
-    :y="app.y || initialAppPositions.y"
-    :w="app.width || initialAppSizes.width"
-    :h="app.height || initialAppSizes.height"
-    :active="activeApp?.id === app.id"
-    :resizable="true"
-    :draggable="true"
+    :x="app.x"
+    :y="app.y"
+    :w="app.width"
+    :h="app.height"
+    :active="app.isActive"
+    :resizable="app.isFullscreen ? false : true"
+    :draggable="app.isFullscreen ? false : true"
     :parent="true"
     @dragging="handleDragging"
     @dragStop="handleDragStop"
+    @resizeStart="handleResizeStart"
     @resizeStop="handleResizeStop"
-    @click="handleActivated"
-    @activated="handleActivated"
-    @deactivated="handleDeactivated"
+    @activated="() => handleActive(true)"
+    @deactivated="() => handleActive(false)"
+    @click="() => handleActive(true)"
     dragHandle=".app-topbar"
     classNameHandle="handle"
     :style="{
-      zIndex: activeApp?.id === app.id ? 10000 : 5000,
+      zIndex: app.isActive ? 10000 : 5000,
     }"
     class="absolute left-0 top-0 rounded-t-xl !border-none"
   >

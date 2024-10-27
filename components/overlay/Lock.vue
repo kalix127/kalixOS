@@ -37,11 +37,11 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
 </script>
 
 <template>
-  <div class="absolute z-[10000] h-[100vh] w-[100vw] bg-black">
+  <div class="absolute z-[10000] h-[100svh] w-[100vw] bg-black">
     <!-- Background -->
     <NuxtImg
       src="/img/bg-desktop.jpg"
-      class="h-[100vh] w-[100vw] select-none object-cover blur-2xl"
+      class="h-[100svh] w-[100vw] select-none object-cover blur-2xl"
       style="-webkit-user-drag: none"
     />
 

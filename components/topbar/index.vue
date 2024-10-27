@@ -1,17 +1,30 @@
 <script lang="ts" setup>
+import { type HTMLAttributes } from "vue";
+import { cn } from "@/lib/utils";
+
+const props = defineProps<{ class?: HTMLAttributes["class"] }>();
+
 const globalStore = useGlobalStore();
 
 const { isPowerOffModalOpen, isRestartModalOpen, isLogoutModalOpen, username } =
   storeToRefs(globalStore);
 const { handlePoweroff, handleRestart, handleLogout } = globalStore;
 
+const { hasAppsAtTop } = storeToRefs(useDesktopStore());
+
 const route = useRoute();
 </script>
 
 <template>
   <header
-    class="flex items-center justify-between bg-[#080404] p-1"
-    :class="[route.name === 'login' ? '!bg-transparent' : '']"
+    :class="[
+      cn(
+        'flex min-h-[35px] items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500 select-none',
+        props.class,
+      ),
+      route.name === 'login' ? '!bg-transparent' : '',
+      hasAppsAtTop ? '!bg-opacity-100' : '',
+    ]"
   >
     <!-- Left empty div for spacing -->
     <div class="hidden sm:block sm:w-1/3"></div>

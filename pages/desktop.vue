@@ -9,7 +9,8 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems } = storeToRefs(desktopStore);
+const { desktopItems, openApps, desktopRef, hasAppsLoading } =
+  storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
 const contextMenuStore = useContextMenuStore();
@@ -85,16 +86,22 @@ onMounted(async () => {
     },
   });
 });
+
+onUnmounted(() => {
+  desktopStore.$reset();
+});
 </script>
 
 <template>
-  <main class="relative">
-    <!-- Background image -->
-    <NuxtImg
-      src="/img/bg-desktop.jpg"
-      class="absolute -z-[1] h-full w-full object-cover"
-      style="-webkit-user-drag: none"
-    />
+  <main
+    ref="desktopRef"
+    class="relative select-none"
+    :class="[hasAppsLoading ? 'cursor-progress' : '']"
+  >
+    <!-- Apps -->
+    <TransitionGroup name="apps">
+      <LazyDesktopApps v-for="app in openApps" :key="app.id" :app="app" />
+    </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
     <ClientOnly>
@@ -109,4 +116,14 @@ onMounted(async () => {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.apps-enter-active,
+.apps-leave-active {
+  transition: all 0.2s ease;
+}
+
+.apps-enter-from,
+.apps-leave-to {
+  opacity: 0;
+}
+</style>

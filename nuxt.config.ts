@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   app: {
-    head: {},
+    head: {
+      htmlAttrs: {
+        class: "overflow-hidden"
+      }
+    },
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
   },
@@ -34,6 +38,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/i18n",
     "@sentry/nuxt/module",
+    "@nuxtjs/device",
   ],
   sentry: {
     sourceMapsUploadOptions: {
@@ -86,6 +91,10 @@ export default defineNuxtConfig({
         dir: "./icons/logo",
         prefix: "logo",
       },
+      {
+        dir: "./icons/gnome",
+        prefix: "gnome"
+      }
     ],
     serverBundle: false,
     clientBundle: {
@@ -97,6 +106,9 @@ export default defineNuxtConfig({
         "material-symbols:volume-off",
         "material-symbols:volume-down",
         "material-symbols:volume-up",
+        "material-symbols:minimize-rounded",
+        "material-symbols:expand-content-rounded",
+        "material-symbols:close-small-outline-rounded",
         "mdi:eye",
         "mdi:eye-off",
         "mdi:battery-charging",
@@ -122,9 +134,7 @@ export default defineNuxtConfig({
         "flag:us-4x3",
       ],
       scan: true,
-
       includeCustomCollections: true,
-
       sizeLimitKb: 256,
     },
   },

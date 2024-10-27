@@ -35,7 +35,7 @@ watchEffect(() => {
 <template>
   <AlertDialog :open="isOpen">
     <AlertDialogContent
-      class="max-w-[280px] rounded-xl p-0 xs:max-w-sm"
+      class="max-w-[280px] rounded-xl p-0 xs:max-w-sm z-[50000] shadow-lg"
     >
       <AlertDialogHeader class="sr-only">
         <AlertDialogTitle>{{ title }}</AlertDialogTitle>

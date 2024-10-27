@@ -8,7 +8,7 @@ const { handlePowerUp } = globalStore;
 </script>
 
 <template>
-  <div class="grid h-full min-h-[100vh] place-content-center bg-black">
+  <div class="grid h-full min-h-[100svh] place-content-center bg-black">
     <div class="group relative inline-flex">
       <div
         class="transitiona-all absolute -inset-px rounded-full bg-primary opacity-70 blur-xl duration-1000 group-hover:opacity-90 group-active:-inset-1 group-active:opacity-100 group-active:duration-100"

@@ -2,12 +2,16 @@
 defineProps<{
   appName: string;
 }>();
+
+defineEmits<{
+  (e: "click"): void;
+}>();
 </script>
 
 <template>
   <TooltipProvider :delay-duration="0">
     <Tooltip :default-open="false">
-      <TooltipTrigger as-child>
+      <TooltipTrigger @click="$emit('click')" as-child>
         <slot />
       </TooltipTrigger>
       <TooltipContent :sideOffset="15" class="rounded-full bg-black/80">

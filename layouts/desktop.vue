@@ -8,8 +8,16 @@ const { isLocked } = storeToRefs(globalStore);
     <Transition name="lock">
       <OverlayLock v-if="isLocked" />
     </Transition>
-    <Topbar />
-    <slot />
+    <div class="relative">
+      <Topbar class="absolute top-0 left-0 w-full" />
+      <!-- Background image -->
+      <NuxtImg
+        src="/img/bg-desktop.jpg"
+        class="absolute -z-[1] h-full w-full object-cover"
+        style="-webkit-user-drag: none"
+      />
+      <slot />
+    </div>
     <ClientOnly>
       <!-- Context menu -->
       <DesktopContextMenu />
@@ -24,14 +32,8 @@ const { isLocked } = storeToRefs(globalStore);
 .wrapper-desktop {
   height: 100svh;
   display: grid;
-  grid-template-rows: 35px 1fr;
-  grid-template-areas:
-    "topbar"
-    "main";
-}
-
-header {
-  grid-area: topbar;
+  grid-template-rows: 1fr;
+  grid-template-areas: "main";
 }
 
 main {

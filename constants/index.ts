@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { WifiNetwork, FileSystemNode, SystemLog } from "@/types";
+import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
 import { assignIds } from "~/helpers";
 
 export const desktopEnvironments = [
@@ -14,6 +14,76 @@ export const defaultNetworks: WifiNetwork[] = [
   { id: 2, name: "TIM-1234567", signal: 3, isProtected: true },
   { id: 3, name: "ILIAD-34781 Public", signal: 1, isProtected: false },
 ];
+
+const trashNode: AppNode = {
+  name: "Trash",
+  type: "app",
+  icon: "app:trash",
+  id: "trash",
+};
+
+// TODO: Add more defaults apps without any functionality
+export const defaultApps: AppNode[] = [
+  trashNode,
+  {
+    name: "Settings",
+    type: "app",
+    icon: "app:settings",
+    id: "settings",
+  },
+  {
+    name: "Files",
+    type: "app",
+    icon: "app:files",
+    id: "files",
+  },
+  {
+    name: "Terminal",
+    type: "app",
+    icon: "app:terminal",
+    id: "terminal",
+  },
+  {
+    name: "Brave",
+    type: "app",
+    icon: "app:brave",
+    id: "brave",
+  },
+  {
+    name: "Thunderbird",
+    type: "app",
+    icon: "app:thunderbird",
+    id: "thunderbird",
+  },
+  {
+    name: "Visual Studio Code",
+    type: "app",
+    icon: "app:vscode",
+    id: "vscode",
+  },
+  {
+    name: "Kate",
+    type: "app",
+    icon: "app:kate",
+    id: "kate",
+  },
+].map((app) => ({
+  ...app,
+  isOpen: false,
+  isActive: false,
+  isMinimized: false,
+  isFullscreen: false,
+  width: 0,
+  height: 0,
+  x: 0,
+  y: 0,
+  prev: {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  },
+}));
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
   assignIds({
@@ -73,16 +143,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                 icon: "folder:folder",
                 canMove: false,
                 canDelete: false,
-                children: [
-                  {
-                    name: "Trash",
-                    type: "app",
-                    canMove: false,
-                    canDelete: false,
-                    icon: "app:trash",
-                    children: [],
-                  },
-                ],
+                children: [trashNode],
               },
               {
                 name: ".zshrc",
@@ -137,52 +198,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
       },
     ],
   });
-
-// TODO: Add more defaults apps without any functionality
-export const defaultDockApps: FileSystemNode[] = [
-  {
-    name: "Settings",
-    type: "app",
-    icon: "app:settings",
-    id: "settings-app",
-  },
-  {
-    name: "Files",
-    type: "app",
-    icon: "app:files",
-    id: "files-app",
-  },
-  {
-    name: "Terminal",
-    type: "app",
-    icon: "app:terminal",
-    id: "terminal-app",
-  },
-  {
-    name: "Brave",
-    type: "app",
-    icon: "app:brave",
-    id: "brave-app",
-  },
-  {
-    name: "Thunderbird",
-    type: "app",
-    icon: "app:thunderbird",
-    id: "thunderbird-app",
-  },
-  {
-    name: "Visual Studio Code",
-    type: "app",
-    icon: "app:vscode",
-    id: "vscode-app",
-  },
-  {
-    name: "Kate",
-    type: "app",
-    icon: "app:kate",
-    id: "kate-app",
-  },
-];
 
 export const defaultBootDuration = 5000;
 

@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 
 const globalStore = useGlobalStore();
+const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 const {
   volume,
@@ -16,6 +17,7 @@ const {
   <Popover>
     <PopoverTrigger
       class="flex cursor-default items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
+      :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
     >
       <Icon
         v-show="connectedWifiNetwork"
@@ -46,7 +48,7 @@ const {
       <Icon name="mdi:battery-charging" size="18" />
     </PopoverTrigger>
 
-    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]">
+    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px] z-[50000]">
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
         class="topbar-menu-transition flex flex-1 flex-col rounded-3xl p-4"

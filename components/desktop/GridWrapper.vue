@@ -5,7 +5,7 @@ defineEmits(["context"]);
 <template>
   <div
     @contextmenu.prevent="$emit('context', $event)"
-    class="desktop-grid-wrapper hide-scrollbar z-[2] w-full overflow-y-scroll px-4 py-2 md:px-6"
+    class="desktop-grid-wrapper hide-scrollbar z-[2] w-full overflow-y-scroll px-4 py-2 md:px-6 mt-[35px]"
     :style="{
       height: `calc(100svh - 35px)`,
     }"

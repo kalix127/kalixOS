@@ -19,6 +19,29 @@ export interface FileSystemNode {
   canDelete?: boolean;
 }
 
+export interface AppNode extends FileSystemNode {
+  // General
+  isOpen: boolean;
+  isActive: boolean;
+  isMinimized: boolean;
+  isFullscreen: boolean;
+
+  // Size
+  width: number;
+  height: number;
+
+  // Position
+  x: number;
+  y: number;
+
+  prev: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+}
+
 export interface SystemLog {
   ok: boolean;
   action: string;

@@ -33,7 +33,9 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
     isAuthenticated.value = true;
 
     // Persist the login
-    const cookie = useCookie<boolean>("isAuthenticated");
+    const cookie = useCookie<boolean>("isAuthenticated", {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     cookie.value = true;
 
     await navigateTo("/desktop");

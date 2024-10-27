@@ -39,7 +39,9 @@ export const useGlobalStore = defineStore({
     // Auth
     loginView: "selectUser",
     username: "Gianluca",
-    isAuthenticated: useCookie("isAuthenticated"),
+    isAuthenticated: useCookie("isAuthenticated", {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    }),
 
     // Boot states
     isBooting: false,
@@ -168,6 +170,12 @@ export const useGlobalStore = defineStore({
       this.username = "";
       this.loginView = "selectUser";
       this.isLogoutModalOpen = false;
+
+      // Update the cookie
+      const isAuthenticatedCookie = useCookie("isAuthenticated", {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+      isAuthenticatedCookie.value = "false";
 
       await navigateTo("/login");
     },

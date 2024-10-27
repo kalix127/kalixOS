@@ -68,7 +68,7 @@ export function useAppHandlers(
 
     // Set the full screen
     app.value.isFullscreen = true;
-    updateAppSizes(desktopRef.value.offsetWidth, desktopRef.value.offsetWidth);
+    updateAppSizes(desktopRef.value.offsetWidth, desktopRef.value?.offsetHeight);
     updateAppPosition(1, 1);
   };
 

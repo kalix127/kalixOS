@@ -3,7 +3,7 @@ import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
 
 const desktopStore = useDesktopStore();
-const { activeApp } = storeToRefs(desktopStore);
+const { desktopRef } = storeToRefs(desktopStore);
 storeToRefs(desktopStore);
 const { closeApp, minimizeApp } = desktopStore;
 

@@ -25,7 +25,6 @@ export const useDesktopStore = defineStore({
     // Apps
     hasAppsLoading: false,
     apps: defaultApps,
-    activeApp: null,
 
     // Desktop
     desktopRef: null,
@@ -312,7 +311,6 @@ interface DesktopStore {
   // Apps
   hasAppsLoading: boolean;
   apps: AppNode[];
-  activeApp: AppNode | null;
 
   // Desktop
   desktopRef: HTMLElement | null;

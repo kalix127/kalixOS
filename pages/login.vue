@@ -3,6 +3,7 @@ import { desktopEnvironments } from "@/constants";
 
 definePageMeta({
   layout: "login",
+  middleware: "desktop"
 });
 
 const globalStore = useGlobalStore();

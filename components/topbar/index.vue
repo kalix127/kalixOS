@@ -19,21 +19,21 @@ const route = useRoute();
   <header
     :class="[
       cn(
-        'flex min-h-[35px] items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500 select-none',
+        'flex min-h-[35px] select-none items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',
       hasAppsAtTop ? '!bg-opacity-100' : '',
     ]"
   >
-    <!-- Left empty div for spacing -->
-    <div class="hidden sm:block sm:w-1/3"></div>
+    <!-- Show default home folders -->
+    <TopbarPlaces />
 
     <!-- Calendar -->
     <TopbarCalendar />
 
     <!-- Main menu -->
-    <div class="flex w-1/3 items-center justify-end gap-2">
+    <div class="flex items-center justify-end gap-2">
       <TopbarResources />
       <TopbarSystemMenu />
     </div>

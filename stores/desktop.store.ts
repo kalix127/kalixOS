@@ -280,10 +280,10 @@ export const useDesktopStore = defineStore({
      * Minimizes an app.
      * @param appId The ID of the app to minimize.
      */
-    minimizeApp(appId: string) {
+    toggleMinimizeApp(appId: string) {
       this.apps = this.apps.map((app) => ({
         ...app,
-        isMinimized: app.id === appId ? true : app.isMinimized,
+        isMinimized: app.id === appId ? !app.isMinimized : app.isMinimized,
       }));
     },
 

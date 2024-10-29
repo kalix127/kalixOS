@@ -16,7 +16,7 @@ export const defaultNetworks: WifiNetwork[] = [
 ];
 
 const trashNode: AppNode = {
-  name: "Trash",
+  name: "trash",
   type: "app",
   icon: "app:trash",
   id: "trash",
@@ -26,46 +26,52 @@ const trashNode: AppNode = {
 export const defaultApps: AppNode[] = [
   trashNode,
   {
-    name: "Settings",
+    name: "settings",
     type: "app",
     icon: "app:settings",
     id: "settings",
   },
   {
-    name: "Files",
+    name: "files",
     type: "app",
     icon: "app:files",
     id: "files",
   },
   {
-    name: "Terminal",
+    name: "terminal",
     type: "app",
     icon: "app:terminal",
     id: "terminal",
   },
   {
-    name: "Brave",
+    name: "brave",
     type: "app",
     icon: "app:brave",
     id: "brave",
   },
   {
-    name: "Thunderbird",
+    name: "thunderbird",
     type: "app",
     icon: "app:thunderbird",
     id: "thunderbird",
   },
   {
-    name: "Visual Studio Code",
+    name: "vscode",
     type: "app",
     icon: "app:vscode",
     id: "vscode",
   },
   {
-    name: "Kate",
-    type: "app",
-    icon: "app:kate",
-    id: "kate",
+    name: "desktop.linkedin_profile",
+    type: "social",
+    icon: "app:linkedin",
+    id: "linkedin",
+  },
+  {
+    name: "desktop.github_profile",
+    type: "social",
+    icon: "app:github",
+    id: "github",
   },
 ].map((app) => ({
   ...app,

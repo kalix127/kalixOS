@@ -11,7 +11,7 @@ defineEmits<{
 
 const desktopStore = useDesktopStore();
 const { apps, hasAppsLoading } = storeToRefs(desktopStore);
-const { updateDockApps, openApp, minimizeApp } = desktopStore;
+const { updateDockApps, openApp, toggleMinimizeApp } = desktopStore;
 
 const dockRef = ref<HTMLElement | null>(null);
 const draggableDockItems = computed({
@@ -22,16 +22,25 @@ const draggableDockItems = computed({
 });
 
 async function handleAppClick(app: AppNode) {
-  // If the app is open and not minimized, minimize it
-  if (app.isOpen && !app.isMinimized) {
-    minimizeApp(app.id);
-  } else if (app.isMinimized) {
-    openApp(app.id);
-  } else {
+  // If the app is a social app, open the corresponding URL
+  if (app.type === "social") {
+    const { linkedin, github } = useRuntimeConfig().public.socialUrl;
+    const url = app.id === "linkedin" ? linkedin : github;
+    if (url) {
+      window.open(url as string, "_blank");
+    }
+    return;
+  }
+
+  // If the app is not open, open it with delay
+  if (!app.isOpen) {
     hasAppsLoading.value = true;
     await new Promise((resolve) => setTimeout(resolve, 1000));
     openApp(app.id);
     hasAppsLoading.value = false;
+    return;
+  } else {
+    toggleMinimizeApp(app.id);
   }
 }
 
@@ -52,16 +61,20 @@ onBeforeMount(async () => {
 <template>
   <div
     v-on-click-outside="() => $emit('close')"
-    ref="dockRef"
-    class="z-[50000] grid h-full w-full grid-cols-4 items-center gap-4 rounded-3xl px-3 py-2 sm:flex"
+    class="z-[50000] flex h-full w-full flex-col items-center gap-2 rounded-3xl px-3 py-2 sm:flex-row"
     :class="[hasAppsLoading ? 'cursor-progress' : '']"
   >
-    <DesktopDockApp
-      v-for="app in apps"
-      :key="app.id"
-      :app="app"
-      @click="() => handleAppClick(app)"
-    />
+    <div
+      ref="dockRef"
+      class="grid grid-cols-3 place-items-center gap-1 xs:grid-cols-5 sm:flex"
+    >
+      <DesktopDockApp
+        v-for="app in apps"
+        :key="app.id"
+        :app="app"
+        @click="() => handleAppClick(app)"
+      />
+    </div>
   </div>
 </template>
 

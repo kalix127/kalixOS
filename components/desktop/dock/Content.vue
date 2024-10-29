@@ -68,10 +68,12 @@ onBeforeMount(async () => {
       ref="dockRef"
       class="grid grid-cols-3 place-items-center gap-1 xs:grid-cols-5 sm:flex"
     >
-      <DesktopDockApp
+      <DesktopDockItem
         v-for="app in apps"
         :key="app.id"
-        :app="app"
+        :app-name="app.name"
+        :icon="app.icon"
+        :is-open="app.isOpen"
         @click="() => handleAppClick(app)"
       />
     </div>

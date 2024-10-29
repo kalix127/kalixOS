@@ -15,7 +15,7 @@ defineEmits<{
         <slot />
       </TooltipTrigger>
       <TooltipContent :sideOffset="15" class="rounded-full bg-black/80">
-        <p>{{ appName }}</p>
+        <p>{{ $t(appName) }}</p>
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

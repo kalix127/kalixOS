@@ -6,7 +6,6 @@
   },
 
   "-----------------TOPBAR-LOGIN----------------": "",
-  "settings": "Impostazioni",
   "lock": "Blocca",
   "wired": "Ethernet",
   "wired_connection": "Connessione Ethernet",
@@ -46,8 +45,19 @@
     "new_folder_with_1_item": "Nuova cartella con 1 elemento",
     "compress_1_folder": "Comprimi 1 cartella",
     "open": "Apri",
-    "pin_to_dock": "Fissa al dock"
+    "pin_to_dock": "Fissa al dock",
+    "linkedin_profile": "Profilo LinkedIn",
+    "github_profile": "Profilo GitHub"
   },
+  
+  "-----------------APPS-------------------": "",
+  "trash": "Cestino",
+  "settings": "Impostazioni",
+  "files": "Files",
+  "terminal": "Terminale",
+  "brave": "Brave",
+  "thunderbird": "Thunderbird",
+  "vscode": "Visual Studio Code",
 
   "-----------------VALIDATIONS-------------------": "",
   "zodI18n": {

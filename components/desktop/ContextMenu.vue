@@ -165,7 +165,7 @@ const moveToTrash = (node: FileSystemNode | null) => {
 <template>
   <Teleport to="body">
     <DropdownMenu :open="isOpen">
-      <DropdownMenuContent class="!w-72" :style="contextMenuStyle">
+      <DropdownMenuContent class="!w-72 z-[50000]" :style="contextMenuStyle">
         <template v-for="option in menuOptions" :key="option.label">
           <DropdownMenuSeparator v-if="option.isSeparator" />
           <DropdownMenuItem

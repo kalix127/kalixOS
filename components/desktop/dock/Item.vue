@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <DesktopDockAppTooltip :app-name="app.name">
+  <DesktopDockItemTooltip :app-name="app.name">
     <Button
       variant="ghost"
       size="icon"
@@ -22,7 +22,7 @@ defineProps<{
         class="absolute bottom-0.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-white"
       />
     </Button>
-  </DesktopDockAppTooltip>
+  </DesktopDockItemTooltip>
 </template>
 
 <style scoped></style>

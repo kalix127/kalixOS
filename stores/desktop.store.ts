@@ -20,7 +20,8 @@ export const useDesktopStore = defineStore({
     nodeMap: new Map<string, FileSystemNode>(),
 
     // Docks
-    isDockVisible: false,
+    isDockVisible: true,
+    isDockPinned: true,
 
     // Apps
     hasAppsLoading: false,
@@ -307,6 +308,7 @@ interface DesktopStore {
 
   // Docks
   isDockVisible: boolean;
+  isDockPinned: boolean;
 
   // Apps
   hasAppsLoading: boolean;

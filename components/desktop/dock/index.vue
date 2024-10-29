@@ -2,7 +2,7 @@
 import { useSwipe, watchDebounced } from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
-const { isDockVisible } = storeToRefs(desktopStore);
+const { isDockVisible, isDockPinned } = storeToRefs(desktopStore);
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
 
@@ -21,6 +21,11 @@ const isHovered = computed(
   () => isTriggerHovered.value || isContentHovered.value,
 );
 
+function toggleVisibility(value: boolean) {
+  if (isDockPinned.value) return;
+  isDockVisible.value = value;
+}
+
 watchDebounced(
   isHovered,
   (newVal) => {
@@ -35,23 +40,25 @@ watchDebounced(
     <Tooltip :open="isDockVisible" :default-open="isDockVisible">
       <div
         class="relative"
-        @mouseenter="isTriggerHovered = true"
-        @mouseleave="isTriggerHovered = false"
+        @mouseenter="() => toggleVisibility(true)"
+        @mouseleave="() => toggleVisibility(false)"
       >
         <TooltipTrigger
           ref="dockTriggerRef"
           class="absolute bottom-0 left-0 z-[50000] h-10 w-full cursor-default sm:h-6"
-          @mouseenter="isTriggerHovered = true"
-          @mouseleave="isTriggerHovered = false"
+          @mouseenter="() => toggleVisibility(true)"
+          @mouseleave="() => toggleVisibility(false)"
         >
         </TooltipTrigger>
         <TooltipContent
           :side-offset="-12"
-          class="rounded-3xl p-0 z-[50000]" 
-          @mouseenter="isContentHovered = true"
-          @mouseleave="isContentHovered = false"
+          class="z-[50000] rounded-3xl p-0"
+          @mouseenter="() => toggleVisibility(true)"
+          @mouseleave="() => toggleVisibility(false)"
         >
-          <DesktopDockContent @close="isDockVisible = false" />
+          <DesktopDockContent
+            @close="() => toggleVisibility(false)"
+          />
         </TooltipContent>
       </div>
     </Tooltip>

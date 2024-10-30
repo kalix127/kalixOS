@@ -1,42 +1,47 @@
 <script setup lang="ts">
-const { hasAppsAtTop } = storeToRefs(useDesktopStore());
+import type { FileSystemNode } from "@/types";
+const { hasAppsAtTop, bookmarksNodes } = storeToRefs(useDesktopStore());
+
+function openFolder(nodeId: string) {
+  console.log("Open folder", nodeId);
+}
 
 // TODO: Add actions
 const items = [
   {
     name: "Home",
     icon: "gnome:home",
-    action: () => console.log("Home"),
+    id: "home",
   },
   {
     name: "Documents",
     icon: "gnome:documents",
-    action: () => console.log("Documents"),
+    id: "documents",
   },
   {
     name: "Downloads",
     icon: "gnome:downloads",
-    action: () => console.log("Downloads"),
+    id: "downloads",
   },
   {
     name: "Music",
     icon: "gnome:music",
-    action: () => console.log("Music"),
+    id: "music",
   },
   {
     name: "Pictures",
     icon: "gnome:pictures",
-    action: () => console.log("Pictures"),
+    id: "pictures",
   },
   {
     name: "Videos",
     icon: "gnome:videos",
-    action: () => console.log("Videos"),
+    id: "videos",
   },
   {
     name: "Trash",
     icon: "gnome:trash",
-    action: () => console.log("Trash"),
+    id: "trash",
   },
 ];
 </script>
@@ -58,11 +63,27 @@ const items = [
         :key="item.name"
         variant="ghost"
         class="flex w-full cursor-default justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
-        @click="item.action"
+        @click="() => openFolder(item.id)"
       >
         <Icon :name="item.icon" size="16" />
         <span class="text-sm">{{ item.name }}</span>
       </Button>
+
+      <div class="my-2 h-px w-full bg-gray-500/30"></div>
+
+      <Button
+        v-for="item in bookmarksNodes.slice(0, 3)"
+        :key="item.name"
+        variant="ghost"
+        class="flex w-full cursor-default justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
+        @click="() => openFolder(item.id)"
+      >
+        <Icon name="gnome:symbolic-folder" size="16" />
+        <span class="text-sm">{{ item.name }}</span>
+      </Button>
+      <div v-if="bookmarksNodes.length > 3" class="grid place-content-center">
+        <span class="text-muted-foreground">...</span>
+      </div>
     </PopoverContent>
   </Popover>
 </template>

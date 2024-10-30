@@ -26,6 +26,8 @@ const trashNode: AppNode = {
   id: "trash",
 };
 
+export const defaultBookmarks = ["projects"];
+
 // TODO: Add more defaults apps without any functionality
 export const defaultApps: AppNode[] = [
   trashNode,
@@ -97,6 +99,7 @@ export const defaultApps: AppNode[] = [
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
   assignIds({
+    id: "root",
     name: "/",
     type: "folder",
     canMove: false,
@@ -111,6 +114,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
         icon: "folder:folder",
         children: [
           {
+            id: "home",
             name: username,
             type: "folder",
             canMove: false,
@@ -118,18 +122,21 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
             icon: "folder:folder",
             children: [
               {
+                id: "downloads",
                 name: "Downloads",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
               },
               {
+                id: "documents",
                 name: "Documents",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
               },
               {
+                id: "pictures",
                 name: "Pictures",
                 type: "folder",
                 icon: "folder:folder",
@@ -142,18 +149,29 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                 children: [],
               },
               {
+                id: "videos",
                 name: "Videos",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
               },
               {
+                id: "desktop",
                 name: "Desktop",
                 type: "folder",
                 icon: "folder:folder",
                 canMove: false,
                 canDelete: false,
-                children: [trashNode],
+                children: [
+                  trashNode,
+                  {
+                    id: "projects",
+                    name: "projects",
+                    type: "folder",
+                    icon: "folder:folder",
+                    children: [],
+                  },
+                ],
               },
               {
                 name: ".zshrc",
@@ -208,7 +226,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
       },
     ],
   });
-
 
 export const powerUpSystemLogs: SystemLog[] = [
   {

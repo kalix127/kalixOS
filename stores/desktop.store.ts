@@ -3,6 +3,7 @@ import {
   defaultFileSystem,
   defaultApps,
   defaultSuspendThreshold,
+  defaultBookmarks,
 } from "@/constants";
 import { getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
@@ -22,6 +23,7 @@ export const useDesktopStore = defineStore({
     // Filesystem
     fileSystem: defaultFileSystem(storeToRefs(useGlobalStore()).username.value),
     nodeMap: new Map<string, FileSystemNode>(),
+    bookmarks: defaultBookmarks,
 
     // Docks
     isDockVisible: true,
@@ -63,6 +65,12 @@ export const useDesktopStore = defineStore({
 
     hasAppsAtTop(state): boolean {
       return this.openApps.some((app) => app.y <= 1);
+    },
+
+    bookmarksNodes(state): FileSystemNode[] {
+      return state.bookmarks
+        .map((id) => state.nodeMap.get(id))
+        .filter((node): node is FileSystemNode => node !== undefined)
     },
   },
   actions: {
@@ -109,7 +117,9 @@ export const useDesktopStore = defineStore({
 
         // Gradually show the suspended overlay after 70% of the suspend duration
         watch(idledFor, (newValue: number) => {
-          const idleThreshold = Math.floor((defaultSuspendThreshold * 0.7) / 1000); // 70% of suspend duration in seconds
+          const idleThreshold = Math.floor(
+            (defaultSuspendThreshold * 0.7) / 1000,
+          ); // 70% of suspend duration in seconds
           const suspendPercentage =
             newValue < idleThreshold
               ? 0
@@ -357,6 +367,7 @@ interface DesktopStore {
   // Filesystem
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
+  bookmarks: string[]; // Array of ids
 
   // Docks
   isDockVisible: boolean;

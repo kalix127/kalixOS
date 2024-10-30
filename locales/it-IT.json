@@ -49,6 +49,9 @@
     "linkedin_profile": "Profilo LinkedIn",
     "github_profile": "Profilo GitHub"
   },
+
+  "automatic_suspend_title": "Sospensione automatica",
+  "automatic_suspend_description": "La sospensione è imminente a causa di inattività.",
   
   "-----------------APPS-------------------": "",
   "trash": "Cestino",

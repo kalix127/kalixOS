@@ -49,6 +49,9 @@
     "linkedin_profile": "Linkedin Profile",
     "github_profile": "GitHub Profile",
   },
+
+  "automatic_suspend_title": "Automatic suspend",
+  "automatic_suspend_description": "Suspending soon because of inactivity.",
   
   "-----------------APPS-------------------": "",
   "trash": "Trash",

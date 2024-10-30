@@ -1,7 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { isAboutToSuspend, isSuspended } = storeToRefs(useGlobalStore());
+</script>
 
 <template>
   <div class="wrapper-login">
+    <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
     <Topbar />
     <main>
       <slot />

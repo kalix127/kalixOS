@@ -2,6 +2,10 @@
 import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
 import { assignIds } from "~/helpers";
 
+export const defaultBootDuration = 5000;
+
+export const defaultSuspendDuration = 10000;
+
 export const desktopEnvironments = [
   "GNOME",
   "GNOME Classic",
@@ -205,7 +209,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
     ],
   });
 
-export const defaultBootDuration = 5000;
 
 export const powerUpSystemLogs: SystemLog[] = [
   {

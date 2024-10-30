@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import { defaultFileSystem, defaultApps } from "@/constants";
+import {
+  defaultFileSystem,
+  defaultApps,
+  defaultSuspendDuration,
+} from "@/constants";
 import { getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
 import {
@@ -10,7 +14,7 @@ import {
   canDelete,
 } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { watchThrottled } from "@vueuse/core";
+import { useIdle, useTimestamp, watchOnce, watchThrottled } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -68,6 +72,7 @@ export const useDesktopStore = defineStore({
     init(): void {
       this.initializeNodeMap(this.fileSystem);
       this.syncAppsWithLocalStorage();
+      this.initIdleDetection();
     },
 
     /**
@@ -78,6 +83,53 @@ export const useDesktopStore = defineStore({
       this.nodeMap.set(node.id, node);
       if (node.children) {
         node.children.forEach((child) => this.initializeNodeMap(child));
+      }
+    },
+
+    /**
+     * Initializes idle detection and locks the desktop after inactivity
+     */
+    initIdleDetection(): void {
+      if (import.meta.client) {
+        const { idle, lastActive } = useIdle(defaultSuspendDuration);
+        const now = useTimestamp({ interval: 1000 });
+
+        const globalStore = useGlobalStore();
+        const {
+          isAuthenticated,
+          isLocked,
+          isAboutToSuspend,
+          suspendedPercentage,
+        } = storeToRefs(globalStore);
+        const { handleSuspend } = globalStore;
+
+        const idledFor = computed(() =>
+          Math.floor((now.value - lastActive.value) / 1000),
+        );
+
+        // Gradually show the suspended overlay after 70% of the suspend duration
+        watch(idledFor, (newValue: number) => {
+          const idleThreshold = Math.floor((defaultSuspendDuration * 0.7) / 1000); // 70% of suspend duration in seconds
+          const suspendPercentage =
+            newValue < idleThreshold
+              ? 0
+              : Math.min(
+                  (newValue - idleThreshold) /
+                    ((defaultSuspendDuration * 0.3) / 1000),
+                  1,
+                ); // Scale 0-100% over remaining 30%
+          isAboutToSuspend.value = newValue >= idleThreshold;
+          suspendedPercentage.value = suspendPercentage;
+        });
+
+        watch(idle, (isIdle) => {
+          if (!isAuthenticated.value) return;
+
+          if (isIdle) {
+            handleSuspend();
+            isLocked.value = true;
+          }
+        });
       }
     },
 

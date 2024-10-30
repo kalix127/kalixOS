@@ -17,6 +17,7 @@ const route = useRoute();
 
 <template>
   <header
+    @contextmenu.prevent=""
     :class="[
       cn(
         'flex min-h-[35px] select-none items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',

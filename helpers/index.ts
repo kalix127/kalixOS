@@ -13,7 +13,7 @@ export const assignIds = (node: FileSystemNode): FileSystemNode => {
   };
 
   if (newNode.children && newNode.children.length > 0) {
-    newNode.children = newNode.children.map((child) => assignIds(child));
+    newNode.children = newNode.children.map((child) => child.id ? child : assignIds(child));
   }
 
   return newNode;

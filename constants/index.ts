@@ -66,13 +66,13 @@ export const defaultApps: AppNode[] = [
     id: "vscode",
   },
   {
-    name: "desktop.linkedin_profile",
+    name: "linkedin_profile",
     type: "social",
     icon: "app:linkedin",
     id: "linkedin",
   },
   {
-    name: "desktop.github_profile",
+    name: "github_profile",
     type: "social",
     icon: "app:github",
     id: "github",

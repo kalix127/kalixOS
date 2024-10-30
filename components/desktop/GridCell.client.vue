@@ -54,8 +54,8 @@ const handleStopRenaming = () => {
         <span class="text-sm font-medium">
           {{
             item.type === "file"
-              ? $t("desktop.rename_file_title")
-              : $t("desktop.rename_folder_title")
+              ? $t("rename_file_title")
+              : $t("rename_folder_title")
           }}
         </span>
         <form
@@ -72,7 +72,7 @@ const handleStopRenaming = () => {
             class="w-fit cursor-default font-extrabold"
             @click="handleStopRenaming"
           >
-            {{ item.isNewlyCreated ? "OK" : $t("desktop.rename") }}
+            {{ item.isNewlyCreated ? "OK" : $t("rename") }}
           </Button>
         </form>
       </PopoverContent>

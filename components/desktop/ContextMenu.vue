@@ -35,56 +35,56 @@ const menuOptions = computed(() => {
   switch (targetType.value) {
     case "desktop":
       return [
-        { label: t("desktop.new_folder"), action: () => createNewFolder() },
-        { label: t("desktop.new_document"), action: () => createNewDocument() },
+        { label: t("new_folder"), action: () => createNewFolder() },
+        { label: t("new_document"), action: () => createNewDocument() },
         { isSeparator: true },
         {
-          label: `${t("desktop.change_background")}...`,
+          label: `${t("change_background")}...`,
           action: () => console.log("Change Background"),
         },
         {
-          label: t("desktop.display_settings"),
+          label: t("display_settings"),
           action: () => console.log("Display Settings"),
         },
       ];
     case "file":
       return [
         { label: "Open", action: () => openFile(targetNode.value) },
-        { label: `${t("desktop.rename")}...`, action: () => renameNode(targetNode.value) },
-        { label: t("desktop.move_to_trash"), action: () => moveToTrash(targetNode.value) },
+        { label: `${t("rename")}...`, action: () => renameNode(targetNode.value) },
+        { label: t("move_to_trash"), action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
-          label: t("desktop.properties"),
+          label: t("properties"),
           action: () => console.log("Properties"),
         },
       ];
     case "folder":
       return [
-        { label: t("desktop.open"), action: () => openFolder(targetNode.value) },
-        { label: `${t("desktop.rename")}...`, action: () => renameNode(targetNode.value) },
-        { label: t("desktop.move_to_trash"), action: () => moveToTrash(targetNode.value) },
+        { label: t("open"), action: () => openFolder(targetNode.value) },
+        { label: `${t("rename")}...`, action: () => renameNode(targetNode.value) },
+        { label: t("move_to_trash"), action: () => moveToTrash(targetNode.value) },
         { isSeparator: true },
         {
-          label: t("desktop.compress_folder"),
+          label: t("compress_folder"),
           action: () => console.log("Compress 1 folder"),
         },
         {
-          label: t("desktop.new_folder_with_1_item"),
+          label: t("new_folder_with_1_item"),
           action: () => console.log("New folder with 1 item"),
         },
         { isSeparator: true },
         {
-          label: t("desktop.properties"),
+          label: t("properties"),
           action: () => console.log("Properties"),
         },
         {
-          label: t("desktop.show_x_in_files", { target: t("desktop.folder") }),
+          label: t("show_x_in_files", { target: t("folder") }),
           action: () => console.log("Show in Files"),
         },
       ];
     case "app":
       return [
-        { label: t("desktop.open"), action: () => openApp(targetNode.value) },
+        { label: t("open"), action: () => openApp(targetNode.value) },
       ];
     default:
       return [];
@@ -94,7 +94,7 @@ const menuOptions = computed(() => {
 const createNewFolder = () => {
   if (desktopNode.value) {
     createItem(desktopNode.value.id, {
-      name: t("desktop.new_folder"),
+      name: t("new_folder"),
       type: "folder",
       icon: "folder:folder",
       isRenaming: true,
@@ -110,7 +110,7 @@ const createNewFolder = () => {
 const createNewDocument = () => {
   if (desktopNode.value) {
     createItem(desktopNode.value.id, {
-      name: t("desktop.new_document"),
+      name: t("new_document"),
       type: "file",
       icon: "file:file",
       isRenaming: true,

@@ -4,7 +4,7 @@ import { assignIds } from "~/helpers";
 
 export const defaultBootDuration = 5000;
 
-export const defaultSuspendDuration = 10000;
+export const defaultSuspendThreshold = 300000; // 5 minutes
 
 export const desktopEnvironments = [
   "GNOME",

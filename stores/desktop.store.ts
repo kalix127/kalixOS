@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import {
   defaultFileSystem,
   defaultApps,
-  defaultSuspendDuration,
+  defaultSuspendThreshold,
 } from "@/constants";
 import { getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
@@ -91,7 +91,7 @@ export const useDesktopStore = defineStore({
      */
     initIdleDetection(): void {
       if (import.meta.client) {
-        const { idle, lastActive } = useIdle(defaultSuspendDuration);
+        const { idle, lastActive } = useIdle(defaultSuspendThreshold);
         const now = useTimestamp({ interval: 1000 });
 
         const globalStore = useGlobalStore();
@@ -109,13 +109,13 @@ export const useDesktopStore = defineStore({
 
         // Gradually show the suspended overlay after 70% of the suspend duration
         watch(idledFor, (newValue: number) => {
-          const idleThreshold = Math.floor((defaultSuspendDuration * 0.7) / 1000); // 70% of suspend duration in seconds
+          const idleThreshold = Math.floor((defaultSuspendThreshold * 0.7) / 1000); // 70% of suspend duration in seconds
           const suspendPercentage =
             newValue < idleThreshold
               ? 0
               : Math.min(
                   (newValue - idleThreshold) /
-                    ((defaultSuspendDuration * 0.3) / 1000),
+                    ((defaultSuspendThreshold * 0.3) / 1000),
                   1,
                 ); // Scale 0-100% over remaining 30%
           isAboutToSuspend.value = newValue >= idleThreshold;

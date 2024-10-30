@@ -42,7 +42,7 @@ const route = useRoute();
     <!-- Main menu -->
     <div class="flex items-center justify-end gap-2">
       <TopbarResources />
-      <TopbarSystemMenu />
+      <TopbarSystemMenu v-if="!isLocked" />
     </div>
 
     <!-- Automatic suspend alert -->

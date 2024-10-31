@@ -26,21 +26,25 @@ const route = useRoute();
     @contextmenu.prevent=""
     :class="[
       cn(
-        'relative flex min-h-[35px] select-none items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
+        'relative flex min-h-[35px] select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',
       hasAppsAtTop ? '!bg-opacity-100' : '',
     ]"
   >
-    <!-- Show default home folders -->
-    <TopbarPlaces />
+    <!-- Left Section -->
+    <div class="flex flex-1 items-center">
+      <TopbarPlaces />
+    </div>
 
-    <!-- Calendar -->
-    <TopbarCalendar />
+    <!-- Center Section -->
+    <div class="flex flex-none items-center justify-center">
+      <TopbarCalendar />
+    </div>
 
-    <!-- Main menu -->
-    <div class="flex items-center justify-end gap-2">
+    <!-- Right Section -->
+    <div class="flex flex-1 items-center justify-end gap-2">
       <TopbarResources />
       <TopbarSystemMenu v-if="!isLocked" />
     </div>
@@ -48,7 +52,7 @@ const route = useRoute();
     <!-- Automatic suspend alert -->
     <Transition name="fade">
       <Alert
-        class="absolute border-none -bottom-20 left-1/2 z-[50000] max-w-72 xs:max-w-80 -translate-x-1/2 bg-popover sm:max-w-96"
+        class="absolute -bottom-20 left-1/2 z-[50000] max-w-72 -translate-x-1/2 border-none bg-popover xs:max-w-80 sm:max-w-96"
         :class="isLocked ? 'hidden' : ''"
         v-if="isAboutToSuspend"
       >

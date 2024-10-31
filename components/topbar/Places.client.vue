@@ -82,7 +82,7 @@ const items = [
         <span class="text-sm">{{ item.name }}</span>
       </Button>
       <div v-if="bookmarksNodes.length > 3" class="grid place-content-center">
-        <span class="text-muted-foreground">...</span>
+        <span class="text-muted-foreground select-none">...</span>
       </div>
     </PopoverContent>
   </Popover>

@@ -115,8 +115,6 @@ const createNewFolder = () => {
       isNewlyCreated: true,
       children: [],
     });
-  } else {
-    console.error("Desktop node not found.");
   }
   closeContextMenu();
 };
@@ -131,8 +129,6 @@ const createNewDocument = () => {
       isNewlyCreated: true,
       children: [],
     });
-  } else {
-    console.error("Desktop node not found.");
   }
   closeContextMenu();
 };

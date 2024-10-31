@@ -17,6 +17,8 @@ export interface FileSystemNode {
   canEdit?: boolean;
   canMove?: boolean;
   canDelete?: boolean;
+
+  isTranslated?: boolean;
 }
 
 export interface AppNode extends FileSystemNode {

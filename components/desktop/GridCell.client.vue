@@ -37,7 +37,7 @@ const handleStopRenaming = () => {
     @contextmenu.prevent.stop="handleContextMenu"
     :class="
       cn(
-        'group  flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
+        'group flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
         props.class,
       )
     "
@@ -79,7 +79,7 @@ const handleStopRenaming = () => {
     </Popover>
     <span
       class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
-      >{{ formattedName }}</span
+      >{{ item.isTranslated ? $t(formattedName) : formattedName }}</span
     >
   </div>
 </template>

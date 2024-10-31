@@ -9,39 +9,34 @@ function openFolder(nodeId: string) {
 // TODO: Add actions
 const items = [
   {
-    name: "Home",
+    name: "home",
     icon: "gnome:home",
     id: "home",
   },
   {
-    name: "Documents",
+    name: "documents",
     icon: "gnome:documents",
     id: "documents",
   },
   {
-    name: "Downloads",
+    name: "downloads",
     icon: "gnome:downloads",
     id: "downloads",
   },
   {
-    name: "Music",
+    name: "music",
     icon: "gnome:music",
     id: "music",
   },
   {
-    name: "Pictures",
+    name: "pictures",
     icon: "gnome:pictures",
     id: "pictures",
   },
   {
-    name: "Videos",
+    name: "videos",
     icon: "gnome:videos",
     id: "videos",
-  },
-  {
-    name: "Trash",
-    icon: "gnome:trash",
-    id: "trash",
   },
 ];
 </script>
@@ -66,22 +61,22 @@ const items = [
         @click="() => openFolder(item.id)"
       >
         <Icon :name="item.icon" size="16" />
-        <span class="text-sm">{{ item.name }}</span>
+        <span class="text-sm">{{ $t(item.name) }}</span>
       </Button>
 
       <div class="my-2 h-px w-full bg-gray-500/30"></div>
 
       <Button
-        v-for="item in bookmarksNodes.slice(0, 3)"
+        v-for="item in bookmarksNodes.slice(0, 4)"
         :key="item.name"
         variant="ghost"
         class="flex w-full cursor-default justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
         @click="() => openFolder(item.id)"
       >
         <Icon name="gnome:symbolic-folder" size="16" />
-        <span class="text-sm">{{ item.name }}</span>
+        <span class="text-sm">{{ item.isTranslated ? $t(item.name) : item.name }}</span>
       </Button>
-      <div v-if="bookmarksNodes.length > 3" class="grid place-content-center">
+      <div v-if="bookmarksNodes.length > 4" class="grid place-content-center">
         <span class="text-muted-foreground select-none">...</span>
       </div>
     </PopoverContent>

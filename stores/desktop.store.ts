@@ -5,7 +5,7 @@ import {
   defaultSuspendThreshold,
   defaultBookmarks,
 } from "@/constants";
-import { getNodeIcon } from "@/helpers";
+import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
 import {
   findParentById,
@@ -38,15 +38,11 @@ export const useDesktopStore = defineStore({
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
-      const username = storeToRefs(useGlobalStore()).username.value;
-      const path = `/home/${username}/Desktop`;
-      return findNodeByAbsolutePath(state.fileSystem, path);
+      return findNodeByIdRecursive(state.fileSystem, "desktop");
     },
 
     trashNode(state): FileSystemNode | null {
-      const username = storeToRefs(useGlobalStore()).username.value;
-      const path = `/home/${username}/Desktop/Trash`;
-      return findNodeByAbsolutePath(state.fileSystem, path);
+      return findNodeByIdRecursive(state.fileSystem, "trash");
     },
 
     desktopItems(state): FileSystemNode[] {
@@ -70,7 +66,7 @@ export const useDesktopStore = defineStore({
     bookmarksNodes(state): FileSystemNode[] {
       return state.bookmarks
         .map((id) => state.nodeMap.get(id))
-        .filter((node): node is FileSystemNode => node !== undefined)
+        .filter((node): node is FileSystemNode => node !== undefined);
     },
   },
   actions: {

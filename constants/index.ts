@@ -20,10 +20,11 @@ export const defaultNetworks: WifiNetwork[] = [
 ];
 
 const trashNode: AppNode = {
+  id: "trash",
   name: "trash",
   type: "app",
   icon: "app:trash",
-  id: "trash",
+  isTranslated: true,
 };
 
 export const defaultBookmarks = ["projects"];
@@ -112,6 +113,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
         canMove: false,
         canDelete: false,
         icon: "folder:folder",
+        isTranslated: true,
         children: [
           {
             id: "home",
@@ -120,48 +122,56 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
             canMove: false,
             canDelete: false,
             icon: "folder:folder",
+            isTranslated: true,
             children: [
               {
                 id: "downloads",
-                name: "Downloads",
+                name: "downloads",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
                 id: "documents",
-                name: "Documents",
+                name: "documents",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
                 id: "pictures",
-                name: "Pictures",
+                name: "pictures",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Music",
+                id: "music",
+                name: "music",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
                 id: "videos",
-                name: "Videos",
+                name: "videos",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
                 id: "desktop",
-                name: "Desktop",
+                name: "desktop",
                 type: "folder",
                 icon: "folder:folder",
                 canMove: false,
                 canDelete: false,
+                isTranslated: true,
                 children: [
                   trashNode,
                   {
@@ -170,13 +180,9 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                     type: "folder",
                     icon: "folder:folder",
                     children: [],
+                    isTranslated: true,
                   },
                 ],
-              },
-              {
-                name: ".zshrc",
-                type: "file",
-                icon: "file:text",
               },
             ],
           },

@@ -29,7 +29,6 @@
   "rename_folder_title": "Nome della cartella",
   "folder": "Cartella",
   "file": "File",
-  "desktop": "Scrivania",
   "application": "Applicazione",
   "name": "Nome",
   "new_folder": "Nuova cartella",
@@ -50,7 +49,17 @@
   "automatic_suspend_title": "Sospensione automatica",
   "automatic_suspend_description": "La sospensione è imminente a causa di inattività.",
   "add_to_bookmarks": "Aggiungi ai segnalibri",
-  
+
+  "-----------------NODES-------------------": "",
+  "home": "Home",
+  "desktop": "Scrivania",
+  "projects": "Progetti",
+  "documents": "Documenti",
+  "downloads": "Scaricati",
+  "pictures": "Immagini",
+  "music": "Musica",
+  "videos": "Video",
+
   "-----------------APPS-------------------": "",
   "trash": "Cestino",
   "settings": "Impostazioni",

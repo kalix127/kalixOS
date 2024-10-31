@@ -9,13 +9,12 @@ import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
 import {
   findParentById,
-  findNodeByAbsolutePath,
   canMove,
   canEdit,
   canDelete,
 } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { useIdle, useTimestamp, watchOnce, watchThrottled } from "@vueuse/core";
+import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -26,8 +25,8 @@ export const useDesktopStore = defineStore({
     bookmarks: defaultBookmarks,
 
     // Docks
-    isDockVisible: true,
-    isDockPinned: true,
+    isDockVisible: false,
+    isDockPinned: false,
 
     // Apps
     hasAppsLoading: false,

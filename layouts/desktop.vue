@@ -22,7 +22,7 @@ const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
     </div>
     <ClientOnly>
       <!-- Context menu -->
-      <DesktopContextMenu />
+      <DesktopGridContextMenu />
 
       <!-- Dockbar -->
       <DesktopDock v-if="!isLocked" />

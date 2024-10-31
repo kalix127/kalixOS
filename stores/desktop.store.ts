@@ -360,6 +360,16 @@ export const useDesktopStore = defineStore({
         app.id === appId ? { ...app, ...changes } : app,
       );
     },
+
+    /**
+     * Adds a node to bookmarks if not already present.
+     * @param nodeId The ID of the node to add to bookmarks.
+     */
+    addToBookmarks(nodeId: string) {
+      if (!this.bookmarks.includes(nodeId)) {
+        this.bookmarks.push(nodeId);
+      }
+    },
   },
 });
 

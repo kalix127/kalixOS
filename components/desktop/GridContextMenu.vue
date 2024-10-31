@@ -11,7 +11,7 @@ const { isOpen, x, y, targetType, targetNode } = storeToRefs(contextMenuStore);
 const { closeContextMenu } = contextMenuStore;
 
 const { desktopNode, trashNode } = storeToRefs(desktopStore);
-const { createItem, editItem, moveItem } = desktopStore;
+const { createItem, editItem, moveItem, addToBookmarks } = desktopStore;
 
 // Close context menu on clicking outside or pressing Escape
 useEventListener("click", () => {
@@ -50,8 +50,14 @@ const menuOptions = computed(() => {
     case "file":
       return [
         { label: "Open", action: () => openFile(targetNode.value) },
-        { label: `${t("rename")}...`, action: () => renameNode(targetNode.value) },
-        { label: t("move_to_trash"), action: () => moveToTrash(targetNode.value) },
+        {
+          label: `${t("rename")}...`,
+          action: () => renameNode(targetNode.value),
+        },
+        {
+          label: t("move_to_trash"),
+          action: () => moveToTrash(targetNode.value),
+        },
         { isSeparator: true },
         {
           label: t("properties"),
@@ -61,8 +67,14 @@ const menuOptions = computed(() => {
     case "folder":
       return [
         { label: t("open"), action: () => openFolder(targetNode.value) },
-        { label: `${t("rename")}...`, action: () => renameNode(targetNode.value) },
-        { label: t("move_to_trash"), action: () => moveToTrash(targetNode.value) },
+        {
+          label: `${t("rename")}...`,
+          action: () => renameNode(targetNode.value),
+        },
+        {
+          label: t("move_to_trash"),
+          action: () => moveToTrash(targetNode.value),
+        },
         { isSeparator: true },
         {
           label: t("compress_folder"),
@@ -74,6 +86,10 @@ const menuOptions = computed(() => {
         },
         { isSeparator: true },
         {
+          label: t("add_to_bookmarks"),
+          action: () => addToBookmarksAction(targetNode.value),
+        },
+        {
           label: t("properties"),
           action: () => console.log("Properties"),
         },
@@ -83,9 +99,7 @@ const menuOptions = computed(() => {
         },
       ];
     case "app":
-      return [
-        { label: t("open"), action: () => openApp(targetNode.value) },
-      ];
+      return [{ label: t("open"), action: () => openApp(targetNode.value) }];
     default:
       return [];
   }
@@ -147,6 +161,15 @@ const openFile = (node: FileSystemNode | null) => {
   closeContextMenu();
 };
 
+const addToBookmarksAction = (node: FileSystemNode | null) => {
+  if (!node || node.type !== "folder") {
+    return;
+  }
+
+  addToBookmarks(node.id);
+  closeContextMenu();
+};
+
 const renameNode = (node: FileSystemNode | null) => {
   if (node) {
     editItem(node.id, { isRenaming: true });
@@ -165,7 +188,7 @@ const moveToTrash = (node: FileSystemNode | null) => {
 <template>
   <Teleport to="body">
     <DropdownMenu :open="isOpen">
-      <DropdownMenuContent class="!w-72 z-[50000]" :style="contextMenuStyle">
+      <DropdownMenuContent class="z-[50000] !w-72" :style="contextMenuStyle">
         <template v-for="option in menuOptions" :key="option.label">
           <DropdownMenuSeparator v-if="option.isSeparator" />
           <DropdownMenuItem

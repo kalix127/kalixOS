@@ -10,7 +10,8 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading } = storeToRefs(desktopStore);
+const { apps, hasAppsLoading, isDockPinned, isDockVisible } =
+  storeToRefs(desktopStore);
 const { updateDockApps, openApp, toggleMinimizeApp } = desktopStore;
 
 const dockRef = ref<HTMLElement | null>(null);
@@ -22,6 +23,10 @@ const draggableDockItems = computed({
 });
 
 async function handleAppClick(app: AppNode) {
+  if (!isDockPinned.value) {
+    isDockVisible.value = false;
+  }
+
   // If the app is a social app, open the corresponding URL
   if (app.type === "social") {
     const { linkedin, github } = useRuntimeConfig().public.socialUrl;

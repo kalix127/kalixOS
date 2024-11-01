@@ -25,8 +25,8 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
           </div>
 
           <!-- Options -->
-          <template v-for="option in menuOptions" :key="option.label">
-            <DropdownMenuSeparator v-if="option.isSeparator" />
+          <template v-for="(option, index) in menuOptions" :key="option.label">
+            <DropdownMenuSeparator v-if="option.isSeparator && index !== 0" />
             <DropdownMenuItem
               @click="option.action"
               :inset="targetType !== 'dock'"

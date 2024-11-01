@@ -7,12 +7,7 @@ import {
 } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
-import {
-  findParentById,
-  canMove,
-  canEdit,
-  canDelete,
-} from "@/helpers";
+import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
 import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
 
@@ -25,8 +20,8 @@ export const useDesktopStore = defineStore({
     bookmarks: defaultBookmarks,
 
     // Docks
-    isDockVisible: false,
-    isDockPinned: false,
+    isDockVisible: true,
+    isDockPinned: true,
 
     // Apps
     hasAppsLoading: false,

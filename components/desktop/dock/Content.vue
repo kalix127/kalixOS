@@ -10,9 +10,9 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading, isDockPinned, isDockVisible } =
+const { apps, hasAppsLoading } =
   storeToRefs(desktopStore);
-const { updateDockApps, openApp, toggleMinimizeApp } = desktopStore;
+const { updateDockApps } = desktopStore;
 
 const dockRef = ref<HTMLElement | null>(null);
 const draggableDockItems = computed({
@@ -22,32 +22,7 @@ const draggableDockItems = computed({
   },
 });
 
-async function handleAppClick(app: AppNode) {
-  if (!isDockPinned.value) {
-    isDockVisible.value = false;
-  }
-
-  // If the app is a social app, open the corresponding URL
-  if (app.type === "social") {
-    const { linkedin, github } = useRuntimeConfig().public.socialUrl;
-    const url = app.id === "linkedin" ? linkedin : github;
-    if (url) {
-      window.open(url as string, "_blank");
-    }
-    return;
-  }
-
-  // If the app is not open, open it with delay
-  if (!app.isOpen) {
-    hasAppsLoading.value = true;
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    openApp(app.id);
-    hasAppsLoading.value = false;
-    return;
-  } else {
-    toggleMinimizeApp(app.id);
-  }
-}
+const { handleOpenApp } = useContextMenu();
 
 onBeforeMount(async () => {
   await until(dockRef).toBeTruthy();
@@ -77,7 +52,7 @@ onBeforeMount(async () => {
         v-for="app in apps"
         :key="app.id"
         :app="app"
-        @openApp="() => handleAppClick(app)"
+        @openApp="() => handleOpenApp(app)"
       />
     </div>
   </div>

@@ -39,7 +39,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
 <template>
   <div
     @contextmenu.prevent=""
-    class="absolute z-[10000] h-[100svh] w-[100vw] bg-black"
+    class="absolute z-[100000] h-[100svh] w-[100vw] bg-black"
   >
     <!-- Background -->
     <NuxtImg

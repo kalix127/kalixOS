@@ -8,7 +8,7 @@ const props = defineProps<{
   item: FileSystemNode;
 }>();
 
-const contextMenuStore = useContextMenuStore();
+const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
 const { editItem } = desktopStore;
 
@@ -19,10 +19,10 @@ const formattedName = computed(() => {
 });
 
 const handleContextMenu = (event: MouseEvent) => {
-  contextMenuStore.openContextMenu(
+  openContextMenu(
     event.clientX,
     event.clientY,
-    props.item.type,
+    props.item.type as TargetType,
     props.item,
   );
 };

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import type { FileSystemNode } from "@/types";
+import type { FileSystemNode, AppNode } from "@/types";
 
 const { t } = useI18n();
 
@@ -100,6 +100,34 @@ const menuOptions = computed(() => {
       ];
     case "app":
       return [{ label: t("open"), action: () => openApp(targetNode.value) }];
+
+    case "dock":
+      return [
+        // Show "Open" option only if the app is closed
+        ...(targetNode.value.isOpen
+          ? []
+          : [
+              { label: t("open"), action: () => openApp(targetNode.value) },
+            ]),
+        // Show "App Details" option only if the app is a social app
+        ...(targetNode.value?.type === "social"
+          ? []
+          : [
+            { isSeparator: true },
+              {
+                label: t("app_details"),
+                action: () => console.log("App Details"),
+              },
+            ]),
+
+        // Show "Quit" option only if the app is open
+        ...(targetNode.value?.isOpen
+          ? [
+              { isSeparator: true },
+              { label: t("quit"), action: () => console.log("Quit") },
+            ]
+          : []),
+      ];
     default:
       return [];
   }
@@ -134,7 +162,7 @@ const createNewDocument = () => {
 };
 
 // TODO: Implement
-const openApp = (node: FileSystemNode | null) => {
+const openApp = (node: FileSystemNode | AppNode | null) => {
   if (node) {
     console.log(`Launching app: ${node.name}`);
   }
@@ -142,7 +170,7 @@ const openApp = (node: FileSystemNode | null) => {
 };
 
 // TODO: Implement
-const openFolder = (node: FileSystemNode | null) => {
+const openFolder = (node: FileSystemNode | AppNode | null) => {
   if (node) {
     console.log(`Opening folder: ${node.name}`);
   }
@@ -150,14 +178,14 @@ const openFolder = (node: FileSystemNode | null) => {
 };
 
 // TODO: Implement
-const openFile = (node: FileSystemNode | null) => {
+const openFile = (node: FileSystemNode | AppNode | null) => {
   if (node) {
     console.log(`Opening file: ${node.name}`);
   }
   closeContextMenu();
 };
 
-const addToBookmarksAction = (node: FileSystemNode | null) => {
+const addToBookmarksAction = (node: FileSystemNode | AppNode | null) => {
   if (!node || node.type !== "folder") {
     return;
   }
@@ -166,14 +194,14 @@ const addToBookmarksAction = (node: FileSystemNode | null) => {
   closeContextMenu();
 };
 
-const renameNode = (node: FileSystemNode | null) => {
+const renameNode = (node: FileSystemNode | AppNode | null) => {
   if (node) {
     editItem(node.id, { isRenaming: true });
   }
   closeContextMenu();
 };
 
-const moveToTrash = (node: FileSystemNode | null) => {
+const moveToTrash = (node: FileSystemNode | AppNode | null) => {
   if (node && trashNode.value) {
     moveItem(node.id, trashNode.value.id);
   }
@@ -184,18 +212,39 @@ const moveToTrash = (node: FileSystemNode | null) => {
 <template>
   <Teleport to="body">
     <DropdownMenu :open="isOpen">
-      <DropdownMenuContent class="z-[50000] !w-72" :style="contextMenuStyle">
-        <template v-for="option in menuOptions" :key="option.label">
-          <DropdownMenuSeparator v-if="option.isSeparator" />
-          <DropdownMenuItem
-            @click="option.action"
-            inset
-            class="duration-0"
-            v-else
+      <DropdownMenuContent
+        class="z-[60000]"
+        :class="[targetType === 'dock' ? '!w-60 sm:max-h-60' : '!w-72']"
+        :style="contextMenuStyle"
+      >
+        <div class="space-y-2">
+          <!-- Target name -->
+          <div
+            v-if="targetType === 'dock'"
+            class="flex items-center gap-4 px-1"
           >
-            {{ option.label }}
-          </DropdownMenuItem>
-        </template>
+            <span
+              class="select-none text-nowrap text-xs font-extrabold text-muted-foreground"
+            >
+              {{ $t(targetNode?.name) }}
+            </span>
+            <div class="h-px w-full bg-gray-50/10"></div>
+          </div>
+
+          <!-- Options -->
+          <template v-for="option in menuOptions" :key="option.label">
+            <DropdownMenuSeparator v-if="option.isSeparator" />
+            <DropdownMenuItem
+              @click="option.action"
+              :inset="targetType !== 'dock'"
+              class="duration-0"
+              :class="[targetType === 'dock' ? 'min-h-9' : '']"
+              v-else
+            >
+              {{ option.label }}
+            </DropdownMenuItem>
+          </template>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   </Teleport>

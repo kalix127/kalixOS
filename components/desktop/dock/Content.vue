@@ -76,10 +76,8 @@ onBeforeMount(async () => {
       <DesktopDockItem
         v-for="app in apps"
         :key="app.id"
-        :app-name="app.name"
-        :icon="app.icon"
-        :is-open="app.isOpen"
-        @click="() => handleAppClick(app)"
+        :app="app"
+        @openApp="() => handleAppClick(app)"
       />
     </div>
   </div>

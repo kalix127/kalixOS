@@ -21,7 +21,7 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
             >
               {{ $t(targetNode?.name) }}
             </span>
-            <div class="h-px w-full bg-gray-50/10"></div>
+            <div class="h-px w-full bg-muted-foreground/15"></div>
           </div>
 
           <!-- Options -->

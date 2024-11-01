@@ -2,27 +2,23 @@
 import { type AppNode } from "@/types";
 
 const { hasAppsLoading } = storeToRefs(useDesktopStore());
-const { openContextMenu } = useContextMenuStore();
 
 defineEmits<{
-  (e: "openApp"): void;
+  (e: "openApp", app: AppNode): void;
+  (e: "context", event: MouseEvent, app: AppNode): void;
 }>();
 
 const props = defineProps<{
   app: AppNode;
 }>();
 const { app } = toRefs(props);
-
-const handleContextMenu = (event: MouseEvent) => {
-  openContextMenu(event.clientX, event.clientY, "dock", app.value);
-};
 </script>
 
 <template>
   <DesktopDockItemTooltip :app-name="app.name">
     <Button
-      @contextmenu.prevent.stop="handleContextMenu"
-      @click="() => $emit('openApp')"
+      @contextmenu.prevent="(event) => $emit('context', event, app)"
+      @click="() => $emit('openApp', app)"
       variant="ghost"
       size="icon"
       class="relative grid cursor-default place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7"

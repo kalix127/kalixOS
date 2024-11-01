@@ -10,9 +10,10 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading } =
-  storeToRefs(desktopStore);
+const { apps, hasAppsLoading } = storeToRefs(desktopStore);
 const { updateDockApps } = desktopStore;
+
+const { openContextMenu } = useContextMenuStore();
 
 const dockRef = ref<HTMLElement | null>(null);
 const draggableDockItems = computed({
@@ -23,6 +24,10 @@ const draggableDockItems = computed({
 });
 
 const { handleOpenApp } = useContextMenu();
+
+const handleContextMenu = (event: MouseEvent, app: AppNode) => {
+  openContextMenu(event.clientX, event.clientY, "dock", app);
+};
 
 onBeforeMount(async () => {
   await until(dockRef).toBeTruthy();
@@ -52,7 +57,8 @@ onBeforeMount(async () => {
         v-for="app in apps"
         :key="app.id"
         :app="app"
-        @openApp="() => handleOpenApp(app)"
+        @openApp="handleOpenApp"
+        @context="handleContextMenu"
       />
     </div>
   </div>

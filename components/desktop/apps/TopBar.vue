@@ -47,6 +47,7 @@ const actions = computed(() => [
       ),
       isActive ? 'bg-popover' : 'bg-muted',
     ]"
+    @dblclick="$emit('fullscreen')"
   >
     <!-- Empty div -->
     <div></div>

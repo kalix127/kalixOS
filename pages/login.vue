@@ -95,7 +95,7 @@ const socialLinks = [
         <PopoverTrigger
           class="absolute bottom-4 right-4 grid place-items-center rounded-full bg-secondary p-3 sm:right-8"
         >
-          <Icon name="material-symbols:settings-rounded" size="16" />
+          <Icon name="gnome:settings" size="16" />
         </PopoverTrigger>
         <PopoverContent class="w-fit rounded-2xl">
           <RadioGroup v-model="desktopEnvironment">

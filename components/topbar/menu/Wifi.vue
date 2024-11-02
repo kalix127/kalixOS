@@ -57,10 +57,10 @@ function closeMenu() {
     :isOpen="isWifiMenuOpen"
     :isEnabled="isWifiEnabled"
     :title="$t('wifi')"
-    icon="ic:baseline-signal-wifi-4-bar"
+    icon="gnome:wifi-4"
   >
     <template #loading-icon>
-      <Icon v-show="isSearchingWifiNetworks" name="mingcute:loading-fill" class="animate-spin" size="20" />
+      <Icon v-show="isSearchingWifiNetworks" name="extra:loading" class="animate-spin" size="20" />
     </template>
     <Button
       v-for="network in availableWifiNetworks"
@@ -70,20 +70,20 @@ function closeMenu() {
       @click="() => connectToWifi(network)"
     >
       <Icon
-        :name="`ic:baseline-signal-wifi-${network.signal}-bar${network.isProtected ? '-lock' : ''}`"
+        :name="`gnome:wifi-${network.signal}${network.isProtected ? '-lock' : ''}`"
         size="18"
       />
       {{ network.name }}
 
       <Icon
-        name="ic:outline-check"
-        size="20"
+        name="gnome:checkmark"
+        size="18"
         v-show="connectedWifiNetwork?.id === network.id"
       />
       <Icon
-        name="mingcute:loading-fill"
+        name="extra:loading"
         class="animate-spin"
-        size="20"
+        size="18"
         v-show="idConnectingNetwork === network.id"
       />
     </Button>

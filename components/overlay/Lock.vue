@@ -52,9 +52,9 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
     <div
       class="absolute left-1/2 top-1/2 flex w-72 max-w-screen-xs -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-6"
     >
-      <div class="grid place-content-center rounded-full bg-secondary p-2">
-        <Icon name="material-symbols:person" size="140" />
-      </div>
+    <div class="grid place-content-center rounded-full bg-secondary p-6">
+      <Icon name="gnome:avatar" size="120" />
+    </div>
 
       <h1 class="text-2xl font-extrabold">{{ username }}</h1>
 
@@ -80,9 +80,13 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                   class="absolute inset-y-0 end-0 flex items-center justify-center px-3"
                   @click="isPasswordVisible = !isPasswordVisible"
                 >
-                  <Icon name="mdi:eye" size="20" v-show="!isPasswordVisible" />
                   <Icon
-                    name="mdi:eye-off"
+                    name="gnome:password-show-off"
+                    size="20"
+                    v-show="!isPasswordVisible"
+                  />
+                  <Icon
+                    name="gnome:password-show-on"
                     size="20"
                     v-show="isPasswordVisible"
                   />
@@ -92,7 +96,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                 <Icon
                   class="absolute -end-10 hidden xs:block"
                   v-show="isLoading"
-                  name="svg-spinners:ring-resize"
+                  name="extra:loading-resize"
                   size="20"
                 />
               </div>

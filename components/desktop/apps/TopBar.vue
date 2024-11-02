@@ -47,6 +47,7 @@ const actions = computed(() => [
       ),
       isActive ? 'bg-popover' : 'bg-muted',
     ]"
+    @dblclick="$emit('fullscreen')"
   >
     <!-- Empty div -->
     <div></div>
@@ -55,7 +56,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ title }}
+      {{ $t(title) }}
     </div>
 
     <!-- Actions -->

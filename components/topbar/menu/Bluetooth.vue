@@ -15,7 +15,7 @@ function closeMenu() {
     :isOpen="isBluetoothMenuOpen"
     :isEnabled="isBluetoothEnabled"
     :title="$t('bluetooth')"
-    icon="material-symbols:bluetooth"
+    icon="gnome:bluetooth-on"
   >
     <div
       class="grid place-content-center p-6 text-center sm:text-lg text-md font-extrabold text-muted-foreground/70"

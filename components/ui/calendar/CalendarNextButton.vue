@@ -33,7 +33,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
   >
     <slot>
-      <Icon name="material-symbols:arrow-right" size="26" />
+      <Icon name="gnome:arrow-right" size="18" />
     </slot>
   </CalendarNext>
 </template>

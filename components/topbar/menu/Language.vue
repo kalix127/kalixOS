@@ -8,12 +8,12 @@ const { isLanguageMenuOpen } = storeToRefs(globalStore);
 
 const items = computed(() => [
   {
-    icon: "flag:it-4x3",
+    icon: "flag:it",
     name: t("language.it"),
     value: "it-IT",
   },
   {
-    icon: "flag:us-4x3",
+    icon: "flag:us",
     name: t("language.en"),
     value: "en-US",
   },
@@ -30,7 +30,7 @@ function closeMenu() {
     :isOpen="isLanguageMenuOpen"
     :isEnabled="true"
     :title="$t('language.switch')"
-    icon="lucide:languages"
+    icon="gnome:languages"
   >
     <Button
       v-for="item in items"

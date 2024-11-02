@@ -47,7 +47,7 @@ function closeMenu() {
     v-on-click-outside="closeMenu"
     :isOpen="isPowerOffMenuOpen"
     :title="$t('power_off')"
-    icon="fa6-solid:power-off"
+    icon="gnome:poweroff"
   >
     <Button
       v-for="option in options"

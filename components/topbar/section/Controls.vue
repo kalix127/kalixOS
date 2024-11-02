@@ -12,21 +12,18 @@ const { volume, isPowerOffMenuOpen, isAnyTopbarMenuOpen } =
   >
     <!-- Volume slider -->
     <div class="flex min-h-8 items-center gap-4">
+      <Icon v-show="volume[0] > 66" name="gnome:volume-3" size="20" />
       <Icon
-        v-show="volume[0] > 50"
-        name="material-symbols:volume-up"
+        v-show="volume[0] > 33 && volume[0] <= 66"
+        name="gnome:volume-2"
         size="20"
       />
       <Icon
-        v-show="volume[0] > 0 && volume[0] <= 50"
-        name="material-symbols:volume-down"
+        v-show="volume[0] > 0 && volume[0] <= 33"
+        name="gnome:volume-1"
         size="20"
       />
-      <Icon
-        v-show="volume[0] === 0"
-        name="material-symbols:volume-off"
-        size="20"
-      />
+      <Icon v-show="volume[0] === 0" name="gnome:volume-off" size="20" />
       <Slider
         v-model="volume"
         :disabled="isAnyTopbarMenuOpen"

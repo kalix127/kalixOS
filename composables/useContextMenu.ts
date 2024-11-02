@@ -11,8 +11,13 @@ export function useContextMenu() {
     storeToRefs(contextMenuStore);
   const { closeContextMenu } = contextMenuStore;
 
-  const { desktopNode, trashNode, isDockPinned, isDockVisible, hasAppsLoading } =
-    storeToRefs(desktopStore);
+  const {
+    desktopNode,
+    trashNode,
+    isDockPinned,
+    isDockVisible,
+    hasAppsLoading,
+  } = storeToRefs(desktopStore);
   const {
     createItem,
     editItem,
@@ -118,6 +123,7 @@ export function useContextMenu() {
           ...(targetNode.value.isOpen
             ? []
             : [
+                { isSeparator: true },
                 {
                   label: t("open"),
                   action: () => handleOpenApp(targetNode.value),

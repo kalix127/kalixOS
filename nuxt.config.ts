@@ -99,6 +99,10 @@ export default defineNuxtConfig({
         dir: "./icons/flag",
         prefix: "flag",
       },
+      {
+        dir: "./icons/extra",
+        prefix: "extra",
+      },
     ],
     serverBundle: false,
     clientBundle: {

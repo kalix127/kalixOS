@@ -7,8 +7,7 @@
     "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "start": "node --env-file=.env --import ./.output/server/sentry.server.config.mjs .output/server/index.mjs"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@formkit/drag-and-drop": "^0.2.4",
@@ -18,7 +17,6 @@
     "@nuxtjs/device": "^3.2.4",
     "@nuxtjs/i18n": "^8.5.5",
     "@pinia/nuxt": "^0.5.5",
-    "@sentry/nuxt": "^8.34.0",
     "@vee-validate/zod": "^4.13.2",
     "@vueuse/components": "^11.1.0",
     "@vueuse/core": "^11.1.0",

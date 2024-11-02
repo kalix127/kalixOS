@@ -37,16 +37,8 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
-    "@sentry/nuxt/module",
     "@nuxtjs/device",
   ],
-  sentry: {
-    sourceMapsUploadOptions: {
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-    },
-  },
   i18n: {
     // TODO: Add baseUrl for prod
     defaultLocale: "en-US",

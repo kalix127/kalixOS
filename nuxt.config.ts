@@ -94,7 +94,11 @@ export default defineNuxtConfig({
       {
         dir: "./icons/gnome",
         prefix: "gnome"
-      }
+      },
+      {
+        dir: "./icons/flag",
+        prefix: "flag",
+      },
     ],
     serverBundle: false,
     clientBundle: {

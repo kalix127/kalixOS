@@ -19,21 +19,21 @@ const items = [
     ? [
         {
           name: t("settings"),
-          icon: "material-symbols:settings-rounded",
+          icon: "gnome:settings",
           handler: () => {
             console.log("Settings");
           },
         },
         {
           name: t("lock"),
-          icon: "material-symbols:lock",
+          icon: "gnome:lock",
           handler: handleLock,
         },
       ]
     : []),
   {
     name: t("power_off"),
-    icon: "fa6-solid:power-off",
+    icon: "gnome:poweroff",
     handler: () => {
       isPowerOffMenuOpen.value = !isPowerOffMenuOpen.value;
     },
@@ -53,7 +53,7 @@ const items = [
         class="cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover hidden sm:flex"
         :disabled="isAnyTopbarMenuOpen"
       >
-        <Icon name="mdi:battery-charging" size="18" />
+        <Icon name="gnome:battery-full" size="18" />
         <span class="text-sm font-semibold">100%</span>
       </Button>
       <!-- Language Switcher -->
@@ -64,7 +64,7 @@ const items = [
         :disabled="isAnyTopbarMenuOpen"
         @click="isLanguageMenuOpen = !isLanguageMenuOpen"
       >
-        <Icon name="lucide:languages" size="18" />
+        <Icon name="gnome:languages" size="18" />
       </Button>
     </div>
 

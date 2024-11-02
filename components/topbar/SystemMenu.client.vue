@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { cn } from "@/lib/utils";
-
 const globalStore = useGlobalStore();
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
@@ -21,34 +19,33 @@ const {
     >
       <Icon
         v-show="connectedWifiNetwork"
-        :name="`ic:baseline-signal-wifi-${connectedWifiNetwork?.signal || 1}-bar`"
+        :name="`gnome:wifi-${connectedWifiNetwork?.signal || 1}`"
         size="18"
       />
-      <Icon v-show="isWiredEnabled" name="lucide:ethernet-port" size="18" />
+      <Icon v-show="isWiredEnabled" name="gnome:wired-on" size="18" />
       <Icon
         v-show="isAirplaneModeEnabled"
-        name="ion:airplane-sharp"
+        name="gnome:airplane-mode-on"
+        size="18"
+      />
+      <Icon v-show="volume[0] > 66" name="gnome:volume-3" size="18" />
+      <Icon
+        v-show="volume[0] > 33 && volume[0] <= 66"
+        name="gnome:volume-2"
         size="18"
       />
       <Icon
-        v-show="volume[0] > 50"
-        name="material-symbols:volume-up"
+        v-show="volume[0] > 0 && volume[0] <= 33"
+        name="gnome:volume-1"
         size="18"
       />
-      <Icon
-        v-show="volume[0] > 0 && volume[0] <= 50"
-        name="material-symbols:volume-down"
-        size="18"
-      />
-      <Icon
-        v-show="volume[0] === 0"
-        name="material-symbols:volume-off"
-        size="18"
-      />
-      <Icon name="mdi:battery-charging" size="18" />
+      <Icon v-show="volume[0] === 0" name="gnome:volume-off" size="18" />
+      <Icon name="gnome:battery-full" size="18" />
     </PopoverTrigger>
 
-    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px] z-[60000]">
+    <PopoverContent
+      class="z-[60000] mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]"
+    >
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
         class="topbar-menu-transition flex flex-1 flex-col rounded-3xl p-4"

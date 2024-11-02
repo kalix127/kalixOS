@@ -20,7 +20,7 @@ function handleDisconnect() {
     :isOpen="isWiredMenuOpen"
     :isEnabled="isWiredEnabled"
     :title="$t('wired_connection')"
-    icon="lucide:ethernet-port"
+    icon="gnome:wired-on"
   >
     <Button
       variant="ghost"
@@ -28,7 +28,7 @@ function handleDisconnect() {
       @click="handleDisconnect"
     >
       <div class="flex items-center gap-2">
-        <Icon name="lucide:ethernet-port" size="18" />
+        <Icon name="gnome:wired-on" size="18" />
         <span>{{ $t("wired") }}</span>
       </div>
       <span class="text-muted-foreground"> {{ $t("disconnect") }} </span>

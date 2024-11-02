@@ -17,7 +17,7 @@ const { handlePowerUp } = globalStore;
         class="relative inline-flex items-center justify-center rounded-full bg-secondary p-7 transition-all duration-200 group-hover:bg-secondary/95"
         @click="handlePowerUp"
       >
-        <Icon name="fa6-solid:power-off" size="72" />
+        <Icon name="gnome:poweroff" size="72" />
       </button>
     </div>
   </div>

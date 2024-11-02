@@ -51,8 +51,8 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
 
 <template>
   <div class="flex w-72 max-w-screen-xs flex-col items-center gap-6">
-    <div class="grid place-content-center rounded-full bg-secondary p-2">
-      <Icon name="material-symbols:person" size="140" />
+    <div class="grid place-content-center rounded-full bg-secondary p-6">
+      <Icon name="gnome:avatar" size="120" />
     </div>
 
     <h1 class="text-2xl font-extrabold">{{ username }}</h1>
@@ -72,7 +72,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                 :disabled="isLoading"
                 @click="handleBack"
               >
-                <Icon name="ion:md-arrow-round-back" size="18" />
+                <Icon name="gnome:arrow-long-left" size="18" />
               </Button>
 
               <Input
@@ -91,15 +91,23 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                 class="absolute inset-y-0 end-0 flex items-center justify-center px-3"
                 @click="isPasswordVisible = !isPasswordVisible"
               >
-                <Icon name="mdi:eye" size="20" v-show="!isPasswordVisible" />
-                <Icon name="mdi:eye-off" size="20" v-show="isPasswordVisible" />
+                <Icon
+                  name="gnome:password-show-off"
+                  size="20"
+                  v-show="!isPasswordVisible"
+                />
+                <Icon
+                  name="gnome:password-show-on"
+                  size="20"
+                  v-show="isPasswordVisible"
+                />
               </button>
 
               <!-- Loading Icon -->
               <Icon
                 class="absolute -end-10 hidden xs:block"
                 v-show="isLoading"
-                name="svg-spinners:ring-resize"
+                name="extra:loading-resize"
                 size="20"
               />
             </div>

@@ -25,7 +25,7 @@ const items = computed(() => [
     menu: true,
     name: t("wired"),
     label: "wired",
-    icon: "lucide:ethernet-port",
+    icon: "gnome:wired-on",
     handler: () => {
       isWiredEnabled.value = !isWiredEnabled.value;
       isAirplaneModeEnabled.value = false; // disable airplane mode when wired is toggled
@@ -44,9 +44,9 @@ const items = computed(() => [
     label: "wifi",
     icon: isWifiEnabled.value
       ? connectedWifiNetwork.value
-        ? `ic:baseline-signal-wifi-${connectedWifiNetwork.value?.signal || 1}-bar`
-        : "ic:baseline-wifi-find"
-      : "ic:baseline-signal-wifi-connected-no-internet-4",
+        ? `gnome:wifi-${connectedWifiNetwork.value?.signal || 1}`
+        : "gnome:wifi-not-connected"
+      : "gnome:wifi-off",
     handler: () => {
       toggleWifi();
     },
@@ -63,8 +63,8 @@ const items = computed(() => [
     name: t("bluetooth"),
     label: "bluetooth",
     icon: isBluetoothEnabled.value
-      ? "material-symbols:bluetooth"
-      : "material-symbols:bluetooth-disabled",
+      ? "gnome:bluetooth-on"
+      : "gnome:bluetooth-off",
     handler: () => {
       isBluetoothEnabled.value = !isBluetoothEnabled.value;
     },
@@ -76,9 +76,11 @@ const items = computed(() => [
     },
   },
   {
-    model: isAirplaneModeEnabled.value,
+    model: isAirplaneModeEnabled,
     name: t("airplane_mode"),
-    icon: "ion:airplane-sharp",
+    icon: isAirplaneModeEnabled.value
+      ? "gnome:airplane-mode-on"
+      : "gnome:airplane-mode-off",
     handler: () => {
       isAirplaneModeEnabled.value = !isAirplaneModeEnabled.value;
       isWifiEnabled.value = false;
@@ -111,11 +113,7 @@ const items = computed(() => [
         ]"
         @click="item.handler"
       >
-        <Icon
-          :name="item.icon"
-          size="18"
-          :class="[item.isActive ? '' : 'bg-muted-foreground']"
-        />
+        <Icon :name="item.icon" size="18" />
 
         <!-- Only for the Wifi Button -->
         <div class="flex flex-col items-start" v-if="item.label === 'wifi'">
@@ -147,7 +145,7 @@ const items = computed(() => [
         ]"
         @click="item.menuHandler"
       >
-        <Icon name="ion:arrow-forward-outline" size="18" />
+        <Icon name="gnome:arrow-long-right" size="18" />
       </button>
     </div>
   </div>

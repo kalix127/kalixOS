@@ -19,7 +19,7 @@ function handleNotListed() {
         class="flex min-h-16 min-w-72 items-center gap-4 rounded-xl bg-secondary/90 p-1.5 ring-2 ring-primary/70 hover:bg-secondary"
       >
         <div class="grid place-content-center rounded-full bg-accent p-3">
-          <Icon name="material-symbols:person" size="28" />
+          <Icon name="gnome:avatar" size="28" />
         </div>
         <span class="font-bold"> Gianluca </span>
       </div>

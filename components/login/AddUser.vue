@@ -24,8 +24,8 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
 
 <template>
   <div class="flex w-72 max-w-screen-xs flex-col items-center gap-16">
-    <div class="grid place-content-center rounded-full bg-secondary p-2">
-      <Icon name="material-symbols:person" size="140" />
+    <div class="grid place-content-center rounded-full bg-secondary p-6">
+      <Icon name="gnome:avatar" size="120" />
     </div>
 
     <!-- Username Input -->
@@ -43,7 +43,7 @@ const onSubmit = handleSubmit(async (values: AddUserForm) => {
                 :disabled="isLoading"
                 @click="handleBack"
               >
-                <Icon name="ion:md-arrow-round-back" size="18" />
+                <Icon name="gnome:arrow-long-left" size="18" />
               </Button>
               <Input
                 class="h-9 bg-secondary pr-10"

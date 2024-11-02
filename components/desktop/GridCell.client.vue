@@ -8,7 +8,7 @@ const props = defineProps<{
   item: FileSystemNode;
 }>();
 
-const contextMenuStore = useContextMenuStore();
+const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
 const { editItem } = desktopStore;
 
@@ -19,10 +19,10 @@ const formattedName = computed(() => {
 });
 
 const handleContextMenu = (event: MouseEvent) => {
-  contextMenuStore.openContextMenu(
+  openContextMenu(
     event.clientX,
     event.clientY,
-    props.item.type,
+    props.item.type as TargetType,
     props.item,
   );
 };
@@ -37,7 +37,7 @@ const handleStopRenaming = () => {
     @contextmenu.prevent.stop="handleContextMenu"
     :class="
       cn(
-        'group  flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
+        'group flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
         props.class,
       )
     "
@@ -54,8 +54,8 @@ const handleStopRenaming = () => {
         <span class="text-sm font-medium">
           {{
             item.type === "file"
-              ? $t("desktop.rename_file_title")
-              : $t("desktop.rename_folder_title")
+              ? $t("rename_file_title")
+              : $t("rename_folder_title")
           }}
         </span>
         <form
@@ -72,14 +72,14 @@ const handleStopRenaming = () => {
             class="w-fit cursor-default font-extrabold"
             @click="handleStopRenaming"
           >
-            {{ item.isNewlyCreated ? "OK" : $t("desktop.rename") }}
+            {{ item.isNewlyCreated ? "OK" : $t("rename") }}
           </Button>
         </form>
       </PopoverContent>
     </Popover>
     <span
       class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
-      >{{ formattedName }}</span
+      >{{ item.isTranslated ? $t(formattedName) : formattedName }}</span
     >
   </div>
 </template>

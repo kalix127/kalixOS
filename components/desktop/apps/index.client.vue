@@ -5,7 +5,7 @@ import VueDraggableResizable from "vue-draggable-resizable";
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
 storeToRefs(desktopStore);
-const { closeApp, minimizeApp } = desktopStore;
+const { closeApp, toggleMinimizeApp } = desktopStore;
 
 const props = defineProps<{
   app: AppNode;
@@ -57,7 +57,7 @@ const {
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
       <DesktopAppsTopBar
-        @minimize="() => minimizeApp(app.id)"
+        @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
         :title="app.name"

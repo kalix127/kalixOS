@@ -1,11 +1,9 @@
 <script lang="js" setup>
 import { Toaster } from "@/components/ui/sonner";
-const { isSuspended } = storeToRefs(useGlobalStore());
 </script>
 
 <template>
-  <OverlaySuspended v-if="isSuspended" />
-  <NuxtLayout v-else>
+  <NuxtLayout>
     <NuxtPage />
     <Toaster />
   </NuxtLayout>

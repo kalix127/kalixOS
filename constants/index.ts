@@ -2,6 +2,10 @@
 import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
 import { assignIds } from "~/helpers";
 
+export const defaultBootDuration = 5000;
+
+export const defaultSuspendThreshold = 300000; // 5 minutes
+
 export const desktopEnvironments = [
   "GNOME",
   "GNOME Classic",
@@ -16,56 +20,65 @@ export const defaultNetworks: WifiNetwork[] = [
 ];
 
 const trashNode: AppNode = {
-  name: "Trash",
+  id: "trash",
+  name: "trash",
   type: "app",
   icon: "app:trash",
-  id: "trash",
+  isTranslated: true,
 };
+
+export const defaultBookmarks = ["projects"];
 
 // TODO: Add more defaults apps without any functionality
 export const defaultApps: AppNode[] = [
   trashNode,
   {
-    name: "Settings",
+    name: "settings",
     type: "app",
     icon: "app:settings",
     id: "settings",
   },
   {
-    name: "Files",
+    name: "files",
     type: "app",
     icon: "app:files",
     id: "files",
   },
   {
-    name: "Terminal",
+    name: "terminal",
     type: "app",
     icon: "app:terminal",
     id: "terminal",
   },
   {
-    name: "Brave",
+    name: "brave",
     type: "app",
     icon: "app:brave",
     id: "brave",
   },
   {
-    name: "Thunderbird",
+    name: "thunderbird",
     type: "app",
     icon: "app:thunderbird",
     id: "thunderbird",
   },
   {
-    name: "Visual Studio Code",
+    name: "vscode",
     type: "app",
     icon: "app:vscode",
     id: "vscode",
   },
   {
-    name: "Kate",
-    type: "app",
-    icon: "app:kate",
-    id: "kate",
+    name: "linkedin_profile",
+    type: "social",
+    icon: "app:linkedin",
+    id: "linkedin",
+  },
+  {
+    name: "github_profile",
+    type: "social",
+    icon: "app:github",
+    id: "github",
   },
 ].map((app) => ({
   ...app,
@@ -87,6 +100,7 @@ export const defaultApps: AppNode[] = [
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
   assignIds({
+    id: "root",
     name: "/",
     type: "folder",
     canMove: false,
@@ -99,56 +113,76 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
         canMove: false,
         canDelete: false,
         icon: "folder:folder",
+        isTranslated: true,
         children: [
           {
+            id: "home",
             name: username,
             type: "folder",
             canMove: false,
             canDelete: false,
             icon: "folder:folder",
+            isTranslated: true,
             children: [
               {
-                name: "Downloads",
+                id: "downloads",
+                name: "downloads",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Documents",
+                id: "documents",
+                name: "documents",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Pictures",
+                id: "pictures",
+                name: "pictures",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Music",
+                id: "music",
+                name: "music",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Videos",
+                id: "videos",
+                name: "videos",
                 type: "folder",
                 icon: "folder:folder",
                 children: [],
+                isTranslated: true,
               },
               {
-                name: "Desktop",
+                id: "desktop",
+                name: "desktop",
                 type: "folder",
                 icon: "folder:folder",
                 canMove: false,
                 canDelete: false,
-                children: [trashNode],
-              },
-              {
-                name: ".zshrc",
-                type: "file",
-                icon: "file:text",
+                isTranslated: true,
+                children: [
+                  trashNode,
+                  {
+                    id: "projects",
+                    name: "projects",
+                    type: "folder",
+                    icon: "folder:folder",
+                    children: [],
+                    isTranslated: true,
+                  },
+                ],
               },
             ],
           },
@@ -198,8 +232,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
       },
     ],
   });
-
-export const defaultBootDuration = 5000;
 
 export const powerUpSystemLogs: SystemLog[] = [
   {

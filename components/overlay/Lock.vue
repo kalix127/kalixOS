@@ -37,7 +37,10 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
 </script>
 
 <template>
-  <div class="absolute z-[10000] h-[100svh] w-[100vw] bg-black">
+  <div
+    @contextmenu.prevent=""
+    class="absolute z-[100000] h-[100svh] w-[100vw] bg-black"
+  >
     <!-- Background -->
     <NuxtImg
       src="/img/bg-desktop.jpg"
@@ -66,6 +69,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                   aria-label="Password"
                   placeholder="Password"
                   autofocus
+                  autocomplete
                   v-bind="componentField"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :disabled="isLoading"

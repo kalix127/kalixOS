@@ -1,16 +1,15 @@
 import { defineStore } from "pinia";
-import { defaultFileSystem, defaultApps } from "@/constants";
-import { getNodeIcon } from "@/helpers";
-import type { AppNode, FileSystemNode } from "~/types";
 import {
-  findParentById,
-  findNodeByAbsolutePath,
-  canMove,
-  canEdit,
-  canDelete,
-} from "@/helpers";
+  defaultFileSystem,
+  defaultApps,
+  defaultSuspendThreshold,
+  defaultBookmarks,
+} from "@/constants";
+import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
+import type { AppNode, FileSystemNode } from "~/types";
+import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { watchThrottled } from "@vueuse/core";
+import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -18,9 +17,11 @@ export const useDesktopStore = defineStore({
     // Filesystem
     fileSystem: defaultFileSystem(storeToRefs(useGlobalStore()).username.value),
     nodeMap: new Map<string, FileSystemNode>(),
+    bookmarks: defaultBookmarks,
 
     // Docks
-    isDockVisible: false,
+    isDockVisible: true,
+    isDockPinned: true,
 
     // Apps
     hasAppsLoading: false,
@@ -31,15 +32,11 @@ export const useDesktopStore = defineStore({
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
-      const username = storeToRefs(useGlobalStore()).username.value;
-      const path = `/home/${username}/Desktop`;
-      return findNodeByAbsolutePath(state.fileSystem, path);
+      return findNodeByIdRecursive(state.fileSystem, "desktop");
     },
 
     trashNode(state): FileSystemNode | null {
-      const username = storeToRefs(useGlobalStore()).username.value;
-      const path = `/home/${username}/Desktop/Trash`;
-      return findNodeByAbsolutePath(state.fileSystem, path);
+      return findNodeByIdRecursive(state.fileSystem, "trash");
     },
 
     desktopItems(state): FileSystemNode[] {
@@ -59,6 +56,12 @@ export const useDesktopStore = defineStore({
     hasAppsAtTop(state): boolean {
       return this.openApps.some((app) => app.y <= 1);
     },
+
+    bookmarksNodes(state): FileSystemNode[] {
+      return state.bookmarks
+        .map((id) => state.nodeMap.get(id))
+        .filter((node): node is FileSystemNode => node !== undefined);
+    },
   },
   actions: {
     /**
@@ -67,6 +70,7 @@ export const useDesktopStore = defineStore({
     init(): void {
       this.initializeNodeMap(this.fileSystem);
       this.syncAppsWithLocalStorage();
+      this.initIdleDetection();
     },
 
     /**
@@ -77,6 +81,55 @@ export const useDesktopStore = defineStore({
       this.nodeMap.set(node.id, node);
       if (node.children) {
         node.children.forEach((child) => this.initializeNodeMap(child));
+      }
+    },
+
+    /**
+     * Initializes idle detection and locks the desktop after inactivity
+     */
+    initIdleDetection(): void {
+      if (import.meta.client) {
+        const { idle, lastActive } = useIdle(defaultSuspendThreshold);
+        const now = useTimestamp({ interval: 1000 });
+
+        const globalStore = useGlobalStore();
+        const {
+          isAuthenticated,
+          isLocked,
+          isAboutToSuspend,
+          suspendedPercentage,
+        } = storeToRefs(globalStore);
+        const { handleSuspend } = globalStore;
+
+        const idledFor = computed(() =>
+          Math.floor((now.value - lastActive.value) / 1000),
+        );
+
+        // Gradually show the suspended overlay after 70% of the suspend duration
+        watch(idledFor, (newValue: number) => {
+          const idleThreshold = Math.floor(
+            (defaultSuspendThreshold * 0.7) / 1000,
+          ); // 70% of suspend duration in seconds
+          const suspendPercentage =
+            newValue < idleThreshold
+              ? 0
+              : Math.min(
+                  (newValue - idleThreshold) /
+                    ((defaultSuspendThreshold * 0.3) / 1000),
+                  1,
+                ); // Scale 0-100% over remaining 30%
+          isAboutToSuspend.value = newValue >= idleThreshold;
+          suspendedPercentage.value = suspendPercentage;
+        });
+
+        watch(idle, (isIdle) => {
+          if (!isAuthenticated.value) return;
+
+          if (isIdle) {
+            handleSuspend();
+            isLocked.value = true;
+          }
+        });
       }
     },
 
@@ -280,10 +333,10 @@ export const useDesktopStore = defineStore({
      * Minimizes an app.
      * @param appId The ID of the app to minimize.
      */
-    minimizeApp(appId: string) {
+    toggleMinimizeApp(appId: string) {
       this.apps = this.apps.map((app) => ({
         ...app,
-        isMinimized: app.id === appId ? true : app.isMinimized,
+        isMinimized: app.id === appId ? !app.isMinimized : app.isMinimized,
       }));
     },
 
@@ -297,6 +350,16 @@ export const useDesktopStore = defineStore({
         app.id === appId ? { ...app, ...changes } : app,
       );
     },
+
+    /**
+     * Adds a node to bookmarks if not already present.
+     * @param nodeId The ID of the node to add to bookmarks.
+     */
+    addToBookmarks(nodeId: string) {
+      if (!this.bookmarks.includes(nodeId)) {
+        this.bookmarks.push(nodeId);
+      }
+    },
   },
 });
 
@@ -304,9 +367,11 @@ interface DesktopStore {
   // Filesystem
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
+  bookmarks: string[]; // Array of ids
 
   // Docks
   isDockVisible: boolean;
+  isDockPinned: boolean;
 
   // Apps
   hasAppsLoading: boolean;

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 const globalStore = useGlobalStore();
-const { isLocked } = storeToRefs(globalStore);
+const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
 </script>
 
 <template>
   <div class="wrapper-desktop relative">
+    <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
+
     <Transition name="lock">
       <OverlayLock v-if="isLocked" />
     </Transition>
-    <div class="relative">
-      <Topbar class="absolute top-0 left-0 w-full" />
+    <div class="relative max-h-[100svh] max-w-[100svw]">
+      <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->
       <NuxtImg
         src="/img/bg-desktop.jpg"
@@ -20,10 +22,10 @@ const { isLocked } = storeToRefs(globalStore);
     </div>
     <ClientOnly>
       <!-- Context menu -->
-      <DesktopContextMenu />
+      <DesktopGridContextMenu />
 
       <!-- Dockbar -->
-      <DesktopDock />
+      <DesktopDock v-if="!isLocked" />
     </ClientOnly>
   </div>
 </template>

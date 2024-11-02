@@ -34,7 +34,6 @@ const targetNodeId = ref<string | null>(null);
 
 function handleDrop() {
   if (!draggedNodeId.value || !targetNodeId.value) {
-    console.error("No dragged or target node id");
     return;
   }
 
@@ -56,7 +55,6 @@ onMounted(async () => {
     // Assign dragged and target node ids on mobile
     handleNodePointerover(data, state) {
       if (!data.detail.state?.currentTargetValue) {
-        console.error("No current target value");
         return;
       }
 
@@ -67,7 +65,6 @@ onMounted(async () => {
     // Assign dragged and target node ids on desktop
     handleNodeDragover(data, state) {
       if (!state.currentTargetValue) {
-        console.error("No current target value");
         return;
       }
 

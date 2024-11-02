@@ -80,6 +80,7 @@ const onSubmit = handleSubmit(async (values: LoginForm) => {
                 aria-label="Password"
                 placeholder="Password"
                 autofocus
+                autocomplete
                 v-bind="componentField"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :disabled="isLoading"

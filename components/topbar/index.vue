@@ -6,8 +6,14 @@ const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 
 const globalStore = useGlobalStore();
 
-const { isPowerOffModalOpen, isRestartModalOpen, isLogoutModalOpen, username } =
-  storeToRefs(globalStore);
+const {
+  isPowerOffModalOpen,
+  isRestartModalOpen,
+  isLogoutModalOpen,
+  username,
+  isAboutToSuspend,
+  isLocked,
+} = storeToRefs(globalStore);
 const { handlePoweroff, handleRestart, handleLogout } = globalStore;
 
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());
@@ -17,26 +23,52 @@ const route = useRoute();
 
 <template>
   <header
+    @contextmenu.prevent=""
     :class="[
       cn(
-        'flex min-h-[35px] items-center justify-between bg-[#080404] bg-opacity-20 p-1 transition-all duration-500 select-none',
+        'relative flex min-h-[35px] select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',
       hasAppsAtTop ? '!bg-opacity-100' : '',
     ]"
   >
-    <!-- Left empty div for spacing -->
-    <div class="hidden sm:block sm:w-1/3"></div>
-
-    <!-- Calendar -->
-    <TopbarCalendar />
-
-    <!-- Main menu -->
-    <div class="flex w-1/3 items-center justify-end gap-2">
-      <TopbarResources />
-      <TopbarSystemMenu />
+    <!-- Left Section -->
+    <div class="flex flex-1 items-center">
+      <TopbarPlaces />
     </div>
+
+    <!-- Center Section -->
+    <div class="flex flex-none items-center justify-center">
+      <TopbarCalendar />
+    </div>
+
+    <!-- Right Section -->
+    <div class="flex flex-1 items-center justify-end gap-2">
+      <TopbarResources />
+      <TopbarSystemMenu v-if="!isLocked" />
+    </div>
+
+    <!-- Automatic suspend alert -->
+    <Transition name="fade">
+      <Alert
+        class="absolute -bottom-20 left-1/2 z-[50000] max-w-72 -translate-x-1/2 border-none bg-popover xs:max-w-80 sm:max-w-96"
+        :class="isLocked ? 'hidden' : ''"
+        v-if="isAboutToSuspend"
+      >
+        <div class="flex items-center gap-4">
+          <Icon name="gnome:suspend" size="28" />
+          <div class="space-y-1">
+            <AlertTitle class="font-extrabold tracking-normal">{{
+              $t("automatic_suspend_title")
+            }}</AlertTitle>
+            <AlertDescription class="text-xs">
+              {{ $t("automatic_suspend_description") }}
+            </AlertDescription>
+          </div>
+        </div>
+      </Alert>
+    </Transition>
 
     <!-- Power off modals -->
     <TopbarPowerOffModal
@@ -68,3 +100,15 @@ const route = useRoute();
     />
   </header>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

@@ -9,14 +9,16 @@ export interface FileSystemNode {
   id: string;
   icon: string;
   name: string;
-  type: "folder" | "file" | "app";
-  children?: FileSystemNode[];
+  type: "folder" | "file" | "app" | "social";
+  children?: (FileSystemNode | AppNode)[];
   isRenaming?: boolean;
   isNewlyCreated?: boolean; // Indicates if the node has just been created
   // Permission flags
   canEdit?: boolean;
   canMove?: boolean;
   canDelete?: boolean;
+
+  isTranslated?: boolean;
 }
 
 export interface AppNode extends FileSystemNode {

@@ -22,6 +22,8 @@ export const useGlobalStore = defineStore({
     volume: [100],
     isLocked: false,
     isSuspended: false,
+    isAboutToSuspend: false,
+    suspendedPercentage: 0,
 
     // Topbar Menus
     isLanguageMenuOpen: false,
@@ -112,6 +114,7 @@ export const useGlobalStore = defineStore({
 
     async handleSuspend() {
       this.isSuspended = true;
+      this.suspendedPercentage = 100;
       this.isPowerOffMenuOpen = false;
 
       const { idle } = useIdle(0);
@@ -120,6 +123,8 @@ export const useGlobalStore = defineStore({
       // Start watching after 1 seconds
       watchOnce(idle, () => {
         this.isSuspended = false;
+        this.isAboutToSuspend = false;
+        this.suspendedPercentage = 0;
         // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
       });
     },
@@ -232,6 +237,8 @@ interface GlobalStore {
   volume: number[];
   isLocked: boolean;
   isSuspended: boolean;
+  isAboutToSuspend: boolean;
+  suspendedPercentage: number;
 
   // Topbar Menus
   isLanguageMenuOpen: boolean;

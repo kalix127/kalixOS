@@ -48,7 +48,7 @@ const {
       <Icon name="mdi:battery-charging" size="18" />
     </PopoverTrigger>
 
-    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px] z-[50000]">
+    <PopoverContent class="mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px] z-[60000]">
       <div
         :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
         class="topbar-menu-transition flex flex-1 flex-col rounded-3xl p-4"

@@ -3,7 +3,7 @@ import { desktopEnvironments } from "@/constants";
 
 definePageMeta({
   layout: "login",
-  middleware: "desktop"
+  middleware: "desktop",
 });
 
 const globalStore = useGlobalStore();
@@ -32,7 +32,7 @@ const socialLinks = [
 
 <template>
   <div class="grid h-full grid-rows-[1fr_125px] sm:grid-rows-[1fr_75px]">
-    <div class="grid place-content-center m-8">
+    <div class="m-8 grid place-content-center">
       <Transition mode="out-in">
         <!-- Select User -->
         <LoginSelectUser v-if="loginView === 'selectUser'" />
@@ -88,8 +88,7 @@ const socialLinks = [
       <div class="grid place-content-center">
         <div class="flex items-center gap-2">
           <Icon name="logo:manjaro" size="40" />
-          <span
-            class="font-comfortaa select-none text-3xl font-bold"
+          <span class="select-none font-comfortaa text-3xl font-bold"
             >manjaro</span
           >
         </div>

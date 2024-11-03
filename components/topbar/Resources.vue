@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useIntervalFn } from "@vueuse/core";
+
 const cpuUsage = ref("0.00%");
 const memoryUsage = ref("0.00%");
 
@@ -8,16 +10,14 @@ const getRandomValue = (min: number, max: number): string => {
   return `${value}%`;
 };
 
-onMounted(() => {
-  const interval = setInterval(() => {
+useIntervalFn(
+  () => {
     cpuUsage.value = getRandomValue(5, 80); // CPU between 5 and 80%
     memoryUsage.value = getRandomValue(15, 95); // Memory between 15 and 95%
-  }, 1000);
-
-  onUnmounted(() => {
-    clearInterval(interval);
-  });
-});
+  },
+  1000,
+  { immediate: true }
+);
 </script>
 
 <template>

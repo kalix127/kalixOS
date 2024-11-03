@@ -101,15 +101,13 @@ onUnmounted(() => {
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
-    <ClientOnly>
-      <DesktopGridWrapper @context="handleContextMenu" ref="desktopGridRef">
-        <DesktopGridCell
-          v-for="item in desktopItems"
-          :key="item.id"
-          :item="item"
-        />
-      </DesktopGridWrapper>
-    </ClientOnly>
+    <DesktopGridWrapper @context="handleContextMenu" ref="desktopGridRef">
+      <DesktopGridCell
+        v-for="item in desktopItems"
+        :key="item.id"
+        :item="item"
+      />
+    </DesktopGridWrapper>
   </main>
 </template>
 

@@ -35,7 +35,7 @@ const route = useRoute();
   >
     <!-- Left Section -->
     <div class="flex flex-1 items-center">
-      <TopbarPlaces />
+      <TopbarPlaces v-if="route.name === 'desktop'" />
     </div>
 
     <!-- Center Section -->

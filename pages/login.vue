@@ -77,6 +77,11 @@ const socialLinks = [
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+
+          <!-- Social Skeleton -->
+          <template #fallback>
+            <Skeleton class="h-8 w-36 rounded-md" />
+          </template>
         </ClientOnly>
       </div>
 

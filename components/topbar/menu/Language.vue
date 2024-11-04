@@ -8,12 +8,10 @@ const { isLanguageMenuOpen } = storeToRefs(globalStore);
 
 const items = computed(() => [
   {
-    icon: "flag:it",
     name: t("language.it"),
     value: "it-IT",
   },
   {
-    icon: "flag:us",
     name: t("language.en"),
     value: "en-US",
   },
@@ -40,7 +38,6 @@ function closeMenu() {
       :class="[locale === item.value ? 'bg-accent' : 'hover:bg-accent/50']"
       @click="() => setLocale(item.value)"
     >
-      <Icon :name="item.icon" size="18" />
       {{ item.name }}
     </Button>
   </TopbarMenu>

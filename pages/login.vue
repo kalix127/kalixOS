@@ -9,7 +9,7 @@ const { loginView } = storeToRefs(globalStore);
 </script>
 
 <template>
-  <div class="grid place-content-center">
+  <div class="grid place-content-center order-1">
     <Transition mode="out-in">
       <!-- Select User -->
       <LoginSelectUser v-if="loginView === 'selectUser'" />

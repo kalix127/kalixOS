@@ -27,7 +27,7 @@ const socialLinks = [
 
 <template>
   <div
-    class="relative grid grid-cols-1 px-4 sm:grid-cols-3 sm:flex-row sm:px-8"
+    class="relative grid grid-cols-1 px-4 py-2 sm:grid-cols-3 sm:flex-row sm:px-8 order-2"
   >
     <!-- Socials -->
     <div class="flex items-center justify-center gap-4 sm:justify-start">

@@ -82,7 +82,7 @@ const socialLinks = [
       >
         <Icon name="gnome:settings" size="16" />
       </PopoverTrigger>
-      <PopoverContent class="w-fit rounded-2xl">
+      <PopoverContent class="w-fit rounded-2xl mr-2">
         <RadioGroup v-model="desktopEnvironment">
           <div
             v-for="environment in desktopEnvironments"

@@ -2,7 +2,6 @@
 definePageMeta({
   layout: "login",
   middleware: "desktop",
-  middleware: "desktop",
 });
 
 const globalStore = useGlobalStore();

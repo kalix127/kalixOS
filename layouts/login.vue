@@ -6,8 +6,9 @@ const { isAboutToSuspend, isSuspended } = storeToRefs(useGlobalStore());
   <div class="wrapper-login">
     <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
     <Topbar />
-    <main>
+    <main class="grid h-full grid-rows-[1fr_125px] sm:grid-rows-[1fr_75px]">
       <slot />
+      <LoginFooter />
     </main>
   </div>
 </template>

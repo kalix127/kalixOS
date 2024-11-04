@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import { type Ref, ref } from "vue";
 import {
   type DateValue,
   getLocalTimeZone,
   today,
 } from "@internationalized/date";
-import { Calendar } from "@/components/ui/calendar";
-
-const currentDate = ref(new Date());
-
+import { useIntervalFn } from "@vueuse/core"
+  
 const { locale } = useI18n();
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
-onMounted(() => {
-  const intervalId = setInterval(() => {
-    currentDate.value = new Date();
-  }, 100);
-  
-  onUnmounted(() => {
-    clearInterval(intervalId);
-  });
-});
+const currentDate = ref(new Date());
+
+// Hydration Logic
+useHydration(
+  "currentDate",
+  () => currentDate.value.toISOString(),
+  (hydratedDate: string) => {
+    currentDate.value = new Date(hydratedDate);
+  }
+);
+
+useIntervalFn(() => {
+  currentDate.value = new Date();
+}, 100, { immediate: true });
 
 const formattedDateTime = computed(() => {
   return Intl.DateTimeFormat(locale.value, {
@@ -29,21 +31,19 @@ const formattedDateTime = computed(() => {
   }).format(currentDate.value);
 });
 
-const weekDay = computed(
-  () =>
-    new Intl.DateTimeFormat(locale.value, {
-      dateStyle: "full",
-    })
-      .format(new Date())
-      .split(" ")[0],
+const weekDay = computed(() =>
+  new Intl.DateTimeFormat(locale.value, {
+    weekday: "long",
+  }).format(currentDate.value)
 );
 
 const formattedDate = computed(() =>
   Intl.DateTimeFormat(locale.value, {
     dateStyle: "long",
-  }).format(new Date()),
+  }).format(currentDate.value)
 );
 
+// Calendar Date State
 const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
 </script>
 

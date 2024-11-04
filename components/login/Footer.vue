@@ -27,7 +27,7 @@ const socialLinks = [
 
 <template>
   <div
-    class="relative grid grid-cols-1 px-4 py-2 sm:grid-cols-3 sm:flex-row sm:px-8 order-2"
+    class="relative order-2 flex flex-col justify-center px-4 py-2 sm:flex-row sm:px-8"
   >
     <!-- Socials -->
     <div class="flex items-center justify-center gap-4 sm:justify-start">
@@ -64,15 +64,6 @@ const socialLinks = [
           <Skeleton class="h-8 w-36 rounded-md" />
         </template>
       </ClientOnly>
-    </div>
-
-    <div class="grid place-content-center">
-      <div class="flex items-center gap-2">
-        <Icon name="logo:manjaro" size="40" />
-        <span class="select-none font-comfortaa text-3xl font-bold"
-          >manjaro</span
-        >
-      </div>
     </div>
 
     <!-- Desktop Environment Options -->

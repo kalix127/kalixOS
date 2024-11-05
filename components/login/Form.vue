@@ -1,122 +1,45 @@
 <script setup lang="ts">
-import { useForm } from "vee-validate";
 import { loginSchema, type LoginForm } from "~/validations/auth.schema";
-import { toTypedSchema } from "@vee-validate/zod";
 
+const { isLoading, authenticate, handleBack } = useAuth();
+const { username } = storeToRefs(useGlobalStore());
 const { t } = useI18n();
 
-const globalStore = useGlobalStore();
-const { isAuthenticated, loginView, username } = storeToRefs(globalStore);
-
-function handleBack() {
-  loginView.value = "selectUser";
-}
-
-const isLoading = ref(false);
-const isPasswordVisible = ref(false);
-
-const { handleSubmit, setErrors } = useForm({
-  validationSchema: toTypedSchema(loginSchema),
-  initialValues: {
-    password: "password",
-  },
-});
-
-const onSubmit = handleSubmit(async (values: LoginForm) => {
-  isLoading.value = true;
-
-  // Fake delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Check if the password is correct
-  if (values.password === "password") {
-    isAuthenticated.value = true;
-
-    // Persist the login
-    const cookie = useCookie<boolean>("isAuthenticated", {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
-    cookie.value = true;
-
-    await navigateTo("/desktop");
-  } else {
+const onSubmit = async (
+  values: LoginForm,
+  setErrors: (errors: any) => void,
+) => {
+  const success = await authenticate(values.password);
+  if (!success) {
     setErrors({
       password: t("zodI18n.errors.password_authentication_failed"),
     });
   }
-
-  isLoading.value = false;
-});
+};
 </script>
 
 <template>
-  <div class="flex w-72 max-w-screen-xs flex-col items-center gap-6">
-    <div class="grid place-content-center rounded-full bg-secondary p-6">
-      <Icon name="gnome:avatar" size="120" />
-    </div>
-
-    <h1 class="text-2xl font-extrabold">{{ username }}</h1>
-
-    <!-- Password Input -->
-    <form @submit.prevent="onSubmit">
-      <FormField v-slot="{ componentField }" name="password">
-        <FormItem class="space-y-4">
-          <FormControl>
-            <div class="relative flex items-center gap-4">
-              <!-- Back button -->
-              <Button
-                variant="ghost"
-                size="icon"
-                class="grid h-9 w-9 cursor-pointer place-content-center rounded-full bg-secondary p-2"
-                type="button"
-                :disabled="isLoading"
-                @click="handleBack"
-              >
-                <Icon name="gnome:arrow-long-left" size="18" />
-              </Button>
-
-              <Input
-                class="h-9 bg-secondary pr-10"
-                aria-label="Password"
-                placeholder="Password"
-                autofocus
-                autocomplete
-                v-bind="componentField"
-                :type="isPasswordVisible ? 'text' : 'password'"
-                :disabled="isLoading"
-              />
-              <button
-                type="button"
-                aria-label="Toggle password visibility"
-                class="absolute inset-y-0 end-0 flex items-center justify-center px-3"
-                @click="isPasswordVisible = !isPasswordVisible"
-              >
-                <Icon
-                  name="gnome:password-show-off"
-                  size="20"
-                  v-show="!isPasswordVisible"
-                />
-                <Icon
-                  name="gnome:password-show-on"
-                  size="20"
-                  v-show="isPasswordVisible"
-                />
-              </button>
-
-              <!-- Loading Icon -->
-              <Icon
-                class="absolute -end-10 hidden xs:block"
-                v-show="isLoading"
-                name="extra:loading-resize"
-                size="20"
-              />
-            </div>
-          </FormControl>
-          <FormMessage class="text-center text-sm text-foreground" />
-        </FormItem>
-      </FormField>
-    </form>
-  </div>
+  <AuthForm
+    :validationSchema="loginSchema"
+    :initialValues="{ password: 'password' }"
+    :onSubmit="onSubmit"
+    :title="username"
+    :showBackButton="true"
+    :onBack="handleBack"
+    :isLoading="isLoading"
+  >
+    <template #fields>
+      <AuthInput
+        name="password"
+        type="password"
+        placeholder="Password"
+        ariaLabel="Password"
+        defaultValue="password"
+        inputClasses="h-9 bg-secondary pr-10"
+        :disabled="isLoading"
+      />
+    </template>
+  </AuthForm>
 </template>
 
 <style scoped></style>

@@ -23,6 +23,12 @@
   "logout_modal": "{username} will be logged out automatically in {seconds} seconds.",
   "cancel": "Cancel",
   "not_listed": "Not listed?",
+  "desktop_environment": {
+    "gnome": "GNOME",
+    "gnome_classic": "GNOME Classic", 
+    "gnome_classic_xorg": "GNOME Classic on Xorg",
+    "gnome_xorg": "GNOME on Xorg"
+  },
 
   "-----------------DESKTOP-------------------": "",
   "rename_file_title": "File name",

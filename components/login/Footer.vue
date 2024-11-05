@@ -81,7 +81,9 @@ const socialLinks = [
             class="flex items-center space-x-2"
           >
             <RadioGroupItem :id="environment" :value="environment" />
-            <Label :for="environment">{{ environment }}</Label>
+            <Label :for="environment">{{
+              $t(`desktop_environment.${environment}`)
+            }}</Label>
           </div>
         </RadioGroup>
       </PopoverContent>

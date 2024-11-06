@@ -50,7 +50,7 @@ const items = [
       <!-- Battery item -->
       <Button
         variant="ghost"
-        class="cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover hidden sm:flex"
+        class="cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover flex"
         :disabled="isAnyTopbarMenuOpen"
       >
         <Icon name="gnome:battery-full" size="18" />

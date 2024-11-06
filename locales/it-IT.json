@@ -23,6 +23,12 @@
   "logout_modal": "{username} sarà disconnesso automaticamente in {seconds} secondi.",
   "cancel": "Annulla",
   "not_listed": "Non elencato?",
+  "desktop_environment": {
+    "gnome": "GNOME",
+    "gnome_classic": "GNOME Classic", 
+    "gnome_classic_xorg": "GNOME Classic su Xorg",
+    "gnome_xorg": "GNOME su Xorg"
+  },
 
   "-----------------DESKTOP-------------------": "",
   "rename_file_title": "Nome del file",

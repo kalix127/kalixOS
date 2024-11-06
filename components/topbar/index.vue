@@ -45,7 +45,7 @@ const route = useRoute();
 
     <!-- Right Section -->
     <div class="flex flex-1 items-center justify-end gap-2">
-      <TopbarResources />
+      <TopbarResources v-if="route.name === 'desktop'" />
       <TopbarSystemMenu v-if="!isLocked" />
     </div>
 

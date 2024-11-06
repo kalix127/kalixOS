@@ -88,10 +88,6 @@ export default defineNuxtConfig({
         prefix: "gnome"
       },
       {
-        dir: "./icons/flag",
-        prefix: "flag",
-      },
-      {
         dir: "./icons/extra",
         prefix: "extra",
       },

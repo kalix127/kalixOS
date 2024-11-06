@@ -7,10 +7,10 @@ export const defaultBootDuration = 5000;
 export const defaultSuspendThreshold = 300000; // 5 minutes
 
 export const desktopEnvironments = [
-  "GNOME",
-  "GNOME Classic",
-  "GNOME Classic on Xorg",
-  "GNOME on Xorg",
+  "gnome",
+  "gnome_classic",
+  "gnome_classic_xorg",
+  "gnome_xorg",
 ];
 
 export const defaultNetworks: WifiNetwork[] = [

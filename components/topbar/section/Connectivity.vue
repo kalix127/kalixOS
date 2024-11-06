@@ -104,7 +104,7 @@ const items = computed(() => [
       class="flex max-h-12 min-h-12 items-center"
     >
       <button
-        class="flex h-full w-full cursor-default items-center justify-start gap-2.5 rounded-l-full p-2 px-4"
+        class="flex h-full w-full cursor-default items-center justify-start gap-2 rounded-l-full p-2 px-4"
         :class="[
           item.isActive
             ? 'bg-primary/80 hover:bg-primary/90'
@@ -113,7 +113,7 @@ const items = computed(() => [
         ]"
         @click="item.handler"
       >
-        <Icon :name="item.icon" size="18" />
+        <Icon :name="item.icon" size="16" />
 
         <!-- Only for the Wifi Button -->
         <div class="flex flex-col items-start" v-if="item.label === 'wifi'">

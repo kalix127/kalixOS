@@ -9,6 +9,7 @@ const areSystemLogsVisible = ref(false);
 
 const { escape } = useMagicKeys();
 
+// Toggle the plymouth logs on ESC's key
 watch(escape, (v) => {
   if (v) {
     areSystemLogsVisible.value = !areSystemLogsVisible.value;
@@ -17,19 +18,8 @@ watch(escape, (v) => {
 </script>
 
 <template>
-  <div class="relative grid min-h-[100svh] grid-rows-[1fr_75px] bg-black">
-    <div class="flex flex-col items-center justify-center">
-      <Icon name="extra:loading-dots" size="80" />
-    </div>
-
-    <div class="grid place-content-center">
-      <div class="flex items-center gap-2">
-        <Icon name="logo:manjaro" size="46" />
-        <span class="font-comfortaa select-none text-3xl font-bold sm:text-4xl"
-          >manjaro</span
-        >
-      </div>
-    </div>
+  <div class="relative grid min-h-[100svh] place-content-center bg-black">
+    <Icon name="extra:loading-dots" size="80" />
 
     <!-- System Logs on escape -->
     <OverlaySystemLogs v-show="areSystemLogsVisible" />

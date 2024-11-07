@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { loginSchema, type LoginForm } from "~/validations/auth.schema";
 
-const { isLoading, authenticate, unlock } = useAuth();
+const { isLoading, unlock } = useAuth();
 const { username } = storeToRefs(useGlobalStore());
 const { t } = useI18n();
 

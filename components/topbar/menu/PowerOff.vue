@@ -4,13 +4,10 @@ import { vOnClickOutside } from "@vueuse/components";
 const { t } = useI18n();
 
 const globalStore = useGlobalStore();
-const {
-  isPowerOffMenuOpen,
-  isRestartModalOpen,
-  isPowerOffModalOpen,
-  isLogoutModalOpen,
-  isAuthenticated,
-} = storeToRefs(globalStore);
+const { isPowerOffMenuOpen, isAuthenticated } = storeToRefs(globalStore);
+
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
+  storeToRefs(useBootStore());
 
 const { handleSuspend } = globalStore;
 

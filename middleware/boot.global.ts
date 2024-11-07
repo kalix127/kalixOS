@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { isBooting } = storeToRefs(useGlobalStore());
+  const { isBooting } = storeToRefs(useBootStore());
 
   const bootingPages = ["/booting", "/poweroff", "/"];
 

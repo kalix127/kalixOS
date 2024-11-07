@@ -5,16 +5,12 @@ import { cn } from "@/lib/utils";
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 
 const globalStore = useGlobalStore();
+const bootStore = useBootStore();
 
-const {
-  isPowerOffModalOpen,
-  isRestartModalOpen,
-  isLogoutModalOpen,
-  username,
-  isAboutToSuspend,
-  isLocked,
-} = storeToRefs(globalStore);
-const { handlePoweroff, handleRestart } = globalStore;
+const { username, isAboutToSuspend, isLocked } = storeToRefs(globalStore);
+
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } = storeToRefs(bootStore);
+const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());

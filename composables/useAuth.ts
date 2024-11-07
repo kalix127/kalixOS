@@ -1,6 +1,7 @@
 export function useAuth() {
   const globalStore = useGlobalStore();
   const { isAuthenticated, isLocked, loginView } = storeToRefs(globalStore);
+  const { setIsAuthenticated } = globalStore;
 
   const isLoading = ref(false);
   const isPasswordVisible = ref(false);
@@ -15,13 +16,7 @@ export function useAuth() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (password === "password") {
-      isAuthenticated.value = true;
-
-      // Persist the login
-      const cookie = useCookie<boolean>("isAuthenticated", {
-        maxAge: 30 * 24 * 60 * 60, // seconds
-      });
-      cookie.value = true;
+      setIsAuthenticated(true);
 
       await navigateTo("/desktop");
       isLoading.value = false;

@@ -44,13 +44,14 @@ export const useGlobalStore = defineStore({
 
     // Auth
     loginView: "selectUser",
-    username:
-      useCookie("username", {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      }).value || defaultUsername,
+    username: useCookie("username", {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      default: () => defaultUsername,
+    }).value,
     isAuthenticated: useCookie("isAuthenticated", {
       maxAge: 30 * 24 * 60 * 60 * 1000,
-    }),
+      default: () => false,
+    }).value,
 
     // Boot states
     isBooting: false,
@@ -186,23 +187,25 @@ export const useGlobalStore = defineStore({
     setUsername(newUsername: string) {
       this.username = newUsername;
       const usernameCookie = useCookie("username", {
-        maxAge: 30 * 24 * 60 * 60, // 30 days
+        maxAge: 30 * 24 * 60 * 1000,
       });
       usernameCookie.value = newUsername;
     },
 
-    async handleLogout() {
-      // TODO: When implementing the desktop, make sure to reset the desktop store
-      this.isAuthenticated = false;
-      this.username = defaultUsername;
-      this.loginView = "selectUser";
-      this.isLogoutModalOpen = false;
-
-      // Update the cookie
+    setIsAuthenticated(value: boolean) {
+      this.isAuthenticated = value;
       const isAuthenticatedCookie = useCookie("isAuthenticated", {
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
-      isAuthenticatedCookie.value = "false";
+      isAuthenticatedCookie.value = value.toString();
+    },
+
+    async handleLogout() {
+      // TODO: When implementing the desktop, make sure to reset the desktop store
+      this.setIsAuthenticated(false);
+      this.username = defaultUsername;
+      this.loginView = "selectUser";
+      this.isLogoutModalOpen = false;
 
       await navigateTo("/login");
     },
@@ -278,7 +281,7 @@ interface GlobalStore {
   // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
-  isAuthenticated: Ref<boolean>;
+  isAuthenticated: boolean;
 
   // Boot states
   isBooting: boolean; // This represents if the user is booting/rebooting the system

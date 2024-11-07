@@ -2,6 +2,8 @@
 import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
 import { assignIds } from "~/helpers";
 
+export const defaultUsername = "Gianluca";
+
 export const defaultBootDuration = 5000;
 
 export const defaultSuspendThreshold = 300000; // 5 minutes

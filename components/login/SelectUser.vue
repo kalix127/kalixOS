@@ -1,9 +1,10 @@
 <script setup lang="ts">
 const globalStore = useGlobalStore();
-const { loginView, username } = storeToRefs(globalStore);
+const { loginView } = storeToRefs(globalStore);
+const { setUsername } = globalStore;
 
 function handleSelectUser() {
-  username.value = "Gianluca";
+  setUsername("Gianluca");
   loginView.value = "enterPassword";
 }
 

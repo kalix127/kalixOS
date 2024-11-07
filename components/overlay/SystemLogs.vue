@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useScroll } from "@vueuse/core";
 
-const globalStore = useGlobalStore();
-const { systemLogs } = storeToRefs(globalStore);
+const { systemLogs } = storeToRefs(useBootStore());
 
 const systemLogsRef = ref<HTMLElement | null>(null);
 const { y } = useScroll(systemLogsRef);

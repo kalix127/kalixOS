@@ -2,7 +2,7 @@
 definePageMeta({
   pageTransition: false,
 });
-const { handlePowerUp } = useGlobalStore();
+const { handlePowerUp } = useBootStore();
 </script>
 
 <template>

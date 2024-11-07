@@ -1,14 +1,8 @@
-import { defineStore } from "pinia";
 import type { WifiNetwork } from "@/types";
 import { generateRandomDelays } from "@/lib/utils";
-import {
-  defaultNetworks,
-  defaultBootDuration,
-  desktopEnvironments,
-} from "@/constants";
+import { defaultNetworks, desktopEnvironments } from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
-import type { SystemLog } from "@/types";
-import { powerOffSystemLogs, powerUpSystemLogs } from "@/constants";
+import { defaultUsername } from "@/constants";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -40,17 +34,14 @@ export const useGlobalStore = defineStore({
 
     // Auth
     loginView: "selectUser",
-    username: "Gianluca",
+    username: useCookie("username", {
+      maxAge: 30 * 24 * 60 * 60,
+      default: () => defaultUsername,
+    }).value,
     isAuthenticated: useCookie("isAuthenticated", {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    }),
-
-    // Boot states
-    isBooting: false,
-    isPowerOffModalOpen: false,
-    isRestartModalOpen: false,
-    isLogoutModalOpen: false,
-    systemLogs: [],
+      maxAge: 30 * 24 * 60 * 60,
+      default: () => false,
+    }).value,
   }),
   actions: {
     // Wifi
@@ -128,81 +119,26 @@ export const useGlobalStore = defineStore({
         // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
       });
     },
+    // Auth
 
-    // Boot handlers
-    resetBootingState() {
-      this.isBooting = false;
-      this.systemLogs = [];
-    },
-    async boot() {
-      this.isBooting = true;
-
-      // Reset some state
-      this.isAuthenticated = false;
-      this.isPowerOffMenuOpen = false;
-      this.isRestartModalOpen = false;
-      this.isPowerOffModalOpen = false;
-      this.isLogoutModalOpen = false;
-      this.loginView = "selectUser";
-
-      await navigateTo("/booting");
-      await new Promise((resolve) => setTimeout(resolve, defaultBootDuration));
+    /**
+     * Sets the username and updates the corresponding cookie.
+     * @param newUsername - The new username to set.
+     */
+    setUsername(newUsername: string) {
+      this.username = newUsername;
+      const usernameCookie = useCookie("username", {
+        maxAge: 30 * 24 * 60 * 60,
+      });
+      usernameCookie.value = newUsername;
     },
 
-    async handlePoweroff() {
-      await Promise.all([this.addSystemLogs("poweroff"), this.boot()]);
-      await navigateTo("poweroff");
-      this.resetBootingState();
-    },
-    async handlePowerUp() {
-      await Promise.all([this.addSystemLogs("powerup"), this.boot()]);
-      await navigateTo("login");
-      this.resetBootingState();
-    },
-    async handleRestart() {
-      await Promise.all([this.addSystemLogs("poweroff"), this.boot()]);
-      await navigateTo("/"); // blank page
-      // Reset the system logs
-      this.systemLogs = [];
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      await Promise.all([this.addSystemLogs("powerup"), this.boot()]);
-      await navigateTo("login");
-      this.resetBootingState();
-    },
-    async handleLogout() {
-      // TODO: When implementing the desktop, make sure to reset the desktop store
-      this.isAuthenticated = false;
-      this.username = "";
-      this.loginView = "selectUser";
-      this.isLogoutModalOpen = false;
-
-      // Update the cookie
+    setIsAuthenticated(value: boolean) {
+      this.isAuthenticated = value;
       const isAuthenticatedCookie = useCookie("isAuthenticated", {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60,
       });
-      isAuthenticatedCookie.value = "false";
-
-      await navigateTo("/login");
-    },
-
-    async addSystemLogs(type: "powerup" | "poweroff") {
-      const totalTime = defaultBootDuration - 500;
-      const logs = type === "powerup" ? powerUpSystemLogs : powerOffSystemLogs;
-
-      const randomDelays = generateRandomDelays(logs.length, totalTime);
-
-      for (let i = 0; i < logs.length; i++) {
-        await this.addSystemLogWithDelay(logs[i], randomDelays[i]);
-      }
-    },
-
-    addSystemLogWithDelay(log: SystemLog, delay: number) {
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          this.systemLogs.push(log);
-          resolve();
-        }, delay);
-      });
+      isAuthenticatedCookie.value = value.toString();
     },
   },
   getters: {
@@ -256,12 +192,5 @@ interface GlobalStore {
   // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
-  isAuthenticated: Ref<boolean>;
-
-  // Boot states
-  isBooting: boolean; // This represents if the user is booting/rebooting the system
-  isPowerOffModalOpen: boolean;
-  isRestartModalOpen: boolean;
-  isLogoutModalOpen: boolean;
-  systemLogs: SystemLog[];
+  isAuthenticated: boolean;
 }

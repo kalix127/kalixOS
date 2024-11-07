@@ -1,6 +1,8 @@
 export function useAuth() {
   const globalStore = useGlobalStore();
-  const { isAuthenticated, isLocked, loginView } = storeToRefs(globalStore);
+  const { isAuthenticated, isLocked, loginView, isLogoutModalOpen } =
+    storeToRefs(globalStore);
+  const { setIsAuthenticated } = globalStore;
 
   const isLoading = ref(false);
   const isPasswordVisible = ref(false);
@@ -9,19 +11,13 @@ export function useAuth() {
     loginView.value = "selectUser";
   };
 
-  const authenticate = async (password: string): Promise<boolean> => {
+  const handleLogin = async (password: string): Promise<boolean> => {
     isLoading.value = true;
     // Fake delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (password === "password") {
-      isAuthenticated.value = true;
-
-      // Persist the login
-      const cookie = useCookie<boolean>("isAuthenticated", {
-        maxAge: 30 * 24 * 60 * 60, // seconds
-      });
-      cookie.value = true;
+      setIsAuthenticated(true);
 
       await navigateTo("/desktop");
       isLoading.value = false;
@@ -32,7 +28,15 @@ export function useAuth() {
     }
   };
 
-  const unlock = async (password: string): Promise<boolean> => {
+  const handleLogout = async () => {
+    // TODO: When implementing the desktop, make sure to reset the desktop store
+    setIsAuthenticated(false);
+    isLogoutModalOpen.value = false;
+
+    await navigateTo("/login");
+  };
+
+  const handleUnlock = async (password: string): Promise<boolean> => {
     isLoading.value = true;
     // Fake delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -51,8 +55,9 @@ export function useAuth() {
     isLoading,
     isPasswordVisible,
     handleBack,
-    authenticate,
-    unlock,
+    handleLogin,
+    handleLogout,
+    handleUnlock,
     isAuthenticated,
     isLocked,
     loginView,

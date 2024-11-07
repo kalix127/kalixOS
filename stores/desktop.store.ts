@@ -1,4 +1,3 @@
-import { defineStore } from "pinia";
 import {
   defaultFileSystem,
   defaultApps,
@@ -15,7 +14,9 @@ export const useDesktopStore = defineStore({
   id: "desktopStore",
   state: (): DesktopStore => ({
     // Filesystem
-    fileSystem: defaultFileSystem(storeToRefs(useGlobalStore()).username.value),
+    fileSystem: defaultFileSystem(
+      storeToRefs(useGlobalStore()).username.value.toLowerCase(),
+    ),
     nodeMap: new Map<string, FileSystemNode>(),
     bookmarks: defaultBookmarks,
 

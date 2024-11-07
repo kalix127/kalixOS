@@ -1,4 +1,3 @@
-import { defineStore } from "pinia";
 import type { FileSystemNode, AppNode } from "@/types";
 import { useWindowSize } from "@vueuse/core";
 

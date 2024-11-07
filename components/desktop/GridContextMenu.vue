@@ -9,8 +9,9 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
         class="z-[60000]"
         :class="[targetType === 'dock' ? '!w-60' : '!w-72']"
         :style="contextMenuStyle"
+        as-child
       >
-        <div class="space-y-2">
+        <div class="space-y-2" @contextmenu.prevent="">
           <!-- Target name -->
           <div
             v-if="targetType === 'dock'"

@@ -45,11 +45,11 @@ export const useGlobalStore = defineStore({
     // Auth
     loginView: "selectUser",
     username: useCookie("username", {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60,
       default: () => defaultUsername,
     }).value,
     isAuthenticated: useCookie("isAuthenticated", {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60,
       default: () => false,
     }).value,
 
@@ -187,7 +187,7 @@ export const useGlobalStore = defineStore({
     setUsername(newUsername: string) {
       this.username = newUsername;
       const usernameCookie = useCookie("username", {
-        maxAge: 30 * 24 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60,
       });
       usernameCookie.value = newUsername;
     },
@@ -195,7 +195,7 @@ export const useGlobalStore = defineStore({
     setIsAuthenticated(value: boolean) {
       this.isAuthenticated = value;
       const isAuthenticatedCookie = useCookie("isAuthenticated", {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60,
       });
       isAuthenticatedCookie.value = value.toString();
     },

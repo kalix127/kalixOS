@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { defaultUsername } from "~/constants";
+
 definePageMeta({
   layout: "login",
   middleware: "desktop",
@@ -6,6 +8,12 @@ definePageMeta({
 
 const globalStore = useGlobalStore();
 const { loginView } = storeToRefs(globalStore);
+const { setUsername } = globalStore;
+
+onBeforeMount(() => {
+  setUsername(defaultUsername);
+  loginView.value = "selectUser";
+});
 </script>
 
 <template>

@@ -203,8 +203,6 @@ export const useGlobalStore = defineStore({
     async handleLogout() {
       // TODO: When implementing the desktop, make sure to reset the desktop store
       this.setIsAuthenticated(false);
-      this.username = defaultUsername;
-      this.loginView = "selectUser";
       this.isLogoutModalOpen = false;
 
       await navigateTo("/login");

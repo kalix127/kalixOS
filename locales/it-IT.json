@@ -58,6 +58,15 @@
   "app_details": "Dettagli app",
   "quit": "Esci",
 
+  "-----------------SETTINGS-------------------": "",
+  "network": "Rete",
+  "displays": "Schermi",
+  "sound": "Audio",
+  "power": "Energia",
+  "appearance": "Aspetto",
+  "printers": "Stampanti",
+  "system": "Sistema",
+
   "-----------------NODES-------------------": "",
   "home": "Home",
   "desktop": "Scrivania",

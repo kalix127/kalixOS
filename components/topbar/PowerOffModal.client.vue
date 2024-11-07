@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useTimeoutFn } from "@vueuse/core";
+
 const globalStore = useGlobalStore();
 const { isPowerOffMenuOpen } = storeToRefs(globalStore);
 
-const { isOpen, seconds } = defineProps<{
+const props = defineProps<{
   title: string;
   label: string;
   description: string;
@@ -10,32 +12,50 @@ const { isOpen, seconds } = defineProps<{
   isOpen: boolean;
 }>();
 
-const emit = defineEmits(["closeModal", "action"]);
+const emit = defineEmits<{
+  (e: "closeModal"): void;
+  (e: "action"): void;
+}>();
 
-let timer: NodeJS.Timeout;
+const timeoutCallback = () => {
+  emit("action");
+};
 
-watchEffect(() => {
-  if (isOpen) {
-    // Close the poweroff menu when the modal is opened
-    isPowerOffMenuOpen.value = false;
+const { start, stop } = useTimeoutFn(
+  timeoutCallback,
+  () => props.seconds * 1000,
+  { immediate: false },
+);
 
-    timer = setTimeout(() => {
-      emit("action");
-    }, seconds * 1000);
+/**
+ * - When opened, it starts the countdown and ensures the power-off menu is closed.
+ * - When closed, it stops any ongoing countdown.
+ */
+watch(
+  () => props.isOpen,
+  (newVal) => {
+    if (newVal) {
+      // Close the power-off menu when the modal is opened
+      isPowerOffMenuOpen.value = false;
 
-    // Cleanup timer on component unmount
-    return () => clearTimeout(timer);
-  } else {
-    // Cleanup timer when modal is closed
-    clearTimeout(timer);
-  }
+      // Start the countdown
+      start();
+    } else {
+      // Stop the countdown if the modal is closed
+      stop();
+    }
+  },
+);
+
+onBeforeUnmount(() => {
+  stop();
 });
 </script>
 
 <template>
   <AlertDialog :open="isOpen">
     <AlertDialogContent
-      class="max-w-[280px] rounded-xl p-0 xs:max-w-sm z-[60000] shadow-lg"
+      class="z-[60000] max-w-[280px] rounded-xl p-0 shadow-lg xs:max-w-sm"
     >
       <AlertDialogHeader class="sr-only">
         <AlertDialogTitle>{{ title }}</AlertDialogTitle>
@@ -54,14 +74,16 @@ watchEffect(() => {
           variant="ghost"
           class="w-1/2 rounded-none rounded-bl-xl border-2 border-primary/60 bg-secondary"
           @click="() => emit('closeModal')"
-          >{{ $t("cancel") }}</Button
         >
+          {{ $t("cancel") }}
+        </Button>
         <Button
           variant="ghost"
           class="w-1/2 rounded-none rounded-br-xl bg-secondary"
           @click="() => emit('action')"
-          >{{ label }}</Button
         >
+          {{ label }}
+        </Button>
       </div>
     </AlertDialogContent>
   </AlertDialog>

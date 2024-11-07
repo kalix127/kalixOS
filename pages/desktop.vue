@@ -85,7 +85,11 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  desktopStore.$reset();
+  desktopStore.$dispose();
+  contextMenuStore.$dispose();
+  // Delete the store state
+  delete useNuxtApp().$pinia.state.value[desktopStore.$id];
+  delete useNuxtApp().$pinia.state.value[contextMenuStore.$id];
 });
 </script>
 

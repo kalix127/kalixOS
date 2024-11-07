@@ -8,7 +8,11 @@ import {
 } from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
 import type { SystemLog } from "@/types";
-import { powerOffSystemLogs, powerUpSystemLogs } from "@/constants";
+import {
+  powerOffSystemLogs,
+  powerUpSystemLogs,
+  defaultUsername,
+} from "@/constants";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -40,7 +44,10 @@ export const useGlobalStore = defineStore({
 
     // Auth
     loginView: "selectUser",
-    username: "Gianluca",
+    username:
+      useCookie("username", {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      }).value || defaultUsername,
     isAuthenticated: useCookie("isAuthenticated", {
       maxAge: 30 * 24 * 60 * 60 * 1000,
     }),
@@ -169,10 +176,25 @@ export const useGlobalStore = defineStore({
       await navigateTo("login");
       this.resetBootingState();
     },
+
+    // Auth
+
+    /**
+     * Sets the username and updates the corresponding cookie.
+     * @param newUsername - The new username to set.
+     */
+    setUsername(newUsername: string) {
+      this.username = newUsername;
+      const usernameCookie = useCookie("username", {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      });
+      usernameCookie.value = newUsername;
+    },
+
     async handleLogout() {
       // TODO: When implementing the desktop, make sure to reset the desktop store
       this.isAuthenticated = false;
-      this.username = "";
+      this.username = defaultUsername;
       this.loginView = "selectUser";
       this.isLogoutModalOpen = false;
 

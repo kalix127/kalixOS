@@ -2,12 +2,13 @@
 import { addUserSchema, type AddUserForm } from "~/validations/auth.schema";
 
 const { isLoading, handleBack, loginView } = useAuth();
-const { username } = storeToRefs(useGlobalStore());
+const { setUsername } = useGlobalStore();
+
 const onSubmit = async (
   values: AddUserForm,
   setErrors: (errors: any) => void,
 ) => {
-  username.value = values.username;
+  setUsername(values.username);
   loginView.value = "enterPassword";
 };
 </script>

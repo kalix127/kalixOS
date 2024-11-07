@@ -200,13 +200,7 @@ export const useGlobalStore = defineStore({
       isAuthenticatedCookie.value = value.toString();
     },
 
-    async handleLogout() {
-      // TODO: When implementing the desktop, make sure to reset the desktop store
-      this.setIsAuthenticated(false);
-      this.isLogoutModalOpen = false;
 
-      await navigateTo("/login");
-    },
 
     async addSystemLogs(type: "powerup" | "poweroff") {
       const totalTime = defaultBootDuration - 500;

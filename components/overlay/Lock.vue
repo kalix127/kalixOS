@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { loginSchema, type LoginForm } from "~/validations/auth.schema";
 
-const { isLoading, unlock } = useAuth();
+const { isLoading, handleUnlock } = useAuth();
 const { username } = storeToRefs(useGlobalStore());
 const { t } = useI18n();
 
@@ -9,7 +9,7 @@ const onSubmit = async (
   values: LoginForm,
   setErrors: (errors: any) => void,
 ) => {
-  const success = await unlock(values.password);
+  const success = await handleUnlock(values.password);
   if (!success) {
     setErrors({
       password: t("zodI18n.errors.password_authentication_failed"),

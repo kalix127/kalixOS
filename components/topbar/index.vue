@@ -14,7 +14,8 @@ const {
   isAboutToSuspend,
   isLocked,
 } = storeToRefs(globalStore);
-const { handlePoweroff, handleRestart, handleLogout } = globalStore;
+const { handlePoweroff, handleRestart } = globalStore;
+const { handleLogout } = useAuth();
 
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 

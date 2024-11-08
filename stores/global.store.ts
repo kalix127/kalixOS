@@ -47,20 +47,35 @@ export const useGlobalStore = defineStore({
     }).value,
   }),
   actions: {
-    // Wifi
+    // Toggles
+    toggleWired() {
+      this.isWiredEnabled = !this.isWiredEnabled;
+    },
+
     toggleWifi() {
       this.isWifiEnabled = !this.isWifiEnabled;
       this.availableWifiNetworks = [];
 
-      if (this.isWifiEnabled) {
-        this.isAirplaneModeEnabled = false;
-        this.searchWifiNetworks();
-      } else {
-        // If the Wifi has been disabled, reset the connected network
+      if (!this.isWifiEnabled) {
         this.connectedWifiNetwork = null;
+        return;
       }
+
+      this.isAirplaneModeEnabled = false;
+      this.searchWifiNetworks();
     },
 
+    toggleBluetooth() {
+      this.isBluetoothEnabled = !this.isBluetoothEnabled;
+    },
+
+    toggleAirplaneMode() {
+      this.isAirplaneModeEnabled = !this.isAirplaneModeEnabled;
+      this.isWifiEnabled = false;
+      this.connectedWifiNetwork = null;
+    },
+
+    // Wifi
     async searchWifiNetworks() {
       this.isSearchingWifiNetworks = true;
       const totalTime = 2500; // 2.5 seconds in total to add all the networks
@@ -198,17 +213,8 @@ interface GlobalStore {
   isSearchingWifiNetworks: boolean;
 
   // Settings
-  currentSettingsTab:
-    | "wifi"
-    | "network"
-    | "bluetooth"
-    | "displays"
-    | "sound"
-    | "power"
-    | "appearance"
-    | "printers"
-    | "system"
-    | null;
+  currentSettingsTab: string | null | undefined;
+
   // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;

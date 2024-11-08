@@ -59,6 +59,15 @@
   "app_details": "App Details",
   "quit": "Quit",
 
+  "-----------------SETTINGS-------------------": "",
+  "network": "Network",
+  "displays": "Displays",
+  "sound": "Sound",
+  "power": "Power",
+  "appearance": "Appearance",
+  "printers": "Printers",
+  "system": "System",
+
   "-----------------NODES-------------------": "",
   "home": "Home",
   "projects": "Projects",

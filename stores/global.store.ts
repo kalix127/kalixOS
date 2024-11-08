@@ -32,6 +32,9 @@ export const useGlobalStore = defineStore({
     isConnectingToWifi: false,
     isSearchingWifiNetworks: false,
 
+    // Settings
+    currentSettingsTab: null,
+
     // Auth
     loginView: "selectUser",
     username: useCookie("username", {
@@ -140,6 +143,11 @@ export const useGlobalStore = defineStore({
       });
       isAuthenticatedCookie.value = value.toString();
     },
+
+    // Settings
+    setSettingsTab(tab: GlobalStore["currentSettingsTab"]) {
+      this.currentSettingsTab = tab;
+    },
   },
   getters: {
     isAnyTopbarMenuOpen(state) {
@@ -189,6 +197,18 @@ interface GlobalStore {
   isConnectingToWifi: boolean;
   isSearchingWifiNetworks: boolean;
 
+  // Settings
+  currentSettingsTab:
+    | "wifi"
+    | "network"
+    | "bluetooth"
+    | "displays"
+    | "sound"
+    | "power"
+    | "appearance"
+    | "printers"
+    | "system"
+    | null;
   // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;

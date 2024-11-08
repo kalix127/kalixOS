@@ -14,14 +14,20 @@ const { app } = toRefs(props);
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+
+const scrollAreaHeight = computed(() => {
+  const topBarHeight = 40;
+  const windowContentHeight = app.value.height - topBarHeight;
+  return windowContentHeight;
+});
 </script>
 
 <template>
   <div
     :class="
       cn(
-        `grid h-full w-full bg-background ${
-          isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[minmax(175px,25%)_75%]'
+        `grid bg-background ${
+          isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[25%_75%]'
         }`,
         $props.class,
       )
@@ -30,14 +36,20 @@ const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
     <!-- Sidebar -->
     <DesktopAppSettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
-      :height="app.height"
+      :is-active="app.isActive"
+      :style="{
+        height: `${scrollAreaHeight}px`,
+      }"
     />
 
     <!-- Content -->
     <div
       v-if="!isMobile || currentSettingsTab"
-      class="flex flex-col items-center justify-start px-6 py-4"
-    >
+      class="flex flex-col items-center justify-start"
+      :style="{
+        height: `${scrollAreaHeight}px`,
+      }"
+    > 
       <Transition mode="out-in">
         <DesktopAppSettingsTabWifi v-if="currentSettingsTab === 'wifi'" />
         <div v-else></div>

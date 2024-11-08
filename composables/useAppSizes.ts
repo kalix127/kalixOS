@@ -1,8 +1,11 @@
-import { useWindowSize } from "@vueuse/core";
+import {
+  useWindowSize,
+  breakpointsTailwind,
+  useBreakpoints,
+} from "@vueuse/core";
 
 export function useAppSizes() {
-  const { isMobileOrTablet: device } = useDevice();
-  const isMobileOrTablet = toRef(device);
+  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("md");
 
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 

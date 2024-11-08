@@ -2,22 +2,16 @@
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const props = defineProps<{
-  height: number;
+  isActive: boolean;
 }>();
 
-const { height: windowHeight } = toRefs(props);
+const { isActive } = toRefs(props);
 const { t } = useI18n();
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
 const globalStore = useGlobalStore();
 const { currentSettingsTab } = storeToRefs(globalStore);
 const { setSettingsTab } = globalStore;
-
-const scrollAreaHeight = computed(() => {
-  const topBarHeight = 40;
-  const windowContentHeight = windowHeight.value - topBarHeight;
-  return windowContentHeight;
-});
 
 const items = computed(() => [
   {
@@ -76,11 +70,11 @@ const items = computed(() => [
 
 <template>
   <ScrollArea
-    class="w-full rounded-l-md bg-muted p-1.5"
-    :class="[isMobile ? '' : 'border-r border-r-black/30']"
-    :style="{
-      height: `${scrollAreaHeight}px`,
-    }"
+    class="w-full rounded-l-md p-1.5 transition-colors duration-300"
+    :class="[
+      isMobile ? '' : 'border-r border-r-black/30',
+      isActive ? 'bg-muted' : 'bg-muted/50',
+    ]"
   >
     <div class="flex flex-col gap-1.5">
       <template v-for="(item, index) in items">

@@ -12,7 +12,7 @@
   "wifi": "Wi-Fi",
   "bluetooth": "Bluetooth",
   "bluetooth_not_available": "Bluetooth not available or connected device",
-  "airplane_mode": "Airplane mode",
+  "airplane_mode": "Airplane Mode",
   "disconnect": "Disconnect",
   "suspend": "Suspend",
   "restart": "Restart",
@@ -25,7 +25,7 @@
   "not_listed": "Not listed?",
   "desktop_environment": {
     "gnome": "GNOME",
-    "gnome_classic": "GNOME Classic", 
+    "gnome_classic": "GNOME Classic",
     "gnome_classic_xorg": "GNOME Classic on Xorg",
     "gnome_xorg": "GNOME on Xorg"
   },
@@ -67,7 +67,16 @@
   "appearance": "Appearance",
   "printers": "Printers",
   "system": "System",
-
+  "saved_networks": "Saved Networks",
+  "connect_to_hidden_network": "Connect to Hidden Network...",
+  "turn_wifi_hotspot_on": "Turn On Wi-Fi Hotspot...",
+  "wifi_no_adapter_found": "No Wi-Fi Adapter Found",
+  "wifi_no_adapter_description": "Make sure you have a Wi-Fi adapter plugged and turned on",
+  "airplane_mode_enabled": "Airplane Mode On",
+  "airplane_mode_enabled_description": "Turn off to use Wi-Fi",
+  "visible_networks": "Visible Networks",
+  "connected": "Connected",
+  
   "-----------------NODES-------------------": "",
   "home": "Home",
   "projects": "Projects",

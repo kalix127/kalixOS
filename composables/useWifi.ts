@@ -51,6 +51,7 @@ export function useWifi() {
   function connectToWifi(network: WifiNetwork) {
     // Check if the selected network is already connected
     if (connectedWifiNetwork.value?.id === network.id) {
+      connectedWifiNetwork.value = null;
       return;
     }
 

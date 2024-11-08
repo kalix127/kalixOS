@@ -37,7 +37,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
-    "@nuxtjs/device",
   ],
   i18n: {
     // TODO: Add baseUrl for prod

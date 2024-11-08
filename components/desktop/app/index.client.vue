@@ -56,7 +56,7 @@ const {
   >
     <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
-      <DesktopAppsTopBar
+      <DesktopAppTopBar
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
@@ -67,7 +67,8 @@ const {
       />
 
       <!-- Content -->
-      <DesktopAppsContent :app="app" />
+      <DesktopAppSettings v-if="app.id === 'settings'" :app="app" />
+      <DesktopAppTrash v-if="app.id === 'trash'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

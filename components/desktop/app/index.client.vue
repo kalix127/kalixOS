@@ -60,9 +60,11 @@ const {
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
-        :title="app.name"
-        :isFullscreen="app.isFullscreen"
-        :isActive="app.isActive"
+        :app="app"
+        :class="[
+          app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
+          app.isActive ? 'bg-popover' : 'bg-muted',
+        ]"
         class="app-topbar"
       />
 

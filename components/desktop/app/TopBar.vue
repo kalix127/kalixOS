@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
+import type { AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -10,19 +11,17 @@ defineEmits<{
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  title: string;
-  isFullscreen: boolean;
-  isActive: boolean;
+  app: AppNode;
 }>();
 
-const { title, isFullscreen, isActive } = toRefs(props);
+const { app } = toRefs(props);
 
 const actions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
   },
-  isFullscreen.value
+  app.value.isFullscreen
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -45,7 +44,6 @@ const actions = computed(() => [
         'grid h-10 grid-cols-3 rounded-t-xl p-2 transition-colors duration-300',
         $props.class,
       ),
-      isActive ? 'bg-popover' : 'bg-muted',
     ]"
     @dblclick="$emit('fullscreen')"
   >
@@ -56,7 +54,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ $t(title) }}
+      {{ $t(app.name) }}
     </div>
 
     <!-- Actions -->
@@ -65,7 +63,7 @@ const actions = computed(() => [
         variant="ghost"
         size="icon"
         class="size-6 cursor-default rounded-full duration-300 hover:bg-secondary-hover"
-        :class="[isActive ? 'bg-secondary' : 'bg-popover']"
+        :class="[app.isActive ? 'bg-secondary' : 'bg-popover']"
         v-for="action in actions"
         :key="action.icon"
       >

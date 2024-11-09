@@ -26,9 +26,9 @@ const scrollAreaHeight = computed(() => {
   <div
     :class="
       cn(
-        `grid bg-background ${
-          isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[25%_75%]'
-        }`,
+        'grid bg-background',
+        isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[25%_75%]',
+        app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
         $props.class,
       )
     "
@@ -36,10 +36,13 @@ const scrollAreaHeight = computed(() => {
     <!-- Sidebar -->
     <DesktopAppSettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
-      :is-active="app.isActive"
       :style="{
         height: `${scrollAreaHeight}px`,
       }"
+      :class="[
+        app.isActive ? 'bg-muted' : 'bg-muted/50',
+        app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
+      ]"
     />
 
     <!-- Content -->

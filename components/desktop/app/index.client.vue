@@ -24,6 +24,11 @@ const {
   handleResizeStop,
   handleFullscreen,
 } = useAppHandlers(app, appRef);
+
+// Make sure the modal is closed by default
+onBeforeMount(() => {
+  app.value.isModalOpen = false;
+});
 </script>
 
 <template>
@@ -54,7 +59,7 @@ const {
     }"
     class="absolute left-0 top-0 rounded-t-xl !border-none duration-300"
   >
-    <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
+    <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
       <DesktopAppTopBar
         @minimize="() => toggleMinimizeApp(app.id)"

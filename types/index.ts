@@ -3,6 +3,19 @@ export interface WifiNetwork {
   name: string;
   signal: number;
   isProtected: boolean;
+
+  isSaved?: boolean;
+  details?: {
+    linkSpeed: string;
+    security: string;
+    ipv4: string;
+    ipv6: string;
+    hardwareAddress: string;
+    supportedFrequencies: string[];
+    defaultRoute: string;
+    dns4: string[];
+    dns6: string[];
+  }
 }
 
 export interface FileSystemNode {

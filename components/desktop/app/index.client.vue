@@ -68,7 +68,6 @@ const {
 
       <!-- Content -->
       <DesktopAppSettings v-if="app.id === 'settings'" :app="app" />
-      <DesktopAppTrash v-if="app.id === 'trash'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

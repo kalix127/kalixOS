@@ -20,7 +20,6 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
 <template>
   <DesktopAppSettingsContent>
-
     <div class="h-full space-y-6">
       <DesktopAppSettingsOptionGroup>
         <!-- Toggle Wifi -->
@@ -103,15 +102,23 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
                 </div>
               </template>
               <template #action>
-                <div>
+                <div class="flex items-center gap-4">
                   <span
                     v-if="connectedWifiNetwork?.id === network.id"
                     class="text-muted-foreground"
                     >{{ $t("connected") }}</span
                   >
+                  <Button
+                    class="size-8 hover:bg-secondary-hover"
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <Icon
+                      name="material-symbols:info-outline-rounded"
+                      size="18"
+                    />
+                  </Button>
                 </div>
-                <!-- TODO: Show the settings icon only if its a saved network -->
-                <!-- <Icon name="gnome:settings" size="16" /> -->
               </template>
             </DesktopAppSettingsOption>
           </DesktopAppSettingsOptionGroup>

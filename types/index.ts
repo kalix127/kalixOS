@@ -40,6 +40,7 @@ export interface AppNode extends FileSystemNode {
   isActive: boolean;
   isMinimized: boolean;
   isFullscreen: boolean;
+  isModalOpen: boolean;
 
   // Size
   width: number;

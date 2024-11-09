@@ -18,7 +18,7 @@ export const desktopEnvironments = [
 export const defaultNetworks: WifiNetwork[] = [
   {
     id: 1,
-    name: "FASTWEB-7632798", 
+    name: "FASTWEB-7632798",
     signal: 4,
     isProtected: true,
     details: {
@@ -30,7 +30,7 @@ export const defaultNetworks: WifiNetwork[] = [
       supportedFrequencies: ["2.4 GHz", "5 GHz"],
       defaultRoute: "192.168.1.1",
       dns4: ["8.8.8.8", "8.8.4.4"],
-      dns6: ["2001:4860:4860::8888", "2001:4860:4860::8844"]
+      dns6: ["2001:4860:4860::8888", "2001:4860:4860::8844"],
     },
   },
   {
@@ -47,7 +47,7 @@ export const defaultNetworks: WifiNetwork[] = [
       supportedFrequencies: ["2.4 GHz"],
       defaultRoute: "192.168.2.1",
       dns4: ["1.1.1.1", "1.0.0.1"],
-      dns6: ["2606:4700:4700::1111", "2606:4700:4700::1001"]
+      dns6: ["2606:4700:4700::1111", "2606:4700:4700::1001"],
     },
   },
   {
@@ -64,7 +64,7 @@ export const defaultNetworks: WifiNetwork[] = [
       supportedFrequencies: ["2.4 GHz", "5 GHz"],
       defaultRoute: "192.168.3.1",
       dns4: ["208.67.222.222", "208.67.220.220"],
-      dns6: ["2620:119:35::35", "2620:119:53::53"]
+      dns6: ["2620:119:35::35", "2620:119:53::53"],
     },
   },
 ];
@@ -136,6 +136,7 @@ export const defaultApps: AppNode[] = [
   isActive: false,
   isMinimized: false,
   isFullscreen: false,
+  isModalOpen: false,
   width: 0,
   height: 0,
   x: 0,

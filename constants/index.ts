@@ -21,6 +21,7 @@ export const defaultNetworks: WifiNetwork[] = [
     name: "FASTWEB-7632798",
     signal: 4,
     isProtected: true,
+    isSaved: true,
     details: {
       linkSpeed: "103 Mb/s",
       security: "WPA2",

@@ -46,6 +46,7 @@ onBeforeMount(() => {
     :parent="true"
     @dragging="handleDragging"
     @dragStop="handleDragStop"
+    @resizing="handleResizeStop"
     @resizeStop="handleResizeStop"
     @activated="() => handleActive(true)"
     @deactivated="() => handleActive(false)"

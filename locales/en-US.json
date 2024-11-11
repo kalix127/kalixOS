@@ -77,7 +77,19 @@
   "airplane_mode_enabled_description": "Turn off to use Wi-Fi",
   "visible_networks": "Visible Networks",
   "connected": "Connected",
-  
+
+  "-----------------WIFI-DETAILS-------------------": "",
+  "linkSpeed": "Link Speed",
+  "security": "Security",
+  "ipv4": "IPv4 Address",
+  "ipv6": "IPv6 Address",
+  "hardwareAddress": "Hardware Address",
+  "supportedFrequencies": "Supported Frequencies",
+  "defaultRoute": "Default Route",
+  "dns4": "DNS4",
+  "dns6": "DNS6",
+  "forget_connection": "Forget connection",
+
   "-----------------NODES-------------------": "",
   "home": "Home",
   "projects": "Projects",

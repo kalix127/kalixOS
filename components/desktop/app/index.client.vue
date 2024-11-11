@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
@@ -28,6 +29,12 @@ const {
 // Make sure the modal is closed by default
 onBeforeMount(() => {
   app.value.isModalOpen = false;
+
+  // If on mobile, set the app to fullscreen
+  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("sm");
+  if (isMobileOrTablet.value) {
+    handleFullscreen(true);
+  }
 });
 </script>
 

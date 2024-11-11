@@ -51,8 +51,29 @@ export function useAppHandlers(
     }
   };
 
-  const handleFullscreen = () => {
-    // If the app is already fullscreen, exit fullscreen
+  const handleFullscreen = (value?: boolean) => {
+    // If value is provided, set fullscreen directly
+    if (typeof value !== 'undefined') {
+      app.value.isFullscreen = value;
+      if (value) {
+        // Store current size/position before going fullscreen
+        app.value.prev.width = app.value.width;
+        app.value.prev.height = app.value.height;
+        app.value.prev.x = app.value.x;
+        app.value.prev.y = app.value.y;
+
+        // Set fullscreen size/position
+        updateAppSizes(desktopRef.value?.offsetWidth || 0, desktopRef.value?.offsetHeight || 0);
+        updateAppPosition(1, 1);
+      } else {
+        // Restore previous size/position
+        updateAppSizes(app.value.prev.width, app.value.prev.height);
+        updateAppPosition(app.value.prev.x, app.value.prev.y);
+      }
+      return;
+    }
+
+    // Default toggle behavior
     if (app.value.isFullscreen) {
       app.value.isFullscreen = false;
       updateAppSizes(app.value.prev.width, app.value.prev.height);
@@ -68,7 +89,7 @@ export function useAppHandlers(
 
     // Set the full screen
     app.value.isFullscreen = true;
-    updateAppSizes(desktopRef.value.offsetWidth, desktopRef.value?.offsetHeight);
+    updateAppSizes(desktopRef.value?.offsetWidth || 0, desktopRef.value?.offsetHeight || 0);
     updateAppPosition(1, 1);
   };
 

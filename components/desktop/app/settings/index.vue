@@ -20,6 +20,11 @@ const scrollAreaHeight = computed(() => {
   const windowContentHeight = app.value.height - topBarHeight;
   return windowContentHeight;
 });
+
+onUnmounted(() => {
+  // Reset the tab value 
+  currentSettingsTab.value = null;
+});
 </script>
 
 <template>

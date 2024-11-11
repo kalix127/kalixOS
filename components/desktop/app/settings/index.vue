@@ -52,12 +52,16 @@ const scrollAreaHeight = computed(() => {
       :style="{
         height: `${scrollAreaHeight}px`,
       }"
-    > 
+    >
       <Transition mode="out-in">
-        <DesktopAppSettingsTabWifi v-if="currentSettingsTab === 'wifi'" />
+        <DesktopAppSettingsTabWifi
+          :app="app"
+          v-if="currentSettingsTab === 'wifi'"
+        />
         <div v-else></div>
       </Transition>
     </div>
+
   </div>
 </template>
 

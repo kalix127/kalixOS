@@ -4,6 +4,7 @@
     "en": "Inglese",
     "it": "Italiano"
   },
+  "close": "Chiudi",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",
@@ -76,6 +77,17 @@
   "visible_networks": "Reti Visibili",
   "connected": "Connesso",
 
+  "-----------------WIFI-DETAILS-------------------": "",
+  "linkSpeed": "Velocità collegamento",
+  "security": "Sicurezza",
+  "ipv4": "Indirizzo IPv4",
+  "ipv6": "Indirizzo IPv6",
+  "hardwareAddress": "Indirizzo hardware",
+  "supportedFrequencies": "Frequenze supportate",
+  "defaultRoute": "Rotta predefinita",
+  "dns4": "DNS4",
+  "dns6": "DNS6",
+  "forget_connection": "Dimentica connessione",
   "-----------------NODES-------------------": "",
   "home": "Home",
   "desktop": "Scrivania",

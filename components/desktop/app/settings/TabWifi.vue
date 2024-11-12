@@ -19,7 +19,7 @@ const {
   connectedWifiNetwork,
   isConnectingToWifi,
 } = storeToRefs(globalStore);
-const { setSettingsTab, toggleWifi, toggleAirplaneMode } = globalStore;
+const { toggleWifi, toggleAirplaneMode } = globalStore;
 
 const { connectToWifi, idConnectingNetwork } = useWifi();
 
@@ -35,10 +35,14 @@ function closeWifiModal() {
 
 <template>
   <DesktopAppSettingsContent :app="app">
-    <div class="h-full space-y-6">
+    <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <DesktopAppSettingsOptionGroup>
         <!-- Toggle Wifi -->
-        <DesktopAppSettingsOption :label="$t('wifi')" @click="toggleWifi">
+        <DesktopAppSettingsOption
+          :label="$t('wifi')"
+          :is-first="true"
+          @click="toggleWifi"
+        >
           <template #action>
             <Switch :checked="isWifiEnabled" />
           </template>
@@ -63,6 +67,7 @@ function closeWifiModal() {
 
         <!-- Wifi Hotspot -->
         <DesktopAppSettingsOption
+          :is-last="true"
           :label="$t('turn_wifi_hotspot_on')"
           is-disabled
         >
@@ -75,6 +80,7 @@ function closeWifiModal() {
       <!-- Toggle Airplane Mode -->
       <DesktopAppSettingsOption
         :label="$t('airplane_mode')"
+        :description="$t('airplane_mode_description')"
         @click="toggleAirplaneMode"
       >
         <template #action>
@@ -85,62 +91,61 @@ function closeWifiModal() {
       <!-- Bottom Content -->
       <Transition mode="out-in">
         <!-- Network List -->
-        <div class="space-y-2" v-if="isWifiEnabled">
-          <div class="flex items-center justify-start gap-2">
-            <span class="text-sm font-extrabold tracking-wide">{{
-              $t("visible_networks")
-            }}</span>
+        <DesktopAppSettingsOptionGroup
+          :title="$t('visible_networks')"
+          v-if="isWifiEnabled"
+        >
+          <template #title-loading-icon>
             <Icon
               v-if="isSearchingWifiNetworks"
               name="extra:loading"
               class="animate-spin"
               size="16"
             />
-          </div>
+          </template>
+          <DesktopAppSettingsOption
+            v-for="(network, index) in availableWifiNetworks"
+            :key="network.id"
+            :is-first="index === 0"
+            :is-last="index === availableWifiNetworks.length - 1"
+            @click="() => connectToWifi(network)"
+          >
+            <template #label>
+              <div class="flex items-center gap-4">
+                <WifiIcon :network="network" :size="18" />
+                <span>{{ network.name }}</span>
+                <Icon
+                  v-if="idConnectingNetwork === network.id"
+                  name="extra:loading"
+                  class="animate-spin"
+                  size="16"
+                />
+              </div>
+            </template>
+            <template #action>
+              <div class="flex items-center gap-4">
+                <span
+                  v-if="connectedWifiNetwork?.id === network.id"
+                  class="text-muted-foreground"
+                  >{{ $t("connected") }}</span
+                >
 
-          <DesktopAppSettingsOptionGroup>
-            <DesktopAppSettingsOption
-              v-for="network in availableWifiNetworks"
-              :key="network.id"
-              @click="() => connectToWifi(network)"
-            >
-              <template #label>
-                <div class="flex items-center gap-4">
-                  <WifiIcon :network="network" :size="18" />
-                  <span>{{ network.name }}</span>
+                <Button
+                  v-if="network.isSaved"
+                  class="size-8 hover:bg-secondary-hover"
+                  variant="ghost"
+                  size="icon"
+                  @click.stop="() => toggleWifiModal(network)"
+                >
                   <Icon
-                    v-if="idConnectingNetwork === network.id"
-                    name="extra:loading"
-                    class="animate-spin"
-                    size="16"
+                    name="material-symbols:info-outline-rounded"
+                    size="18"
                   />
-                </div>
-              </template>
-              <template #action>
-                <div class="flex items-center gap-4">
-                  <span
-                    v-if="connectedWifiNetwork?.id === network.id"
-                    class="text-muted-foreground"
-                    >{{ $t("connected") }}</span
-                  >
-
-                  <Button
-                    v-if="network.isSaved"
-                    class="size-8 hover:bg-secondary-hover"
-                    variant="ghost"
-                    size="icon"
-                    @click.stop="() => toggleWifiModal(network)"
-                  >
-                    <Icon
-                      name="material-symbols:info-outline-rounded"
-                      size="18"
-                    />
-                  </Button>
-                </div>
-              </template>
-            </DesktopAppSettingsOption>
-          </DesktopAppSettingsOptionGroup>
-        </div>
+                </Button>
+              </div>
+            </template>
+          </DesktopAppSettingsOption>
+        </DesktopAppSettingsOptionGroup>
 
         <!-- Wifi Disabled -->
         <div
@@ -189,7 +194,6 @@ function closeWifiModal() {
       :network="selectedWifiNetwork"
       @close="closeWifiModal"
     />
-
   </DesktopAppSettingsContent>
 </template>
 

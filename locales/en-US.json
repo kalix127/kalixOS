@@ -75,8 +75,10 @@
   "wifi_no_adapter_description": "Make sure you have a Wi-Fi adapter plugged and turned on",
   "airplane_mode_enabled": "Airplane Mode On",
   "airplane_mode_enabled_description": "Turn off to use Wi-Fi",
+  "airplane_mode_description": "Disables Wi-Fi and Bluetooth",
   "visible_networks": "Visible Networks",
   "connected": "Connected",
+  "not_set_up": "Not set up",
 
   "-----------------WIFI-DETAILS-------------------": "",
   "linkSpeed": "Link Speed",

@@ -74,8 +74,10 @@
   "wifi_no_adapter_description": "Assicurati che un adattatore Wi-Fi sia collegato e acceso",
   "airplane_mode_enabled": "Modalità Aereo Attiva",
   "airplane_mode_enabled_description": "Disabilita per utilizzare il Wi-Fi",
+  "airplane_mode_description": "Disabilita Wi-Fi e Bluetooth",
   "visible_networks": "Reti Visibili",
   "connected": "Connesso",
+  "not_set_up": "Non configurato",
 
   "-----------------WIFI-DETAILS-------------------": "",
   "linkSpeed": "Velocità collegamento",

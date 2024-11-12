@@ -35,7 +35,7 @@ function closeWifiModal() {
 
 <template>
   <DesktopAppSettingsContent :app="app">
-    <div class="h-full space-y-6">
+    <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <DesktopAppSettingsOptionGroup>
         <!-- Toggle Wifi -->
         <DesktopAppSettingsOption :label="$t('wifi')" @click="toggleWifi">

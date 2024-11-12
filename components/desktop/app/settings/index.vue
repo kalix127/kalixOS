@@ -50,7 +50,7 @@ onUnmounted(() => {
       ]"
     />
 
-    <!-- Content -->
+    <!-- Tabs -->
     <div
       v-if="!isMobile || currentSettingsTab"
       class="flex flex-col items-center justify-start"
@@ -59,14 +59,23 @@ onUnmounted(() => {
       }"
     >
       <Transition mode="out-in">
+        <!-- Wifi -->
         <DesktopAppSettingsTabWifi
           :app="app"
           v-if="currentSettingsTab === 'wifi'"
         />
 
+        <!-- Network -->
         <DesktopAppSettingsTabNetwork
           :app="app"
           v-else-if="currentSettingsTab === 'network'"
+        />
+
+        <!-- Bluetooth -->
+        <DesktopAppSettingsTabBluetooth
+          :app="app"
+          v-else-if="currentSettingsTab === 'bluetooth'"
+          class="h-full grid place-content-center"
         />
 
         <div v-else></div>

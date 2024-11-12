@@ -78,6 +78,8 @@
   "visible_networks": "Reti Visibili",
   "connected": "Connesso",
   "not_set_up": "Non configurato",
+  "bluetooth_disabled": "Bluetooth Spento",
+  "bluetooth_disabled_description": "Accendi per connetterti e ricevere trasferimenti di file",
 
   "-----------------WIFI-DETAILS-------------------": "",
   "linkSpeed": "Velocità collegamento",

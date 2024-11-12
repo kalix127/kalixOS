@@ -12,7 +12,6 @@
   "wired_connection": "Wired connection",
   "wifi": "Wi-Fi",
   "bluetooth": "Bluetooth",
-  "bluetooth_not_available": "Bluetooth not available or connected device",
   "airplane_mode": "Airplane Mode",
   "disconnect": "Disconnect",
   "suspend": "Suspend",
@@ -79,6 +78,10 @@
   "visible_networks": "Visible Networks",
   "connected": "Connected",
   "not_set_up": "Not set up",
+  "bluetooth_disabled": "Bluetooth Turned Off",
+  "bluetooth_disabled_description": "Turn on to connect and receive file transfers",
+  "bluetooth_enabled": "Bluetooth",
+  "bluetooth_enabled_description": "Bluetooth not available or connected device",
 
   "-----------------WIFI-DETAILS-------------------": "",
   "linkSpeed": "Link Speed",

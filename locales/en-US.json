@@ -5,6 +5,7 @@
     "it": "Italian"
   },
   "close": "Close",
+  "off": "Off",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",
@@ -82,6 +83,9 @@
   "bluetooth_disabled_description": "Turn on to connect and receive file transfers",
   "bluetooth_enabled": "Bluetooth",
   "bluetooth_enabled_description": "Bluetooth not available or connected device",
+  "primary_display": "Primary Display",
+  "primary_display_description": "Contains top bar and Activities",
+  "night_light": "Night Light",
 
   "-----------------WIFI-DETAILS-------------------": "",
   "linkSpeed": "Link Speed",

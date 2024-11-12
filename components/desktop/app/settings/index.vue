@@ -78,6 +78,12 @@ onUnmounted(() => {
           class="h-full grid place-content-center"
         />
 
+        <!-- Displays -->
+        <DesktopAppSettingsTabDisplays
+          :app="app"
+          v-else-if="currentSettingsTab === 'displays'"
+        />
+
         <div v-else></div>
       </Transition>
     </div>

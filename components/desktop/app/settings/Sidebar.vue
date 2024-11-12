@@ -73,7 +73,7 @@ const items = computed(() => [
   <ScrollArea
     :class="
       cn(
-        'w-full rounded-l-md p-1.5 transition-colors duration-300',
+        'w-full min-w-fit rounded-l-md p-1.5 transition-colors duration-300',
         isMobile ? '' : 'border-r border-r-black/30',
         $props.class,
       )

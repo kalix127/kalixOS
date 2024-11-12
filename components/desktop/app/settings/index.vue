@@ -22,7 +22,7 @@ const scrollAreaHeight = computed(() => {
 });
 
 onUnmounted(() => {
-  // Reset the tab value 
+  // Reset the tab value
   currentSettingsTab.value = null;
 });
 </script>
@@ -63,10 +63,15 @@ onUnmounted(() => {
           :app="app"
           v-if="currentSettingsTab === 'wifi'"
         />
+
+        <DesktopAppSettingsTabNetwork
+          :app="app"
+          v-else-if="currentSettingsTab === 'network'"
+        />
+
         <div v-else></div>
       </Transition>
     </div>
-
   </div>
 </template>
 

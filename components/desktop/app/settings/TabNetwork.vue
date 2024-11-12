@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WifiNetwork, AppNode } from "@/types";
+import type { AppNode } from "@/types";
 
 const props = defineProps<{
   app: AppNode;
@@ -7,44 +7,35 @@ const props = defineProps<{
 
 const { app } = toRefs(props);
 
-const isWifiModalOpen = ref(false);
-const selectedWifiNetwork = ref<WifiNetwork | null>(null);
-
 const globalStore = useGlobalStore();
-const {
-  isWifiEnabled,
-  isAirplaneModeEnabled,
-  isSearchingWifiNetworks,
-  availableWifiNetworks,
-  connectedWifiNetwork,
-  isConnectingToWifi,
-} = storeToRefs(globalStore);
-const { setSettingsTab, toggleWifi, toggleAirplaneMode } = globalStore;
-
-const { connectToWifi, idConnectingNetwork } = useWifi();
-
-function toggleWifiModal(wifiNetwork: WifiNetwork) {
-  isWifiModalOpen.value = true;
-  selectedWifiNetwork.value = wifiNetwork;
-}
-
-function closeWifiModal() {
-  isWifiModalOpen.value = false;
-}
+const { isWiredEnabled } = storeToRefs(globalStore);
+const { toggleWired } = globalStore;
 </script>
 
 <template>
   <DesktopAppSettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
-      <!-- Toggle Wifi -->
-      <DesktopAppSettingsOption :label="$t('wifi')" @click="toggleWifi">
+      <!-- Toggle Wired -->
+      <DesktopAppSettingsOption
+        :title="$t('wired')"
+        :label="`${isWiredEnabled ? $t('connected') : ''} 1,000 Mb/s`"
+        @click="toggleWired"
+      >
         <template #action>
-          <Switch :checked="isWifiEnabled" />
+          <Switch :checked="isWiredEnabled" />
         </template>
       </DesktopAppSettingsOption>
 
-      <!-- Saved Networks -->
-      <DesktopAppSettingsOption :label="$t('saved_networks')" is-disabled>
+      <!-- VPN -->
+      <DesktopAppSettingsOption
+        title="VPN"
+        :label="$t('not_set_up')"
+        is-disabled
+      >
+      </DesktopAppSettingsOption>
+
+      <!-- Proxy -->
+      <DesktopAppSettingsOption title="Proxy" label="Proxy" is-disabled>
         <template #action>
           <Icon name="gnome:arrow-long-right" size="18" />
         </template>

@@ -14,6 +14,7 @@ export const useGlobalStore = defineStore({
     isBluetoothEnabled: false,
     isAirplaneModeEnabled: false,
     volume: [100],
+    inputVolume: [50],
     isLocked: false,
     isSuspended: false,
     isAboutToSuspend: false,
@@ -194,6 +195,7 @@ interface GlobalStore {
   isBluetoothEnabled: boolean;
   isAirplaneModeEnabled: boolean;
   volume: number[];
+  inputVolume: number[];
   isLocked: boolean;
   isSuspended: boolean;
   isAboutToSuspend: boolean;

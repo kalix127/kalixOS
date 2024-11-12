@@ -20,7 +20,7 @@ const emit = defineEmits<{
 }>();
 
 const handleClick = () => {
-  if (props.isDisabled) return;
+  if (isDisabled.value) return;
   emit("click");
 };
 
@@ -42,16 +42,17 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
         cn(
           'flex h-12 items-center justify-between bg-popover p-4 text-sm transition-colors hover:bg-secondary/80',
           isDisabled
-            ? 'cursor-not-allowed text-muted-foreground'
-            : 'cursor-default',
+            ? 'text-muted-foreground'
+            : '',
           !isOptionGroup ? 'rounded-xl shadow-md' : '',
           isFirst ? 'rounded-t-xl' : '',
           isLast ? 'rounded-b-xl' : '',
+          description ? 'h-[52px]' : '',
           props.class,
         )
       "
     >
-      <div class="flex flex-col" v-if="label">
+      <div class="flex flex-col gap-1" v-if="label">
         <span>{{ label }}</span>
         <span v-if="description" class="text-xs text-muted-foreground">{{
           description

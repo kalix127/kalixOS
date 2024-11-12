@@ -19,7 +19,7 @@ const {
   connectedWifiNetwork,
   isConnectingToWifi,
 } = storeToRefs(globalStore);
-const { setSettingsTab, toggleWifi, toggleAirplaneMode } = globalStore;
+const { toggleWifi, toggleAirplaneMode } = globalStore;
 
 const { connectToWifi, idConnectingNetwork } = useWifi();
 

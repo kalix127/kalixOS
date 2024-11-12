@@ -1,4 +1,3 @@
-<!-- Option.vue -->
 <script setup lang="ts">
 import { type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
@@ -11,6 +10,7 @@ const props = defineProps<{
   isDisabled?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
+  isCenter?: boolean;
 }>();
 
 const { label, title, description, isDisabled } = toRefs(props);
@@ -40,25 +40,25 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
       @click="handleClick"
       :class="
         cn(
-          'flex h-12 items-center justify-between bg-popover p-4 text-sm transition-colors hover:bg-secondary/80',
-          isDisabled
-            ? 'text-muted-foreground'
-            : '',
+          'flex h-12 items-center bg-popover p-4 text-sm transition-colors hover:bg-secondary/80',
+          isCenter ? 'justify-center h-fit' : 'justify-between',
+          isDisabled ? 'text-muted-foreground' : '',
           !isOptionGroup ? 'rounded-xl shadow-md' : '',
           isFirst ? 'rounded-t-xl' : '',
           isLast ? 'rounded-b-xl' : '',
           description ? 'h-[52px]' : '',
-          props.class,
+          $props.class,
         )
       "
     >
-      <div class="flex flex-col gap-1" v-if="label">
+      <div v-if="label" class="flex flex-col gap-1">
         <span>{{ label }}</span>
         <span v-if="description" class="text-xs text-muted-foreground">{{
           description
         }}</span>
       </div>
       <slot v-else name="label" />
+      <slot name="center" />
       <slot name="action" />
     </div>
   </div>

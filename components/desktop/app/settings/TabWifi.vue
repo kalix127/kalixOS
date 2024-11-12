@@ -40,7 +40,7 @@ function closeWifiModal() {
         <!-- Toggle Wifi -->
         <DesktopAppSettingsOption
           :label="$t('wifi')"
-          :is-first="true"
+          is-first
           @click="toggleWifi"
         >
           <template #action>
@@ -67,9 +67,9 @@ function closeWifiModal() {
 
         <!-- Wifi Hotspot -->
         <DesktopAppSettingsOption
-          :is-last="true"
           :label="$t('turn_wifi_hotspot_on')"
           is-disabled
+          is-last
         >
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />

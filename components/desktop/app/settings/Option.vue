@@ -37,6 +37,6 @@ const handleClick = () => {
 
 <style>
 .option:not(.option-group .option) {
-  @apply rounded-xl;
+  @apply rounded-xl shadow-lg;
 }
 </style>

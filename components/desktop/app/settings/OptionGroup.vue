@@ -11,7 +11,7 @@ defineProps<{
   <div
     :class="
       cn(
-        'option-group group flex flex-col justify-between gap-px',
+        'option-group group flex flex-col justify-between gap-px shadow-lg',
         $props.class,
       )
     "

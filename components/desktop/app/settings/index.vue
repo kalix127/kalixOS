@@ -84,6 +84,12 @@ onUnmounted(() => {
           v-else-if="currentSettingsTab === 'displays'"
         />
 
+        <!-- Sound -->
+        <DesktopAppSettingsTabSound
+          :app="app"
+          v-else-if="currentSettingsTab === 'sound'"
+        />
+
         <div v-else></div>
       </Transition>
     </div>

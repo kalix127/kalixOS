@@ -95,6 +95,12 @@ onUnmounted(() => {
           :app="app"
           v-else-if="currentSettingsTab === 'power'"
         />
+
+        <!-- Appearance -->
+        <DesktopAppSettingsTabAppearance
+          :app="app"
+          v-else-if="currentSettingsTab === 'appearance'"
+        />
       </Transition>
     </div>
   </div>

@@ -109,6 +109,8 @@
   "show_battery_percentage_description": "Show exact charge level in the top bar",
   "background": "Background",
   "add_picture": "Add picture",
+  "no_print_service": "No Print Service",
+  "no_print_service_description": "The system printing service doesn't seem to be available",
 
   "--------------------TIMES----------------------": "",
   "never": "Never",

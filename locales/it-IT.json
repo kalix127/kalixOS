@@ -107,6 +107,8 @@
   "show_battery_percentage_description": "Mostra il livello di carica esatto nella barra superiore",
   "background": "Sfondo",
   "add_picture": "Aggiungi immagine",
+  "no_print_service": "Nessun Servizio di Stampa",
+  "no_print_service_description": "Il servizio di stampa del sistema non sembra essere disponibile",
 
   "--------------------TIMES----------------------": "",
   "never": "Mai",

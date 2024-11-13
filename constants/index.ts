@@ -1,5 +1,11 @@
 // @ts-nocheck
-import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
+import type {
+  WifiNetwork,
+  FileSystemNode,
+  SystemLog,
+  AppNode,
+  BackgroundImage,
+} from "@/types";
 import { assignIds } from "~/helpers";
 
 export const defaultUsername = "Gianluca";
@@ -7,6 +13,15 @@ export const defaultUsername = "Gianluca";
 export const defaultBootDuration = 5000;
 
 export const defaultDimScreenThreshold = "300000"; // 5 minutes
+
+export const defaultBackgroundImage: BackgroundImage = {
+  url: "img/bg-desktop.jpg",
+  name: "default",
+};
+
+export const defaultBackgroundImages: BackgroundImage[] = [
+  defaultBackgroundImage,
+];
 
 export const desktopEnvironments = [
   "gnome",

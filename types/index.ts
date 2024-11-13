@@ -63,3 +63,9 @@ export interface SystemLog {
   action: string;
   message: string;
 }
+
+
+export interface BackgroundImage {
+  url: string;
+  name: string;
+}

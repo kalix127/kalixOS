@@ -107,6 +107,8 @@
   "general": "General",
   "show_battery_percentage": "Show battery percentage",
   "show_battery_percentage_description": "Show exact charge level in the top bar",
+  "background": "Background",
+  "add_picture": "Add picture",
 
   "--------------------TIMES----------------------": "",
   "never": "Never",

@@ -35,6 +35,8 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
     >
       {{ title }}
     </div>
+    
+    <slot name="title" />
 
     <div
       @click="handleClick"

@@ -1,6 +1,12 @@
-import { defaultFileSystem, defaultApps, defaultBookmarks } from "@/constants";
+import {
+  defaultFileSystem,
+  defaultApps,
+  defaultBookmarks,
+  defaultBackgroundImage,
+  defaultBackgroundImages,
+} from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
-import type { AppNode, FileSystemNode } from "~/types";
+import type { AppNode, FileSystemNode, BackgroundImage } from "~/types";
 import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
 import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
@@ -25,6 +31,8 @@ export const useDesktopStore = defineStore({
 
     // Desktop
     desktopRef: null,
+    backgroundImage: defaultBackgroundImage,
+    backgroundImages: defaultBackgroundImages,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
@@ -110,7 +118,8 @@ export const useDesktopStore = defineStore({
           const updatedDimScreenThreshold = parseInt(
             storeToRefs(globalStore).dimScreenThreshold.value,
           );
-          const isDimScreenEnabled = storeToRefs(globalStore).isDimScreenEnabled;
+          const isDimScreenEnabled =
+            storeToRefs(globalStore).isDimScreenEnabled;
 
           const idleThreshold = Math.floor(
             (updatedDimScreenThreshold * 0.7) / 1000,
@@ -368,6 +377,36 @@ export const useDesktopStore = defineStore({
         this.bookmarks.push(nodeId);
       }
     },
+
+    /**
+     * Sets the background image.
+     * @param image The background image to set.
+     */
+    setBackgroundImage(image: BackgroundImage) {
+      this.backgroundImage = image;
+
+      // Check if the image is already in the backgroundImages array
+      if (!this.backgroundImages.some((bg) => bg.url === image.url)) {
+        this.backgroundImages.push(image);
+      }
+    },
+
+    /**
+     * Removes the background image.
+     */
+    deleteBackgroundImage(imageUrl: string) {
+      this.backgroundImages = this.backgroundImages.filter(
+        (bg) => bg.url !== imageUrl,
+      );
+
+      // If the deleted image is the current background image or If there is only one background image left (the default one), set the default background image
+      if (
+        this.backgroundImage.url === imageUrl ||
+        this.backgroundImages.length === 1
+      ) {
+        this.backgroundImage = defaultBackgroundImage;
+      }
+    },
   },
 });
 
@@ -387,4 +426,6 @@ interface DesktopStore {
 
   // Desktop
   desktopRef: HTMLElement | null;
+  backgroundImage: BackgroundImage;
+  backgroundImages: BackgroundImage[];
 }

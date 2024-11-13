@@ -107,8 +107,6 @@ export const useDesktopStore = defineStore({
           // If dim screen is disabled or set to 0, do nothing
           if (dimScreenThreshold.value === "0") return;
 
-          console.log("idledFor", newValue);
-
           const updatedDimScreenThreshold = parseInt(
             storeToRefs(globalStore).dimScreenThreshold.value,
           );
@@ -126,7 +124,7 @@ export const useDesktopStore = defineStore({
                   1,
                 ); // Scale 0-100% over remaining 30%
           isAboutToSuspend.value = newValue >= idleThreshold;
-          
+
           // if Dim screen is enabled, Gradually show the suspended overlay after 70% of the suspend duration
           if (isDimScreenEnabled.value) {
             suspendedPercentage.value = suspendPercentage;

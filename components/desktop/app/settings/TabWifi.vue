@@ -137,10 +137,7 @@ function closeWifiModal() {
                   size="icon"
                   @click.stop="() => toggleWifiModal(network)"
                 >
-                  <Icon
-                    name="material-symbols:info-outline-rounded"
-                    size="18"
-                  />
+                  <Icon name="gnome:info-rounded" size="18" />
                 </Button>
               </div>
             </template>

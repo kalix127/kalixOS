@@ -75,7 +75,7 @@ onUnmounted(() => {
         <DesktopAppSettingsTabBluetooth
           :app="app"
           v-else-if="currentSettingsTab === 'bluetooth'"
-          class="h-full grid place-content-center"
+          class="grid h-full place-content-center"
         />
 
         <!-- Displays -->
@@ -90,7 +90,11 @@ onUnmounted(() => {
           v-else-if="currentSettingsTab === 'sound'"
         />
 
-        <div v-else></div>
+        <!-- Power -->
+        <DesktopAppSettingsTabPower
+          :app="app"
+          v-else-if="currentSettingsTab === 'power'"
+        />
       </Transition>
     </div>
   </div>

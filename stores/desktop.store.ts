@@ -1,7 +1,7 @@
 import {
   defaultFileSystem,
   defaultApps,
-  defaultSuspendThreshold,
+  defaultDimScreenThreshold,
   defaultBookmarks,
 } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
@@ -90,17 +90,21 @@ export const useDesktopStore = defineStore({
      */
     initIdleDetection(): void {
       if (import.meta.client) {
-        const { idle, lastActive } = useIdle(defaultSuspendThreshold);
-        const now = useTimestamp({ interval: 1000 });
-
         const globalStore = useGlobalStore();
         const {
           isAuthenticated,
           isLocked,
           isAboutToSuspend,
           suspendedPercentage,
+          dimScreenThreshold,
+          isDimScreenEnabled,
         } = storeToRefs(globalStore);
         const { handleSuspend } = globalStore;
+
+        const initialDimScreenThreshold = parseInt(dimScreenThreshold.value);
+
+        const { idle, lastActive } = useIdle(initialDimScreenThreshold);
+        const now = useTimestamp({ interval: 1000 });
 
         const idledFor = computed(() =>
           Math.floor((now.value - lastActive.value) / 1000),
@@ -108,15 +112,22 @@ export const useDesktopStore = defineStore({
 
         // Gradually show the suspended overlay after 70% of the suspend duration
         watch(idledFor, (newValue: number) => {
+          // If dim screen is disabled, do nothing
+          if (!isDimScreenEnabled.value) return;
+
+          const updatedDimScreenThreshold = parseInt(
+            storeToRefs(globalStore).dimScreenThreshold.value,
+          );
+
           const idleThreshold = Math.floor(
-            (defaultSuspendThreshold * 0.7) / 1000,
+            (updatedDimScreenThreshold * 0.7) / 1000,
           ); // 70% of suspend duration in seconds
           const suspendPercentage =
             newValue < idleThreshold
               ? 0
               : Math.min(
                   (newValue - idleThreshold) /
-                    ((defaultSuspendThreshold * 0.3) / 1000),
+                    ((updatedDimScreenThreshold * 0.3) / 1000),
                   1,
                 ); // Scale 0-100% over remaining 30%
           isAboutToSuspend.value = newValue >= idleThreshold;

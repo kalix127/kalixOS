@@ -6,7 +6,7 @@ export const defaultUsername = "Gianluca";
 
 export const defaultBootDuration = 5000;
 
-export const defaultSuspendThreshold = 300000; // 5 minutes
+export const defaultDimScreenThreshold = "300000"; // 5 minutes
 
 export const desktopEnvironments = [
   "gnome",

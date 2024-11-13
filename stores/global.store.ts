@@ -1,6 +1,10 @@
 import type { WifiNetwork } from "@/types";
 import { generateRandomDelays } from "@/lib/utils";
-import { defaultNetworks, desktopEnvironments } from "@/constants";
+import {
+  defaultNetworks,
+  desktopEnvironments,
+  defaultDimScreenThreshold,
+} from "@/constants";
 import { useIdle, watchOnce } from "@vueuse/core";
 import { defaultUsername } from "@/constants";
 
@@ -16,9 +20,14 @@ export const useGlobalStore = defineStore({
     volume: [100],
     inputVolume: [50],
     isLocked: false,
+    isShowBatteryPercentageEnabled: false,
+
+    // Suspend
     isSuspended: false,
     isAboutToSuspend: false,
     suspendedPercentage: 0,
+    isDimScreenEnabled: true,
+    dimScreenThreshold: defaultDimScreenThreshold,
 
     // Topbar Menus
     isLanguageMenuOpen: false,
@@ -197,9 +206,14 @@ interface GlobalStore {
   volume: number[];
   inputVolume: number[];
   isLocked: boolean;
+  isShowBatteryPercentageEnabled: boolean;
+
+  // Suspend
   isSuspended: boolean;
   isAboutToSuspend: boolean;
   suspendedPercentage: number;
+  isDimScreenEnabled: boolean;
+  dimScreenThreshold: string;
 
   // Topbar Menus
   isLanguageMenuOpen: boolean;

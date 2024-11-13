@@ -8,6 +8,7 @@ const {
   isAirplaneModeEnabled,
   isAnyTopbarMenuOpen,
   connectedWifiNetwork,
+  isShowBatteryPercentageEnabled,
 } = storeToRefs(globalStore);
 </script>
 
@@ -40,7 +41,10 @@ const {
         size="18"
       />
       <Icon v-show="volume[0] === 0" name="gnome:volume-off" size="18" />
-      <Icon name="gnome:battery-full" size="18" />
+      <div class="flex items-center gap-1">
+        <Icon name="gnome:battery-full" size="18" />
+        <span class="text-sm" v-if="isShowBatteryPercentageEnabled">100%</span>
+      </div>
     </PopoverTrigger>
 
     <PopoverContent

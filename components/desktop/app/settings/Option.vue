@@ -40,13 +40,12 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
       @click="handleClick"
       :class="
         cn(
-          'flex h-12 items-center bg-popover p-4 text-sm transition-colors hover:bg-secondary/80',
+          'flex min-h-12 items-center bg-popover p-3 text-sm transition-colors hover:bg-secondary/80',
           isCenter ? 'justify-center h-fit' : 'justify-between',
           isDisabled ? 'text-muted-foreground' : '',
           !isOptionGroup ? 'rounded-xl shadow-md' : '',
           isFirst ? 'rounded-t-xl' : '',
           isLast ? 'rounded-b-xl' : '',
-          description ? 'h-[52px]' : '',
           $props.class,
         )
       "

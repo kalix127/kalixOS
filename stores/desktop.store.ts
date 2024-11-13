@@ -1,9 +1,4 @@
-import {
-  defaultFileSystem,
-  defaultApps,
-  defaultDimScreenThreshold,
-  defaultBookmarks,
-} from "@/constants";
+import { defaultFileSystem, defaultApps, defaultBookmarks } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode } from "~/types";
 import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
@@ -97,27 +92,27 @@ export const useDesktopStore = defineStore({
           isAboutToSuspend,
           suspendedPercentage,
           dimScreenThreshold,
-          isDimScreenEnabled,
         } = storeToRefs(globalStore);
         const { handleSuspend } = globalStore;
 
-        const initialDimScreenThreshold = parseInt(dimScreenThreshold.value);
+        const { lastActive } = useIdle(parseInt(dimScreenThreshold.value));
 
-        const { idle, lastActive } = useIdle(initialDimScreenThreshold);
         const now = useTimestamp({ interval: 1000 });
 
         const idledFor = computed(() =>
           Math.floor((now.value - lastActive.value) / 1000),
         );
 
-        // Gradually show the suspended overlay after 70% of the suspend duration
         watch(idledFor, (newValue: number) => {
-          // If dim screen is disabled, do nothing
-          if (!isDimScreenEnabled.value) return;
+          // If dim screen is disabled or set to 0, do nothing
+          if (dimScreenThreshold.value === "0") return;
+
+          console.log("idledFor", newValue);
 
           const updatedDimScreenThreshold = parseInt(
             storeToRefs(globalStore).dimScreenThreshold.value,
           );
+          const isDimScreenEnabled = storeToRefs(globalStore).isDimScreenEnabled;
 
           const idleThreshold = Math.floor(
             (updatedDimScreenThreshold * 0.7) / 1000,
@@ -131,13 +126,16 @@ export const useDesktopStore = defineStore({
                   1,
                 ); // Scale 0-100% over remaining 30%
           isAboutToSuspend.value = newValue >= idleThreshold;
-          suspendedPercentage.value = suspendPercentage;
-        });
+          
+          // if Dim screen is enabled, Gradually show the suspended overlay after 70% of the suspend duration
+          if (isDimScreenEnabled.value) {
+            suspendedPercentage.value = suspendPercentage;
+          }
 
-        watch(idle, (isIdle) => {
-          if (!isAuthenticated.value) return;
+          // If the idleFor is grater than dimScreenThreshold, lock the screen
+          if (newValue * 1000 >= parseInt(dimScreenThreshold.value)) {
+            if (!isAuthenticated.value) return;
 
-          if (isIdle) {
             handleSuspend();
             isLocked.value = true;
           }

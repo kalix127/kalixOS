@@ -20,7 +20,7 @@ provide("isOptionGroup", true);
     <div
       :class="
         cn(
-          'option-group group flex flex-col justify-between gap-px shadow-lg',
+          'option-group group flex flex-col justify-between gap-px shadow-md',
           $props.class,
         )
       "

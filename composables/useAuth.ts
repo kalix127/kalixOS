@@ -1,7 +1,7 @@
 export function useAuth() {
   const globalStore = useGlobalStore();
-  const { isAuthenticated, isLocked, loginView, isLogoutModalOpen } =
-    storeToRefs(globalStore);
+  const { isAuthenticated, isLocked, loginView } = storeToRefs(globalStore);
+  const { isLogoutModalOpen } = storeToRefs(useBootStore());
   const { setIsAuthenticated } = globalStore;
 
   const isLoading = ref(false);

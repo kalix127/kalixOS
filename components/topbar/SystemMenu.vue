@@ -21,28 +21,40 @@ const {
       <Icon
         v-show="connectedWifiNetwork"
         :name="`gnome:wifi-${connectedWifiNetwork?.signal || 1}`"
-        size="18"
+        class="size-[16px] sm:size-[18px]"
       />
-      <Icon v-show="isWiredEnabled" name="gnome:wired-on" size="18" />
+      <Icon
+        v-show="isWiredEnabled"
+        name="gnome:wired-on"
+        class="size-[16px] sm:size-[18px]"
+      />
       <Icon
         v-show="isAirplaneModeEnabled"
         name="gnome:airplane-mode-on"
-        size="18"
+        class="size-[16px] sm:size-[18px]"
       />
-      <Icon v-show="volume[0] > 66" name="gnome:volume-3" size="18" />
+      <Icon
+        v-show="volume[0] > 66"
+        name="gnome:volume-3"
+        class="size-[16px] sm:size-[18px]"
+      />
       <Icon
         v-show="volume[0] > 33 && volume[0] <= 66"
         name="gnome:volume-2"
-        size="18"
+        class="size-[16px] sm:size-[18px]"
       />
       <Icon
         v-show="volume[0] > 0 && volume[0] <= 33"
         name="gnome:volume-1"
-        size="18"
+        class="size-[16px] sm:size-[18px]"
       />
-      <Icon v-show="volume[0] === 0" name="gnome:volume-off" size="18" />
+      <Icon
+        v-show="volume[0] === 0"
+        name="gnome:volume-off"
+        class="size-[16px] sm:size-[18px]"
+      />
       <div class="flex items-center gap-1">
-        <Icon name="gnome:battery-full" size="18" />
+        <Icon name="gnome:battery-full" class="size-[16px] sm:size-[18px]" />
         <span class="text-sm" v-if="isShowBatteryPercentageEnabled">100%</span>
       </div>
     </PopoverTrigger>

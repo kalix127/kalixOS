@@ -28,7 +28,7 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
 </script>
 
 <template>
-  <div :class="!isOptionGroup ? 'space-y-2' : ''">
+  <div :class="!isOptionGroup ? 'space-y-3' : ''">
     <div
       v-if="!isOptionGroup && title"
       class="text-sm font-extrabold tracking-wide"

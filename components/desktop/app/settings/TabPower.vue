@@ -1,0 +1,124 @@
+<script setup lang="ts">
+import type { AppNode } from "@/types";
+import { defaultDimScreenThreshold } from "~/constants";
+
+const props = defineProps<{
+  app: AppNode;
+}>();
+
+const { app } = toRefs(props);
+
+const globalStore = useGlobalStore();
+const {
+  dimScreenThreshold,
+  isShowBatteryPercentageEnabled,
+  isDimScreenEnabled,
+} = storeToRefs(globalStore);
+
+function toggleShowBatteryPercentage() {
+  isShowBatteryPercentageEnabled.value = !isShowBatteryPercentageEnabled.value;
+}
+
+function toggleDimScreen() {
+  isDimScreenEnabled.value = !isDimScreenEnabled.value;
+}
+</script>
+
+<template>
+  <DesktopAppSettingsContent :app="app">
+    <div class="h-full space-y-6 px-6 py-8 sm:px-12">
+      <!-- Battery level -->
+      <DesktopAppSettingsOptionGroup class="gap-0" :title="$t('battery_level')">
+        <DesktopAppSettingsOption class="pb-0 pt-3 min-h-6" is-first>
+          <template #center>
+            <Slider class="h-2 bg-green-300" :default-value="[0]" :max="100" :step="1" />
+          </template>
+        </DesktopAppSettingsOption>
+        <DesktopAppSettingsOption :label="$t('fully_charged')" is-last>
+          <template #action> 100 % </template>
+        </DesktopAppSettingsOption>
+      </DesktopAppSettingsOptionGroup>
+
+      <!-- Power saving -->
+      <DesktopAppSettingsOptionGroup :title="$t('power_saving')">
+        <!-- Dim screen -->
+        <DesktopAppSettingsOption
+          :label="$t('dim_screen')"
+          :description="$t('dim_screen_description')"
+          is-first
+          @click="toggleDimScreen"
+        >
+          <template #action>
+            <Switch :checked="isDimScreenEnabled" />
+          </template>
+        </DesktopAppSettingsOption>
+
+        <!-- Screen blank -->
+        <DesktopAppSettingsOption
+          :label="$t('screen_blank')"
+          :description="$t('screen_blank_description')"
+          is-last
+        >
+          <template #action>
+            <Select
+              v-model="dimScreenThreshold"
+              :default-value="defaultDimScreenThreshold"
+            >
+              <SelectTrigger class="h-9 w-fit gap-2 bg-transparent ring-0">
+                <SelectValue :placeholder="$t('never')" />
+              </SelectTrigger>
+              <SelectContent class="z-[100000]">
+                <SelectGroup>
+                  <SelectItem value="0"> {{ $t("never") }} </SelectItem>
+                  <SelectItem value="60000"> {{ $t("1_minute") }} </SelectItem>
+                  <SelectItem value="120000">
+                    {{ $t("2_minutes") }}
+                  </SelectItem>
+                  <SelectItem value="180000">
+                    {{ $t("3_minutes") }}
+                  </SelectItem>
+                  <SelectItem value="240000">
+                    {{ $t("4_minutes") }}
+                  </SelectItem>
+                  <SelectItem value="300000">
+                    {{ $t("5_minutes") }}
+                  </SelectItem>
+                  <SelectItem value="600000">
+                    {{ $t("10_minutes") }}
+                  </SelectItem>
+                  <SelectItem value="900000">
+                    {{ $t("15_minutes") }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </template>
+        </DesktopAppSettingsOption>
+      </DesktopAppSettingsOptionGroup>
+
+      <!-- General -->
+      <DesktopAppSettingsOption
+        :title="$t('general')"
+        :label="$t('show_battery_percentage')"
+        :description="$t('show_battery_percentage_description')"
+        @click="toggleShowBatteryPercentage"
+      >
+        <template #action>
+          <Switch :checked="isShowBatteryPercentageEnabled" />
+        </template>
+      </DesktopAppSettingsOption>
+    </div>
+  </DesktopAppSettingsContent>
+</template>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

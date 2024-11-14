@@ -20,15 +20,20 @@ const scrollAreaHeight = computed(() => {
   const windowContentHeight = app.value.height - topBarHeight;
   return windowContentHeight;
 });
+
+onUnmounted(() => {
+  // Reset the tab value
+  currentSettingsTab.value = null;
+});
 </script>
 
 <template>
   <div
     :class="
       cn(
-        `grid bg-background ${
-          isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[25%_75%]'
-        }`,
+        'grid bg-background',
+        isMobile ? 'grid-cols-[1fr]' : 'grid-cols-[25%_75%]',
+        app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
         $props.class,
       )
     "
@@ -36,23 +41,79 @@ const scrollAreaHeight = computed(() => {
     <!-- Sidebar -->
     <DesktopAppSettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
-      :is-active="app.isActive"
       :style="{
         height: `${scrollAreaHeight}px`,
       }"
+      :class="[
+        app.isActive ? 'bg-muted' : 'bg-muted/50',
+        app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
+      ]"
     />
 
-    <!-- Content -->
+    <!-- Tabs -->
     <div
       v-if="!isMobile || currentSettingsTab"
       class="flex flex-col items-center justify-start"
       :style="{
         height: `${scrollAreaHeight}px`,
       }"
-    > 
+    >
       <Transition mode="out-in">
-        <DesktopAppSettingsTabWifi v-if="currentSettingsTab === 'wifi'" />
-        <div v-else></div>
+        <!-- Wifi -->
+        <DesktopAppSettingsTabWifi
+          :app="app"
+          v-if="currentSettingsTab === 'wifi'"
+        />
+
+        <!-- Network -->
+        <DesktopAppSettingsTabNetwork
+          :app="app"
+          v-else-if="currentSettingsTab === 'network'"
+        />
+
+        <!-- Bluetooth -->
+        <DesktopAppSettingsTabBluetooth
+          :app="app"
+          v-else-if="currentSettingsTab === 'bluetooth'"
+          class="grid h-full place-content-center"
+        />
+
+        <!-- Displays -->
+        <DesktopAppSettingsTabDisplays
+          :app="app"
+          v-else-if="currentSettingsTab === 'displays'"
+        />
+
+        <!-- Sound -->
+        <DesktopAppSettingsTabSound
+          :app="app"
+          v-else-if="currentSettingsTab === 'sound'"
+        />
+
+        <!-- Power -->
+        <DesktopAppSettingsTabPower
+          :app="app"
+          v-else-if="currentSettingsTab === 'power'"
+        />
+
+        <!-- Appearance -->
+        <DesktopAppSettingsTabAppearance
+          :app="app"
+          v-else-if="currentSettingsTab === 'appearance'"
+        />
+
+        <!-- Printers -->
+        <DesktopAppSettingsTabPrinters
+          :app="app"
+          v-else-if="currentSettingsTab === 'printers'"
+          class="grid h-full place-content-center"
+        />
+
+        <!-- System -->
+        <DesktopAppSettingsTabSystem
+          :app="app"
+          v-else-if="currentSettingsTab === 'system'"
+        />
       </Transition>
     </div>
   </div>

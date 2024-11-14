@@ -3,6 +3,19 @@ export interface WifiNetwork {
   name: string;
   signal: number;
   isProtected: boolean;
+
+  isSaved?: boolean;
+  details?: {
+    linkSpeed: string;
+    security: string;
+    ipv4: string;
+    ipv6: string;
+    hardwareAddress: string;
+    supportedFrequencies: string[];
+    defaultRoute: string;
+    dns4: string[];
+    dns6: string[];
+  }
 }
 
 export interface FileSystemNode {
@@ -27,6 +40,7 @@ export interface AppNode extends FileSystemNode {
   isActive: boolean;
   isMinimized: boolean;
   isFullscreen: boolean;
+  isModalOpen: boolean;
 
   // Size
   width: number;
@@ -48,4 +62,10 @@ export interface SystemLog {
   ok: boolean;
   action: string;
   message: string;
+}
+
+
+export interface BackgroundImage {
+  url: string;
+  name: string;
 }

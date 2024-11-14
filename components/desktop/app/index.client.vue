@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
@@ -24,6 +25,17 @@ const {
   handleResizeStop,
   handleFullscreen,
 } = useAppHandlers(app, appRef);
+
+// Make sure the modal is closed by default
+onBeforeMount(() => {
+  app.value.isModalOpen = false;
+
+  // If on mobile, set the app to fullscreen
+  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("sm");
+  if (isMobileOrTablet.value) {
+    handleFullscreen(true);
+  }
+});
 </script>
 
 <template>
@@ -36,11 +48,12 @@ const {
     :x="app.x"
     :y="app.y"
     :active="app.isActive"
-    :resizable="app.isFullscreen ? false : true"
+    :resizable="app.isFullscreen || app.isModalOpen ? false : true"
     :draggable="app.isFullscreen ? false : true"
     :parent="true"
     @dragging="handleDragging"
     @dragStop="handleDragStop"
+    @resizing="handleResizeStop"
     @resizeStop="handleResizeStop"
     @activated="() => handleActive(true)"
     @deactivated="() => handleActive(false)"
@@ -52,23 +65,24 @@ const {
     :style="{
       zIndex: app.isActive ? 10000 : 5000,
     }"
-    class="absolute left-0 top-0 rounded-t-xl !border-none duration-300"
+    class="absolute left-0 top-0 rounded-t-xl !border-none shadow-xl duration-300"
   >
-    <div class="relative grid h-full w-full grid-rows-[40px_1fr]">
+    <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
       <DesktopAppTopBar
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"
-        :title="app.name"
-        :isFullscreen="app.isFullscreen"
-        :isActive="app.isActive"
+        :app="app"
+        :class="[
+          app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
+          app.isActive ? 'bg-popover' : 'bg-muted',
+        ]"
         class="app-topbar"
       />
 
       <!-- Content -->
       <DesktopAppSettings v-if="app.id === 'settings'" :app="app" />
-      <DesktopAppTrash v-if="app.id === 'trash'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

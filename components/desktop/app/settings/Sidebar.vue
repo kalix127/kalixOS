@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { type HTMLAttributes } from "vue";
+import { cn } from "@/lib/utils";
 
-const props = defineProps<{
-  isActive: boolean;
+defineProps<{
+  class?: HTMLAttributes["class"];
 }>();
 
-const { isActive } = toRefs(props);
 const { t } = useI18n();
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
@@ -70,11 +71,13 @@ const items = computed(() => [
 
 <template>
   <ScrollArea
-    class="w-full rounded-l-md p-1.5 transition-colors duration-300"
-    :class="[
-      isMobile ? '' : 'border-r border-r-black/30',
-      isActive ? 'bg-muted' : 'bg-muted/50',
-    ]"
+    :class="
+      cn(
+        'w-full min-w-fit rounded-l-md p-1.5 transition-colors duration-300',
+        isMobile ? '' : 'border-r border-r-black/30',
+        $props.class,
+      )
+    "
   >
     <div class="flex flex-col gap-1.5">
       <template v-for="(item, index) in items">

@@ -18,9 +18,13 @@ function closeMenu() {
     icon="gnome:bluetooth-on"
   >
     <div
-      class="grid place-content-center p-6 text-center sm:text-lg text-md font-extrabold text-muted-foreground/70"
+      class="text-md grid place-content-center p-6 text-center font-extrabold text-muted-foreground/70 sm:text-lg"
     >
-      {{ $t("bluetooth_not_available") }}
+      {{
+        isBluetoothEnabled
+          ? $t("bluetooth_enabled_description")
+          : $t("bluetooth_disabled_description")
+      }}
     </div>
   </TopbarMenu>
 </template>

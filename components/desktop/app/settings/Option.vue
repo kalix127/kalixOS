@@ -4,39 +4,65 @@ import { cn } from "@/lib/utils";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
+  title?: string;
   label?: string;
+  description?: string;
   isDisabled?: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
+  isCenter?: boolean;
 }>();
+
+const { label, title, description, isDisabled } = toRefs(props);
 
 const emit = defineEmits<{
   (e: "click"): void;
 }>();
 
 const handleClick = () => {
-  if (props.isDisabled) return;
+  if (isDisabled.value) return;
   emit("click");
 };
+
+const isOptionGroup = inject<boolean>("isOptionGroup", false);
 </script>
 
 <template>
-  <div
-    @click="handleClick"
-    :class="
-      cn(
-        'option flex h-12 items-center justify-between bg-popover p-4 text-sm transition-colors hover:bg-secondary/80',
-        isDisabled ? 'text-muted-foreground' : '',
-        $props.class,
-      )
-    "
-  >
-    <span v-if="label">{{ label }}</span>
-    <slot v-else name="label" />
-    <slot name="action" />
+  <div :class="!isOptionGroup ? 'space-y-3' : ''">
+    <div
+      v-if="!isOptionGroup && title"
+      class="text-sm font-extrabold tracking-wide"
+    >
+      {{ title }}
+    </div>
+    
+    <slot name="title" />
+
+    <div
+      @click="handleClick"
+      :class="
+        cn(
+          'flex min-h-12 items-center bg-popover p-3 text-sm transition-colors hover:bg-secondary/80',
+          isCenter ? 'justify-center h-fit' : 'justify-between',
+          isDisabled ? 'text-muted-foreground' : '',
+          !isOptionGroup ? 'rounded-xl shadow-md' : '',
+          isFirst ? 'rounded-t-xl' : '',
+          isLast ? 'rounded-b-xl' : '',
+          $props.class,
+        )
+      "
+    >
+      <div v-if="label" class="flex flex-col gap-1">
+        <span>{{ label }}</span>
+        <span v-if="description" class="text-xs text-muted-foreground">{{
+          description
+        }}</span>
+      </div>
+      <slot v-else name="label" />
+      <slot name="center" />
+      <slot name="action" />
+    </div>
   </div>
 </template>
 
-<style>
-.option:not(.option-group .option) {
-  @apply rounded-xl;
-}
-</style>
+<style></style>

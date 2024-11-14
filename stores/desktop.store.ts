@@ -1,11 +1,12 @@
 import {
   defaultFileSystem,
   defaultApps,
-  defaultSuspendThreshold,
   defaultBookmarks,
+  defaultBackgroundImage,
+  defaultBackgroundImages,
 } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
-import type { AppNode, FileSystemNode } from "~/types";
+import type { AppNode, FileSystemNode, BackgroundImage } from "~/types";
 import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
 import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
@@ -30,6 +31,8 @@ export const useDesktopStore = defineStore({
 
     // Desktop
     desktopRef: null,
+    backgroundImage: defaultBackgroundImage,
+    backgroundImages: defaultBackgroundImages,
   }),
   getters: {
     desktopNode(state): FileSystemNode | null {
@@ -90,43 +93,56 @@ export const useDesktopStore = defineStore({
      */
     initIdleDetection(): void {
       if (import.meta.client) {
-        const { idle, lastActive } = useIdle(defaultSuspendThreshold);
-        const now = useTimestamp({ interval: 1000 });
-
         const globalStore = useGlobalStore();
         const {
           isAuthenticated,
           isLocked,
           isAboutToSuspend,
           suspendedPercentage,
+          dimScreenThreshold,
         } = storeToRefs(globalStore);
         const { handleSuspend } = globalStore;
+
+        const { lastActive } = useIdle(parseInt(dimScreenThreshold.value));
+
+        const now = useTimestamp({ interval: 1000 });
 
         const idledFor = computed(() =>
           Math.floor((now.value - lastActive.value) / 1000),
         );
 
-        // Gradually show the suspended overlay after 70% of the suspend duration
         watch(idledFor, (newValue: number) => {
+          // If dim screen is disabled or set to 0, do nothing
+          if (dimScreenThreshold.value === "0") return;
+
+          const updatedDimScreenThreshold = parseInt(
+            storeToRefs(globalStore).dimScreenThreshold.value,
+          );
+          const isDimScreenEnabled =
+            storeToRefs(globalStore).isDimScreenEnabled;
+
           const idleThreshold = Math.floor(
-            (defaultSuspendThreshold * 0.7) / 1000,
+            (updatedDimScreenThreshold * 0.7) / 1000,
           ); // 70% of suspend duration in seconds
           const suspendPercentage =
             newValue < idleThreshold
               ? 0
               : Math.min(
                   (newValue - idleThreshold) /
-                    ((defaultSuspendThreshold * 0.3) / 1000),
+                    ((updatedDimScreenThreshold * 0.3) / 1000),
                   1,
                 ); // Scale 0-100% over remaining 30%
           isAboutToSuspend.value = newValue >= idleThreshold;
-          suspendedPercentage.value = suspendPercentage;
-        });
 
-        watch(idle, (isIdle) => {
-          if (!isAuthenticated.value) return;
+          // if Dim screen is enabled, Gradually show the suspended overlay after 70% of the suspend duration
+          if (isDimScreenEnabled.value) {
+            suspendedPercentage.value = suspendPercentage;
+          }
 
-          if (isIdle) {
+          // If the idleFor is grater than dimScreenThreshold, lock the screen
+          if (newValue * 1000 >= parseInt(dimScreenThreshold.value)) {
+            if (!isAuthenticated.value) return;
+
             handleSuspend();
             isLocked.value = true;
           }
@@ -361,6 +377,36 @@ export const useDesktopStore = defineStore({
         this.bookmarks.push(nodeId);
       }
     },
+
+    /**
+     * Sets the background image.
+     * @param image The background image to set.
+     */
+    setBackgroundImage(image: BackgroundImage) {
+      this.backgroundImage = image;
+
+      // Check if the image is already in the backgroundImages array
+      if (!this.backgroundImages.some((bg) => bg.url === image.url)) {
+        this.backgroundImages.push(image);
+      }
+    },
+
+    /**
+     * Removes the background image.
+     */
+    deleteBackgroundImage(imageUrl: string) {
+      this.backgroundImages = this.backgroundImages.filter(
+        (bg) => bg.url !== imageUrl,
+      );
+
+      // If the deleted image is the current background image or If there is only one background image left (the default one), set the default background image
+      if (
+        this.backgroundImage.url === imageUrl ||
+        this.backgroundImages.length === 1
+      ) {
+        this.backgroundImage = defaultBackgroundImage;
+      }
+    },
   },
 });
 
@@ -380,4 +426,6 @@ interface DesktopStore {
 
   // Desktop
   desktopRef: HTMLElement | null;
+  backgroundImage: BackgroundImage;
+  backgroundImages: BackgroundImage[];
 }

@@ -33,6 +33,9 @@ export function useWifi() {
       return;
     }
 
+    // Mark the network as saved after successful connection
+    currentNetwork.value.isSaved = true;
+
     // Update the connected network and reset the connection state
     connectedWifiNetwork.value = currentNetwork.value;
     resetConnectionState();
@@ -67,6 +70,15 @@ export function useWifi() {
 
     // Start the timeout to simulate the connection delay
     start();
+
+  }
+
+  function forgetConnection(network: WifiNetwork) {
+    if (connectedWifiNetwork.value?.id === network.id) {
+      connectedWifiNetwork.value = null;
+    }
+
+    network.isSaved = false;
   }
 
   return {
@@ -76,5 +88,6 @@ export function useWifi() {
     isSearchingWifiNetworks,
     idConnectingNetwork,
     connectToWifi,
+    forgetConnection,
   };
 }

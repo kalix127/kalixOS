@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const globalStore = useGlobalStore();
 const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
+
+const { backgroundImage } = storeToRefs(useDesktopStore());
 </script>
 
 <template>
@@ -13,11 +15,15 @@ const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
     <div class="relative max-h-[100svh] max-w-[100svw]">
       <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->
-      <NuxtImg
-        src="/img/bg-desktop.jpg"
-        class="absolute -z-[1] h-full w-full object-cover"
-        style="-webkit-user-drag: none"
-      />
+      <Transition>
+        <NuxtImg
+          :alt="backgroundImage.name"
+          :key="backgroundImage.name"
+          :src="backgroundImage.url"
+          class="absolute -z-[1] h-full w-full object-cover"
+          style="-webkit-user-drag: none"
+        />
+      </Transition>
       <slot />
     </div>
     <ClientOnly>
@@ -50,5 +56,15 @@ main {
 .lock-enter-from,
 .lock-leave-to {
   transform: translateY(-100%);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

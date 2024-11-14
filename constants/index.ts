@@ -1,12 +1,27 @@
 // @ts-nocheck
-import type { WifiNetwork, FileSystemNode, SystemLog, AppNode } from "@/types";
+import type {
+  WifiNetwork,
+  FileSystemNode,
+  SystemLog,
+  AppNode,
+  BackgroundImage,
+} from "@/types";
 import { assignIds } from "~/helpers";
 
 export const defaultUsername = "Gianluca";
 
 export const defaultBootDuration = 5000;
 
-export const defaultSuspendThreshold = 300000; // 5 minutes
+export const defaultDimScreenThreshold = "300000"; // 5 minutes
+
+export const defaultBackgroundImage: BackgroundImage = {
+  url: "img/bg-desktop.jpg",
+  name: "default",
+};
+
+export const defaultBackgroundImages: BackgroundImage[] = [
+  defaultBackgroundImage,
+];
 
 export const desktopEnvironments = [
   "gnome",
@@ -16,9 +31,58 @@ export const desktopEnvironments = [
 ];
 
 export const defaultNetworks: WifiNetwork[] = [
-  { id: 1, name: "FASTWEB-7632798", signal: 4, isProtected: true },
-  { id: 2, name: "TIM-1234567", signal: 3, isProtected: true },
-  { id: 3, name: "ILIAD-34781 Public", signal: 1, isProtected: false },
+  {
+    id: 1,
+    name: "FASTWEB-7632798",
+    signal: 4,
+    isProtected: true,
+    isSaved: true,
+    details: {
+      linkSpeed: "103 Mb/s",
+      security: "WPA2",
+      ipv4: "192.168.1.100",
+      ipv6: "2001:db8::1",
+      hardwareAddress: "00:1A:2B:3C:4D:5E",
+      supportedFrequencies: ["2.4 GHz", "5 GHz"],
+      defaultRoute: "192.168.1.1",
+      dns4: ["8.8.8.8", "8.8.4.4"],
+      dns6: ["2001:4860:4860::8888", "2001:4860:4860::8844"],
+    },
+  },
+  {
+    id: 2,
+    name: "TIM-1234567",
+    signal: 3,
+    isProtected: true,
+    details: {
+      linkSpeed: "72 Mb/s",
+      security: "WPA3",
+      ipv4: "192.168.2.105",
+      ipv6: "2001:db8::2",
+      hardwareAddress: "00:2B:3C:4D:5E:6F",
+      supportedFrequencies: ["2.4 GHz"],
+      defaultRoute: "192.168.2.1",
+      dns4: ["1.1.1.1", "1.0.0.1"],
+      dns6: ["2606:4700:4700::1111", "2606:4700:4700::1001"],
+    },
+  },
+  {
+    id: 3,
+    name: "ILIAD-34781 Public",
+    signal: 1,
+    isProtected: false,
+    details: {
+      linkSpeed: "13 Mb/s",
+      security: "None",
+      ipv4: "192.168.3.110",
+      ipv6: "2001:db8::3",
+      hardwareAddress: "00:3C:4D:5E:6F:7G",
+      supportedFrequencies: ["2.4 GHz", "5 GHz"],
+      defaultRoute: "192.168.3.1",
+      dns4: ["208.67.222.222", "208.67.220.220"],
+      dns6: ["2620:119:35::35", "2620:119:53::53"],
+    },
+  },
 ];
 
 const trashNode: AppNode = {
@@ -88,6 +152,7 @@ export const defaultApps: AppNode[] = [
   isActive: false,
   isMinimized: false,
   isFullscreen: false,
+  isModalOpen: false,
   width: 0,
   height: 0,
   x: 0,

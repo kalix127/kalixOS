@@ -15,7 +15,7 @@ const {
 <template>
   <Popover>
     <PopoverTrigger
-      class="flex cursor-default items-center justify-end gap-2 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary xs:gap-4"
+      class="flex cursor-default items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
       :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
     >
       <Icon

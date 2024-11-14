@@ -242,7 +242,7 @@ export const defaultApps: AppNode[] = [
   width: 0,
   height: 0,
   x: 0,
-  y: 0,
+  y: 2,
   prev: {
     width: 0,
     height: 0,

@@ -52,7 +52,9 @@ const items = [
         <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></div>
       </div>
     </PopoverTrigger>
-    <PopoverContent class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2">
+    <PopoverContent
+      class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2 shadow-md"
+    >
       <Button
         v-for="item in items"
         :key="item.name"
@@ -74,10 +76,12 @@ const items = [
         @click="() => openFolder(item.id)"
       >
         <Icon name="gnome:symbolic-folder" size="16" />
-        <span class="text-sm">{{ item.isTranslated ? $t(item.name) : item.name }}</span>
+        <span class="text-sm">{{
+          item.isTranslated ? $t(item.name) : item.name
+        }}</span>
       </Button>
       <div v-if="bookmarksNodes.length > 4" class="grid place-content-center">
-        <span class="text-muted-foreground select-none">...</span>
+        <span class="select-none text-muted-foreground">...</span>
       </div>
     </PopoverContent>
   </Popover>

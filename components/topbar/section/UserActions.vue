@@ -9,6 +9,7 @@ const {
   isAnyTopbarMenuOpen,
   isAuthenticated,
   isLocked,
+  currentSettingsTab,
 } = storeToRefs(globalStore);
 
 const { openApp } = useDesktopStore();
@@ -41,6 +42,11 @@ const items = [
     },
   },
 ];
+
+function handleBatteryMenu() {
+  currentSettingsTab.value = "power";
+  openApp("settings");
+}
 </script>
 
 <template>
@@ -54,6 +60,7 @@ const items = [
         variant="ghost"
         class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
         :disabled="isAnyTopbarMenuOpen"
+        @click="handleBatteryMenu"
       >
         <Icon name="gnome:battery-full" size="18" />
         <span class="text-sm font-semibold">100%</span>

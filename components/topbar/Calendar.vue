@@ -54,7 +54,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         class="flex cursor-default select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
         :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
       >
-        <span class="text-nowrap text-sm font-extrabold">
+        <span class="text-nowrap text-xs sm:text-sm font-extrabold">
           {{ formattedDateTime }}
         </span>
       </div>

@@ -88,7 +88,7 @@ export const useGlobalStore = defineStore({
     // Wifi
     async searchWifiNetworks() {
       this.isSearchingWifiNetworks = true;
-      const totalTime = 2500; // 2.5 seconds in total to add all the networks
+      const totalTime = 5000; // 5 seconds in total to add all the networks
 
       // Generate random delays for each network
       const randomDelays = generateRandomDelays(

@@ -51,7 +51,7 @@ function closeMenu() {
       :key="option.name"
       @click="option.handler"
       variant="ghost"
-      class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
+      class="w-full justify-start rounded-xl font-medium duration-0 hover:bg-accent"
       >{{ option.name }}</Button
     >
     <template v-if="isAuthenticated">
@@ -60,7 +60,7 @@ function closeMenu() {
       <Button
         @click="handleLogout"
         variant="ghost"
-        class="w-full cursor-default justify-start rounded-xl font-medium duration-0 hover:bg-accent"
+        class="w-full justify-start rounded-xl font-medium duration-0 hover:bg-accent"
         >{{ $t("logout") }}...
       </Button>
     </template>

@@ -92,7 +92,7 @@ const items = computed(() => [
         <button
           v-else
           :key="`${item.label}-${index}`"
-          class="flex h-11 w-full cursor-default items-center gap-3 rounded-md p-3 transition-colors duration-200"
+          class="flex h-11 w-full items-center gap-3 rounded-md p-3 transition-colors duration-200"
           :class="[
             currentSettingsTab === item.id
               ? 'bg-popover'

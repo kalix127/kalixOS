@@ -69,7 +69,7 @@ const handleStopRenaming = () => {
           />
           <Button
             size="sm"
-            class="w-fit cursor-default font-extrabold"
+            class="w-fit font-extrabold"
             @click="handleStopRenaming"
           >
             {{ item.isNewlyCreated ? "OK" : $t("rename") }}

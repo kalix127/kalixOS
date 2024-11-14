@@ -21,7 +21,7 @@ const { app } = toRefs(props);
       @click="() => $emit('openApp', app)"
       variant="ghost"
       size="icon"
-      class="relative grid cursor-default place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7"
+      class="relative grid place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7"
       :class="[hasAppsLoading ? 'cursor-progress' : '']"
     >
       <Icon :name="app.icon" class="size-9 sm:size-10" />

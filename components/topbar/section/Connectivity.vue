@@ -101,10 +101,10 @@ const items = computed(() => [
     <div
       v-for="item in items"
       :key="item.name"
-      class="flex h-11 sm:h-12 items-center"
+      class="flex h-11 items-center sm:h-12"
     >
       <button
-        class="flex h-full w-full cursor-default items-center justify-start gap-2 rounded-l-full p-2 px-4"
+        class="flex h-full w-full items-center justify-start gap-2 rounded-l-full p-2 px-4"
         :class="[
           item.isActive
             ? 'bg-primary/80 hover:bg-primary/90'
@@ -136,7 +136,7 @@ const items = computed(() => [
       <button
         v-if="item.menu"
         :disabled="getTopbarMenuOpen === item.label || !item.model.value"
-        class="grid h-full cursor-default place-content-center rounded-r-full border-l p-2 py-2"
+        class="grid h-full place-content-center rounded-r-full border-l p-2 py-2"
         :class="[
           item.isActive
             ? 'bg-primary/90 hover:bg-primary'

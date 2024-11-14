@@ -24,7 +24,7 @@ function handleDisconnect() {
   >
     <Button
       variant="ghost"
-      class="flex w-full cursor-default items-center justify-between rounded-xl font-medium duration-0 hover:bg-accent"
+      class="flex w-full items-center justify-between rounded-xl font-medium duration-0 hover:bg-accent"
       @click="handleDisconnect"
     >
       <div class="flex items-center gap-2">

@@ -1,5 +1,6 @@
 import VueDraggableResizable from "vue-draggable-resizable";
 import { type AppNode } from "@/types";
+import { useThrottleFn } from "@vueuse/core";
 
 export function useAppHandlers(
   app: Ref<AppNode>,
@@ -26,34 +27,33 @@ export function useAppHandlers(
   };
 
   /*  Resize Handlers */
-  const handleResizeStop = (
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-  ) => {
-    updateAppSizes(width, height);
-  };
+  const handleResizeStop = useThrottleFn(
+    (x: number, y: number, width: number, height: number) => {
+      updateAppSizes(width, height);
+    },
+    25,
+  );
 
   /* Drag handlers */
-  const handleDragStop = (x: number, y: number) => {
+  const handleDragStop = useThrottleFn((x: number, y: number) => {
     // Prevent the app from being dragged outside the desktop bounds
     // Set 1 to avoid animation bug when the value is 0
     if (x <= 0) x = 1;
     if (y <= 0) y = 1;
 
     updateAppPosition(x, y);
-  };
-  const handleDragging = (x: number, y: number) => {
+  }, 25);
+
+  const handleDragging = useThrottleFn((x: number, y: number) => {
     // Update the app's position only if the user is dragging the app to the top bar
     if (y < 2 || (y > 2 && y < 20)) {
       handleDragStop(x, y);
     }
-  };
+  }, 25);
 
   const handleFullscreen = (value?: boolean) => {
     // If value is provided, set fullscreen directly
-    if (typeof value !== 'undefined') {
+    if (typeof value !== "undefined") {
       app.value.isFullscreen = value;
       if (value) {
         // Store current size/position before going fullscreen
@@ -63,7 +63,10 @@ export function useAppHandlers(
         app.value.prev.y = app.value.y;
 
         // Set fullscreen size/position
-        updateAppSizes(desktopRef.value?.offsetWidth || 0, desktopRef.value?.offsetHeight || 0);
+        updateAppSizes(
+          desktopRef.value?.offsetWidth || 0,
+          desktopRef.value?.offsetHeight || 0,
+        );
         updateAppPosition(1, 1);
       } else {
         // Restore previous size/position
@@ -89,7 +92,10 @@ export function useAppHandlers(
 
     // Set the full screen
     app.value.isFullscreen = true;
-    updateAppSizes(desktopRef.value?.offsetWidth || 0, desktopRef.value?.offsetHeight || 0);
+    updateAppSizes(
+      desktopRef.value?.offsetWidth || 0,
+      desktopRef.value?.offsetHeight || 0,
+    );
     updateAppPosition(1, 1);
   };
 

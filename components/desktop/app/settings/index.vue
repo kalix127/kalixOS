@@ -108,6 +108,12 @@ onUnmounted(() => {
           v-else-if="currentSettingsTab === 'printers'"
           class="grid h-full place-content-center"
         />
+
+        <!-- System -->
+        <DesktopAppSettingsTabSystem
+          :app="app"
+          v-else-if="currentSettingsTab === 'system'"
+        />
       </Transition>
     </div>
   </div>

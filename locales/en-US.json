@@ -9,6 +9,7 @@
   "output": "Output",
   "input": "Input",
   "sounds": "Sounds",
+  "unknown": "Unknown",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",
@@ -111,6 +112,13 @@
   "add_picture": "Add picture",
   "no_print_service": "No Print Service",
   "no_print_service_description": "The system printing service doesn't seem to be available",
+  "operating_system": "Operating System",
+  "processor": "Processor",
+  "memory": "Memory",
+  "disk_capacity": "Disk Capacity",
+  "windowing_system": "Windowing System",
+  "device_name": "Device Name",
+
 
   "--------------------TIMES----------------------": "",
   "never": "Never",

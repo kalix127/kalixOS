@@ -9,6 +9,7 @@
   "output": "Uscita",
   "input": "Ingresso",
   "sounds": "Suoni",
+  "unknown": "Sconosciuto",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",
@@ -109,6 +110,12 @@
   "add_picture": "Aggiungi immagine",
   "no_print_service": "Nessun Servizio di Stampa",
   "no_print_service_description": "Il servizio di stampa del sistema non sembra essere disponibile",
+  "operating_system": "Sistema Operativo",
+  "processor": "Processore",
+  "memory": "Memoria",
+  "disk_capacity": "Capacità Disco",
+  "windowing_system": "Sistema di Finestra",
+  "device_name": "Nome dispositivo",
 
   "--------------------TIMES----------------------": "",
   "never": "Mai",

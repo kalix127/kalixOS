@@ -24,7 +24,7 @@ useIntervalFn(
 
 <template>
   <div
-    class="hidden cursor-default select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-extrabold transition-colors duration-100 ease-in-out hover:bg-secondary lg:flex"
+    class="hidden select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-extrabold transition-colors duration-100 ease-in-out hover:bg-secondary lg:flex"
     :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
   >
     <span>CPU: {{ cpuUsage }}</span>

@@ -66,7 +66,7 @@ function handleBatteryMenu() {
       <!-- Battery item -->
       <Button
         variant="ghost"
-        class="flex size-fit cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 duration-0 hover:bg-secondary-hover sm:p-3"
+        class="flex size-fit select-none items-center space-x-2 rounded-full bg-secondary p-2 duration-0 hover:bg-secondary-hover sm:p-3"
         :disabled="isAnyTopbarMenuOpen"
         @click="handleBatteryMenu"
       >
@@ -83,7 +83,7 @@ function handleBatteryMenu() {
         :disabled="isAnyTopbarMenuOpen"
         size="icon"
         variant="ghost"
-        class="size-fit cursor-default rounded-full bg-secondary p-2.5 duration-0 hover:bg-secondary-hover sm:p-3"
+        class="size-fit rounded-full bg-secondary p-2.5 duration-0 hover:bg-secondary-hover sm:p-3"
         @click="item.handler"
       >
         <Icon :name="item.icon" class="size-[14px] sm:size-4" />

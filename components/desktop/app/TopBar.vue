@@ -62,7 +62,7 @@ const actions = computed(() => [
       <Button
         variant="ghost"
         size="icon"
-        class="size-6 cursor-default rounded-full duration-300 hover:bg-secondary-hover"
+        class="size-6 rounded-full duration-300 hover:bg-secondary-hover"
         :class="[app.isActive ? 'bg-secondary' : 'bg-popover']"
         v-for="action in actions"
         :key="action.icon"

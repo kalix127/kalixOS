@@ -34,7 +34,7 @@ function closeMenu() {
       v-for="item in items"
       :key="item.name"
       variant="ghost"
-      class="flex w-full cursor-default justify-start gap-2 rounded-xl font-medium duration-0"
+      class="flex w-full justify-start gap-2 rounded-xl font-medium duration-0"
       :class="[locale === item.value ? 'bg-accent' : 'hover:bg-accent/50']"
       @click="() => setLocale(item.value)"
     >

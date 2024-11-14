@@ -23,12 +23,12 @@ function handleForgetConnection() {
 <template>
   <DesktopAppModal :app="app">
     <!-- Topbar -->
-    <div class="app-topbar flex h-12 p-2 sm:min-w-80 z-10">
+    <div class="app-topbar z-10 flex h-12 p-2 sm:min-w-80">
       <!-- Cancel button -->
       <div class="flex flex-1 items-center">
         <Button
           variant="secondary"
-          class="h-full cursor-default bg-muted font-extrabold"
+          class="h-full bg-muted font-extrabold"
           @click="emit('close')"
         >
           {{ $t("close") }}
@@ -48,7 +48,9 @@ function handleForgetConnection() {
     <div
       class="flex h-[calc(100%-40px)] w-full flex-col justify-center gap-4 px-3 py-4"
     >
-      <span class="block font-medium sm:hidden text-center">{{ network.name }}</span>
+      <span class="block text-center font-medium sm:hidden">{{
+        network.name
+      }}</span>
       <div class="flex flex-col items-center gap-3 sm:gap-2">
         <div
           v-for="(detail, key) in network.details"

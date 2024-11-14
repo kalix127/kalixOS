@@ -45,7 +45,7 @@ const items = [
   <Popover>
     <PopoverTrigger>
       <div
-        class="flex min-h-7 cursor-default select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
+        class="flex min-h-7 select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
         :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
       >
         <div class="h-2 w-7 rounded-full bg-white"></div>
@@ -59,7 +59,7 @@ const items = [
         v-for="item in items"
         :key="item.name"
         variant="ghost"
-        class="flex w-full cursor-default justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
+        class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
         @click="() => openFolder(item.id)"
       >
         <Icon :name="item.icon" size="16" />
@@ -72,7 +72,7 @@ const items = [
         v-for="item in bookmarksNodes.slice(0, 4)"
         :key="item.name"
         variant="ghost"
-        class="flex w-full cursor-default justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
+        class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
         @click="() => openFolder(item.id)"
       >
         <Icon name="gnome:symbolic-folder" size="16" />

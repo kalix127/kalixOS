@@ -9,7 +9,8 @@ const bootStore = useBootStore();
 
 const { username, isAboutToSuspend, isLocked } = storeToRefs(globalStore);
 
-const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } = storeToRefs(bootStore);
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
+  storeToRefs(bootStore);
 const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
@@ -31,13 +32,20 @@ const route = useRoute();
     ]"
   >
     <!-- Left Section -->
-    <div class="flex flex-1 items-center">
+    <div class="hidden flex-1 items-center sm:flex">
       <TopbarPlaces v-if="route.name === 'desktop'" />
     </div>
 
     <!-- Center Section -->
     <div class="flex flex-none items-center justify-center">
-      <TopbarCalendar />
+      <ClientOnly>
+        <TopbarCalendar />
+
+        <!-- Loading Skeleton -->
+        <template #fallback>
+          <Skeleton class="h-7 w-40 bg-secondary/60" />
+        </template>
+      </ClientOnly>
     </div>
 
     <!-- Right Section -->
@@ -49,7 +57,7 @@ const route = useRoute();
     <!-- Automatic suspend alert -->
     <Transition name="fade">
       <Alert
-        class="absolute -bottom-20 left-1/2 z-[50000] max-w-72 -translate-x-1/2 border-none bg-popover xs:max-w-80 sm:max-w-96"
+        class="absolute -bottom-24 left-1/2 z-[50000] max-w-72 -translate-x-1/2 border-none bg-popover xs:max-w-80 sm:-bottom-20 sm:max-w-96"
         :class="isLocked ? 'hidden' : ''"
         v-if="isAboutToSuspend"
       >

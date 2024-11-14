@@ -27,6 +27,7 @@ function closeMenu() {
     :isEnabled="isWifiEnabled"
     :title="$t('wifi')"
     icon="gnome:wifi-4"
+    ref="wifiMenuRef"
   >
     <template #loading-icon>
       <Icon
@@ -36,28 +37,31 @@ function closeMenu() {
         size="20"
       />
     </template>
-    <Button
-      v-for="network in availableWifiNetworks"
-      :key="network.id"
-      variant="ghost"
-      class="flex w-full cursor-pointer justify-start gap-2 rounded-xl font-medium transition-colors duration-200 hover:bg-accent"
-      @click="() => connectToWifi(network)"
-    >
-      <WifiIcon :network="network" :size="18" />
-      <span>{{ network.name }}</span>
 
-      <Icon
-        name="gnome:checkmark"
-        size="18"
-        v-if="connectedWifiNetwork?.id === network.id"
-      />
-      <Icon
-        name="extra:loading"
-        class="animate-spin"
-        size="18"
-        v-if="idConnectingNetwork === network.id"
-      />
-    </Button>
+    <ScrollArea class="h-[100px] w-full pr-1 sm:h-[200px] lg:h-[300px]">
+      <Button
+        v-for="network in availableWifiNetworks"
+        :key="network.id"
+        variant="ghost"
+        class="flex w-full cursor-pointer justify-start gap-2 rounded-xl font-medium transition-colors duration-200 hover:bg-accent"
+        @click="() => connectToWifi(network)"
+      >
+        <WifiIcon :network="network" :size="18" />
+        <span>{{ network.name }}</span>
+
+        <Icon
+          name="gnome:checkmark"
+          size="18"
+          v-if="connectedWifiNetwork?.id === network.id"
+        />
+        <Icon
+          name="extra:loading"
+          class="animate-spin"
+          size="18"
+          v-if="idConnectingNetwork === network.id"
+        />
+      </Button>
+    </ScrollArea>
   </TopbarMenu>
 </template>
 

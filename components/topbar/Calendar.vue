@@ -54,12 +54,12 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         class="flex cursor-default select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
         :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
       >
-        <span class="text-nowrap text-sm font-extrabold">
+        <span class="text-nowrap text-xs sm:text-sm font-extrabold">
           {{ formattedDateTime }}
         </span>
       </div>
     </PopoverTrigger>
-    <PopoverContent class="ml-1.5 mt-1.5 rounded-3xl xs:w-80 z-[50000]">
+    <PopoverContent class="ml-1.5 mt-1.5 rounded-3xl xs:w-80 z-[50000] shadow-md">
       <div class="flex select-none flex-col items-center">
         <span
           class="text-md w-full text-left font-bold text-muted-foreground xs:pl-4"

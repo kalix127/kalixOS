@@ -101,7 +101,7 @@ const items = computed(() => [
     <div
       v-for="item in items"
       :key="item.name"
-      class="flex max-h-12 min-h-12 items-center"
+      class="flex h-11 sm:h-12 items-center"
     >
       <button
         class="flex h-full w-full cursor-default items-center justify-start gap-2 rounded-l-full p-2 px-4"

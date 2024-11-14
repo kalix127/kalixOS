@@ -9,6 +9,7 @@ const {
   isAnyTopbarMenuOpen,
   isAuthenticated,
   isLocked,
+  currentSettingsTab,
 } = storeToRefs(globalStore);
 
 const { openApp } = useDesktopStore();
@@ -16,6 +17,14 @@ const { openApp } = useDesktopStore();
 const { handleLock } = globalStore;
 
 const items = [
+  {
+    name: t("language.switch"),
+    icon: "gnome:languages",
+    handler: () => {
+      isLanguageMenuOpen.value = !isLanguageMenuOpen.value;
+    },
+  },
+
   // If authenticated and not locked, show the settings and lock buttons
   ...(isAuthenticated.value && !isLocked.value
     ? [
@@ -41,6 +50,11 @@ const items = [
     },
   },
 ];
+
+function handleBatteryMenu() {
+  currentSettingsTab.value = "power";
+  openApp("settings");
+}
 </script>
 
 <template>
@@ -48,40 +62,31 @@ const items = [
     class="topbar-menu-transition flex justify-between gap-4"
     :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
   >
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 sm:gap-4">
       <!-- Battery item -->
       <Button
         variant="ghost"
-        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
+        class="flex size-fit cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 duration-0 hover:bg-secondary-hover sm:p-3"
         :disabled="isAnyTopbarMenuOpen"
+        @click="handleBatteryMenu"
       >
-        <Icon name="gnome:battery-full" size="18" />
-        <span class="text-sm font-semibold">100%</span>
-      </Button>
-      <!-- Language Switcher -->
-      <Button
-        variant="ghost"
-        size="icon"
-        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
-        :disabled="isAnyTopbarMenuOpen"
-        @click="isLanguageMenuOpen = !isLanguageMenuOpen"
-      >
-        <Icon name="gnome:languages" size="18" />
+        <Icon name="gnome:battery-full" class="size-[14px] sm:size-4" />
+        <span class="text-xs font-semibold sm:text-sm">100%</span>
       </Button>
     </div>
 
     <!-- Lock, settings and poweroff buttons -->
-    <div class="flex gap-4">
+    <div class="flex items-center gap-2 sm:gap-4">
       <Button
         v-for="item in items"
         :key="item.name"
         :disabled="isAnyTopbarMenuOpen"
         size="icon"
         variant="ghost"
-        class="cursor-default rounded-full bg-secondary duration-0 hover:bg-secondary-hover"
+        class="size-fit cursor-default rounded-full bg-secondary p-2.5 duration-0 hover:bg-secondary-hover sm:p-3"
         @click="item.handler"
       >
-        <Icon :name="item.icon" size="16" />
+        <Icon :name="item.icon" class="size-[14px] sm:size-4" />
       </Button>
     </div>
   </div>

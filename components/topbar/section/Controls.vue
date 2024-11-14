@@ -1,8 +1,15 @@
 <script setup lang="ts">
 const globalStore = useGlobalStore();
 
-const { volume, inputVolume, isPowerOffMenuOpen, isAnyTopbarMenuOpen } =
+const { volume, inputVolume, isAnyTopbarMenuOpen, currentSettingsTab } =
   storeToRefs(globalStore);
+
+const { openApp } = useDesktopStore();
+
+function handleOpenSettings() {
+  currentSettingsTab.value = "sound";
+  openApp("settings");
+}
 </script>
 
 <template>
@@ -31,6 +38,15 @@ const { volume, inputVolume, isPowerOffMenuOpen, isAnyTopbarMenuOpen } =
         :max="100"
         :step="1"
       />
+
+      <Button
+        variant="ghost"
+        size="icon"
+        class="size-fit rounded-full p-1 hover:bg-secondary"
+        @click="handleOpenSettings"
+      >
+        <Icon name="gnome:arrow-long-right" size="18" />
+      </Button>
     </div>
 
     <!-- Microphone slider -->
@@ -53,6 +69,15 @@ const { volume, inputVolume, isPowerOffMenuOpen, isAnyTopbarMenuOpen } =
         :max="100"
         :step="1"
       />
+
+      <Button
+        variant="ghost"
+        size="icon"
+        class="size-fit rounded-full p-1 hover:bg-secondary"
+        @click="handleOpenSettings"
+      >
+        <Icon name="gnome:arrow-long-right" size="18" />
+      </Button>
     </div>
   </div>
 </template>

@@ -11,6 +11,8 @@ const {
   isLocked,
 } = storeToRefs(globalStore);
 
+const { openApp } = useDesktopStore();
+
 const { handleLock } = globalStore;
 
 const items = [
@@ -21,7 +23,7 @@ const items = [
           name: t("settings"),
           icon: "gnome:settings",
           handler: () => {
-            console.log("Settings");
+            openApp("settings");
           },
         },
         {
@@ -50,7 +52,7 @@ const items = [
       <!-- Battery item -->
       <Button
         variant="ghost"
-        class="cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover flex"
+        class="flex cursor-default select-none items-center space-x-2 rounded-full bg-secondary p-2 px-3 duration-0 hover:bg-secondary-hover"
         :disabled="isAnyTopbarMenuOpen"
       >
         <Icon name="gnome:battery-full" size="18" />

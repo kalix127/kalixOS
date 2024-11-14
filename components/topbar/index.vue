@@ -9,7 +9,8 @@ const bootStore = useBootStore();
 
 const { username, isAboutToSuspend, isLocked } = storeToRefs(globalStore);
 
-const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } = storeToRefs(bootStore);
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
+  storeToRefs(bootStore);
 const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
@@ -31,7 +32,7 @@ const route = useRoute();
     ]"
   >
     <!-- Left Section -->
-    <div class="flex flex-1 items-center">
+    <div class="hidden flex-1 items-center sm:flex">
       <TopbarPlaces v-if="route.name === 'desktop'" />
     </div>
 

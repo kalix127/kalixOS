@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useIntervalFn } from "@vueuse/core";
 
+const { hasAppsAtTop } = storeToRefs(useDesktopStore());
+
 const cpuUsage = ref("0.00%");
 const memoryUsage = ref("0.00%");
 
@@ -16,13 +18,14 @@ useIntervalFn(
     memoryUsage.value = getRandomValue(15, 95); // Memory between 15 and 95%
   },
   1000,
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
 <template>
   <div
     class="hidden cursor-default select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-extrabold transition-colors duration-100 ease-in-out hover:bg-secondary lg:flex"
+    :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
   >
     <span>CPU: {{ cpuUsage }}</span>
     <span>Mem: {{ memoryUsage }}</span>

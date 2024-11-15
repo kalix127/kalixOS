@@ -39,7 +39,7 @@ onUnmounted(() => {
     "
   >
     <!-- Sidebar -->
-    <DesktopAppSettingsSidebar
+    <SettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
       :style="{
         height: `${scrollAreaHeight}px`,
@@ -60,57 +60,57 @@ onUnmounted(() => {
     >
       <Transition mode="out-in">
         <!-- Wifi -->
-        <DesktopAppSettingsTabWifi
+        <SettingsTabWifi
           :app="app"
           v-if="currentSettingsTab === 'wifi'"
         />
 
         <!-- Network -->
-        <DesktopAppSettingsTabNetwork
+        <SettingsTabNetwork
           :app="app"
           v-else-if="currentSettingsTab === 'network'"
         />
 
         <!-- Bluetooth -->
-        <DesktopAppSettingsTabBluetooth
+        <SettingsTabBluetooth
           :app="app"
           v-else-if="currentSettingsTab === 'bluetooth'"
           class="grid h-full place-content-center"
         />
 
         <!-- Displays -->
-        <DesktopAppSettingsTabDisplays
+        <SettingsTabDisplays
           :app="app"
           v-else-if="currentSettingsTab === 'displays'"
         />
 
         <!-- Sound -->
-        <DesktopAppSettingsTabSound
+        <SettingsTabSound
           :app="app"
           v-else-if="currentSettingsTab === 'sound'"
         />
 
         <!-- Power -->
-        <DesktopAppSettingsTabPower
+        <SettingsTabPower
           :app="app"
           v-else-if="currentSettingsTab === 'power'"
         />
 
         <!-- Appearance -->
-        <DesktopAppSettingsTabAppearance
+        <SettingsTabAppearance
           :app="app"
           v-else-if="currentSettingsTab === 'appearance'"
         />
 
         <!-- Printers -->
-        <DesktopAppSettingsTabPrinters
+        <SettingsTabPrinters
           :app="app"
           v-else-if="currentSettingsTab === 'printers'"
           class="grid h-full place-content-center"
         />
 
         <!-- System -->
-        <DesktopAppSettingsTabSystem
+        <SettingsTabSystem
           :app="app"
           v-else-if="currentSettingsTab === 'system'"
         />

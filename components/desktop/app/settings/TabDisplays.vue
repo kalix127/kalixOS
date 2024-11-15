@@ -12,11 +12,11 @@ const { width, height } = useWindowSize();
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
-      <DesktopAppSettingsOptionGroup>
+      <SettingsOptionGroup>
         <!-- Displays -->
-        <DesktopAppSettingsOption is-center is-first>
+        <SettingsOption is-center is-first>
           <template #center>
             <div class="grid place-content-center p-2">
               <div
@@ -26,10 +26,10 @@ const { width, height } = useWindowSize();
               </div>
             </div>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Primary Display -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('primary_display')"
           :description="$t('primary_display_description')"
           is-disabled
@@ -38,20 +38,20 @@ const { width, height } = useWindowSize();
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- Toggle Night Light -->
-      <DesktopAppSettingsOption :label="$t('night_light')" is-disabled>
+      <SettingsOption :label="$t('night_light')" is-disabled>
         <template #action>
           <div class="flex items-center gap-2">
             <span>{{ $t("off") }}</span>
             <Icon name="gnome:arrow-long-right" size="18" />
           </div>
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

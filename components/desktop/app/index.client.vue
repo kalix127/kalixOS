@@ -82,7 +82,7 @@ onBeforeMount(() => {
       />
 
       <!-- Content -->
-      <DesktopAppSettings v-if="app.id === 'settings'" :app="app" />
+      <Settings v-if="app.id === 'settings'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

@@ -25,24 +25,24 @@ function toggleDimScreen() {
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Battery level -->
-      <DesktopAppSettingsOptionGroup class="gap-0" :title="$t('battery_level')">
-        <DesktopAppSettingsOption class="pb-0 pt-3 min-h-6" is-first>
+      <SettingsOptionGroup class="gap-0" :title="$t('battery_level')">
+        <SettingsOption class="pb-0 pt-3 min-h-6" is-first>
           <template #center>
             <Slider class="h-2 bg-green-300" :default-value="[0]" :max="100" :step="1" />
           </template>
-        </DesktopAppSettingsOption>
-        <DesktopAppSettingsOption :label="$t('fully_charged')" is-last>
+        </SettingsOption>
+        <SettingsOption :label="$t('fully_charged')" is-last>
           <template #action> 100 % </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- Power saving -->
-      <DesktopAppSettingsOptionGroup :title="$t('power_saving')">
+      <SettingsOptionGroup :title="$t('power_saving')">
         <!-- Dim screen -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('dim_screen')"
           :description="$t('dim_screen_description')"
           is-first
@@ -51,10 +51,10 @@ function toggleDimScreen() {
           <template #action>
             <Switch :checked="isDimScreenEnabled" />
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Screen blank -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('screen_blank')"
           :description="$t('screen_blank_description')"
           is-last
@@ -93,11 +93,11 @@ function toggleDimScreen() {
               </SelectContent>
             </Select>
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- General -->
-      <DesktopAppSettingsOption
+      <SettingsOption
         :title="$t('general')"
         :label="$t('show_battery_percentage')"
         :description="$t('show_battery_percentage_description')"
@@ -106,9 +106,9 @@ function toggleDimScreen() {
         <template #action>
           <Switch :checked="isShowBatteryPercentageEnabled" />
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

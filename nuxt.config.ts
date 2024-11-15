@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        class: "overflow-hidden"
-      }
+        class: "overflow-hidden",
+      },
     },
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
@@ -38,6 +38,15 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/i18n",
   ],
+  components: {
+    dirs: [
+      {
+        path: "~/components/desktop/app/settings",
+        prefix: "Settings",
+      },
+      "~/components",
+    ],
+  },
   i18n: {
     // TODO: Add baseUrl for prod
     defaultLocale: "en-US",
@@ -84,7 +93,7 @@ export default defineNuxtConfig({
       },
       {
         dir: "./icons/gnome",
-        prefix: "gnome"
+        prefix: "gnome",
       },
       {
         dir: "./icons/extra",

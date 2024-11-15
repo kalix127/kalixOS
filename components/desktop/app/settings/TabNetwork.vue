@@ -13,10 +13,10 @@ const { toggleWired } = globalStore;
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Toggle Wired -->
-      <DesktopAppSettingsOption
+      <SettingsOption
         :title="$t('wired')"
         :label="`${isWiredEnabled ? $t('connected') : ''} 1,000 Mb/s`"
         @click="toggleWired"
@@ -24,24 +24,24 @@ const { toggleWired } = globalStore;
         <template #action>
           <Switch :checked="isWiredEnabled" />
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
 
       <!-- VPN -->
-      <DesktopAppSettingsOption
+      <SettingsOption
         title="VPN"
         :label="$t('not_set_up')"
         is-disabled
       >
-      </DesktopAppSettingsOption>
+      </SettingsOption>
 
       <!-- Proxy -->
-      <DesktopAppSettingsOption title="Proxy" label="Proxy" is-disabled>
+      <SettingsOption title="Proxy" label="Proxy" is-disabled>
         <template #action>
           <Icon name="gnome:arrow-long-right" size="18" />
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

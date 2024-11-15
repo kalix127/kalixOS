@@ -15,10 +15,10 @@ const deviceName = computed(() => {
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Device Name -->
-      <DesktopAppSettingsOption>
+      <SettingsOption>
         <template #label>
           <div class="flex flex-col items-start gap-0.5">
             <span class="text-xs text-muted-foreground">
@@ -29,51 +29,51 @@ const deviceName = computed(() => {
             </span>
           </div>
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
 
       <!-- System Details -->
-      <DesktopAppSettingsOptionGroup>
+      <SettingsOptionGroup>
         <!-- Operating System -->
-        <DesktopAppSettingsOption :label="$t('operating_system')" is-first>
+        <SettingsOption :label="$t('operating_system')" is-first>
           <template #action>
             <span class="text-muted-foreground"> Manjaro Linux </span>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Processor -->
-        <DesktopAppSettingsOption :label="$t('processor')">
+        <SettingsOption :label="$t('processor')">
           <template #action>
             <span class="text-muted-foreground">
               AMD Ryzen&trade; 9 5900X
             </span>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Memory -->
-        <DesktopAppSettingsOption :label="$t('memory')">
+        <SettingsOption :label="$t('memory')">
           <template #action>
             <span class="text-muted-foreground"> 32.0 GiB </span>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Disk Capacity -->
-        <DesktopAppSettingsOption :label="$t('disk_capacity')">
+        <SettingsOption :label="$t('disk_capacity')">
           <template #action>
             <span class="text-muted-foreground">
               {{ $t("unknown") }}
             </span>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Windowing System -->
-        <DesktopAppSettingsOption :label="$t('windowing_system')" is-last>
+        <SettingsOption :label="$t('windowing_system')" is-last>
           <template #action>
             <span class="text-muted-foreground"> Wayland </span>
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

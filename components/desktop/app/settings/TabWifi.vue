@@ -34,11 +34,11 @@ function closeWifiModal() {
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
-      <DesktopAppSettingsOptionGroup>
+      <SettingsOptionGroup>
         <!-- Toggle Wifi -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('wifi')"
           is-first
           @click="toggleWifi"
@@ -46,27 +46,27 @@ function closeWifiModal() {
           <template #action>
             <Switch :checked="isWifiEnabled" />
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Saved Networks -->
-        <DesktopAppSettingsOption :label="$t('saved_networks')" is-disabled>
+        <SettingsOption :label="$t('saved_networks')" is-disabled>
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Connect to Hidden Network -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('connect_to_hidden_network')"
           is-disabled
         >
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Wifi Hotspot -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('turn_wifi_hotspot_on')"
           is-disabled
           is-last
@@ -74,11 +74,11 @@ function closeWifiModal() {
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- Toggle Airplane Mode -->
-      <DesktopAppSettingsOption
+      <SettingsOption
         :label="$t('airplane_mode')"
         :description="$t('airplane_mode_description')"
         @click="toggleAirplaneMode"
@@ -86,12 +86,12 @@ function closeWifiModal() {
         <template #action>
           <Switch :checked="isAirplaneModeEnabled" />
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
 
       <!-- Bottom Content -->
       <Transition mode="out-in">
         <!-- Network List -->
-        <DesktopAppSettingsOptionGroup
+        <SettingsOptionGroup
           :title="$t('visible_networks')"
           v-if="isWifiEnabled"
         >
@@ -103,7 +103,7 @@ function closeWifiModal() {
               size="16"
             />
           </template>
-          <DesktopAppSettingsOption
+          <SettingsOption
             v-for="(network, index) in availableWifiNetworks"
             :key="network.id"
             :is-first="index === 0"
@@ -141,8 +141,8 @@ function closeWifiModal() {
                 </Button>
               </div>
             </template>
-          </DesktopAppSettingsOption>
-        </DesktopAppSettingsOptionGroup>
+          </SettingsOption>
+        </SettingsOptionGroup>
 
         <!-- Wifi Disabled -->
         <div
@@ -185,13 +185,13 @@ function closeWifiModal() {
         </div>
       </Transition>
     </div>
-    <DesktopAppSettingsTabWifiModal
+    <SettingsTabWifiModal
       v-if="isWifiModalOpen"
       :app="app"
       :network="selectedWifiNetwork"
       @close="closeWifiModal"
     />
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

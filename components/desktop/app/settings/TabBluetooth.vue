@@ -12,7 +12,7 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <Transition mode="out-in">
         <!-- Bluetooth Disabled -->
@@ -50,7 +50,7 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
         </div>
       </Transition>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

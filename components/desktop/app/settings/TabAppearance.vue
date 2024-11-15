@@ -38,10 +38,10 @@ const handleBackgroundChange = (event: Event) => {
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Dim screen -->
-      <DesktopAppSettingsOption class="hover:bg-popover" is-first>
+      <SettingsOption class="hover:bg-popover" is-first>
         <template #title>
           <div class="mb-1 flex items-center justify-between gap-2">
             <span class="text-sm font-extrabold tracking-wide">{{
@@ -97,9 +97,9 @@ const handleBackgroundChange = (event: Event) => {
             </TransitionGroup>
           </div>
         </template>
-      </DesktopAppSettingsOption>
+      </SettingsOption>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

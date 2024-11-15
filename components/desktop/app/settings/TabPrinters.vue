@@ -9,7 +9,7 @@ const { app } = toRefs(props);
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <div class="flex flex-col items-center gap-4 text-center">
         <Icon name="gnome:printers" size="120" class="text-muted-foreground" />
@@ -21,7 +21,7 @@ const { app } = toRefs(props);
         </p>
       </div>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

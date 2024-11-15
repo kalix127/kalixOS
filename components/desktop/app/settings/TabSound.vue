@@ -11,12 +11,12 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
 </script>
 
 <template>
-  <DesktopAppSettingsContent :app="app">
+  <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Output -->
-      <DesktopAppSettingsOptionGroup :title="$t('output')">
+      <SettingsOptionGroup :title="$t('output')">
         <!-- Device -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           class="group gap-6"
           :label="$t('output_device')"
           is-first
@@ -31,10 +31,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
               </span>
             </div>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Volume -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           class="gap-6"
           :label="$t('output_volume')"
           is-last
@@ -66,13 +66,13 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
               />
             </div>
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- Input -->
-      <DesktopAppSettingsOptionGroup :title="$t('input')">
+      <SettingsOptionGroup :title="$t('input')">
         <!-- Device -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           class="group gap-6"
           :label="$t('input_device')"
           is-first
@@ -87,10 +87,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
               </span>
             </div>
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Volume -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           class="gap-6"
           :label="$t('input_volume')"
           is-last
@@ -121,13 +121,13 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
               />
             </div>
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
 
       <!-- Sound -->
-      <DesktopAppSettingsOptionGroup :title="$t('sounds')">
+      <SettingsOptionGroup :title="$t('sounds')">
         <!-- Volume levels -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('volume_levels')"
           is-disabled
           is-first
@@ -135,10 +135,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
           <template #action>
             <Icon name="gnome:arrow-long-right" size="18" />
           </template>
-        </DesktopAppSettingsOption>
+        </SettingsOption>
 
         <!-- Alert sounds -->
-        <DesktopAppSettingsOption
+        <SettingsOption
           :label="$t('alert_sound')"
           is-disabled
           is-last
@@ -149,10 +149,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
               <Icon name="gnome:arrow-long-right" size="18" />
             </div>
           </template>
-        </DesktopAppSettingsOption>
-      </DesktopAppSettingsOptionGroup>
+        </SettingsOption>
+      </SettingsOptionGroup>
     </div>
-  </DesktopAppSettingsContent>
+  </SettingsContent>
 </template>
 
 <style scoped>

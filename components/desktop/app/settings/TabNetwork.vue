@@ -44,14 +44,4 @@ const { toggleWired } = globalStore;
   </SettingsContent>
 </template>
 
-<style scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
+<style scoped></style>

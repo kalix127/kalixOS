@@ -15,7 +15,7 @@ const { backgroundImage } = storeToRefs(useDesktopStore());
     <div class="relative max-h-[100svh] max-w-[100svw]">
       <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->
-      <Transition>
+      <Transition name="background">
         <NuxtImg
           :alt="backgroundImage.name"
           :key="backgroundImage.name"
@@ -58,13 +58,13 @@ main {
   transform: translateY(-100%);
 }
 
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.5s ease;
+.background-enter-active,
+.background-leave-active {
+  transition: all 0.2s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.background-enter-from,
+.background-leave-to {
   opacity: 0;
 }
 </style>

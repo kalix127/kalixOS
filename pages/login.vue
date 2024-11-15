@@ -17,7 +17,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="grid place-content-center order-1">
+  <div class="order-1 grid place-content-center">
     <Transition mode="out-in">
       <!-- Select User -->
       <LoginSelectUser v-if="loginView === 'selectUser'" />
@@ -31,14 +31,4 @@ onBeforeMount(() => {
   </div>
 </template>
 
-<style scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
+<style scoped></style>

@@ -5,7 +5,7 @@ import {
 } from "@vueuse/core";
 
 export function useAppSizes() {
-  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("md");
+  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 
@@ -18,7 +18,7 @@ export function useAppSizes() {
     }
 
     // Desktop
-    const width = windowWidth.value * 0.7;
+    const width = windowWidth.value * 0.8;
     const height = (width * 9) / 16;
     return { width: Math.round(width), height: Math.round(height) };
   });
@@ -32,7 +32,7 @@ export function useAppSizes() {
     }
 
     // Desktop
-    const minWidth = 500;
+    const minWidth = 700;
     const minHeight = (minWidth * 9) / 16;
     return { minWidth, minHeight };
   });

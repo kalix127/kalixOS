@@ -73,7 +73,6 @@ export const useDesktopStore = defineStore({
      */
     init(): void {
       this.initializeNodeMap(this.fileSystem);
-      this.syncAppsWithLocalStorage();
       this.initIdleDetection();
     },
 
@@ -147,34 +146,6 @@ export const useDesktopStore = defineStore({
             isLocked.value = true;
           }
         });
-      }
-    },
-
-    /**
-     * Synchronizes the apps state with localStorage on the client-side.
-     */
-    syncAppsWithLocalStorage() {
-      if (import.meta.client) {
-        const storedApps = localStorage.getItem("apps");
-        if (storedApps) {
-          try {
-            this.apps = JSON.parse(storedApps);
-          } catch (e) {
-            console.error("Failed to parse apps from localStorage:", e);
-            this.apps = defaultApps;
-          }
-        } else {
-          this.apps = defaultApps;
-        }
-
-        // Watch for changes and update localStorage accordingly
-        watchThrottled(
-          () => this.apps,
-          (newApps) => {
-            localStorage.setItem("apps", JSON.stringify(newApps));
-          },
-          { deep: true, throttle: 200 },
-        );
       }
     },
 
@@ -319,13 +290,25 @@ export const useDesktopStore = defineStore({
      * Opens an app.
      * @param appId The ID of the app to open.
      */
-    openApp(appId: string) {
-      this.apps = this.apps.map((app) => ({
-        ...app,
-        isOpen: app.id === appId ? true : app.isOpen,
-        isMinimized: app.id === appId ? false : app.isMinimized,
-        isActive: app.id === appId ? true : app.isActive,
-      }));
+    async openApp(appId: string) {
+      const app = this.apps.find((app) => app.id === appId);
+      if (!app) return;
+
+      // If the node is not open, open it with delay
+      if (!app.isOpen) {
+        this.hasAppsLoading = true;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        this.apps = this.apps.map((app) => ({
+          ...app,
+          isOpen: app.id === appId ? true : app.isOpen,
+          isMinimized: app.id === appId ? false : app.isMinimized,
+          isActive: app.id === appId ? true : app.isActive,
+        }));
+        this.hasAppsLoading = false;
+        return;
+      } else {
+        this.toggleMinimizeApp(appId);
+      }
     },
 
     /**

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import {
+  breakpointsTailwind,
+  useBreakpoints,
+  useEventListener,
+  useWindowSize as useViewportSize,
+} from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
@@ -16,7 +21,8 @@ const { app } = toRefs(props);
 
 const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
-const { minAppSizes } = useAppSizes();
+const { minWindowSizes } = useWindowSizes();
+const { width, height } = useViewportSize();
 
 const {
   handleActive,
@@ -24,7 +30,24 @@ const {
   handleDragging,
   handleResizeStop,
   handleFullscreen,
-} = useAppHandlers(app, appRef);
+} = useWindowHandlers(app, appRef);
+
+watch([width, height], ([newWidth, newHeight]) => {
+  // If the app is fullscreen, make sure the app's sizes are locked
+  if (app.value.isFullscreen) {
+    app.value.width = newWidth;
+    app.value.height = newHeight;
+    return;
+  }
+
+  // Check if the app's sizes are bigger than the viewport size, if they arent update the app's sizes do the max value in the viewport
+  if (app.value.width > newWidth) {
+    app.value.width = newWidth;
+  }
+  if (app.value.height > newHeight) {
+    app.value.height = newHeight;
+  }
+});
 
 // Make sure the modal is closed by default
 onBeforeMount(() => {
@@ -41,8 +64,8 @@ onBeforeMount(() => {
 <template>
   <vue-draggable-resizable
     ref="appRef"
-    :min-width="minAppSizes.minWidth"
-    :min-height="minAppSizes.minHeight"
+    :min-width="minWindowSizes.minWidth"
+    :min-height="minWindowSizes.minHeight"
     :w="app.width"
     :h="app.height"
     :x="app.x"
@@ -66,10 +89,11 @@ onBeforeMount(() => {
       zIndex: app.isActive ? 10000 : 5000,
     }"
     class="absolute left-0 top-0 rounded-t-xl !border-none shadow-xl duration-300"
+    :class="[app.isFullscreen ? '' : 'rounded-t-xl']"
   >
     <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
-      <DesktopAppTopBar
+      <DesktopWindowTopBar
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"

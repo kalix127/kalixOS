@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import type { FileSystemNode } from "@/types";
-import { until } from "@vueuse/core";
+import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 definePageMeta({
   layout: "desktop",
@@ -12,6 +12,8 @@ const desktopStore = useDesktopStore();
 const { desktopItems, openApps, desktopRef, hasAppsLoading } =
   storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
+
+const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
 const contextMenuStore = useContextMenuStore();
 const { openContextMenu } = contextMenuStore;
@@ -51,6 +53,7 @@ onMounted(async () => {
     parent: desktopGridRef.value,
     values: draggableItems,
     sortable: false,
+    disabled: isMobileOrTablet.value,
 
     // Assign dragged and target node ids on mobile
     handleNodePointerover(data, state) {
@@ -101,7 +104,7 @@ onUnmounted(() => {
   >
     <!-- Apps -->
     <TransitionGroup name="apps">
-      <LazyDesktopApp v-for="app in openApps" :key="app.id" :app="app" />
+      <LazyDesktopWindow v-for="app in openApps" :key="app.id" :app="app" />
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
@@ -124,5 +127,9 @@ onUnmounted(() => {
 .apps-enter-from,
 .apps-leave-to {
   opacity: 0;
+}
+
+.node-dragging {
+  @apply absolute;
 }
 </style>

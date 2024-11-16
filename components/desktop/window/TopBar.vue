@@ -41,7 +41,8 @@ const actions = computed(() => [
   <div
     :class="[
       cn(
-        'grid h-10 grid-cols-3 rounded-t-xl p-2 transition-colors duration-300',
+        'grid h-10 grid-cols-3 p-2 transition-colors duration-300',
+        app.isFullscreen ? '' : 'rounded-t-xl',
         $props.class,
       ),
     ]"

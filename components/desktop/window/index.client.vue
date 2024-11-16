@@ -66,6 +66,7 @@ onBeforeMount(() => {
       zIndex: app.isActive ? 10000 : 5000,
     }"
     class="absolute left-0 top-0 rounded-t-xl !border-none shadow-xl duration-300"
+    :class="[app.isFullscreen ? '' : 'rounded-t-xl']"
   >
     <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->

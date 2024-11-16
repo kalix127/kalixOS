@@ -17,6 +17,7 @@ const { app } = toRefs(props);
 const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
 const { minWindowSizes } = useWindowSizes();
+const { width, height } = useViewportSize();
 
 const {
   handleActive,
@@ -25,6 +26,16 @@ const {
   handleResizeStop,
   handleFullscreen,
 } = useWindowHandlers(app, appRef);
+
+watch([width, height], ([newWidth, newHeight]) => {
+  // Check if the app's sizes are bigger than the viewport size, if they arent update the app's sizes do the max value in the viewport
+  if (app.value.width > newWidth) {
+    app.value.width = newWidth;
+  }
+  if (app.value.height > newHeight) {
+    app.value.height = newHeight;
+  }
+});
 
 // Make sure the modal is closed by default
 onBeforeMount(() => {

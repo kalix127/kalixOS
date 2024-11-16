@@ -2,22 +2,22 @@ import VueDraggableResizable from "vue-draggable-resizable";
 import { type AppNode } from "@/types";
 import { useThrottleFn } from "@vueuse/core";
 
-export function useAppHandlers(
+export function useWindowHandlers(
   app: Ref<AppNode>,
   appRef: Ref<InstanceType<typeof VueDraggableResizable>>,
 ) {
   const desktopStore = useDesktopStore();
   const { desktopRef } = storeToRefs(desktopStore);
 
-  const { initialAppSizes } = useAppSizes();
-  const { initialAppPositions } = useAppPositions();
+  const { initialWindowSizes } = useWindowSizes();
+  const { initialWindowPositions } = useWindowPositions();
 
-  const updateAppSizes = (w: number, h: number) => {
+  const updateWindowSizes = (w: number, h: number) => {
     app.value.width = Math.round(w);
     app.value.height = Math.round(h);
   };
 
-  const updateAppPosition = (x: number, y: number) => {
+  const updateWindowPosition = (x: number, y: number) => {
     app.value.x = Math.round(x);
     app.value.y = Math.round(y);
   };
@@ -29,7 +29,7 @@ export function useAppHandlers(
   /*  Resize Handlers */
   const handleResizeStop = useThrottleFn(
     (x: number, y: number, width: number, height: number) => {
-      updateAppSizes(width, height);
+      updateWindowSizes(width, height);
     },
     25,
   );
@@ -41,7 +41,7 @@ export function useAppHandlers(
     if (x <= 0) x = 1;
     if (y <= 0) y = 1;
 
-    updateAppPosition(x, y);
+    updateWindowPosition(x, y);
   }, 25);
 
   const handleDragging = useThrottleFn((x: number, y: number) => {
@@ -63,15 +63,15 @@ export function useAppHandlers(
         app.value.prev.y = app.value.y;
 
         // Set fullscreen size/position
-        updateAppSizes(
+        updateWindowSizes(
           desktopRef.value?.offsetWidth || 0,
           desktopRef.value?.offsetHeight || 0,
         );
-        updateAppPosition(1, 1);
+        updateWindowPosition(1, 1);
       } else {
         // Restore previous size/position
-        updateAppSizes(app.value.prev.width, app.value.prev.height);
-        updateAppPosition(app.value.prev.x, app.value.prev.y);
+        updateWindowSizes(app.value.prev.width, app.value.prev.height);
+        updateWindowPosition(app.value.prev.x, app.value.prev.y);
       }
       return;
     }
@@ -79,8 +79,8 @@ export function useAppHandlers(
     // Default toggle behavior
     if (app.value.isFullscreen) {
       app.value.isFullscreen = false;
-      updateAppSizes(app.value.prev.width, app.value.prev.height);
-      updateAppPosition(app.value.prev.x, app.value.prev.y);
+      updateWindowSizes(app.value.prev.width, app.value.prev.height);
+      updateWindowPosition(app.value.prev.x, app.value.prev.y);
       return;
     }
 
@@ -92,11 +92,11 @@ export function useAppHandlers(
 
     // Set the full screen
     app.value.isFullscreen = true;
-    updateAppSizes(
+    updateWindowSizes(
       desktopRef.value?.offsetWidth || 0,
       desktopRef.value?.offsetHeight || 0,
     );
-    updateAppPosition(1, 1);
+    updateWindowPosition(1, 1);
   };
 
   // Hooks
@@ -104,10 +104,13 @@ export function useAppHandlers(
   onBeforeMount(() => {
     // Update the app's size and position if it's the first open
     if (!app.value.width || !app.value.height || !app.value.x || !app.value.y) {
-      updateAppSizes(initialAppSizes.value.width, initialAppSizes.value.height);
-      updateAppPosition(
-        initialAppPositions.value.x,
-        initialAppPositions.value.y,
+      updateWindowSizes(
+        initialWindowSizes.value.width,
+        initialWindowSizes.value.height,
+      );
+      updateWindowPosition(
+        initialWindowPositions.value.x,
+        initialWindowPositions.value.y,
       );
     }
   });

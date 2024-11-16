@@ -21,7 +21,7 @@ function handleForgetConnection() {
 </script>
 
 <template>
-  <DesktopAppModal :app="app">
+  <DesktopWindowModal :app="app">
     <!-- Topbar -->
     <div class="app-topbar z-10 flex h-12 p-2 sm:min-w-80">
       <!-- Cancel button -->
@@ -76,7 +76,7 @@ function handleForgetConnection() {
         </Button>
       </div>
     </div>
-  </DesktopAppModal>
+  </DesktopWindowModal>
 </template>
 
 <style scoped></style>

@@ -16,7 +16,7 @@ const { app } = toRefs(props);
 
 const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
-const { minAppSizes } = useAppSizes();
+const { minWindowSizes } = useWindowSizes();
 
 const {
   handleActive,
@@ -24,7 +24,7 @@ const {
   handleDragging,
   handleResizeStop,
   handleFullscreen,
-} = useAppHandlers(app, appRef);
+} = useWindowHandlers(app, appRef);
 
 // Make sure the modal is closed by default
 onBeforeMount(() => {
@@ -41,8 +41,8 @@ onBeforeMount(() => {
 <template>
   <vue-draggable-resizable
     ref="appRef"
-    :min-width="minAppSizes.minWidth"
-    :min-height="minAppSizes.minHeight"
+    :min-width="minWindowSizes.minWidth"
+    :min-height="minWindowSizes.minHeight"
     :w="app.width"
     :h="app.height"
     :x="app.x"
@@ -69,7 +69,7 @@ onBeforeMount(() => {
   >
     <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
-      <DesktopAppTopBar
+      <DesktopWindowTopBar
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="handleFullscreen()"
         @close="() => closeApp(app.id)"

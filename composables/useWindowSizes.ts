@@ -4,12 +4,12 @@ import {
   useBreakpoints,
 } from "@vueuse/core";
 
-export function useAppSizes() {
+export function useWindowSizes() {
   const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 
-  const initialAppSizes = computed(() => {
+  const initialWindowSizes = computed(() => {
     if (isMobileOrTablet.value) {
       // Mobile or Tablet
       const width = Math.min(300, windowWidth.value * 0.9);
@@ -23,7 +23,7 @@ export function useAppSizes() {
     return { width: Math.round(width), height: Math.round(height) };
   });
 
-  const minAppSizes = computed(() => {
+  const minWindowSizes = computed(() => {
     if (isMobileOrTablet.value) {
       // Mobile or Tablet
       const minWidth = 250;
@@ -38,7 +38,7 @@ export function useAppSizes() {
   });
 
   return {
-    initialAppSizes,
-    minAppSizes,
+    initialWindowSizes,
+    minWindowSizes,
   };
 }

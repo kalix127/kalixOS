@@ -104,7 +104,7 @@ onUnmounted(() => {
   >
     <!-- Apps -->
     <TransitionGroup name="apps">
-      <LazyDesktopApp v-for="app in openApps" :key="app.id" :app="app" />
+      <LazyDesktopWindow v-for="app in openApps" :key="app.id" :app="app" />
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->

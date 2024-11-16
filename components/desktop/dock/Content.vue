@@ -2,7 +2,7 @@
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { animations } from "@formkit/drag-and-drop";
 import type { AppNode } from "@/types";
-import { until } from "@vueuse/core";
+import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
 defineEmits<{
@@ -23,6 +23,8 @@ const draggableDockItems = computed({
   },
 });
 
+const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
+
 const { handleOpenApp } = useContextMenu();
 
 const handleContextMenu = (event: MouseEvent, app: AppNode) => {
@@ -39,6 +41,7 @@ onBeforeMount(async () => {
     values: draggableDockItems,
     plugins: [animations()],
     sortable: true,
+    disabled: isMobileOrTablet.value,
   });
 });
 </script>

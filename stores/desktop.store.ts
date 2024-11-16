@@ -290,13 +290,25 @@ export const useDesktopStore = defineStore({
      * Opens an app.
      * @param appId The ID of the app to open.
      */
-    openApp(appId: string) {
-      this.apps = this.apps.map((app) => ({
-        ...app,
-        isOpen: app.id === appId ? true : app.isOpen,
-        isMinimized: app.id === appId ? false : app.isMinimized,
-        isActive: app.id === appId ? true : app.isActive,
-      }));
+    async openApp(appId: string) {
+      const app = this.apps.find((app) => app.id === appId);
+      if (!app) return;
+
+      // If the node is not open, open it with delay
+      if (!app.isOpen) {
+        this.hasAppsLoading = true;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        this.apps = this.apps.map((app) => ({
+          ...app,
+          isOpen: app.id === appId ? true : app.isOpen,
+          isMinimized: app.id === appId ? false : app.isMinimized,
+          isActive: app.id === appId ? true : app.isActive,
+        }));
+        this.hasAppsLoading = false;
+        return;
+      } else {
+        this.toggleMinimizeApp(appId);
+      }
     },
 
     /**

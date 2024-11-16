@@ -199,16 +199,7 @@ export function useContextMenu() {
         return;
       }
 
-      // If the node is not open, open it with delay
-      if (!node.isOpen) {
-        hasAppsLoading.value = true;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        openApp(node.id);
-        hasAppsLoading.value = false;
-        return;
-      } else {
-        toggleMinimizeApp(node.id);
-      }
+      openApp(node.id);
     }
     closeContextMenu();
   };

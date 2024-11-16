@@ -10,6 +10,8 @@ const {
   connectedWifiNetwork,
   isShowBatteryPercentageEnabled,
 } = storeToRefs(globalStore);
+
+const { hasAppsLoading } = storeToRefs(useDesktopStore());
 </script>
 
 <template>
@@ -63,7 +65,10 @@ const {
       class="z-[60000] mr-1.5 mt-1.5 rounded-3xl p-0 shadow-md sm:w-[400px]"
     >
       <div
-        :class="[isAnyTopbarMenuOpen ? 'bg-background' : '']"
+        :class="[
+          isAnyTopbarMenuOpen ? 'bg-background' : '',
+          hasAppsLoading ? 'cursor-progress' : '',
+        ]"
         class="topbar-menu-transition flex flex-1 flex-col rounded-3xl p-4"
       >
         <!-- User Actions -->

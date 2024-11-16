@@ -73,7 +73,6 @@ export const useDesktopStore = defineStore({
      */
     init(): void {
       this.initializeNodeMap(this.fileSystem);
-      this.syncAppsWithLocalStorage();
       this.initIdleDetection();
     },
 
@@ -147,34 +146,6 @@ export const useDesktopStore = defineStore({
             isLocked.value = true;
           }
         });
-      }
-    },
-
-    /**
-     * Synchronizes the apps state with localStorage on the client-side.
-     */
-    syncAppsWithLocalStorage() {
-      if (import.meta.client) {
-        const storedApps = localStorage.getItem("apps");
-        if (storedApps) {
-          try {
-            this.apps = JSON.parse(storedApps);
-          } catch (e) {
-            console.error("Failed to parse apps from localStorage:", e);
-            this.apps = defaultApps;
-          }
-        } else {
-          this.apps = defaultApps;
-        }
-
-        // Watch for changes and update localStorage accordingly
-        watchThrottled(
-          () => this.apps,
-          (newApps) => {
-            localStorage.setItem("apps", JSON.stringify(newApps));
-          },
-          { deep: true, throttle: 200 },
-        );
       }
     },
 

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import {
+  breakpointsTailwind,
+  useBreakpoints,
+  useEventListener,
+  useWindowSize as useViewportSize,
+} from "@vueuse/core";
 
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
@@ -28,6 +33,13 @@ const {
 } = useWindowHandlers(app, appRef);
 
 watch([width, height], ([newWidth, newHeight]) => {
+  // If the app is fullscreen, make sure the app's sizes are locked
+  if (app.value.isFullscreen) {
+    app.value.width = newWidth;
+    app.value.height = newHeight;
+    return;
+  }
+
   // Check if the app's sizes are bigger than the viewport size, if they arent update the app's sizes do the max value in the viewport
   if (app.value.width > newWidth) {
     app.value.width = newWidth;

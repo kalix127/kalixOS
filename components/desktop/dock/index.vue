@@ -41,7 +41,7 @@ watchDebounced(
       <div class="relative">
         <TooltipTrigger
           ref="dockTriggerRef"
-          class="absolute bottom-0 left-0 z-[50000] h-10 w-full sm:h-6"
+          class="absolute bottom-0 left-0 z-[50000] h-10 w-full sm:h-6 cursor-default"
           @mouseenter="() => setVisibility(true)"
           @mouseleave="() => setVisibility(false)"
         >

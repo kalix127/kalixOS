@@ -19,9 +19,12 @@ const isMobile = useBreakpoints(breakpointsTailwind).isSmaller("md");
     v-if="!isMobile"
     src="https://github1s.com/GianlucaIavicoli/GianlucaIavicoli"
     :class="cn('h-full w-full bg-background', $props.class)"
-    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+    sandbox="allow-scripts allow-same-origin allow-forms"
     referrerpolicy="no-referrer"
+    width="100%"
+    height="100%"
     loading="lazy"
+    title="VS Code"
   ></iframe>
   <div v-else class="grid h-full w-full place-content-center bg-background p-8">
     <div class="flex flex-col items-center gap-6">

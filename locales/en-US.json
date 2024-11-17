@@ -64,6 +64,7 @@
   "app_details": "App Details",
   "quit": "Quit",
   "vscode_not_available_on_mobile": "Can't open Visual Studio Code from mobile, try on desktop.",
+  "brave_not_available_on_mobile": "Can't open Brave from mobile, try on desktop.",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Network",

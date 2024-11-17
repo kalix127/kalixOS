@@ -4,9 +4,9 @@ import VueDraggableResizable from "vue-draggable-resizable";
 import {
   breakpointsTailwind,
   useBreakpoints,
-  useEventListener,
   useWindowSize as useViewportSize,
 } from "@vueuse/core";
+import { defaultFullscreenApps } from "@/constants";
 
 const desktopStore = useDesktopStore();
 const { desktopRef } = storeToRefs(desktopStore);
@@ -53,9 +53,9 @@ watch([width, height], ([newWidth, newHeight]) => {
 onBeforeMount(() => {
   app.value.isModalOpen = false;
 
-  // If on mobile, set the app to fullscreen
+  // If on mobile or brave, set the app to fullscreen
   const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("sm");
-  if (isMobileOrTablet.value) {
+  if (isMobileOrTablet.value || defaultFullscreenApps.includes(app.value.id)) {
     handleFullscreen(true);
   }
 });
@@ -105,9 +105,15 @@ onBeforeMount(() => {
         class="app-topbar"
       />
 
-      <!-- Content -->
+      <!-- Apps content -->
+      <!-- Settings -->
       <Settings v-if="app.id === 'settings'" :app="app" />
+
+      <!-- VS Code -->
       <DesktopAppVSCode v-else-if="app.id === 'vscode'" :app="app" />
+
+      <!-- Brave -->
+      <DesktopAppBrave v-else-if="app.id === 'brave'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

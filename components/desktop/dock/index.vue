@@ -2,7 +2,8 @@
 import { useSwipe, watchDebounced, useDebounceFn } from "@vueuse/core";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 const desktopStore = useDesktopStore();
-const { isDockVisible, isDockPinned, openApps } = storeToRefs(desktopStore);
+const { isDockVisible, isDockPinned, openApps, hasAppFullscreen } =
+  storeToRefs(desktopStore);
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
 
@@ -14,23 +15,24 @@ watch(direction, (newVal) => {
   }
 });
 
-const isTriggerHovered = ref(false);
-const isContentHovered = ref(false);
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
-const isHovered = computed(
-  () => isTriggerHovered.value || isContentHovered.value,
-);
-
 const setVisibility = useDebounceFn((value: boolean) => {
+  if (hasAppFullscreen.value) {
+    isDockPinned.value = false;
+  }
+
   if (isDockPinned.value) return;
   isDockVisible.value = value;
 }, 100);
 
+// Hide the dock when an app is fullscreen, but still show on hover
 watchDebounced(
-  isHovered,
+  hasAppFullscreen,
   (newVal) => {
-    isDockVisible.value = newVal;
+    if (newVal) {
+      isDockVisible.value = false;
+    }
   },
   { debounce: 100 },
 );
@@ -48,7 +50,6 @@ watchDebounced(
         >
         </TooltipTrigger>
         <TooltipContent
-          v-if="!isMobile || (isMobile && openApps.length === 0)"
           :side-offset="-12"
           class="z-[50000] rounded-3xl p-0"
           @mouseenter="() => setVisibility(true)"

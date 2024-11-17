@@ -60,10 +60,7 @@ onUnmounted(() => {
     >
       <Transition mode="out-in">
         <!-- Wifi -->
-        <SettingsTabWifi
-          :app="app"
-          v-if="currentSettingsTab === 'wifi'"
-        />
+        <SettingsTabWifi :app="app" v-if="currentSettingsTab === 'wifi'" />
 
         <!-- Network -->
         <SettingsTabNetwork
@@ -114,11 +111,16 @@ onUnmounted(() => {
           :app="app"
           v-else-if="currentSettingsTab === 'system'"
         />
+
+        <!-- Default -->
+        <SettingsTabDefault
+          :app="app"
+          v-else
+          class="grid h-full place-content-center"
+        />
       </Transition>
     </div>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

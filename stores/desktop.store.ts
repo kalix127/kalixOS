@@ -61,6 +61,10 @@ export const useDesktopStore = defineStore({
       return this.openApps.some((app) => app.y <= 1);
     },
 
+    hasAppFullscreen(state): boolean {
+      return this.openApps.some((app) => app.isFullscreen);
+    },
+
     bookmarksNodes(state): FileSystemNode[] {
       return state.bookmarks
         .map((id) => state.nodeMap.get(id))

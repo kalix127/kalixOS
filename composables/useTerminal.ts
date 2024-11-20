@@ -231,6 +231,7 @@ export function useTerminal(terminalElement: HTMLElement) {
               `\r\n${type}${permissions} ${username} ${username} ${size.padStart(8)} ${date} ${nodeName}`,
             );
           }
+          break;
         }
 
         // If a path is provided, show the contents of the path

@@ -24,7 +24,7 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
             />
 
             <p class="text-sm text-muted-foreground">
-              {{ $t("navigate_settingss") }}
+              {{ $t("navigate_settings") }}
             </p>
           </div>
         </div>

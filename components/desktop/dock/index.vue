@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useSwipe, watchDebounced, useDebounceFn } from "@vueuse/core";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 const desktopStore = useDesktopStore();
-const { isDockVisible, isDockPinned, openApps, hasAppFullscreen } =
+const { isDockVisible, isDockPinned, hasAppFullscreen } =
   storeToRefs(desktopStore);
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
+const { openApp } = useDesktopStore();
 
 // Handle swipe direction
 const { direction } = useSwipe(dockTriggerRef);
@@ -14,8 +14,6 @@ watch(direction, (newVal) => {
     isDockVisible.value = true;
   }
 });
-
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
 const setVisibility = useDebounceFn((value: boolean) => {
   if (hasAppFullscreen.value) {
@@ -36,6 +34,11 @@ watchDebounced(
   },
   { debounce: 100 },
 );
+
+// Open terminal on mount
+onMounted(() => {
+  openApp("terminal");
+});
 </script>
 
 <template>

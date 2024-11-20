@@ -114,6 +114,9 @@ onBeforeMount(() => {
 
       <!-- Brave -->
       <DesktopAppBrave v-else-if="app.id === 'brave'" :app="app" />
+
+      <!-- Terminal -->
+      <DesktopAppTerminal v-else-if="app.id === 'terminal'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

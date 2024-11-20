@@ -13,7 +13,9 @@ export const assignIds = (node: FileSystemNode): FileSystemNode => {
   };
 
   if (newNode.children && newNode.children.length > 0) {
-    newNode.children = newNode.children.map((child) => child.id ? child : assignIds(child));
+    newNode.children = newNode.children.map((child) =>
+      child.id ? child : assignIds(child),
+    );
   }
 
   return newNode;
@@ -24,7 +26,7 @@ export const assignIds = (node: FileSystemNode): FileSystemNode => {
  * @param path The path string (e.g., "/home/user/Desktop").
  * @returns An array of path segments.
  */
-const splitPath = (path: string): string[] => {
+export const splitPath = (path: string): string[] => {
   return path.split("/").filter((segment) => segment.length > 0);
 };
 
@@ -116,6 +118,36 @@ export const findParentById = (
     }
   }
   return null;
+};
+
+/**
+ * Gets the full path of a node by traversing up to the root.
+ * @param root Optional root node to traverse up to. If not provided, traverses to filesystem root.
+ * @param node The FileSystemNode to get the path for.
+ * @returns The full path as a string, starting with '/'.
+ */
+export const getNodeFullPath = (
+  root: FileSystemNode,
+  node: FileSystemNode,
+): string => {
+  const pathParts: string[] = [];
+  let current = node;
+
+  while (current) {
+    // Stop if we've reached the provided root node
+    if (current.id === root.id) {
+      pathParts.unshift(current.name); // Include the root name
+      break;
+    }
+
+    pathParts.unshift(current.name); // Add the current node's name to the path
+    const parent = findParentById(root, current.id); // Pass the root to search within the entire structure
+    current = parent!;
+  }
+
+  const path = `/${pathParts.slice(1).join("/")}`;
+
+  return path;
 };
 
 /**

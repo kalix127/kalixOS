@@ -90,10 +90,12 @@ export function useTerminal(terminalElement: HTMLElement) {
         }
         break;
 
-      // Ctrl+C
+      // TODO: Ctrl+C
       case "\x03":
         term.write(`\r\n${newLine.value}`);
         resetCommandAndCursor();
+
+        // TODO: Before exit, check if there are command / apps open.
         break;
 
       // Ctrl+L
@@ -135,8 +137,8 @@ export function useTerminal(terminalElement: HTMLElement) {
       // Any Other Key
       default:
         // Invalidate specific keys and combinations
-        if (key === "\u001b[A") break; // Arrow up
-        if (key === "\u001b[B") break; // Arrow down
+        if (key === "\u001b[A") break; // Arrow up TODO: Switch to prev command
+        if (key === "\u001b[B") break; // Arrow down TODO: Switch to next command if presents
         if (key === "\u001b[D") break; // Arrow left
         if (key === "\u001b[C") break; // Arrow right
         if (key === "\u001b[1;5A") break; // Ctrl + Arrow up

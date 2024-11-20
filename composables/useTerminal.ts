@@ -1,9 +1,20 @@
 import { Terminal } from "@xterm/xterm";
 
 export function useTerminal(terminalElement: HTMLElement) {
-  const { command, commandHistory, cursorPosition, currentDirectory } =
-    storeToRefs(useTerminalStore());
+  const terminalStore = useTerminalStore();
+  const {
+    command,
+    commandHistory,
+    cursorPosition,
+    currentDirectory,
+    currentDirectoryNode,
+    homeDirectoryNode,
+  } = storeToRefs(terminalStore);
+  const { setCurrentDirectory } = terminalStore;
   const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
+
+  // Set the initial directories
+  setCurrentDirectory(homeDirectoryNode.value!);
 
   // Init terminal
   const term = new Terminal({
@@ -24,16 +35,16 @@ export function useTerminal(terminalElement: HTMLElement) {
   term.open(terminalElement);
   term.onKey((data) => onKey(data));
 
-  // Default new line in the format -> <user>@<user>: <current-directory> $ 
+  // Default new line in the format -> <user>@<user>: <current-directory> $
   const newLine = computed(() => {
     const usernameAnsi = `\x1b[1;32m${username}@${username}\x1b[1;37m`;
 
     // If the current directory is the home directory, show '~/' instead of the full path
-    if (currentDirectory.value === `/home/${username}/`) {
+    if (currentDirectory.value === `/home/${username}`) {
       return `${usernameAnsi}:\x1b[1;34m ~ \x1b[1;37m$ `;
     }
 
-    return `${usernameAnsi}:${currentDirectory.value.slice(0, -1)} $ `;
+    return `${usernameAnsi}:${currentDirectory.value} $ `;
   });
 
   term.write(newLine.value);
@@ -43,6 +54,10 @@ export function useTerminal(terminalElement: HTMLElement) {
     cursorPosition.value = 0;
   }
 
+  function showNewLine() {
+    term.write(`\r\n${newLine.value}`);
+  }
+
   // TODO Handle text input logic
   function onKey(data: { key: string; domEvent: KeyboardEvent }) {
     const { key, domEvent } = data;
@@ -50,7 +65,12 @@ export function useTerminal(terminalElement: HTMLElement) {
     switch (key) {
       // Enter
       case "\r":
-        term.write(`\r\n${newLine.value}`);
+        // If the command is not empty, handle it
+        if (command.value.trim() !== "") {
+          handleCommand();
+        }
+
+        showNewLine();
         resetCommandAndCursor();
 
         // TODO: Save it to the history if successful

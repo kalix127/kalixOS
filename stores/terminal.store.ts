@@ -1,6 +1,4 @@
-import {
-  findNodeByIdRecursive,
-} from "@/helpers";
+import { findNodeByIdRecursive, getNodeFullPath } from "@/helpers";
 import type { FileSystemNode } from "@/types";
 
 const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
@@ -21,9 +19,11 @@ export const useTerminalStore = defineStore("terminal", {
     },
   },
   actions: {
-    setCurrentDirectory(directory: string) {
-      this.currentDirectory = directory;
-      this.currentDirectoryNode = this.homeDirectoryNode;
+    setCurrentDirectory(directoryNode: FileSystemNode) {
+      const rootNode = storeToRefs(useDesktopStore()).fileSystem.value;
+      const fullPath = getNodeFullPath(rootNode, directoryNode);
+      this.currentDirectory = fullPath;
+      this.currentDirectoryNode = directoryNode;
     },
   },
 });

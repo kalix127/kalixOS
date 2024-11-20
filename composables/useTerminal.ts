@@ -212,6 +212,10 @@ export function useTerminal(terminalElement: HTMLElement) {
         setCurrentDirectory(toDirNode);
         break;
 
+      case "pwd":
+        term.write(`\r\n${currentDirectory.value}`);
+        break;
+        
       default:
         term.write(`\r\n${exec}: command not found`);
         break;

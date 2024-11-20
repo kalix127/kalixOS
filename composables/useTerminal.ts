@@ -212,10 +212,75 @@ export function useTerminal(terminalElement: HTMLElement) {
         setCurrentDirectory(toDirNode);
         break;
 
+      case "ls":
+        const flags = args.filter((arg) => arg.startsWith("-"));
+        const nodes = currentDirectoryNode.value?.children ?? [];
+
+        // If -l flag is present, show detailed list format
+        if (flags.includes("-l")) {
+          for (const node of nodes) {
+            const type = node.type === "folder" ? "d" : "-";
+            const permissions = "rwxr-xr-x";
+            const size = node.type === "file" ? "1024" : "4096";
+            const date = new Date().toLocaleDateString();
+            const nodeName =
+              node.type === "folder"
+                ? `\x1b[1;34m${node.name}/\x1b[0m`
+                : node.name;
+            term.write(
+              `\r\n${type}${permissions} ${username} ${username} ${size.padStart(8)} ${date} ${nodeName}`,
+            );
+          }
+        }
+
+        // If a path is provided, show the contents of the path
+        if (args.length > 1) {
+          const path = args[1];
+          const pathNode = findNodeByPath(
+            currentDirectoryNode.value!,
+            splitPath(path),
+          );
+          if (!pathNode) {
+            term.write(
+              `\r\nls: cannot access '${path}': No such file or directory`,
+            );
+            break;
+          }
+          const output = pathNode.children
+            ?.map((node) => {
+              const name =
+                node.type === "folder"
+                  ? `\x1b[1;34m${node.name}\x1b[0m`
+                  : node.name;
+              return name;
+            })
+            .join("  ");
+
+          // If the output is not empty, show it
+          if (output?.trim() !== "") term.write(`\r\n${output}`);
+          break;
+        }
+
+        // If no flags are provided, show simple list format
+        // TODO: Refactor this
+        const output = nodes
+          .map((node) => {
+            const name =
+              node.type === "folder"
+                ? `\x1b[1;34m${node.name}\x1b[0m`
+                : node.name;
+            return name;
+          })
+          .join("  ");
+        if (output) {
+          term.write(`\r\n${output}`);
+        }
+        break;
+
       case "pwd":
         term.write(`\r\n${currentDirectory.value}`);
         break;
-        
+
       default:
         term.write(`\r\n${exec}: command not found`);
         break;

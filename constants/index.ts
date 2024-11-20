@@ -339,6 +339,12 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                   },
                 ],
               },
+              {
+                name: ".zshrc",
+                type: "file",
+                icon: "file:file",
+                children: [],
+              },
             ],
           },
         ],

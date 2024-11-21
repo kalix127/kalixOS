@@ -134,7 +134,9 @@ export function handleLs(
 }
 
 export function formatNodeName(node: FileSystemNode): string {
-  return node.type === "folder" ? `\x1b[1;34m${node.name}/\x1b[0m` : node.name;
+  return node.type === "folder"
+    ? `\x1b[1;34m${node.name}\x1b[0m`
+    : node.name;
 }
 
 export function handleChown(

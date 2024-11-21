@@ -9,7 +9,12 @@ import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
 import type { AppNode, FileSystemNode, BackgroundImage } from "~/types";
 import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
+import {
+  useIdle,
+  useIntervalFn,
+  useTimestamp,
+  watchThrottled,
+} from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -20,6 +25,7 @@ export const useDesktopStore = defineStore({
     ),
     nodeMap: new Map<string, FileSystemNode>(),
     bookmarks: defaultBookmarks,
+    uptime: 0,
 
     // Docks
     isDockVisible: true,
@@ -78,6 +84,7 @@ export const useDesktopStore = defineStore({
     init(): void {
       this.initializeNodeMap(this.fileSystem);
       this.initIdleDetection();
+      this.initUptime();
     },
 
     /**
@@ -151,6 +158,15 @@ export const useDesktopStore = defineStore({
           }
         });
       }
+    },
+
+    /**
+     * Initializes the uptime.
+     */
+    initUptime(): void {
+      useIntervalFn(() => {
+        this.uptime += 1;
+      }, 1000);
     },
 
     /**
@@ -402,7 +418,7 @@ interface DesktopStore {
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
   bookmarks: string[]; // Array of ids
-
+  uptime: number;
   // Docks
   isDockVisible: boolean;
   isDockPinned: boolean;

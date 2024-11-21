@@ -1,9 +1,11 @@
 import { Terminal } from "@xterm/xterm";
+import { WebLinksAddon } from "@xterm/addon-web-links";
 import {
   handleCd,
   handleLs,
   handleChown,
   handleChmod,
+  handleNeofetch,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -22,9 +24,9 @@ export function useTerminal(terminalElement: HTMLElement) {
   // Set the initial directories
   setCurrentDirectory(homeDirectoryNode.value!);
 
-  // Init terminal
+  // Init terminal and addons
+  const webLinksAddon = new WebLinksAddon();
   const term = new Terminal({
-    drawBoldTextInBrightColors: true,
     convertEol: true,
     cursorBlink: true,
     cursorStyle: "underline",
@@ -43,6 +45,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     },
   });
   term.open(terminalElement);
+  term.loadAddon(webLinksAddon);
   term.onKey((data) => onKey(data));
 
   // Default new line in the format -> <user>@<user>: <current-directory> $
@@ -54,9 +57,11 @@ export function useTerminal(terminalElement: HTMLElement) {
       return `${usernameAnsi}:\x1b[1;34m ~ \x1b[1;37m$ `;
     }
 
-    return `${usernameAnsi}:${currentDirectory.value} $ `;
+    return `${usernameAnsi}:\x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
   });
 
+  // Show neofetch on startup
+  handleNeofetch(term, username);
   term.write(newLine.value);
 
   function resetCommandAndCursor() {
@@ -197,6 +202,10 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "pwd":
         term.write(`\r\n${currentDirectory.value}`);
+        break;
+
+      case "neofetch":
+        handleNeofetch(term, username);
         break;
 
       default:

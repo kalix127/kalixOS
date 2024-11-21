@@ -55,6 +55,9 @@ export const useGlobalStore = defineStore({
       maxAge: 30 * 24 * 60 * 60,
       default: () => false,
     }).value,
+
+    // Terminal
+    memoryUsedPercentage: 0,
   }),
   actions: {
     // Toggles
@@ -235,4 +238,7 @@ interface GlobalStore {
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
   isAuthenticated: boolean;
+
+  // Terminal
+  memoryUsedPercentage: number;
 }

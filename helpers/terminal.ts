@@ -7,6 +7,7 @@ import {
   findNodeByPath,
   resolvePath,
 } from "~/helpers";
+import { useWindowSize } from "@vueuse/core";
 
 const { editItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
@@ -134,9 +135,7 @@ export function handleLs(
 }
 
 export function formatNodeName(node: FileSystemNode): string {
-  return node.type === "folder"
-    ? `\x1b[1;34m${node.name}\x1b[0m`
-    : node.name;
+  return node.type === "folder" ? `\x1b[1;34m${node.name}\x1b[0m` : node.name;
 }
 
 export function handleChown(
@@ -266,4 +265,67 @@ export function handleChmod(
   } else {
     term.write(`\r\nchmod: invalid mode: '${mode}'`);
   }
+}
+
+export function handleNeofetch(term: Terminal, username: string): void {
+  // Get uptime
+  const { uptime } = storeToRefs(useDesktopStore());
+  const readableUptime = formatUptime(uptime.value);
+
+  // Get resolution
+  const { width, height } = useWindowSize();
+  const resolution = `${width.value}x${height.value}`;
+
+  // Get memory
+  const { memoryUsedPercentage } = storeToRefs(useGlobalStore());
+  const memoryUsed = Math.round((memoryUsedPercentage.value / 100) * 15406);
+
+  // Links
+  const authorLink = generateLink(
+    "https://github.com/GianlucaIavicoli",
+    "@GianlucaIavicoli",
+  );
+  const themeLink = generateLink(
+    "https://github.com/lassekongo83/adw-gtk3",
+    "adw-gtk3 [GTK2/3]",
+  );
+  const iconLink = generateLink(
+    "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme",
+    "Papirus-Dark [GTK2/3]",
+  );
+
+  const neoFetch = `
+  \x1b[1;36m                    -'                    ${username}\x1b[1;37m@\x1b[1;36m${username}
+  \x1b[1;36m                   .o+'                   \x1b[1;37m-------------------
+  \x1b[1;36m                  'ooo/                   Author:\x1b[1;37m ${authorLink}
+  \x1b[1;36m                 '+oooo:                  OS:\x1b[1;37m Manjaro Linux x86_64 
+  \x1b[1;36m                '+oooooo:                 Host:\x1b[1;37m ThinkPad X1 Carbon Gen 9
+  \x1b[1;36m                -+oooooo+:                Kernel:\x1b[1;37m 6.10.13-3-MANJARO
+  \x1b[1;36m              '/:-:++oooo+:               Uptime:\x1b[1;37m ${readableUptime}
+  \x1b[1;36m             '/++++/+++++++:              Packages:\x1b[1;37m 782 (pacman)
+  \x1b[1;36m            '/++++++++++++++:             Shell:\x1b[1;37m zsh
+  \x1b[1;36m           '/+++ooooooooooooo/'           Resolution:\x1b[1;37m ${resolution} 
+  \x1b[1;36m          ./ooosssso++osssssso+'          DE:\x1b[1;37m GNOME
+  \x1b[1;36m         .oossssso-''''/ossssss+'         VM:\x1b[1;37m Mutter
+  \x1b[1;36m        -osssssso.      :ssssssso.        Theme:\x1b[1;37m ${themeLink}
+  \x1b[1;36m       :osssssss/        osssso+++.       Icons:\x1b[1;37m ${iconLink}
+  \x1b[1;36m      /ossssssss/        +ssssooo/-       Terminal:\x1b[1;37m gnome-terminal
+  \x1b[1;36m    '/ossssso+/:-        -:/+osssso+-     CPU:\x1b[1;37m Intel Core i7-1165G7 @ 4.70GHz (8) 
+  \x1b[1;36m   '+sso+:-'                 '.-/+oso:    GPU:\x1b[1;37m NVIDIA GeForce RTX 4060 Mobile
+  \x1b[1;36m  '++:.                           '-/+/   GPU:\x1b[1;37m Intel Iris Xe Graphics
+  \x1b[1;36m  .'                                 '/   Memory:\x1b[1;37m ${memoryUsed}MiB / 15406MiB
+
+`;
+  term.clear();
+  term.write(`${neoFetch}`);
+}
+
+export function generateLink(url: string, label: string): string {
+  return `\x1b]8;;${url}\x07${label}\x1b]8;;\x07`;
+}
+
+export function formatUptime(uptime: number): string {
+  const hours = Math.floor(uptime / 3600);
+  const minutes = Math.floor((uptime % 3600) / 60);
+  return `${hours} hours, ${minutes} mins`;
 }

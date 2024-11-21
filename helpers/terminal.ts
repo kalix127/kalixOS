@@ -759,3 +759,41 @@ function formatDfRow(
 
   return `${filesystemPadded}  ${sizeFormatted.padStart(widths[1])}  ${usedFormatted.padStart(widths[2])}  ${availFormatted.padStart(widths[3])}  ${usePercentFormatted}  ${mountedOnPadded}`;
 }
+
+export function handleCat(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  // Allow only 'cat' with exactly one argument
+  // TODO: Add help message
+  if (args.length !== 1) {
+    term.write(`\r\ncat: missing operand`);
+    return false;
+  }
+
+  const filePath = args[0];
+  let targetNode: FileSystemNode | null = null;
+
+  if (filePath.startsWith("/")) {
+    // Absolute path
+    targetNode = findNodeByAbsolutePath(fileSystem, filePath);
+  } else {
+    // Relative path
+    targetNode = findNodeByPath(currentDirectoryNode, splitPath(filePath));
+  }
+
+  if (!targetNode) {
+    term.write(`\r\ncat: ${filePath}: No such file or directory`);
+    return false;
+  }
+
+  if (targetNode.type !== "file") {
+    term.write(`\r\ncat: ${filePath}: Is a directory`);
+    return false;
+  }
+
+  term.write(`\r\n${targetNode.content}`);
+  return true;
+}

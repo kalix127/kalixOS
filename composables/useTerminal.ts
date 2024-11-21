@@ -9,6 +9,7 @@ import {
   handleTree,
   handleFree,
   handleDf,
+  handleCat,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -271,6 +272,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "chmod":
         shouldAddToHistory = handleChmod(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "cat":
+        shouldAddToHistory = handleCat(
           term,
           args.slice(1),
           fileSystem,

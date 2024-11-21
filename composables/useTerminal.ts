@@ -35,7 +35,11 @@ export function useTerminal(terminalElement: HTMLElement) {
     tabStopWidth: 4,
     fontFamily: "JetBrainsMono Nerd Font Mono",
     theme: {
-      brightBlue: "#268BD2",
+      brightCyan: "#299890",
+      brightBlue: "#268bd2",
+      brightWhite: "#d0cfcc",
+      brightGreen: "#5fd601",
+      background: "#161420",
     },
   });
   term.open(terminalElement);

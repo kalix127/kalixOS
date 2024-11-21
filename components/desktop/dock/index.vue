@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useSwipe, watchDebounced, useDebounceFn } from "@vueuse/core";
+import { useSwipe, watchDebounced, useDebounceFn, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 const desktopStore = useDesktopStore();
 const { isDockVisible, isDockPinned, hasAppFullscreen } =
   storeToRefs(desktopStore);
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
 const { openApp } = useDesktopStore();
+const isDesktop = useBreakpoints(breakpointsTailwind).greaterOrEqual("lg");
 
 // Handle swipe direction
 const { direction } = useSwipe(dockTriggerRef);
@@ -37,7 +38,9 @@ watchDebounced(
 
 // Open terminal on mount
 onMounted(() => {
-  openApp("terminal");
+  if (isDesktop.value) {
+    openApp("terminal");
+  }
 });
 </script>
 

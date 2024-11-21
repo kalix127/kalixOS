@@ -1,10 +1,10 @@
 import { Terminal } from "@xterm/xterm";
 import {
-  findNodeByAbsolutePath,
-  findParentById,
-  splitPath,
-  findNodeByPath,
-} from "~/helpers";
+  handleCd,
+  handleLs,
+  handleChown,
+  handleChmod,
+} from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -159,60 +159,30 @@ export function useTerminal(terminalElement: HTMLElement) {
     }
   }
 
+  /**
+   * Main command handler that delegates to specific command functions.
+   */
   function handleCommand() {
     const trimmedCommand = command.value.trim();
     const args = trimmedCommand.split(" ");
     const exec = args[0];
+    const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
 
     switch (exec) {
       case "cd":
-        const toDir = args[1];
-        const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
-        // If no directory is provided, change to the home directory
-        if (!toDir) {
-          setCurrentDirectory(homeDirectoryNode.value!);
-          break;
-        }
-
-        // If toDir starts with a /, it's an absolute path
-        if (toDir.startsWith("/")) {
-          const toDirNode = findNodeByAbsolutePath(fileSystem, toDir);
-          if (!toDirNode) {
-            term.write(`\r\ncd: ${toDir}: No such file or directory`);
-            break;
-          }
-          setCurrentDirectory(toDirNode);
-          break;
-        }
-
-        // If toDir is '..', change to the parent directory
-        if (toDir === "..") {
-          console.log("cd ..");
-          const parent = findParentById(
-            fileSystem,
-            currentDirectoryNode.value!.id,
-          );
-          if (!parent) {
-            term.write(`\r\ncd: ..: No such file or directory`);
-            break;
-          }
-          setCurrentDirectory(parent);
-          break;
-        }
-
-        // If toDir doesn't start with a /, it's a relative path
-        const toDirNode = findNodeByPath(
+        handleCd(
+          term,
+          args,
+          fileSystem,
           currentDirectoryNode.value!,
-          splitPath(toDir),
+          homeDirectoryNode.value!,
         );
-        if (!toDirNode) {
-          term.write(`\r\ncd: ${toDir}: No such file or directory`);
-          break;
-        }
-        setCurrentDirectory(toDirNode);
         break;
 
       case "ls":
+        handleLs(term, args, currentDirectoryNode.value!);
+        break;
+
         const flags = args.filter((arg) => arg.startsWith("-"));
         const nodes = currentDirectoryNode.value?.children ?? [];
 

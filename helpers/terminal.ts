@@ -390,35 +390,40 @@ export function handleTree(
   currentDirectoryNode: FileSystemNode,
 ): boolean {
   try {
-    // Parse flags
+    // Initialize default values
     let level = 1; // Default depth
     let targetPath = "."; // Default to current directory
 
-    // Handle -L flag
-    const lFlagIndex = args.findIndex((arg) => arg === "-L");
-    if (lFlagIndex !== -1) {
-      // Ensure that the next argument exists and is a number
-      if (lFlagIndex + 1 < args.length) {
-        const levelArg = args[lFlagIndex + 1];
+    // Iterate over the arguments
+    let i = 0;
+    while (i < args.length) {
+      const arg = args[i];
+      if (arg === "-L") {
+        // Ensure the next argument exists
+        if (i + 1 >= args.length) {
+          term.write(`\r\ntree: option requires an argument -- 'L'`);
+          return false;
+        }
+        const levelArg = args[i + 1];
         const parsedLevel = parseInt(levelArg, 10);
 
+        // Validate the level argument
         if (isNaN(parsedLevel) || parsedLevel < 1) {
           term.write(`\r\ntree: invalid level: '${levelArg}'`);
           return false;
         }
 
         level = parsedLevel;
-      } else {
-        term.write(`\r\ntree: option requires an argument -- 'L'`);
+        i += 2; // Skip the flag and its value
+      } else if (arg.startsWith("-")) {
+        // Handle unknown flags
+        term.write(`\r\ntree: unknown option '${arg}'`);
         return false;
+      } else {
+        // Positional argument (path)
+        targetPath = arg;
+        i += 1;
       }
-    }
-
-    // Identify non-flag arguments as paths
-    const nonFlagArgs = args.filter((arg) => !arg.startsWith("-"));
-    if (nonFlagArgs.length > 0) {
-      // Assume the first non-flag argument is the path
-      targetPath = nonFlagArgs[0];
     }
 
     // Resolve the target path

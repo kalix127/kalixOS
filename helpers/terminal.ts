@@ -325,6 +325,146 @@ export function handleNeofetch(term: Terminal, username: string): void {
   term.write(`${neoFetch}`);
 }
 
+/**
+ * Recursively traverses the file system and builds the tree structure.
+ * @param node The current FileSystemNode.
+ * @param prefix The string prefix for the current level (e.g., "│   ", "    ").
+ * @param isLast Indicates if the current node is the last child of its parent.
+ * @param depth The maximum depth to traverse.
+ * @param currentDepth The current depth in the traversal.
+ * @param lines An array to accumulate the tree lines.
+ */
+function traverseTree(
+  node: FileSystemNode,
+  prefix: string,
+  isLast: boolean,
+  depth: number,
+  currentDepth: number,
+  lines: string[],
+): void {
+  if (currentDepth > depth) return;
+
+  // Determine the connector based on whether it's the last child
+  const connector = isLast ? "└── " : "├── ";
+
+  // Construct the current line with prefix and connector
+  const line = `${prefix}${connector}${formatNodeName(node)}`;
+  lines.push(line);
+
+  // If the node is a folder and has children, traverse them
+  if (node.type === "folder" && node.children && node.children.length > 0) {
+    // Update the prefix for child nodes
+    const newPrefix = prefix + (isLast ? "    " : "│   ");
+
+    node.children!.forEach((child, index) => {
+      const isLastChild = index === node.children!.length - 1;
+      traverseTree(
+        child,
+        newPrefix,
+        isLastChild,
+        depth,
+        currentDepth + 1,
+        lines,
+      );
+    });
+  }
+}
+
+/**
+ * Handler for the 'tree' command.
+ * @param term The terminal instance.
+ * @param args The array of arguments passed to the command.
+ * @param fileSystem The root FileSystemNode.
+ * @param currentDirectoryNode The current directory FileSystemNode.
+ * @returns True if the command executes successfully, else false.
+ */
+export function handleTree(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  try {
+    // Parse flags
+    let level = 1; // Default depth
+    let targetPath = "."; // Default to current directory
+
+    // Handle -L flag
+    const lFlagIndex = args.findIndex((arg) => arg === "-L");
+    if (lFlagIndex !== -1) {
+      // Ensure that the next argument exists and is a number
+      if (lFlagIndex + 1 < args.length) {
+        const levelArg = args[lFlagIndex + 1];
+        const parsedLevel = parseInt(levelArg, 10);
+
+        if (isNaN(parsedLevel) || parsedLevel < 1) {
+          term.write(`\r\ntree: invalid level: '${levelArg}'`);
+          return false;
+        }
+
+        level = parsedLevel;
+      } else {
+        term.write(`\r\ntree: option requires an argument -- 'L'`);
+        return false;
+      }
+    }
+
+    // Identify non-flag arguments as paths
+    const nonFlagArgs = args.filter((arg) => !arg.startsWith("-"));
+    if (nonFlagArgs.length > 0) {
+      // Assume the first non-flag argument is the path
+      targetPath = nonFlagArgs[0];
+    }
+
+    // Resolve the target path
+    const targetNode = resolvePath(
+      fileSystem,
+      currentDirectoryNode,
+      targetPath,
+    );
+
+    if (!targetNode) {
+      term.write(
+        `\r\ntree: cannot access '${targetPath}': No such file or directory`,
+      );
+      return false;
+    }
+
+    // Initialize the lines array with the root node
+    const lines: string[] = [];
+
+    // Add the root node
+    if (targetPath === "." || targetPath === "") {
+      lines.push(".");
+    } else {
+      lines.push(formatNodeName(targetNode));
+    }
+
+    // Traverse the tree and populate the lines array
+    if (
+      targetNode.type === "folder" &&
+      targetNode.children &&
+      targetNode.children.length > 0
+    ) {
+      targetNode.children.forEach((child, index) => {
+        const isLastChild = index === targetNode.children!.length - 1;
+        traverseTree(child, "", isLastChild, level, 1, lines); // Start at depth 1
+      });
+    }
+
+    // Write the lines to the terminal
+    lines.forEach((line) => {
+      term.write(`\r\n${line}`);
+    });
+
+    return true;
+  } catch (error) {
+    term.write(`\r\ntree: an unexpected error occurred.`);
+    console.error("Error in handleTree:", error);
+    return false;
+  }
+}
+
 export function generateLink(url: string, label: string): string {
   return `\x1b]8;;${url}\x07${label}\x1b]8;;\x07`;
 }

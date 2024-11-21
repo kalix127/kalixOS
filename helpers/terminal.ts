@@ -136,3 +136,132 @@ export function handleLs(
 export function formatNodeName(node: FileSystemNode): string {
   return node.type === "folder" ? `\x1b[1;34m${node.name}/\x1b[0m` : node.name;
 }
+
+export function handleChown(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): void {
+  if (!args[1]) {
+    term.write(`\r\nchown: missing operand`);
+    return;
+  }
+
+  const [user, group] = args[1].split(":");
+  if (!user || !group) {
+    term.write(`\r\nchown: invalid format; expected 'user:group'`);
+    return;
+  }
+
+  const targetPath = args[2];
+  if (!targetPath) {
+    term.write(`\r\nchown: missing file operand`);
+    return;
+  }
+
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
+  if (!targetNode) {
+    term.write(
+      `\r\nchown: cannot access '${targetPath}': No such file or directory`,
+    );
+    return;
+  }
+
+  editItem(targetNode.id, { owner: user, group });
+}
+
+export function handleChmod(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): void {
+  if (!args[1]) {
+    term.write("\r\nchmod: missing operand");
+    return;
+  }
+
+  const mode = args[1];
+  const targetPath = args[2];
+  if (!targetPath) {
+    term.write("\r\nchmod: missing file operand");
+    return;
+  }
+
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
+  if (!targetNode) {
+    term.write(
+      `\r\nchmod: cannot access '${targetPath}': No such file or directory`,
+    );
+    return;
+  }
+
+  const permissions = targetNode.permissions;
+
+  // Symbolic mode (e.g., u+x, g-w)
+  if (/^[ugoa]*[+-=][rwx]+$/.test(mode)) {
+    const targets = [] as Array<"owner" | "group" | "others">;
+
+    if (!/[ugo]/.test(mode[0]) || mode.startsWith("a")) {
+      targets.push("owner", "group", "others");
+    } else {
+      if (mode.includes("u")) targets.push("owner");
+      if (mode.includes("g")) targets.push("group");
+      if (mode.includes("o")) targets.push("others");
+    }
+
+    const operation = mode.match(/[+-=]/)?.[0];
+    const permissionTypes = mode.match(/[rwx]+/)?.[0].split("") ?? [];
+
+    targets.forEach((target) => {
+      permissionTypes.forEach((perm) => {
+        const permKey = (
+          perm === "r" ? "read" : perm === "w" ? "write" : "execute"
+        ) as keyof (typeof permissions)[typeof target];
+        switch (operation) {
+          case "+":
+            permissions[target][permKey] = true;
+            break;
+          case "-":
+            permissions[target][permKey] = false;
+            break;
+          case "=":
+            // Reset all permissions for the target
+            permissions[target] = { read: false, write: false, execute: false };
+            permissions[target][permKey] = true;
+            break;
+          default:
+            break;
+        }
+      });
+    });
+
+    editItem(targetNode.id, { permissions });
+    term.write(`\r\nPermissions of '${targetNode.name}' updated successfully`);
+  } else if (/^[0-7]{3}$/.test(mode)) {
+    // Numeric mode (e.g., 777)
+    const values = mode.split("").map((char) => parseInt(char, 8));
+    const newPermissions: FileSystemNode["permissions"] = {
+      owner: {
+        read: !!(values[0] & 4),
+        write: !!(values[0] & 2),
+        execute: !!(values[0] & 1),
+      },
+      group: {
+        read: !!(values[1] & 4),
+        write: !!(values[1] & 2),
+        execute: !!(values[1] & 1),
+      },
+      others: {
+        read: !!(values[2] & 4),
+        write: !!(values[2] & 2),
+        execute: !!(values[2] & 1),
+      },
+    };
+
+    editItem(targetNode.id, { permissions: newPermissions });
+  } else {
+    term.write(`\r\nchmod: invalid mode: '${mode}'`);
+  }
+}

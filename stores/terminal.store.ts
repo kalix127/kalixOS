@@ -6,8 +6,9 @@ const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
 export const useTerminalStore = defineStore("terminal", {
   state: (): TerminalState => ({
     command: "",
-    commandHistory: [],
     cursorPosition: 0,
+    commandHistory: [],
+    commandHistoryIndex: 0,
 
     currentDirectory: `/home/${username}/`,
     currentDirectoryNode: null,
@@ -25,13 +26,21 @@ export const useTerminalStore = defineStore("terminal", {
       this.currentDirectory = fullPath;
       this.currentDirectoryNode = directoryNode;
     },
+
+    addCommandHistory(command: string) {
+      // Check if exact command is already in history
+      if (this.commandHistory.some((cmd) => cmd === command)) return;
+
+      this.commandHistory.push(command);
+    },
   },
 });
 
 interface TerminalState {
   command: string;
-  commandHistory: string[];
   cursorPosition: number;
+  commandHistory: string[];
+  commandHistoryIndex: number;
 
   currentDirectoryNode: FileSystemNode | null;
   currentDirectory: string;

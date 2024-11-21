@@ -17,8 +17,9 @@ export function useTerminal(terminalElement: HTMLElement) {
     currentDirectory,
     currentDirectoryNode,
     homeDirectoryNode,
+    commandHistoryIndex,
   } = storeToRefs(terminalStore);
-  const { setCurrentDirectory } = terminalStore;
+  const { setCurrentDirectory, addCommandHistory } = terminalStore;
   const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
 
   // Set the initial directories
@@ -77,19 +78,23 @@ export function useTerminal(terminalElement: HTMLElement) {
   function onKey(data: { key: string; domEvent: KeyboardEvent }) {
     const { key, domEvent } = data;
 
+    // Reset the command history index if the key is not the arrow up or down
+    if (key !== "\u001b[A" && key !== "\u001b[B") {
+      commandHistoryIndex.value = 0;
+    }
+
+    let shouldAddToHistory = false;
+
     switch (key) {
       // Enter
       case "\r":
         // If the command is not empty, handle it
         if (command.value.trim() !== "") {
-          handleCommand();
+          shouldAddToHistory = handleCommand();
         }
 
         showNewLine();
-        resetCommandAndCursor();
-
-        // TODO: Save it to the history if successful
-        // commandHistory.value.push(command.value);
+        if (!shouldAddToHistory) resetCommandAndCursor();
         break;
 
       // Backspace/Delete
@@ -136,6 +141,53 @@ export function useTerminal(terminalElement: HTMLElement) {
           });
         break;
 
+      // Arrow Up
+      case "\u001b[A":
+        if (commandHistory.value.length > 0) {
+          // If at start, begin from end of history
+          if (commandHistoryIndex.value === 0) {
+            commandHistoryIndex.value = commandHistory.value.length;
+          }
+
+          if (commandHistoryIndex.value > 0) {
+            commandHistoryIndex.value--;
+            command.value = commandHistory.value[commandHistoryIndex.value];
+            cursorPosition.value = command.value.length;
+
+            term.write("\r\x1B[K"); // Clear current line
+            term.write(`${newLine.value}`);
+            term.write(command.value);
+          }
+        }
+        break;
+
+      // Arrow Down
+      case "\u001b[B":
+        if (commandHistory.value.length > 0) {
+          if (commandHistoryIndex.value < commandHistory.value.length - 1) {
+            commandHistoryIndex.value++;
+            command.value = commandHistory.value[commandHistoryIndex.value];
+            cursorPosition.value = command.value.length;
+
+            term.write("\r\x1B[K"); // Clear current line
+            term.write(`${newLine.value}`);
+            term.write(command.value);
+          }
+          // Clear command when reaching end of history
+          else if (
+            commandHistoryIndex.value ===
+            commandHistory.value.length - 1
+          ) {
+            commandHistoryIndex.value++;
+            command.value = "";
+            cursorPosition.value = 0;
+
+            term.write("\r\x1B[K");
+            term.write(`${newLine.value}`);
+          }
+        }
+        break;
+
       // TODO: Ctrl+R
       case "\x12":
         // Action: Show a list of previous commands used, numbered.
@@ -167,20 +219,27 @@ export function useTerminal(terminalElement: HTMLElement) {
         cursorPosition.value += key.length;
         break;
     }
+
+    if (shouldAddToHistory) {
+      addCommandHistory(command.value);
+      resetCommandAndCursor();
+    }
   }
 
   /**
    * Main command handler that delegates to specific command functions.
    */
-  function handleCommand() {
+  function handleCommand(): boolean {
     const trimmedCommand = command.value.trim();
     const args = trimmedCommand.split(" ");
     const exec = args[0];
     const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
 
+    let shouldAddToHistory = false;
+
     switch (exec) {
       case "cd":
-        handleCd(
+        shouldAddToHistory = handleCd(
           term,
           args,
           fileSystem,
@@ -190,11 +249,16 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       case "ls":
-        handleLs(term, args.slice(1), fileSystem, currentDirectoryNode.value!);
+        shouldAddToHistory = handleLs(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
         break;
 
       case "chown":
-        handleChown(
+        shouldAddToHistory = handleChown(
           term,
           args.slice(1),
           fileSystem,
@@ -203,25 +267,35 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       case "chmod":
-        handleChmod(term, args.slice(1), fileSystem, currentDirectoryNode.value!);
+        shouldAddToHistory = handleChmod(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
         break;
 
       case "pwd":
         term.write(`\r\n${currentDirectory.value}`);
+        shouldAddToHistory = true;
         break;
 
       case "neofetch":
         handleNeofetch(term, username);
+        shouldAddToHistory = true;
         break;
 
       case "whoami":
         term.write(`\r\n${username}`);
+        shouldAddToHistory = true;
         break;
 
       default:
         term.write(`\r\nzsh: command not found: ${exec}`);
         break;
     }
+
+    return shouldAddToHistory;
   }
 
   return {

@@ -18,11 +18,11 @@ export function handleCd(
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
   homeDirectoryNode: FileSystemNode,
-): void {
+): boolean {
   const toDir = args[1];
   if (!toDir) {
     setCurrentDirectory(homeDirectoryNode);
-    return;
+    return true;
   }
 
   let targetNode: FileSystemNode | null = null;
@@ -40,10 +40,11 @@ export function handleCd(
 
   if (!targetNode) {
     term.write(`\r\ncd: ${toDir}: No such file or directory`);
-    return;
+    return false;
   }
 
   setCurrentDirectory(targetNode);
+  return true;
 }
 
 export function handleLs(
@@ -51,7 +52,7 @@ export function handleLs(
   args: string[],
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
-): void {
+): boolean {
   const flags = args.filter((arg) => arg.startsWith("-"));
   const pathArgs = args.filter((arg) => !arg.startsWith("-"));
   const path = pathArgs.length > 0 ? pathArgs[0] : null;
@@ -63,7 +64,7 @@ export function handleLs(
     targetNode = resolvePath(fileSystem, currentDirectoryNode, path);
     if (!targetNode) {
       term.write(`\r\nls: cannot access '${path}': No such file or directory`);
-      return;
+      return false;
     }
   } else {
     // Default to current directory
@@ -114,7 +115,7 @@ export function handleLs(
         `\r\n${type}${permissions} ${owner.padEnd(maxOwnerLength)} ${group.padEnd(maxGroupLength)} ${size.padStart(maxSizeLength)} ${date} ${nodeName}`,
       );
     });
-    return;
+    return false;
   }
 
   // If a path is provided without '-l', show the contents of the path
@@ -124,7 +125,7 @@ export function handleLs(
     if (output.trim() !== "") {
       term.write(`\r\n${output}`);
     }
-    return;
+    return false;
   }
 
   // If no flags or paths are provided, show simple list format
@@ -132,6 +133,7 @@ export function handleLs(
   if (output) {
     term.write(`\r\n${output}`);
   }
+  return false;
 }
 
 export function formatNodeName(node: FileSystemNode): string {
@@ -143,22 +145,22 @@ export function handleChown(
   args: string[],
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
-): void {
-  if (!args[1]) {
+): boolean {
+  if (!args[0]) {
     term.write(`\r\nchown: missing operand`);
-    return;
+    return false;
   }
 
-  const [user, group] = args[1].split(":");
+  const [user, group] = args[0].split(":");
   if (!user || !group) {
     term.write(`\r\nchown: invalid format; expected 'user:group'`);
-    return;
+    return false;
   }
 
-  const targetPath = args[2];
+  const targetPath = args[1];
   if (!targetPath) {
     term.write(`\r\nchown: missing file operand`);
-    return;
+    return false;
   }
 
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
@@ -166,10 +168,11 @@ export function handleChown(
     term.write(
       `\r\nchown: cannot access '${targetPath}': No such file or directory`,
     );
-    return;
+    return false;
   }
 
   editItem(targetNode.id, { owner: user, group });
+  return true;
 }
 
 export function handleChmod(
@@ -177,17 +180,17 @@ export function handleChmod(
   args: string[],
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
-): void {
+): boolean {
   if (!args[1]) {
     term.write("\r\nchmod: missing operand");
-    return;
+    return false;
   }
 
   const mode = args[1];
   const targetPath = args[2];
   if (!targetPath) {
     term.write("\r\nchmod: missing file operand");
-    return;
+    return false;
   }
 
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
@@ -195,7 +198,7 @@ export function handleChmod(
     term.write(
       `\r\nchmod: cannot access '${targetPath}': No such file or directory`,
     );
-    return;
+    return false;
   }
 
   const permissions = targetNode.permissions;
@@ -239,7 +242,7 @@ export function handleChmod(
     });
 
     editItem(targetNode.id, { permissions });
-    term.write(`\r\nPermissions of '${targetNode.name}' updated successfully`);
+    return true;
   } else if (/^[0-7]{3}$/.test(mode)) {
     // Numeric mode (e.g., 777)
     const values = mode.split("").map((char) => parseInt(char, 8));
@@ -262,8 +265,10 @@ export function handleChmod(
     };
 
     editItem(targetNode.id, { permissions: newPermissions });
+    return true;
   } else {
     term.write(`\r\nchmod: invalid mode: '${mode}'`);
+    return false;
   }
 }
 

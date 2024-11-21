@@ -558,8 +558,8 @@ export function handleFree(term: Terminal, args: string[]): boolean {
   const memValues = [total, used, free, shared, buffCache, available];
   const swapValues = [swapTotal, swapUsed, swapFree];
 
-  const memLine = formatRow("Mem:", memValues, humanReadable, widths);
-  const swapLine = formatRow("Swap:", swapValues, humanReadable, widths);
+  const memLine = formatFreeRow("Mem:", memValues, humanReadable, widths);
+  const swapLine = formatFreeRow("Swap:", swapValues, humanReadable, widths);
 
   const output = fullHeader + memLine + "\n" + swapLine;
 
@@ -578,7 +578,7 @@ function getRandomInt(min: number, max: number): number {
 }
 
 /**
- * Formats a number of bytes into a human-readable string with units.
+ * Formats a number of kilobytes into a human-readable string with units.
  * @param kilobytes The number of kilobytes.
  * @param decimals The number of decimal places to include.
  * @returns The formatted string (e.g., "15GiB").
@@ -588,10 +588,17 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["Ki", "Mi", "Gi"];
-  const i = Math.floor(Math.log(kilobytes) / Math.log(k));
+  const sizes = ["KiB", "MiB", "GiB", "TiB", "PiB"];
 
-  return parseFloat((kilobytes / Math.pow(k, i)).toFixed(dm)) + sizes[i];
+  // Convert kilobytes to bytes
+  const bytes = kilobytes * 1024;
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  // Ensure index does not exceed the sizes array
+  const index = i < sizes.length ? i : sizes.length - 1;
+
+  return parseFloat((bytes / Math.pow(k, index)).toFixed(dm)) + sizes[index];
 }
 
 /**
@@ -602,7 +609,7 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
  * @param widths The array of column widths.
  * @returns The formatted row string.
  */
-function formatRow(
+function formatFreeRow(
   label: string,
   values: number[],
   humanReadable: boolean,
@@ -611,7 +618,7 @@ function formatRow(
   const formattedValues = values
     .map((val, idx) => {
       if (humanReadable) {
-        return formatBytes(val * 1024, 1).padStart(widths[idx]);
+        return formatBytes(val, 1).padStart(widths[idx]);
       } else {
         return val.toString().padStart(widths[idx]);
       }

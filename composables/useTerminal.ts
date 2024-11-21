@@ -200,7 +200,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       default:
-        term.write(`\r\n${exec}: command not found`);
+        term.write(`\r\nzsh: command not found: ${exec}`);
         break;
     }
   }

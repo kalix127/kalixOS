@@ -7,6 +7,7 @@ import type {
   BackgroundImage,
 } from "@/types";
 import { assignDefaultProperties } from "~/helpers";
+import { zshContent } from "./files";
 
 export const defaultUsername = "Gianluca";
 
@@ -336,6 +337,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                   name: ".zshrc",
                   type: "file",
                   icon: "file:file",
+                  content: zshContent,
                   children: [],
                 },
               ],

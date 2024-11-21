@@ -55,7 +55,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ $t(app.name) }}
+      {{ app.name }}
     </div>
 
     <!-- Actions -->

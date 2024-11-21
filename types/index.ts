@@ -50,7 +50,6 @@ export interface FileSystemNode {
   canEdit?: boolean;
   canMove?: boolean;
   canDelete?: boolean;
-  isTranslated?: boolean;
 }
 
 export interface AppNode extends FileSystemNode {
@@ -60,6 +59,7 @@ export interface AppNode extends FileSystemNode {
   isMinimized: boolean;
   isFullscreen: boolean;
   isModalOpen: boolean;
+  isTranslated?: boolean;
 
   // Size
   width: number;

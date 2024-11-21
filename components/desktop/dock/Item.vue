@@ -28,7 +28,7 @@ function handleClick() {
 </script>
 
 <template>
-  <DesktopDockItemTooltip :app-name="app.name">
+  <DesktopDockItemTooltip :app-name="app.name" :is-translated="app.isTranslated">
     <Button
       @contextmenu.prevent="(event) => $emit('context', event, app)"
       @click="handleClick"

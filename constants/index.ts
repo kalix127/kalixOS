@@ -175,49 +175,48 @@ export const defaultNetworks: WifiNetwork[] = [
 
 const trashNode: AppNode = {
   id: "trash",
-  name: "trash",
+  name: "Trash",
   type: "app",
   icon: "app:trash",
-  isTranslated: true,
 };
 
-export const defaultBookmarks = ["projects"];
+export const defaultBookmarks = ["coding"];
 
 // TODO: Add more defaults apps without any functionality
 export const defaultApps: AppNode[] = [
   trashNode,
   {
-    name: "settings",
+    name: "Settings",
     type: "app",
     icon: "app:settings",
     id: "settings",
   },
   {
-    name: "files",
+    name: "Files",
     type: "app",
     icon: "app:files",
     id: "files",
   },
   {
-    name: "terminal",
+    name: "Terminal",
     type: "app",
     icon: "app:terminal",
     id: "terminal",
   },
   {
-    name: "brave",
+    name: "Brave",
     type: "app",
     icon: "app:brave",
     id: "brave",
   },
   {
-    name: "thunderbird",
+    name: "Thunderbird",
     type: "app",
     icon: "app:thunderbird",
     id: "thunderbird",
   },
   {
-    name: "vscode",
+    name: "Visual Studio Code",
     type: "app",
     icon: "app:vscode",
     id: "vscode",
@@ -227,12 +226,14 @@ export const defaultApps: AppNode[] = [
     type: "social",
     icon: "app:linkedin",
     id: "linkedin",
+    isTranslated: true,
   },
   {
     name: "github_profile",
     type: "social",
     icon: "app:github",
     id: "github",
+    isTranslated: true,
   },
 ].map((app) => ({
   ...app,
@@ -269,7 +270,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
           canMove: false,
           canDelete: false,
           icon: "folder:folder",
-          isTranslated: true,
           children: [
             {
               id: "home",
@@ -278,65 +278,57 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               canMove: false,
               canDelete: false,
               icon: "folder:folder",
-              isTranslated: true,
               children: [
                 {
                   id: "downloads",
-                  name: "downloads",
+                  name: "Downloads",
                   type: "folder",
                   icon: "folder:folder",
                   children: [],
-                  isTranslated: true,
                 },
                 {
                   id: "documents",
-                  name: "documents",
+                  name: "Documents",
                   type: "folder",
                   icon: "folder:folder",
                   children: [],
-                  isTranslated: true,
                 },
                 {
                   id: "pictures",
-                  name: "pictures",
+                  name: "Pictures",
                   type: "folder",
                   icon: "folder:folder",
                   children: [],
-                  isTranslated: true,
                 },
                 {
                   id: "music",
-                  name: "music",
+                  name: "Music",
                   type: "folder",
                   icon: "folder:folder",
                   children: [],
-                  isTranslated: true,
                 },
                 {
                   id: "videos",
-                  name: "videos",
+                  name: "Videos",
                   type: "folder",
                   icon: "folder:folder",
                   children: [],
-                  isTranslated: true,
                 },
                 {
                   id: "desktop",
-                  name: "desktop",
+                  name: "Desktop",
                   type: "folder",
                   icon: "folder:folder",
                   canMove: false,
                   canDelete: false,
-                  isTranslated: true,
                   children: [
                     trashNode,
                     {
-                      id: "projects",
-                      name: "projects",
+                      id: "coding",
+                      name: "Coding",
                       type: "folder",
                       icon: "folder:folder",
                       children: [],
-                      isTranslated: true,
                     },
                   ],
                 },

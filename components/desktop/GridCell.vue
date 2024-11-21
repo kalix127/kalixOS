@@ -79,7 +79,7 @@ const handleStopRenaming = () => {
     </Popover>
     <span
       class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
-      >{{ item.isTranslated ? $t(formattedName) : formattedName }}</span
+      >{{ formattedName }}</span
     >
   </div>
 </template>

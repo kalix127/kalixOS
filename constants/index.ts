@@ -5,6 +5,7 @@ import type {
   SystemLog,
   AppNode,
   BackgroundImage,
+  NodePermissions,
 } from "@/types";
 import { assignDefaultProperties } from "~/helpers";
 import { zshContent } from "./files";
@@ -14,6 +15,18 @@ export const defaultUsername = "Gianluca";
 export const defaultBootDuration = 5000;
 
 export const defaultDimScreenThreshold = "300000"; // 5 minutes
+
+export const defaultFilePermissions = {
+  owner: { read: true, write: true, execute: false },
+  group: { read: true, write: false, execute: false },
+  others: { read: true, write: false, execute: false },
+};
+
+export const defaultFolderPermissions = {
+  owner: { read: true, write: true, execute: true },
+  group: { read: true, write: false, execute: true },
+  others: { read: true, write: false, execute: true },
+};
 
 export const defaultBackgroundImage: BackgroundImage = {
   url: "img/bg-desktop.jpg",

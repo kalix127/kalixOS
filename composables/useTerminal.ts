@@ -160,6 +160,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         if (key === "\u001b[1;5B") break; // Ctrl + Arrow down
         if (key === "\u001b[1;5D") break; // Ctrl + Arrow left
         if (key === "\u001b[1;5C") break; // Ctrl + Arrow right
+        if (domEvent.ctrlKey && domEvent.key === "Backspace") break; // Ctrl + Backspace
 
         term.write(key);
         command.value += key;

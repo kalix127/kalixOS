@@ -2,20 +2,24 @@
 import { useIntervalFn } from "@vueuse/core";
 
 const { hasAppsAtTop } = storeToRefs(useDesktopStore());
+const { memoryUsedPercentage } = storeToRefs(useGlobalStore());
 
 const cpuUsage = ref("0.00%");
 const memoryUsage = ref("0.00%");
 
 // Function to generate random CPU and memory usage with decimals
-const getRandomValue = (min: number, max: number): string => {
+const getRandomValue = (min: number, max: number): { value: string; percentage: number } => {
   const value = (Math.random() * (max - min) + min).toFixed(2);
-  return `${value}%`;
+  return { value: `${value}%`, percentage: Math.round(Number(value)) };
 };
 
 useIntervalFn(
   () => {
-    cpuUsage.value = getRandomValue(5, 80); // CPU between 5 and 80%
-    memoryUsage.value = getRandomValue(15, 95); // Memory between 15 and 95%
+    const randomCpuUsage = getRandomValue(5, 80); // CPU between 5 and 80%
+    const randomMemoryUsage = getRandomValue(15, 95); // Memory between 15 and 95%
+    cpuUsage.value = randomCpuUsage.value;
+    memoryUsage.value = `${randomMemoryUsage.value}%`;
+    memoryUsedPercentage.value = randomMemoryUsage.percentage;
   },
   1000,
   { immediate: true },

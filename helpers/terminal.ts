@@ -49,10 +49,28 @@ export function handleCd(
 export function handleLs(
   term: Terminal,
   args: string[],
+  fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
 ): void {
   const flags = args.filter((arg) => arg.startsWith("-"));
-  const nodes = currentDirectoryNode.children ?? [];
+  const pathArgs = args.filter((arg) => !arg.startsWith("-"));
+  const path = pathArgs.length > 0 ? pathArgs[0] : null;
+
+  let targetNode: FileSystemNode | null = null;
+
+  if (path) {
+    // Resolve the provided path (absolute or relative)
+    targetNode = resolvePath(fileSystem, currentDirectoryNode, path);
+    if (!targetNode) {
+      term.write(`\r\nls: cannot access '${path}': No such file or directory`);
+      return;
+    }
+  } else {
+    // Default to current directory
+    targetNode = currentDirectoryNode;
+  }
+
+  const nodes = targetNode.children ?? [];
 
   if (flags.includes("-l")) {
     // Calculate maximum column widths dynamically
@@ -76,23 +94,13 @@ export function handleLs(
     nodes.forEach((node) => {
       const type = node.type === "folder" ? "d" : "-";
 
-      // Convert permissions object to rwxr-xr-x format
-      const formatPermissions = (
-        permissions: FileSystemNode["permissions"],
-      ) => {
-        const permissionString = (perm: {
-          read: boolean;
-          write: boolean;
-          execute: boolean;
-        }) =>
-          `${perm.read ? "r" : "-"}${perm.write ? "w" : "-"}${perm.execute ? "x" : "-"}`;
-
-        return (
-          `${permissionString(permissions?.owner ?? { read: false, write: false, execute: false })}` +
-          `${permissionString(permissions?.group ?? { read: false, write: false, execute: false })}` +
-          `${permissionString(permissions?.others ?? { read: false, write: false, execute: false })}`
+      // Ensure permissions are defined
+      if (!node.permissions) {
+        term.write(
+          `\r\nls: cannot read permissions of '${node.name}': Permissions undefined`,
         );
-      };
+        return;
+      }
 
       const permissions = formatPermissions(node.permissions);
       const size =
@@ -109,21 +117,13 @@ export function handleLs(
     return;
   }
 
-  // If a path is provided, show the contents of the path
-  if (args.length > 1) {
-    const path = args[1];
-    const pathNode = findNodeByPath(currentDirectoryNode, splitPath(path));
+  // If a path is provided without '-l', show the contents of the path
+  if (path) {
+    const output = nodes.map((node) => formatNodeName(node)).join("  ");
 
-    if (!pathNode) {
-      term.write(`\r\nls: cannot access '${path}': No such file or directory`);
-      return;
+    if (output.trim() !== "") {
+      term.write(`\r\n${output}`);
     }
-
-    const output = pathNode.children
-      ?.map((node) => formatNodeName(node))
-      .join("  ");
-
-    if (output?.trim() !== "") term.write(`\r\n${output}`);
     return;
   }
 
@@ -328,4 +328,24 @@ export function formatUptime(uptime: number): string {
   const hours = Math.floor(uptime / 3600);
   const minutes = Math.floor((uptime % 3600) / 60);
   return `${hours} hours, ${minutes} mins`;
+}
+
+/**
+ * Converts the permissions object to a string like rwxr-xr-x.
+ * @param permissions The permissions object.
+ * @returns The formatted permissions string.
+ */
+function formatPermissions(permissions: FileSystemNode["permissions"]): string {
+  const permissionString = (perm: {
+    read: boolean;
+    write: boolean;
+    execute: boolean;
+  }) =>
+    `${perm.read ? "r" : "-"}${perm.write ? "w" : "-"}${perm.execute ? "x" : "-"}`;
+
+  return (
+    `${permissionString(permissions.owner)}` +
+    `${permissionString(permissions.group)}` +
+    `${permissionString(permissions.others)}`
+  );
 }

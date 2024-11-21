@@ -189,15 +189,20 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       case "ls":
-        handleLs(term, args, currentDirectoryNode.value!);
+        handleLs(term, args.slice(1), fileSystem, currentDirectoryNode.value!);
         break;
 
       case "chown":
-        handleChown(term, args, fileSystem, currentDirectoryNode.value!);
+        handleChown(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
         break;
 
       case "chmod":
-        handleChmod(term, args, fileSystem, currentDirectoryNode.value!);
+        handleChmod(term, args.slice(1), fileSystem, currentDirectoryNode.value!);
         break;
 
       case "pwd":

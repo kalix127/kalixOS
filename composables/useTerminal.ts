@@ -54,7 +54,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       return `${usernameAnsi}:\x1b[1;34m ~ \x1b[1;37m$ `;
     }
 
-    return `${usernameAnsi}:${currentDirectory.value} $ `;
+    return `${usernameAnsi}:\x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
   });
 
   term.write(newLine.value);

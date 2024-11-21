@@ -10,6 +10,7 @@ import {
   handleFree,
   handleDf,
   handleCat,
+  handleTouch,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -290,6 +291,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "tree":
         shouldAddToHistory = handleTree(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "touch":
+        shouldAddToHistory = handleTouch(
           term,
           args.slice(1),
           fileSystem,

@@ -8,8 +8,9 @@ import {
   resolvePath,
 } from "~/helpers";
 import { useWindowSize } from "@vueuse/core";
+import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
-const { editItem } = useDesktopStore();
+const { editItem, createItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 export function handleCd(
@@ -795,5 +796,54 @@ export function handleCat(
   }
 
   term.write(`\r\n${targetNode.content}`);
+  return true;
+}
+export function handleTouch(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  // Allow only 'touch' with exactly one argument
+  if (args.length !== 1) {
+    term.write(`\r\ntouch: missing file operand`);
+    return false;
+  }
+
+  const filePath = args[0];
+  let targetDirectory: FileSystemNode;
+  let fileName: string;
+
+  if (filePath.startsWith("/")) {
+    // Absolute path
+    const pathParts = splitPath(filePath);
+    fileName = pathParts.pop() || "";
+    const dirPath = pathParts.join("/");
+    targetDirectory =
+      findNodeByAbsolutePath(fileSystem, dirPath) || currentDirectoryNode;
+  } else {
+    // Relative path
+    const pathParts = splitPath(filePath);
+    fileName = pathParts.pop() || "";
+    if (pathParts.length > 0) {
+      targetDirectory =
+        findNodeByPath(currentDirectoryNode, pathParts) || currentDirectoryNode;
+    } else {
+      targetDirectory = currentDirectoryNode;
+    }
+  }
+
+  // Check if node already exists
+  const existingNode = targetDirectory.children?.find(
+    (child) => child.name === fileName,
+  );
+  if (!existingNode) {
+    createItem(targetDirectory.id, {
+      name: fileName,
+      type: "file",
+      icon: "file:file",
+      permissions: defaultFilePermissions,
+    });
+  }
   return true;
 }

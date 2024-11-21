@@ -47,31 +47,52 @@ export const assignDefaultProperties = (
 };
 
 /**
- * Resolves a path to its corresponding node in the file system.
- * @param root The root FileSystemNode of the file system.
- * @param currentDirectoryNode The current directory FileSystemNode.
- * @param path The path to resolve.
- * @returns The resolved FileSystemNode or null if the path is invalid.
+ * Resolves a given path starting from a specified directory node.
+ * @param fileSystem The root FileSystemNode.
+ * @param currentDirectoryNode The node from which to start resolving the path.
+ * @param path The path to resolve (absolute or relative).
+ * @returns The FileSystemNode corresponding to the path, or null if not found.
  */
-export const resolvePath = (
-  root: FileSystemNode,
+export function resolvePath(
+  fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
   path: string,
-): FileSystemNode | null => {
-  const pathSegments = splitPath(path);
+): FileSystemNode | null {
+  if (!path) return null;
 
-  if (path === "/") {
-    return root;
+  // Determine if the path is absolute
+  const isAbsolute = path.startsWith("/");
+
+  // Split the path into parts, ignoring empty segments
+  const parts = path.split("/").filter((part) => part.length > 0);
+
+  // Start from root if absolute, else from current directory
+  let node: FileSystemNode = isAbsolute ? fileSystem : currentDirectoryNode;
+
+  for (const part of parts) {
+    if (part === ".") {
+      continue; // Current directory, no change
+    } else if (part === "..") {
+      // Parent directory handling requires parent references
+      // Since our FileSystemNode does not have a parent reference, we cannot traverse up
+      // Thus, return null or handle accordingly
+      return null; // Unable to navigate to parent
+    } else {
+      if (node.type !== "folder" || !node.children) {
+        return null; // Cannot traverse further
+      }
+
+      const found = node.children.find((child) => child.name === part);
+      if (found) {
+        node = found;
+      } else {
+        return null; // Path does not exist
+      }
+    }
   }
 
-  if (path.startsWith("/")) {
-    // Absolute path
-    return findNodeByAbsolutePath(root, path);
-  } else {
-    // Relative path
-    return findNodeByPath(currentDirectoryNode, pathSegments);
-  }
-};
+  return node;
+}
 
 /**
  * Checks if a given path is valid in the file system.

@@ -5,6 +5,7 @@ import {
   handleLs,
   handleChown,
   handleChmod,
+  handleNeofetch,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -59,6 +60,8 @@ export function useTerminal(terminalElement: HTMLElement) {
     return `${usernameAnsi}:\x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
   });
 
+  // Show neofetch on startup
+  handleNeofetch(term, username);
   term.write(newLine.value);
 
   function resetCommandAndCursor() {
@@ -199,6 +202,10 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "pwd":
         term.write(`\r\n${currentDirectory.value}`);
+        break;
+
+      case "neofetch":
+        handleNeofetch(term, username);
         break;
 
       default:

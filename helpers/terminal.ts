@@ -43,6 +43,11 @@ export function handleCd(
     return false;
   }
 
+  if (targetNode.type !== "folder") {
+    term.write(`\r\ncd: ${toDir}: Not a directory`);
+    return false;
+  }
+
   setCurrentDirectory(targetNode);
   return true;
 }

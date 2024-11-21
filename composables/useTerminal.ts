@@ -208,6 +208,10 @@ export function useTerminal(terminalElement: HTMLElement) {
         handleNeofetch(term, username);
         break;
 
+      case "whoami":
+        term.write(`\r\n${username}`);
+        break;
+
       default:
         term.write(`\r\nzsh: command not found: ${exec}`);
         break;

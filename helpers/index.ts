@@ -1,6 +1,6 @@
 import type { FileSystemNode } from "~/types";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
-
+import { v4 as uuidv4 } from "uuid";
 /**
  * Recursively assigns default properties to each node in the file system.
  * @param node The root FileSystemNode.
@@ -21,6 +21,7 @@ export const assignDefaultProperties = (
   // Create new node with default properties
   const newNode: FileSystemNode = {
     ...node,
+    id: node.id || uuidv4(),
     permissions:
       node.permissions || node.type === "folder"
         ? defaultFolderPermissions

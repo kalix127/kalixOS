@@ -187,13 +187,12 @@ export function handleChmod(
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
 ): boolean {
-  if (!args[1]) {
+  if (args.length < 2) {
     term.write("\r\nchmod: missing operand");
     return false;
   }
 
-  const mode = args[1];
-  const targetPath = args[2];
+  const [mode, targetPath] = args;
   if (!targetPath) {
     term.write("\r\nchmod: missing file operand");
     return false;
@@ -798,6 +797,7 @@ export function handleCat(
   term.write(`\r\n${targetNode.content}`);
   return true;
 }
+
 export function handleTouch(
   term: Terminal,
   args: string[],

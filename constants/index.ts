@@ -6,7 +6,7 @@ import type {
   AppNode,
   BackgroundImage,
 } from "@/types";
-import { assignIds } from "~/helpers";
+import { assignDefaultProperties } from "~/helpers";
 
 export const defaultUsername = "Gianluca";
 
@@ -254,145 +254,148 @@ export const defaultApps: AppNode[] = [
 }));
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
-  assignIds({
-    id: "root",
-    name: "/",
-    type: "folder",
-    canMove: false,
-    canDelete: false,
-    icon: "folder:folder",
-    children: [
-      {
-        name: "home",
-        type: "folder",
-        canMove: false,
-        canDelete: false,
-        icon: "folder:folder",
-        isTranslated: true,
-        children: [
-          {
-            id: "home",
-            name: username,
-            type: "folder",
-            canMove: false,
-            canDelete: false,
-            icon: "folder:folder",
-            isTranslated: true,
-            children: [
-              {
-                id: "downloads",
-                name: "downloads",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "documents",
-                name: "documents",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "pictures",
-                name: "pictures",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "music",
-                name: "music",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "videos",
-                name: "videos",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "desktop",
-                name: "desktop",
-                type: "folder",
-                icon: "folder:folder",
-                canMove: false,
-                canDelete: false,
-                isTranslated: true,
-                children: [
-                  trashNode,
-                  {
-                    id: "projects",
-                    name: "projects",
-                    type: "folder",
-                    icon: "folder:folder",
-                    children: [],
-                    isTranslated: true,
-                  },
-                ],
-              },
-              {
-                name: ".zshrc",
-                type: "file",
-                icon: "file:file",
-                children: [],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "bin",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "etc",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "proc",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "run",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "usr",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "var",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "tmp",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-    ],
-  });
+  assignDefaultProperties(
+    {
+      id: "root",
+      name: "/",
+      type: "folder",
+      canMove: false,
+      canDelete: false,
+      icon: "folder:folder",
+      children: [
+        {
+          name: "home",
+          type: "folder",
+          canMove: false,
+          canDelete: false,
+          icon: "folder:folder",
+          isTranslated: true,
+          children: [
+            {
+              id: "home",
+              name: username,
+              type: "folder",
+              canMove: false,
+              canDelete: false,
+              icon: "folder:folder",
+              isTranslated: true,
+              children: [
+                {
+                  id: "downloads",
+                  name: "downloads",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                  isTranslated: true,
+                },
+                {
+                  id: "documents",
+                  name: "documents",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                  isTranslated: true,
+                },
+                {
+                  id: "pictures",
+                  name: "pictures",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                  isTranslated: true,
+                },
+                {
+                  id: "music",
+                  name: "music",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                  isTranslated: true,
+                },
+                {
+                  id: "videos",
+                  name: "videos",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                  isTranslated: true,
+                },
+                {
+                  id: "desktop",
+                  name: "desktop",
+                  type: "folder",
+                  icon: "folder:folder",
+                  canMove: false,
+                  canDelete: false,
+                  isTranslated: true,
+                  children: [
+                    trashNode,
+                    {
+                      id: "projects",
+                      name: "projects",
+                      type: "folder",
+                      icon: "folder:folder",
+                      children: [],
+                      isTranslated: true,
+                    },
+                  ],
+                },
+                {
+                  name: ".zshrc",
+                  type: "file",
+                  icon: "file:file",
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "bin",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "etc",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "proc",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "run",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "usr",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "var",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "tmp",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+      ],
+    },
+    username,
+  );
 
 export const powerUpSystemLogs: SystemLog[] = [
   {

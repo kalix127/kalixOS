@@ -2,19 +2,44 @@ import type { FileSystemNode } from "~/types";
 import { v4 as uuidv4 } from "uuid";
 
 /**
- * Recursively assigns unique IDs to each node in the file system.
+ * Recursively assigns default properties to each node in the file system.
  * @param node The root FileSystemNode.
- * @returns A new FileSystemNode with unique IDs assigned to itself and all its descendants.
+ * @returns A new FileSystemNode with default properties assigned to itself and all descendants.
  */
-export const assignIds = (node: FileSystemNode): FileSystemNode => {
-  const newNode: FileSystemNode = {
-    ...node,
-    id: uuidv4(),
+export const assignDefaultProperties = (
+  node: FileSystemNode,
+  username: string,
+): FileSystemNode => {
+  const { locale } = useI18n();
+  const createdAt = Intl.DateTimeFormat(locale.value, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date());
+
+  // Default permissions
+  const defaultPermissions = {
+    owner: { read: true, write: true, execute: true },
+    group: { read: true, write: false, execute: true },
+    others: { read: true, write: false, execute: true },
   };
 
+  // Create new node with default properties
+  const newNode: FileSystemNode = {
+    ...node,
+    permissions: node.permissions || defaultPermissions,
+    owner: node.owner || username,
+    group: node.group || username,
+    createdAt: node.createdAt || createdAt,
+    content: node.content || "",
+  };
+
+  // Recursively process children
   if (newNode.children && newNode.children.length > 0) {
     newNode.children = newNode.children.map((child) =>
-      child.id ? child : assignIds(child),
+      assignDefaultProperties(child, username),
     );
   }
 

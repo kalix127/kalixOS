@@ -15,7 +15,7 @@ export interface WifiNetwork {
     defaultRoute: string;
     dns4: string[];
     dns6: string[];
-  }
+  };
 }
 
 export interface FileSystemNode {
@@ -26,11 +26,30 @@ export interface FileSystemNode {
   children?: (FileSystemNode | AppNode)[];
   isRenaming?: boolean;
   isNewlyCreated?: boolean; // Indicates if the node has just been created
-  // Permission flags
+  content?: string;
+  owner?: string;
+  group?: string;
+  createdAt?: string;
+  permissions: {
+    owner: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+    group: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+    others: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+  };
   canEdit?: boolean;
   canMove?: boolean;
   canDelete?: boolean;
-
   isTranslated?: boolean;
 }
 
@@ -63,7 +82,6 @@ export interface SystemLog {
   action: string;
   message: string;
 }
-
 
 export interface BackgroundImage {
   url: string;

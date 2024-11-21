@@ -494,3 +494,129 @@ function formatPermissions(permissions: FileSystemNode["permissions"]): string {
     `${permissionString(permissions.others)}`
   );
 }
+
+export function handleFree(term: Terminal, args: string[]): boolean {
+  // Allow only 'free' or 'free -h'
+  if (args.length > 1) {
+    term.write(`\r\nfree: too many arguments provided.`);
+    return false;
+  }
+
+  let humanReadable = false;
+
+  if (args.length === 1) {
+    if (args[0] === "-h") {
+      humanReadable = true;
+    } else {
+      term.write(
+        `\r\nfree: invalid option '${args[0]}'. Only '-h' is supported.`,
+      );
+      return false;
+    }
+  }
+
+  const { memoryUsedPercentage } = storeToRefs(useGlobalStore());
+  const total = 15406;
+  const used = Math.round((memoryUsedPercentage.value / 100) * total);
+  const remaining = total - used;
+
+  // Generate 'shared' memory (up to 5% of remaining or 10% of used)
+  const maxShared = Math.min(remaining * 0.05, used * 0.1);
+  const shared = Math.round(getRandomInt(0, Math.floor(maxShared)));
+
+  const remainingAfterShared = remaining - shared;
+
+  // Generate 'free' memory (up to 60% of remaining after shared)
+  const maxFree = Math.floor(remainingAfterShared * 0.6);
+  const free = Math.round(getRandomInt(0, maxFree));
+
+  // 'buff/cache' is the rest
+  const buffCache = remainingAfterShared - free;
+
+  // 'available' memory is 'free' + 'buff/cache'
+  const available = free + buffCache;
+
+  // Swap is fixed at 0
+  const swapTotal = 0;
+  const swapUsed = 0;
+  const swapFree = 0;
+
+  const headers = [
+    "total",
+    "used",
+    "free",
+    "shared",
+    "buff/cache",
+    "available",
+  ];
+  const widths = [10, 10, 10, 10, 15, 15];
+  const headerLine = headers
+    .map((header, idx) => header.padStart(widths[idx]))
+    .join("  ");
+  const fullHeader = "       " + headerLine + "\n";
+
+  const memValues = [total, used, free, shared, buffCache, available];
+  const swapValues = [swapTotal, swapUsed, swapFree];
+
+  const memLine = formatRow("Mem:", memValues, humanReadable, widths);
+  const swapLine = formatRow("Swap:", swapValues, humanReadable, widths);
+
+  const output = fullHeader + memLine + "\n" + swapLine;
+
+  term.write(`\r\n${output}`);
+  return true;
+}
+
+/**
+ * Generates a random integer between min and max (inclusive).
+ * @param min The minimum integer value.
+ * @param max The maximum integer value.
+ * @returns A random integer between min and max.
+ */
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Formats a number of bytes into a human-readable string with units.
+ * @param kilobytes The number of kilobytes.
+ * @param decimals The number of decimal places to include.
+ * @returns The formatted string (e.g., "15GiB").
+ */
+function formatBytes(kilobytes: number, decimals: number = 1): string {
+  if (kilobytes === 0) return "0B";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Ki", "Mi", "Gi"];
+  const i = Math.floor(Math.log(kilobytes) / Math.log(k));
+
+  return parseFloat((kilobytes / Math.pow(k, i)).toFixed(dm)) + sizes[i];
+}
+
+/**
+ * Formats a row with a label and corresponding values.
+ * @param label The label for the row (e.g., 'Mem:', 'Swap:').
+ * @param values The array of values corresponding to each column.
+ * @param humanReadable Whether to format the numbers in a human-readable format.
+ * @param widths The array of column widths.
+ * @returns The formatted row string.
+ */
+function formatRow(
+  label: string,
+  values: number[],
+  humanReadable: boolean,
+  widths: number[],
+): string {
+  const formattedValues = values
+    .map((val, idx) => {
+      if (humanReadable) {
+        return formatBytes(val * 1024, 1).padStart(widths[idx]);
+      } else {
+        return val.toString().padStart(widths[idx]);
+      }
+    })
+    .join("  ");
+
+  return `${label.padEnd(6)} ${formattedValues}`;
+}

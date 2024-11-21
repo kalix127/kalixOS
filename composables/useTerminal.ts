@@ -7,6 +7,7 @@ import {
   handleChmod,
   handleNeofetch,
   handleTree,
+  handleFree,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -278,6 +279,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "tree":
         shouldAddToHistory = handleTree(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "free":
+        shouldAddToHistory = handleFree(
           term,
           args.slice(1),
           fileSystem,

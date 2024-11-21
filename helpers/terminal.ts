@@ -627,3 +627,130 @@ function formatFreeRow(
 
   return `${label.padEnd(6)} ${formattedValues}`;
 }
+
+export function handleDf(term: Terminal, args: string[]): boolean {
+  // Allow only 'df' or 'df -h'
+  if (args.length > 1) {
+    term.write(`\r\ndf: too many arguments provided.`);
+    return false;
+  }
+
+  let humanReadable = false;
+
+  if (args.length === 1) {
+    if (args[0] === "-h") {
+      humanReadable = true;
+    } else {
+      term.write(
+        `\r\ndf: invalid option '${args[0]}'. Only '-h' is supported.`,
+      );
+      return false;
+    }
+  }
+
+  // Define column headers and widths
+  const headers = ["Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on"];
+  const widths = [20, 10, 10, 10, 6, 25];
+
+  // Construct the header line with proper alignment
+  const headerLine = headers
+    .map((header, idx) => {
+      if (idx === 0 || idx === headers.length - 1) {
+        // Left-align 'Filesystem' and 'Mounted on'
+        return header.padEnd(widths[idx]);
+      } else {
+        // Right-align numeric headers
+        return header.padStart(widths[idx]);
+      }
+    })
+    .join("  ");
+
+  const fullHeader = headerLine + "\n";
+
+  // Total size of approximately 1 TB
+  const mockFilesystems = [
+    { filesystem: "/dev/nvme0n1p5", mountedOn: "/", size: 1018176000 },
+    { filesystem: "/dev/nvme0n1p1", mountedOn: "/boot/efi", size: 96000 },
+    { filesystem: "dev", mountedOn: "/dev", size: 7500000 },
+    { filesystem: "run", mountedOn: "/run", size: 7600000 },
+    { filesystem: "tmpfs", mountedOn: "/tmp", size: 7600000 },
+    { filesystem: "tmpfs", mountedOn: "/run/user/1000", size: 7600000 },
+    { filesystem: "tmpfs", mountedOn: "/dev/shm", size: 7600000 },
+  ];
+
+  // Generate disk usage data with random values
+  const dfData = mockFilesystems.map((fs) => {
+    const total = fs.size;
+    const used = getRandomInt(0, total);
+    const avail = total - used;
+    const usePercent = total === 0 ? 0 : Math.round((used / total) * 100);
+
+    return {
+      filesystem: fs.filesystem,
+      size: humanReadable ? formatBytes(total) : total.toString(),
+      used: humanReadable ? formatBytes(used) : used.toString(),
+      avail: humanReadable ? formatBytes(avail) : avail.toString(),
+      usePercent: `${usePercent}%`,
+      mountedOn: fs.mountedOn,
+    };
+  });
+
+  // Prepare disk usage lines
+  const dfLines = dfData.map((fs) => {
+    return formatDfRow(
+      fs.filesystem,
+      fs.size,
+      fs.used,
+      fs.avail,
+      fs.usePercent,
+      fs.mountedOn,
+      humanReadable,
+      widths,
+    );
+  });
+
+  const output = fullHeader + dfLines.join("\n");
+  term.write(`\r\n${output}`);
+  return true;
+}
+
+/**
+ * Formats a row for the 'df' command.
+ * @param filesystem The name of the filesystem.
+ * @param size The total size of the filesystem.
+ * @param used The used space of the filesystem.
+ * @param avail The available space of the filesystem.
+ * @param usePercent The usage percentage of the filesystem.
+ * @param mountedOn The mount point of the filesystem.
+ * @param humanReadable Whether to format the numbers in a human-readable format.
+ * @param widths The array of column widths.
+ * @returns The formatted row string.
+ */
+function formatDfRow(
+  filesystem: string,
+  size: string,
+  used: string,
+  avail: string,
+  usePercent: string,
+  mountedOn: string,
+  humanReadable: boolean,
+  widths: number[],
+): string {
+  // Left-align 'Filesystem' and 'Mounted on'
+  const filesystemPadded = filesystem.padEnd(widths[0]);
+  const mountedOnPadded = mountedOn.padEnd(widths[5]);
+
+  // Right-align numeric columns
+  const sizeFormatted = humanReadable
+    ? formatBytes(parseInt(size) * 1024)
+    : size.padStart(widths[1]);
+  const usedFormatted = humanReadable
+    ? formatBytes(parseInt(used) * 1024)
+    : used.padStart(widths[2]);
+  const availFormatted = humanReadable
+    ? formatBytes(parseInt(avail) * 1024)
+    : avail.padStart(widths[3]);
+  const usePercentFormatted = usePercent.padStart(widths[4]);
+
+  return `${filesystemPadded}  ${sizeFormatted.padStart(widths[1])}  ${usedFormatted.padStart(widths[2])}  ${availFormatted.padStart(widths[3])}  ${usePercentFormatted}  ${mountedOnPadded}`;
+}

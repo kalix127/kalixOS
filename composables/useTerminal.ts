@@ -8,6 +8,7 @@ import {
   handleNeofetch,
   handleTree,
   handleFree,
+  handleDf,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -287,12 +288,11 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       case "free":
-        shouldAddToHistory = handleFree(
-          term,
-          args.slice(1),
-          fileSystem,
-          currentDirectoryNode.value!,
-        );
+        shouldAddToHistory = handleFree(term, args.slice(1));
+        break;
+
+      case "df":
+        shouldAddToHistory = handleDf(term, args.slice(1));
         break;
 
       case "pwd":

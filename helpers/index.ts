@@ -47,6 +47,48 @@ export const assignDefaultProperties = (
 };
 
 /**
+ * Resolves a path to its corresponding node in the file system.
+ * @param root The root FileSystemNode of the file system.
+ * @param currentDirectoryNode The current directory FileSystemNode.
+ * @param path The path to resolve.
+ * @returns The resolved FileSystemNode or null if the path is invalid.
+ */
+export const resolvePath = (
+  root: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+  path: string,
+): FileSystemNode | null => {
+  const pathSegments = splitPath(path);
+
+  if (path === "/") {
+    return root;
+  }
+
+  if (path.startsWith("/")) {
+    // Absolute path
+    return findNodeByAbsolutePath(root, path);
+  } else {
+    // Relative path
+    return findNodeByPath(currentDirectoryNode, pathSegments);
+  }
+};
+
+/**
+ * Checks if a given path is valid in the file system.
+ * @param root The root FileSystemNode of the file system.
+ * @param currentDirectoryNode The current directory FileSystemNode.
+ * @param path The path to validate.
+ * @returns True if the path is valid, false otherwise.
+ */
+export const isPathValid = (
+  root: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+  path: string,
+): boolean => {
+  return !!resolvePath(root, currentDirectoryNode, path);
+};
+
+/**
  * Splits a UNIX-like path into its components.
  * @param path The path string (e.g., "/home/user/Desktop").
  * @returns An array of path segments.

@@ -210,7 +210,7 @@ export const useDesktopStore = defineStore({
      */
     createItem(
       parentId: string,
-      newItem: Omit<FileSystemNode, "id">,
+      newItem: Omit<FileSystemNode, "id" | "children" | "isNewlyCreated">,
     ): FileSystemNode | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
@@ -218,11 +218,39 @@ export const useDesktopStore = defineStore({
       // Check permissions
       if (!canEdit(parent)) return null;
 
-      const itemWithId: FileSystemNode = { ...newItem, id: uuidv4() };
+      const username = useGlobalStore().username;
+      const createdAt = Intl.DateTimeFormat("it-IT", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: false,
+      }).format(new Date());
+
+      // Create new node with default properties
+      const newNode: FileSystemNode = {
+        ...newItem,
+        id: uuidv4(),
+        owner: username,
+        group: username,
+        createdAt,
+        content: newItem.content || "",
+        isNewlyCreated: true,
+        children: [],
+      };
+
+      // If file type, set icon based on extension
+      if (newNode.type === "file") {
+        const extension = newNode.name.split(".").pop();
+        if (extension) {
+          newNode.icon = getNodeIcon(extension);
+        }
+      }
+
       parent.children = parent.children || [];
-      parent.children.push(itemWithId);
-      this.nodeMap.set(itemWithId.id, itemWithId);
-      return itemWithId;
+      parent.children.push(newNode);
+      this.nodeMap.set(newNode.id, newNode);
+      return newNode;
     },
 
     /**

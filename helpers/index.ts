@@ -1,5 +1,5 @@
 import type { FileSystemNode } from "~/types";
-import { v4 as uuidv4 } from "uuid";
+import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
 /**
  * Recursively assigns default properties to each node in the file system.
@@ -10,8 +10,7 @@ export const assignDefaultProperties = (
   node: FileSystemNode,
   username: string,
 ): FileSystemNode => {
-  const { locale } = useI18n();
-  const createdAt = Intl.DateTimeFormat(locale.value, {
+  const createdAt = Intl.DateTimeFormat("it-IT", {
     month: "short",
     day: "numeric",
     hour: "numeric",
@@ -19,17 +18,13 @@ export const assignDefaultProperties = (
     hour12: false,
   }).format(new Date());
 
-  // Default permissions
-  const defaultPermissions = {
-    owner: { read: true, write: true, execute: true },
-    group: { read: true, write: false, execute: true },
-    others: { read: true, write: false, execute: true },
-  };
-
   // Create new node with default properties
   const newNode: FileSystemNode = {
     ...node,
-    permissions: node.permissions || defaultPermissions,
+    permissions:
+      node.permissions || node.type === "folder"
+        ? defaultFolderPermissions
+        : defaultFilePermissions,
     owner: node.owner || username,
     group: node.group || username,
     createdAt: node.createdAt || createdAt,

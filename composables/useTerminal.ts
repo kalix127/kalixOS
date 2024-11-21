@@ -1,4 +1,5 @@
 import { Terminal } from "@xterm/xterm";
+import { WebLinksAddon } from "@xterm/addon-web-links";
 import {
   handleCd,
   handleLs,
@@ -22,9 +23,9 @@ export function useTerminal(terminalElement: HTMLElement) {
   // Set the initial directories
   setCurrentDirectory(homeDirectoryNode.value!);
 
-  // Init terminal
+  // Init terminal and addons
+  const webLinksAddon = new WebLinksAddon();
   const term = new Terminal({
-    drawBoldTextInBrightColors: true,
     convertEol: true,
     cursorBlink: true,
     cursorStyle: "underline",
@@ -43,6 +44,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     },
   });
   term.open(terminalElement);
+  term.loadAddon(webLinksAddon);
   term.onKey((data) => onKey(data));
 
   // Default new line in the format -> <user>@<user>: <current-directory> $

@@ -87,3 +87,10 @@ export interface BackgroundImage {
   url: string;
   name: string;
 }
+
+export interface Process {
+  pid: number;
+  appId: string;
+  startTimeTimestamp: number;
+  command: string;
+}

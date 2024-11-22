@@ -6,11 +6,12 @@ import {
   splitPath,
   findNodeByPath,
   resolvePath,
+  canEdit,
 } from "~/helpers";
 import { useWindowSize } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
-const { editItem, createItem, moveItem } = useDesktopStore();
+const { editItem, createItem, moveItem, deleteItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 export function handleCd(
@@ -982,4 +983,75 @@ export function handleMv(
 
   term.write(`\r\nmv: cannot overwrite '${targetPath}'`);
   return false;
+}
+
+export function handleRm(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  if (args.length === 0) {
+    term.write("\r\nrm: missing operand");
+    return false;
+  }
+
+  let forceDelete = false;
+  let targetPath = "";
+
+  // Parse arguments
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "-f") {
+      forceDelete = true;
+    } else {
+      if (targetPath) {
+        term.write("\r\nrm: too many arguments");
+        return false;
+      }
+      targetPath = args[i];
+    }
+  }
+
+  if (!targetPath) {
+    term.write("\r\nrm: missing operand");
+    return false;
+  }
+
+  // Resolve target node
+  let targetNode: FileSystemNode | null;
+  if (targetPath.startsWith("/")) {
+    targetNode = findNodeByAbsolutePath(fileSystem, targetPath);
+  } else {
+    targetNode = findNodeByPath(currentDirectoryNode, splitPath(targetPath));
+  }
+
+  if (!targetNode) {
+    term.write(
+      `\r\nrm: cannot remove '${targetPath}': No such file or directory`,
+    );
+    return false;
+  }
+
+  // Check if trying to delete a folder without -f flag
+  if (targetNode.type === "folder" && !forceDelete) {
+    term.write(`\r\nrm: cannot remove '${targetPath}': Is a directory`);
+    return false;
+  }
+
+  const parentNode = findParentById(fileSystem, targetNode.id);
+  if (!parentNode || parentNode.type !== "folder") {
+    term.write(
+      `\r\nrm: cannot remove '${targetPath}': No such file or directory`,
+    );
+    return false;
+  }
+
+  // Delete the item
+  const success = deleteItem(targetNode.id);
+  if (!success) {
+    term.write(`\r\nrm: cannot remove '${targetPath}': Permission denied`);
+    return false;
+  }
+
+  return true;
 }

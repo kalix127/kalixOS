@@ -10,7 +10,7 @@ import {
 import { useWindowSize } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
-const { editItem, createItem } = useDesktopStore();
+const { editItem, createItem, moveItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 export function handleCd(
@@ -901,4 +901,85 @@ export function handleMkdir(
     });
   }
   return true;
+}
+
+export function handleMv(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  if (args.length < 2) {
+    term.write("\r\nmv: missing file operand");
+    return false;
+  }
+
+  const sourcePath = args[0];
+  const targetPath = args[1];
+
+  // Find source node
+  let sourceNode: FileSystemNode | null = null;
+  if (sourcePath.startsWith("/")) {
+    sourceNode = findNodeByAbsolutePath(fileSystem, sourcePath);
+  } else {
+    sourceNode = findNodeByPath(currentDirectoryNode, splitPath(sourcePath));
+  }
+
+  if (!sourceNode) {
+    term.write(
+      `\r\nmv: cannot stat '${sourcePath}': No such file or directory`,
+    );
+    return false;
+  }
+
+  // Find target node/parent
+  let targetNode: FileSystemNode | null = null;
+  if (targetPath.startsWith("/")) {
+    targetNode = findNodeByAbsolutePath(fileSystem, targetPath);
+  } else {
+    targetNode = findNodeByPath(currentDirectoryNode, splitPath(targetPath));
+  }
+
+  if (!targetNode) {
+    const targetPathParts = splitPath(targetPath);
+    const parentPath = targetPathParts.join("/");
+
+    let parentNode: FileSystemNode | null;
+    if (targetPath.startsWith("/")) {
+      parentNode = findNodeByAbsolutePath(fileSystem, parentPath);
+    } else {
+      parentNode = findNodeByPath(currentDirectoryNode, targetPathParts);
+    }
+
+    if (!parentNode || parentNode.type !== "folder") {
+      term.write(
+        `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': No such directory`,
+      );
+      return false;
+    }
+
+    const success = moveItem(sourceNode.id, parentNode.id);
+    if (!success) {
+      term.write(
+        `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': Permission denied`,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  // If target exists and is a directory, move source into it
+  if (targetNode.type === "folder") {
+    const success = moveItem(sourceNode.id, targetNode.id);
+    if (!success) {
+      term.write(
+        `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': Permission denied`,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  term.write(`\r\nmv: cannot overwrite '${targetPath}'`);
+  return false;
 }

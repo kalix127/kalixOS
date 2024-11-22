@@ -12,6 +12,7 @@ import {
   handleCat,
   handleTouch,
   handleMkdir,
+  handleMv,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -310,6 +311,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "mkdir":
         shouldAddToHistory = handleMkdir(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "mv":
+        shouldAddToHistory = handleMv(
           term,
           args.slice(1),
           fileSystem,

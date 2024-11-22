@@ -231,8 +231,8 @@ export const useDesktopStore = defineStore({
       const newNode: FileSystemNode = {
         ...newItem,
         id: uuidv4(),
-        owner: username,
-        group: username,
+        owner: username.toLowerCase(),
+        group: username.toLowerCase(),
         createdAt,
         content: newItem.content || "",
         isNewlyCreated: true,

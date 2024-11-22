@@ -15,6 +15,7 @@ import {
   handleMv,
   handleRm,
 } from "@/helpers/terminal";
+import { findNodeByPath } from "@/helpers";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -244,6 +245,12 @@ export function useTerminal(terminalElement: HTMLElement) {
     const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
 
     let shouldAddToHistory = false;
+    
+    // Check if the file bin node for the command exists.
+    if (!findNodeByPath(fileSystem, ["bin", exec])) {
+      term.write(`\r\nzsh: command not found: ${exec}`);
+      return false;
+    }
 
     switch (exec) {
       case "cd":

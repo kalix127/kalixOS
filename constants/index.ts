@@ -37,7 +37,7 @@ export const defaultBackgroundImages: BackgroundImage[] = [
   defaultBackgroundImage,
 ];
 
-export const defaultFullscreenApps = ["brave", "vscode"];
+export const defaultFullscreenApps = ["brave", "code"];
 
 export const desktopEnvironments = [
   "gnome",
@@ -233,7 +233,7 @@ export const defaultApps: AppNode[] = [
     name: "Visual Studio Code",
     type: "app",
     icon: "app:vscode",
-    id: "vscode",
+    id: "code",
   },
   {
     name: "linkedin_profile",
@@ -361,7 +361,139 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
           name: "bin",
           type: "folder",
           icon: "folder:folder",
-          children: [],
+          children: [
+            {
+              id: "pwd",
+              name: "pwd",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "ls",
+              name: "ls",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "cat",
+              name: "cat",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "cd",
+              name: "cd",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "rm",
+              name: "rm",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "touch",
+              name: "touch",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "mkdir",
+              name: "mkdir",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "mv",
+              name: "mv",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "df",
+              name: "df",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "free",
+              name: "free",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "help",
+              name: "help",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "ps",
+              name: "ps",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "kill",
+              name: "kill",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "neofetch",
+              name: "neofetch",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "chown",
+              name: "chown",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "chmod",
+              name: "chmod",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "tree",
+              name: "tree",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            {
+              id: "whoami",
+              name: "whoami",
+              type: "file",
+              icon: "file:file",
+              children: [],
+            },
+            ...defaultApps.slice(1, -2).map((app) => ({
+              ...app,
+              id: `${app.id}-bin`,
+              name: app.id.toLowerCase(),
+            })),
+          ],
         },
         {
           name: "etc",
@@ -377,12 +509,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
         },
         {
           name: "run",
-          type: "folder",
-          icon: "folder:folder",
-          children: [],
-        },
-        {
-          name: "usr",
           type: "folder",
           icon: "folder:folder",
           children: [],

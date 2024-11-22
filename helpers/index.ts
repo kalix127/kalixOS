@@ -1,4 +1,4 @@
-import type { FileSystemNode } from "~/types";
+import type { FileSystemNode, Process } from "~/types";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 /**
@@ -324,4 +324,13 @@ export const getNodeIcon = (extension: string): string => {
     default:
       return "file:file";
   }
+};
+
+export const getNextPid = (processes: Process[]): number => {
+  const highestPid = processes.reduce(
+    (max, process) => Math.max(max, process.pid),
+    0,
+  );
+  const randomIncrement = Math.floor(Math.random() * 500) + 1;
+  return highestPid + randomIncrement;
 };

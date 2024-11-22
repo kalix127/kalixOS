@@ -1,14 +1,14 @@
 import { Terminal } from "@xterm/xterm";
-import type { FileSystemNode } from "~/types";
+import type { FileSystemNode, Process } from "~/types";
 import {
   findNodeByAbsolutePath,
   findParentById,
   splitPath,
   findNodeByPath,
   resolvePath,
-  canEdit,
+  getNextPid,
 } from "~/helpers";
-import { useWindowSize } from "@vueuse/core";
+import { useWindowSize, useTimestamp } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
 const { editItem, createItem, moveItem, deleteItem } = useDesktopStore();
@@ -1054,4 +1054,107 @@ export function handleRm(
   }
 
   return true;
+}
+
+/**
+ * Handler for the 'ps' command.
+ * @param term The terminal instance.
+ * @param args The array of arguments passed to the command.
+ * @returns True if the command executes successfully, else false.
+ */
+export function handlePs(term: Terminal, args: string[]): boolean {
+  // Allow only 'ps' without any arguments
+  if (args.length > 0) {
+    term.write(`\r\nps: too many arguments provided.`);
+    return false;
+  }
+
+  // Define column headers and widths
+  const headers = ["PID", "TTY", "TIME", "CMD"];
+  const widths = [6, 12, 10, 25];
+
+  const headerLine = headers
+    .map((header, idx) => {
+      if (idx === 0) {
+        // Right-align 'PID'
+        return header.padStart(widths[idx]);
+      } else {
+        // Left-align 'TTY', 'TIME', and 'CMD'
+        return header.padEnd(widths[idx]);
+      }
+    })
+    .join("  ");
+
+  const fullHeader = headerLine + "\n";
+
+  const { processes } = storeToRefs(useDesktopStore());
+
+  // Format each process into a row with default TTY "pts/1"
+  const psLines = processes.value.map((proc) => {
+    const time = formatTime(proc.startTimeTimestamp);
+    return formatPsRow(proc.pid, "pts/1", time, proc.command, widths);
+  });
+
+  // Add the 'ps' process itself with TTY "pts/2"
+  const currentTimeTimestamp = useTimestamp({ offset: 0 }).value;
+  const psProcess = {
+    pid: getNextPid(processes.value),
+    time: formatTime(currentTimeTimestamp),
+    cmd: "ps",
+  };
+  psLines.push(
+    formatPsRow(psProcess.pid, "pts/2", psProcess.time, psProcess.cmd, widths),
+  );
+
+  const output = fullHeader + psLines.join("\n");
+
+  term.write(`\r\n${output}`);
+  return true;
+}
+
+/**
+ * Formats a row for the 'ps' command.
+ * @param pid The Process ID.
+ * @param tty The terminal associated with the process.
+ * @param time The cumulative CPU time the process has used.
+ * @param cmd The command that initiated the process.
+ * @param widths The array of column widths.
+ * @returns The formatted row string.
+ */
+function formatPsRow(
+  pid: number,
+  tty: string,
+  time: string,
+  cmd: string,
+  widths: number[],
+): string {
+  const pidPadded = pid.toString().padStart(widths[0]);
+  const ttyPadded = tty.padEnd(widths[1]);
+  const timePadded = time.padEnd(widths[2]);
+  const cmdPadded = cmd.padEnd(widths[3]);
+  return `${pidPadded}  ${ttyPadded}  ${timePadded}  ${cmdPadded}`;
+}
+
+/**
+ * Converts a timestamp or duration into "HH:MM:SS" format.
+ * @param timestamp The timestamp in milliseconds.
+ * @returns The formatted time string.
+ */
+function formatTime(timestamp: number): string {
+  // Get current timestamp
+  const now = Date.now();
+
+  // Calculate elapsed time in seconds
+  const elapsedSeconds = Math.floor((now - timestamp) / 1000);
+
+  // Calculate hours, minutes, seconds
+  const hours = Math.floor(elapsedSeconds / 3600)
+    .toString()
+    .padStart(2, "0");
+  const minutes = Math.floor((elapsedSeconds % 3600) / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
+
+  return `${hours}:${minutes}:${seconds}`;
 }

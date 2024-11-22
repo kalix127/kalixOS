@@ -14,6 +14,7 @@ import {
   handleMkdir,
   handleMv,
   handleRm,
+  handlePs,
 } from "@/helpers/terminal";
 import { findNodeByPath } from "@/helpers";
 
@@ -245,7 +246,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
 
     let shouldAddToHistory = false;
-    
+
     // Check if the file bin node for the command exists.
     if (!findNodeByPath(fileSystem, ["bin", exec])) {
       term.write(`\r\nzsh: command not found: ${exec}`);
@@ -344,6 +345,15 @@ export function useTerminal(terminalElement: HTMLElement) {
         );
         break;
 
+      case "ps":
+        shouldAddToHistory = handlePs(term, args.slice(1));
+        break;
+
+      case "neofetch":
+        handleNeofetch(term, username);
+        shouldAddToHistory = true;
+        break;
+
       case "free":
         shouldAddToHistory = handleFree(term, args.slice(1));
         break;
@@ -354,11 +364,6 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "pwd":
         term.write(`\r\n${currentDirectory.value}`);
-        shouldAddToHistory = true;
-        break;
-
-      case "neofetch":
-        handleNeofetch(term, username);
         shouldAddToHistory = true;
         break;
 

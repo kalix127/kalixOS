@@ -6,14 +6,21 @@ import {
   defaultBackgroundImages,
 } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
-import type { AppNode, FileSystemNode, BackgroundImage } from "~/types";
-import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
-import { v4 as uuidv4 } from "uuid";
+import type {
+  AppNode,
+  FileSystemNode,
+  BackgroundImage,
+  Process,
+} from "~/types";
 import {
-  useIdle,
-  useIntervalFn,
-  useTimestamp,
-} from "@vueuse/core";
+  findParentById,
+  canMove,
+  canEdit,
+  canDelete,
+  getNextPid,
+} from "@/helpers";
+import { v4 as uuidv4 } from "uuid";
+import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -25,6 +32,7 @@ export const useDesktopStore = defineStore({
     nodeMap: new Map<string, FileSystemNode>(),
     bookmarks: defaultBookmarks,
     uptime: 0,
+    processes: [],
 
     // Docks
     isDockVisible: true,
@@ -352,6 +360,9 @@ export const useDesktopStore = defineStore({
           isActive: app.id === appId ? true : app.isActive,
         }));
         this.hasAppsLoading = false;
+
+        // Create a process for the app
+        this.createProcess(app.id, app.name.toLowerCase());
         return;
       } else {
         this.toggleMinimizeApp(appId);
@@ -374,6 +385,9 @@ export const useDesktopStore = defineStore({
         x: app.id === appId ? 0 : app.x,
         y: app.id === appId ? 0 : app.y,
       }));
+
+      // Close the process
+      this.closeProcess(appId);
     },
 
     /**
@@ -437,6 +451,32 @@ export const useDesktopStore = defineStore({
         this.backgroundImage = defaultBackgroundImage;
       }
     },
+
+    /**
+     * Create a process.
+     * @param process The process to add.
+     */
+    createProcess(appId: string, command: string) {
+      // Check if the process for that appId is already running
+      if (this.processes.some((process) => process.appId === appId)) return;
+
+      this.processes.push({
+        pid: getNextPid(this.processes),
+        appId: appId,
+        startTimeTimestamp: useTimestamp({ offset: 0 }).value,
+        command,
+      });
+    },
+
+    /**
+     * Closes a process.
+     * @param appId The appId of the process.
+     */
+    closeProcess(appId: string) {
+      this.processes = this.processes.filter(
+        (process) => process.appId !== appId,
+      );
+    },
   },
 });
 
@@ -446,6 +486,8 @@ interface DesktopStore {
   nodeMap: Map<string, FileSystemNode>;
   bookmarks: string[]; // Array of ids
   uptime: number;
+  processes: Process[];
+
   // Docks
   isDockVisible: boolean;
   isDockPinned: boolean;

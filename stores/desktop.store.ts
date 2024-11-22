@@ -13,7 +13,6 @@ import {
   useIdle,
   useIntervalFn,
   useTimestamp,
-  watchThrottled,
 } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({

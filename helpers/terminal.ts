@@ -1158,3 +1158,32 @@ function formatTime(timestamp: number): string {
 
   return `${hours}:${minutes}:${seconds}`;
 }
+
+export function handleKill(term: Terminal, args: string[]): boolean {
+  // Check if exactly one argument is provided
+  if (args.length !== 1) {
+    term.write("\r\nkill: usage: kill <pid>");
+    return false;
+  }
+
+  // Check if argument is a valid number
+  const pid = parseInt(args[0]);
+  if (isNaN(pid)) {
+    term.write("\r\nkill: argument must be a number");
+    return false;
+  }
+
+  const desktopStore = useDesktopStore();
+  const { processes } = storeToRefs(desktopStore);
+  const { closeApp } = desktopStore;
+  const process = processes.value.find((p) => p.pid === pid);
+
+  if (!process) {
+    term.write(`\r\nkill: (${pid}) - No such process`);
+    return false;
+  }
+
+  // Close the process and its associated app
+  closeApp(process.appId);
+  return true;
+}

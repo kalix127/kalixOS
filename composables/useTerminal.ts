@@ -15,6 +15,7 @@ import {
   handleMv,
   handleRm,
   handlePs,
+  handleKill,
 } from "@/helpers/terminal";
 import { findNodeByPath } from "@/helpers";
 
@@ -347,6 +348,10 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "ps":
         shouldAddToHistory = handlePs(term, args.slice(1));
+        break;
+
+      case "kill":
+        shouldAddToHistory = handleKill(term, args.slice(1));
         break;
 
       case "neofetch":

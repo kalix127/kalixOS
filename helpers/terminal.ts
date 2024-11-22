@@ -852,3 +852,53 @@ export function handleTouch(
   }
   return true;
 }
+
+export function handleMkdir(
+  term: Terminal,
+  args: string[],
+  fileSystem: FileSystemNode,
+  currentDirectoryNode: FileSystemNode,
+): boolean {
+  // Allow only 'mkdir' with exactly one argument
+  if (args.length !== 1) {
+    term.write(`\r\nmkdir: missing directory operand`);
+    return false;
+  }
+
+  const dirPath = args[0];
+  let targetDirectory: FileSystemNode;
+  let dirName: string;
+
+  if (dirPath.startsWith("/")) {
+    // Absolute path
+    const pathParts = splitPath(dirPath);
+    dirName = pathParts.pop() || "";
+    const parentPath = pathParts.join("/");
+    targetDirectory =
+      findNodeByAbsolutePath(fileSystem, parentPath) || currentDirectoryNode;
+  } else {
+    // Relative path
+    const pathParts = splitPath(dirPath);
+    dirName = pathParts.pop() || "";
+    if (pathParts.length > 0) {
+      targetDirectory =
+        findNodeByPath(currentDirectoryNode, pathParts) || currentDirectoryNode;
+    } else {
+      targetDirectory = currentDirectoryNode;
+    }
+  }
+
+  // Check if node already exists
+  const existingNode = targetDirectory.children?.find(
+    (child) => child.name === dirName,
+  );
+  if (!existingNode) {
+    createItem(targetDirectory.id, {
+      name: dirName,
+      type: "folder",
+      icon: "folder:folder",
+      permissions: defaultFolderPermissions,
+    });
+  }
+  return true;
+}

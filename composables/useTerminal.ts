@@ -11,6 +11,7 @@ import {
   handleDf,
   handleCat,
   handleTouch,
+  handleMkdir,
 } from "@/helpers/terminal";
 
 export function useTerminal(terminalElement: HTMLElement) {
@@ -300,6 +301,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "touch":
         shouldAddToHistory = handleTouch(
+          term,
+          args.slice(1),
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "mkdir":
+        shouldAddToHistory = handleMkdir(
           term,
           args.slice(1),
           fileSystem,

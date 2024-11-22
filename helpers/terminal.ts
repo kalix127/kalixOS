@@ -1187,3 +1187,28 @@ export function handleKill(term: Terminal, args: string[]): boolean {
   closeApp(process.appId);
   return true;
 }
+
+export function handlePkill(term: Terminal, args: string[]): boolean {
+  // Check if correct number of arguments
+  if (args.length !== 2 || args[0] !== "-f") {
+    term.write("\r\npkill: usage: pkill -f <command>");
+    return false;
+  }
+
+  const command = args[1].toLowerCase();
+  const desktopStore = useDesktopStore();
+  const { processes } = storeToRefs(desktopStore);
+  const { closeApp } = desktopStore;
+  const process = processes.value.find(
+    (p) => p.command.toLowerCase() === command,
+  );
+
+  if (!process) {
+    term.write(`\r\npkill: no process found matching '${command}'`);
+    return false;
+  }
+
+  // Close the process
+  closeApp(process.appId);
+  return true;
+}

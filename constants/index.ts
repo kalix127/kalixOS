@@ -454,6 +454,13 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               children: [],
             },
             {
+              id: "pkill",
+              name: "pkill",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
               id: "neofetch",
               name: "neofetch",
               type: "file",

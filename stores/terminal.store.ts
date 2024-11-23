@@ -28,8 +28,13 @@ export const useTerminalStore = defineStore("terminal", {
     },
 
     addCommandHistory(command: string) {
-      // Check if exact command is already in history
-      if (this.commandHistory.some((cmd) => cmd === command)) return;
+      // If the command is already in the history, re-insert it at the new index
+      const existingIndex = this.commandHistory.findIndex(
+        (cmd) => cmd === command,
+      );
+      if (existingIndex !== -1) {
+        this.commandHistory.splice(existingIndex, 1);
+      }
 
       this.commandHistory.push(command);
     },

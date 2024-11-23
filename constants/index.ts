@@ -496,6 +496,13 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               icon: "file:bash",
               children: [],
             },
+            {
+              id: "help",
+              name: "help",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
             ...defaultApps.slice(1, -2).map((app) => ({
               ...app,
               id: `${app.id}-bin`,
@@ -1280,92 +1287,117 @@ export const powerOffSystemLogs: SystemLog[] = [
 
 export const commandSpecs: { [commandName: string]: CommandSpec } = {
   cd: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [{ name: "directory", required: false }],
   },
   ls: {
-    acceptsFlags: ["-l", "-a"],
+    acceptsFlags: ["-l", "-a", "-h"],
     flagAliases: {
       "--list": "-l",
       "--all": "-a",
+      "--human-readable": "-h",
+      "--help": "-h",
     },
     positionalArgs: [{ name: "path", required: false }],
   },
   pwd: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [],
   },
   tree: {
-    acceptsFlags: ["-L"],
+    acceptsFlags: ["-L", "-h"],
     flagAliases: {
       "--level": "-L",
+      "--help": "-h",
     },
     flagsWithValues: ["-L"],
     positionalArgs: [{ name: "path", required: false }],
   },
   chown: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [
       { name: "owner:group", required: true },
       { name: "file", required: true },
     ],
   },
   chmod: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [
       { name: "mode", required: true },
       { name: "file", required: true },
     ],
   },
   touch: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [{ name: "file", required: true }],
   },
   mkdir: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [{ name: "directory", required: true }],
   },
   mv: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [
       { name: "source", required: true },
       { name: "destination", required: true },
     ],
   },
   rm: {
-    acceptsFlags: ["-r", "-f"],
+    acceptsFlags: ["-r", "-f", "-h"],
     flagAliases: {
       "--recursive": "-r",
       "--force": "-f",
+      "--help": "-h",
     },
     positionalArgs: [{ name: "file", required: true }],
   },
   cat: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [{ name: "file", required: true }],
   },
   ps: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [],
   },
   kill: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [{ name: "pid", required: true }],
   },
   pkill: {
-    acceptsFlags: ["-f"],
+    acceptsFlags: ["-f", "-h"],
     flagAliases: {
       "--full": "-f",
+      "--help": "-h",
     },
     positionalArgs: [{ name: "pattern", required: true }],
   },
@@ -1373,6 +1405,7 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     acceptsFlags: ["-h"],
     flagAliases: {
       "--human": "-h",
+      "--help": "-h",
     },
     positionalArgs: [],
   },
@@ -1380,20 +1413,32 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     acceptsFlags: ["-h"],
     flagAliases: {
       "--human": "-h",
+      "--help": "-h",
     },
     positionalArgs: [],
   },
   whoami: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [],
   },
   clear: {
-    acceptsFlags: [],
-    flagAliases: {},
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
     positionalArgs: [],
   },
   neofetch: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  help: {
     acceptsFlags: [],
     flagAliases: {},
     positionalArgs: [],

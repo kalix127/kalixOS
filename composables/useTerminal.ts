@@ -18,9 +18,11 @@ import {
   handleKill,
   handlePkill,
   parseArguments,
+  handleHelp,
 } from "@/helpers/terminal";
 import { findNodeByPath } from "@/helpers";
 import { commandSpecs } from "@/constants";
+import { helpMessages } from "~/constants/helpMessages";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -272,6 +274,18 @@ export function useTerminal(terminalElement: HTMLElement) {
       return false;
     }
 
+    // Handle help commands
+    if (exec === "help") {
+      shouldAddToHistory = handleHelp(term);
+      return shouldAddToHistory;
+    }
+
+    if (parsedArgs.flags.includes("-h")) {
+      term.write(`\r\n${helpMessages[exec]}`);
+      shouldAddToHistory = true;
+      return shouldAddToHistory;
+    }
+
     switch (exec) {
       case "cd":
         shouldAddToHistory = handleCd(
@@ -402,6 +416,10 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "clear":
         term.clear();
         shouldAddToHistory = true;
+        break;
+
+      case "help":
+        shouldAddToHistory = handleHelp(term);
         break;
 
       default:

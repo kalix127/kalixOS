@@ -10,6 +10,7 @@ import {
 } from "~/helpers";
 import { useWindowSize, useTimestamp } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
+import { helpMessages } from "~/constants/helpMessages";
 
 const { editItem, createItem, moveItem, deleteItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
@@ -913,6 +914,12 @@ export function handleNeofetch(term: Terminal, username: string): void {
   term.write(`${neoFetch}`);
 }
 
+export function handleHelp(term: Terminal): boolean {
+  const generalHelp = helpMessages["help"];
+  term.write(`\r\n${generalHelp}`);
+  return true;
+}
+
 /* Utility functions */
 
 export function parseArguments(
@@ -996,7 +1003,6 @@ export function parseArguments(
 
   return { flags, flagValues, positionalArgs };
 }
-
 export function formatUptime(uptime: number): string {
   const hours = Math.floor(uptime / 3600);
   const minutes = Math.floor((uptime % 3600) / 60);

@@ -85,7 +85,6 @@ Remove (unlink) the FILE.
 
 Options:
   -r, --recursive     remove directories and their contents recursively.
-  -f, --force         ignore nonexistent files and never prompt.
   -h, --help          display this help and exit.`,
 
   cat: `Usage: cat FILE...

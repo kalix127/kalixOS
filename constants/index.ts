@@ -1364,10 +1364,9 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     ],
   },
   rm: {
-    acceptsFlags: ["-r", "-f", "-h"],
+    acceptsFlags: ["-r", "-h"],
     flagAliases: {
       "--recursive": "-r",
-      "--force": "-f",
       "--help": "-h",
     },
     positionalArgs: [{ name: "file", required: true }],

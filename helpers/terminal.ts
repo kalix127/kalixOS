@@ -544,7 +544,7 @@ export function handleRm(
     return false;
   }
 
-  const forceDelete = flags.includes("-f");
+  const recursiveDelete = flags.includes("-r");
   const targetPath = positionalArgs[0];
 
   // Resolve target node
@@ -563,7 +563,7 @@ export function handleRm(
   }
 
   // Check if trying to delete a folder without -f flag
-  if (targetNode.type === "folder" && !forceDelete) {
+  if (targetNode.type === "folder" && !recursiveDelete) {
     term.write(`\r\nrm: cannot remove '${targetPath}': Is a directory`);
     return false;
   }

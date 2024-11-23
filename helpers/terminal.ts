@@ -893,7 +893,7 @@ export function handleNeofetch(term: Terminal, username: string): void {
   \x1b[1;36m                   .o+'                   \x1b[1;37m-------------------
   \x1b[1;36m                  'ooo/                   Author:\x1b[1;37m ${authorLink}
   \x1b[1;36m                 '+oooo:                  OS:\x1b[1;37m Manjaro Linux x86_64 
-  \x1b[1;36m                '+oooooo:                 Host:\x1b[1;37m ThinkPad X1 Carbon Gen 9
+  \x1b[1;36m                '+oooooo:                 Host:\x1b[1;37m Laptop A6
   \x1b[1;36m                -+oooooo+:                Kernel:\x1b[1;37m 6.10.13-3-MANJARO
   \x1b[1;36m              '/:-:++oooo+:               Uptime:\x1b[1;37m ${readableUptime}
   \x1b[1;36m             '/++++/+++++++:              Packages:\x1b[1;37m 782 (pacman)
@@ -904,10 +904,10 @@ export function handleNeofetch(term: Terminal, username: string): void {
   \x1b[1;36m        -osssssso.      :ssssssso.        Theme:\x1b[1;37m ${themeLink}
   \x1b[1;36m       :osssssss/        osssso+++.       Icons:\x1b[1;37m ${iconLink}
   \x1b[1;36m      /ossssssss/        +ssssooo/-       Terminal:\x1b[1;37m gnome-terminal
-  \x1b[1;36m    '/ossssso+/:-        -:/+osssso+-     CPU:\x1b[1;37m Intel Core i7-1165G7 @ 4.70GHz (8) 
+  \x1b[1;36m    '/ossssso+/:-        -:/+osssso+-     CPU:\x1b[1;37m AMD Ryzen™ 9 5900X 
   \x1b[1;36m   '+sso+:-'                 '.-/+oso:    GPU:\x1b[1;37m NVIDIA GeForce RTX 4060 Mobile
-  \x1b[1;36m  '++:.                           '-/+/   GPU:\x1b[1;37m Intel Iris Xe Graphics
-  \x1b[1;36m  .'                                 '/   Memory:\x1b[1;37m ${memoryUsed}MiB / 15406MiB
+  \x1b[1;36m  '++:.                           '-/+/   Memory:\x1b[1;37m ${memoryUsed}MiB / 15406MiB
+  \x1b[1;36m  .'                                 '/   
 
 `;
   term.clear();
@@ -1003,6 +1003,7 @@ export function parseArguments(
 
   return { flags, flagValues, positionalArgs };
 }
+
 export function formatUptime(uptime: number): string {
   const hours = Math.floor(uptime / 3600);
   const minutes = Math.floor((uptime % 3600) / 60);

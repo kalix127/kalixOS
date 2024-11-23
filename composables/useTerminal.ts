@@ -399,6 +399,11 @@ export function useTerminal(terminalElement: HTMLElement) {
         shouldAddToHistory = true;
         break;
 
+      case "clear":
+        term.clear();
+        shouldAddToHistory = true;
+        break;
+
       default:
         term.write(`\r\nzsh: command not found: ${exec}`);
         break;

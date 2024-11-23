@@ -981,6 +981,11 @@ export function parseArguments(
     i++;
   }
 
+  // If help flag is present, skip positional args check
+  if (flags.includes("-h") || flags.includes("--help")) {
+    return { flags, flagValues, positionalArgs };
+  }
+
   const requiredArgs =
     commandSpec.positionalArgs?.filter((arg) => arg.required) || [];
   if (positionalArgs.length < requiredArgs.length) {

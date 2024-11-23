@@ -256,6 +256,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     // Check if the file bin node for the command exists.
     if (!findNodeByPath(fileSystem, ["bin", exec])) {
       term.write(`\r\nzsh: command not found: ${exec}`);
+      term.write("\r\nType 'help' to see available commands");
       return false;
     }
 
@@ -424,6 +425,7 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       default:
         term.write(`\r\nzsh: command not found: ${exec}`);
+        term.write("\r\nType 'help' to see available commands");
         break;
     }
 

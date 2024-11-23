@@ -404,8 +404,6 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
     }
 
-    console.log("Should add to history", shouldAddToHistory);
-
     return shouldAddToHistory;
   }
 

@@ -276,7 +276,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "cd":
         shouldAddToHistory = handleCd(
           term,
-          args,
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
           homeDirectoryNode.value!,
@@ -286,37 +286,15 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "ls":
         shouldAddToHistory = handleLs(
           term,
-          args.slice(1),
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
         );
         break;
 
-      case "chown":
-        shouldAddToHistory = handleChown(
-          term,
-          args.slice(1),
-          fileSystem,
-          currentDirectoryNode.value!,
-        );
-        break;
-
-      case "chmod":
-        shouldAddToHistory = handleChmod(
-          term,
-          args.slice(1),
-          fileSystem,
-          currentDirectoryNode.value!,
-        );
-        break;
-
-      case "cat":
-        shouldAddToHistory = handleCat(
-          term,
-          args.slice(1),
-          fileSystem,
-          currentDirectoryNode.value!,
-        );
+      case "pwd":
+        term.write(`\r\n${currentDirectory.value}`);
+        shouldAddToHistory = true;
         break;
 
       case "tree":
@@ -328,10 +306,28 @@ export function useTerminal(terminalElement: HTMLElement) {
         );
         break;
 
+      case "chown":
+        shouldAddToHistory = handleChown(
+          term,
+          parsedArgs,
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "chmod":
+        shouldAddToHistory = handleChmod(
+          term,
+          parsedArgs,
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
       case "touch":
         shouldAddToHistory = handleTouch(
           term,
-          args.slice(1),
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
         );
@@ -340,7 +336,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "mkdir":
         shouldAddToHistory = handleMkdir(
           term,
-          args.slice(1),
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
         );
@@ -349,7 +345,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "mv":
         shouldAddToHistory = handleMv(
           term,
-          args.slice(1),
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
         );
@@ -358,40 +354,39 @@ export function useTerminal(terminalElement: HTMLElement) {
       case "rm":
         shouldAddToHistory = handleRm(
           term,
-          args.slice(1),
+          parsedArgs,
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "cat":
+        shouldAddToHistory = handleCat(
+          term,
+          parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
         );
         break;
 
       case "ps":
-        shouldAddToHistory = handlePs(term, args.slice(1));
+        shouldAddToHistory = handlePs(term, parsedArgs);
         break;
 
       case "kill":
-        shouldAddToHistory = handleKill(term, args.slice(1));
+        shouldAddToHistory = handleKill(term, parsedArgs);
         break;
 
       case "pkill":
-        shouldAddToHistory = handlePkill(term, args.slice(1));
-        break;
-
-      case "neofetch":
-        handleNeofetch(term, username);
-        shouldAddToHistory = true;
+        shouldAddToHistory = handlePkill(term, parsedArgs);
         break;
 
       case "free":
-        shouldAddToHistory = handleFree(term, args.slice(1));
+        shouldAddToHistory = handleFree(term, parsedArgs);
         break;
 
       case "df":
-        shouldAddToHistory = handleDf(term, args.slice(1));
-        break;
-
-      case "pwd":
-        term.write(`\r\n${currentDirectory.value}`);
-        shouldAddToHistory = true;
+        shouldAddToHistory = handleDf(term, parsedArgs);
         break;
 
       case "whoami":
@@ -399,10 +394,17 @@ export function useTerminal(terminalElement: HTMLElement) {
         shouldAddToHistory = true;
         break;
 
+      case "neofetch":
+        handleNeofetch(term, username);
+        shouldAddToHistory = true;
+        break;
+
       default:
         term.write(`\r\nzsh: command not found: ${exec}`);
         break;
     }
+
+    console.log("Should add to history", shouldAddToHistory);
 
     return shouldAddToHistory;
   }

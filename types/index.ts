@@ -94,3 +94,16 @@ export interface Process {
   startTimeTimestamp: number;
   command: string;
 }
+
+export interface CommandSpec {
+  acceptsFlags: string[];
+  flagAliases: { [alias: string]: string };
+  flagsWithValues?: string[];
+  positionalArgs?: { name: string; required: boolean }[];
+}
+
+export interface ParsedArgs {
+  flags: string[];
+  flagValues: { [key: string]: string };
+  positionalArgs: string[];
+}

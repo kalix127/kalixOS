@@ -6,6 +6,7 @@ import type {
   AppNode,
   BackgroundImage,
   NodePermissions,
+  CommandSpec,
 } from "@/types";
 import { assignDefaultProperties } from "~/helpers";
 import { zshContent } from "./files";
@@ -1276,3 +1277,120 @@ export const powerOffSystemLogs: SystemLog[] = [
     message: "System Power Off.",
   },
 ];
+
+export const commandSpecs: { [commandName: string]: CommandSpec } = {
+  cd: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [{ name: "directory", required: false }],
+  },
+  ls: {
+    acceptsFlags: ["-l", "-a"],
+    flagAliases: {
+      "--list": "-l",
+      "--all": "-a",
+    },
+    positionalArgs: [{ name: "path", required: false }],
+  },
+  pwd: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [],
+  },
+  tree: {
+    acceptsFlags: ["-L"],
+    flagAliases: {
+      "--level": "-L",
+    },
+    flagsWithValues: ["-L"],
+    positionalArgs: [{ name: "path", required: false }],
+  },
+  chown: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [
+      { name: "owner:group", required: true },
+      { name: "file", required: true },
+    ],
+  },
+  chmod: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [
+      { name: "mode", required: true },
+      { name: "file", required: true },
+    ],
+  },
+  touch: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  mkdir: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [{ name: "directory", required: true }],
+  },
+  mv: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [
+      { name: "source", required: true },
+      { name: "destination", required: true },
+    ],
+  },
+  rm: {
+    acceptsFlags: ["-r", "-f"],
+    flagAliases: {
+      "--recursive": "-r",
+      "--force": "-f",
+    },
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  cat: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  ps: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [],
+  },
+  kill: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [{ name: "pid", required: true }],
+  },
+  pkill: {
+    acceptsFlags: ["-f"],
+    flagAliases: {
+      "--full": "-f",
+    },
+    positionalArgs: [{ name: "pattern", required: true }],
+  },
+  free: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--human": "-h",
+    },
+    positionalArgs: [],
+  },
+  df: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--human": "-h",
+    },
+    positionalArgs: [],
+  },
+  whoami: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [],
+  },
+  neofetch: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [],
+  },
+};

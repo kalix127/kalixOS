@@ -1,5 +1,5 @@
 import { Terminal } from "@xterm/xterm";
-import type { FileSystemNode, Process } from "~/types";
+import type { FileSystemNode, CommandSpec, ParsedArgs } from "~/types";
 import {
   findNodeByAbsolutePath,
   findParentById,
@@ -1211,4 +1211,82 @@ export function handlePkill(term: Terminal, args: string[]): boolean {
   // Close the process
   closeApp(process.appId);
   return true;
+}
+/* Utility functions */
+
+export function parseArguments(
+  args: string[],
+  commandSpec: CommandSpec,
+): ParsedArgs {
+  const flags: string[] = [];
+  const flagValues: { [key: string]: string } = {};
+  const positionalArgs: string[] = [];
+
+  let i = 0;
+  while (i < args.length) {
+    const arg = args[i];
+
+    if (arg.startsWith("-")) {
+      if (arg.startsWith("--")) {
+        const alias = commandSpec.flagAliases[arg];
+        if (alias) {
+          if (commandSpec.flagsWithValues?.includes(alias)) {
+            const value = args[++i];
+            if (!value) {
+              throw new Error(`Option '${arg}' requires a value`);
+            }
+            flagValues[alias] = value;
+          } else {
+            flags.push(alias);
+          }
+        } else {
+          throw new Error(`Unknown option '${arg}'`);
+        }
+      } else {
+        const chars = arg.slice(1).split("");
+        let consumedValue = false;
+        for (let j = 0; j < chars.length; j++) {
+          const char = chars[j];
+          const flag = `-${char}`;
+          if (commandSpec.acceptsFlags.includes(flag)) {
+            if (commandSpec.flagsWithValues?.includes(flag)) {
+              let value = "";
+              if (j < chars.length - 1) {
+                value = chars.slice(j + 1).join("");
+              } else {
+                value = args[++i];
+              }
+              if (!value) {
+                throw new Error(`Option '${flag}' requires a value`);
+              }
+              flagValues[flag] = value;
+              consumedValue = true;
+              break;
+            } else {
+              flags.push(flag);
+            }
+          } else {
+            throw new Error(`Unknown option '-${char}'`);
+          }
+        }
+        if (consumedValue) {
+          break;
+        }
+      }
+    } else {
+      positionalArgs.push(arg);
+    }
+
+    i++;
+  }
+
+  const requiredArgs =
+    commandSpec.positionalArgs?.filter((arg) => arg.required) || [];
+  if (positionalArgs.length < requiredArgs.length) {
+    throw new Error(
+      `${requiredArgs[positionalArgs.length].name}: missing required argument`,
+    );
+  }
+
+  return { flags, flagValues, positionalArgs };
 }

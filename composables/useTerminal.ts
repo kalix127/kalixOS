@@ -17,8 +17,10 @@ import {
   handlePs,
   handleKill,
   handlePkill,
+  parseArguments,
 } from "@/helpers/terminal";
 import { findNodeByPath } from "@/helpers";
+import { commandSpecs } from "@/constants";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -252,6 +254,21 @@ export function useTerminal(terminalElement: HTMLElement) {
     // Check if the file bin node for the command exists.
     if (!findNodeByPath(fileSystem, ["bin", exec])) {
       term.write(`\r\nzsh: command not found: ${exec}`);
+      return false;
+    }
+
+    const commandSpec = commandSpecs[exec];
+
+    if (!commandSpec) {
+      term.write(`\r\n${exec}: command specification not found`);
+      return false;
+    }
+
+    let parsedArgs;
+    try {
+      parsedArgs = parseArguments(args.slice(1), commandSpec);
+    } catch (error: any) {
+      term.write(`\r\n${error.message}`);
       return false;
     }
 

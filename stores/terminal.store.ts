@@ -13,12 +13,7 @@ export const useTerminalStore = defineStore("terminal", {
     currentDirectory: `/home/${username}/`,
     currentDirectoryNode: null,
   }),
-  getters: {
-    homeDirectoryNode(state): FileSystemNode | null {
-      const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
-      return findNodeByIdRecursive(fileSystem, "home");
-    },
-  },
+  getters: {},
   actions: {
     setCurrentDirectory(directoryNode: FileSystemNode) {
       const rootNode = storeToRefs(useDesktopStore()).fileSystem.value;

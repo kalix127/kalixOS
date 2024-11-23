@@ -30,14 +30,14 @@ export function useTerminal(terminalElement: HTMLElement) {
     cursorPosition,
     currentDirectory,
     currentDirectoryNode,
-    homeDirectoryNode,
     commandHistoryIndex,
   } = storeToRefs(terminalStore);
   const { setCurrentDirectory, addCommandHistory } = terminalStore;
   const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
+  const { homeNode } = storeToRefs(useDesktopStore());
 
   // Set the initial directories
-  setCurrentDirectory(homeDirectoryNode.value!);
+  setCurrentDirectory(homeNode.value!);
 
   // Init terminal and addons
   const webLinksAddon = new WebLinksAddon();
@@ -279,7 +279,7 @@ export function useTerminal(terminalElement: HTMLElement) {
           parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
-          homeDirectoryNode.value!,
+          homeNode.value!,
         );
         break;
 

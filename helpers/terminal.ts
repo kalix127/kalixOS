@@ -25,12 +25,12 @@ export function handleCd(
   },
   fileSystem: FileSystemNode,
   currentDirectoryNode: FileSystemNode,
-  homeDirectoryNode: FileSystemNode,
+  homeNode: FileSystemNode,
 ): boolean {
   const { positionalArgs } = parsedArgs;
   const toDir = positionalArgs[0];
   if (!toDir) {
-    setCurrentDirectory(homeDirectoryNode);
+    setCurrentDirectory(homeNode);
     return true;
   }
 

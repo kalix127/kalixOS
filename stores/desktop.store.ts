@@ -48,6 +48,10 @@ export const useDesktopStore = defineStore({
     backgroundImages: defaultBackgroundImages,
   }),
   getters: {
+    homeNode(state): FileSystemNode | null {
+      return findNodeByIdRecursive(state.fileSystem, "home");
+    },
+    
     desktopNode(state): FileSystemNode | null {
       return findNodeByIdRecursive(state.fileSystem, "desktop");
     },

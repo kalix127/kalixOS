@@ -110,7 +110,7 @@ onBeforeMount(() => {
       <Settings v-if="app.id === 'settings'" :app="app" />
 
       <!-- VS Code -->
-      <DesktopAppVSCode v-else-if="app.id === 'vscode'" :app="app" />
+      <DesktopAppVSCode v-else-if="app.id === 'code'" :app="app" />
 
       <!-- Brave -->
       <DesktopAppBrave v-else-if="app.id === 'brave'" :app="app" />

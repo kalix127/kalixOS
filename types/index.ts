@@ -15,7 +15,7 @@ export interface WifiNetwork {
     defaultRoute: string;
     dns4: string[];
     dns6: string[];
-  }
+  };
 }
 
 export interface FileSystemNode {
@@ -26,12 +26,30 @@ export interface FileSystemNode {
   children?: (FileSystemNode | AppNode)[];
   isRenaming?: boolean;
   isNewlyCreated?: boolean; // Indicates if the node has just been created
-  // Permission flags
+  content?: string;
+  owner?: string;
+  group?: string;
+  createdAt?: string;
+  permissions: {
+    owner: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+    group: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+    others: {
+      read: boolean;
+      write: boolean;
+      execute: boolean;
+    };
+  };
   canEdit?: boolean;
   canMove?: boolean;
   canDelete?: boolean;
-
-  isTranslated?: boolean;
 }
 
 export interface AppNode extends FileSystemNode {
@@ -41,6 +59,7 @@ export interface AppNode extends FileSystemNode {
   isMinimized: boolean;
   isFullscreen: boolean;
   isModalOpen: boolean;
+  isTranslated?: boolean;
 
   // Size
   width: number;
@@ -64,8 +83,27 @@ export interface SystemLog {
   message: string;
 }
 
-
 export interface BackgroundImage {
   url: string;
   name: string;
+}
+
+export interface Process {
+  pid: number;
+  appId: string;
+  startTimeTimestamp: number;
+  command: string;
+}
+
+export interface CommandSpec {
+  acceptsFlags: string[];
+  flagAliases: { [alias: string]: string };
+  flagsWithValues?: string[];
+  positionalArgs?: { name: string; required: boolean }[];
+}
+
+export interface ParsedArgs {
+  flags: string[];
+  flagValues: { [key: string]: string };
+  positionalArgs: string[];
 }

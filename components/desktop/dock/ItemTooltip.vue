@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   appName: string;
+  isTranslated?: boolean;
 }>();
 
 defineEmits<{
@@ -14,8 +15,11 @@ defineEmits<{
       <TooltipTrigger @click="$emit('click')" as-child>
         <slot />
       </TooltipTrigger>
-      <TooltipContent :sideOffset="15" class="rounded-full bg-black/80 z-[50000]">
-        <p>{{ $t(appName) }}</p>
+      <TooltipContent
+        :sideOffset="15"
+        class="z-[50000] rounded-full bg-black/80"
+      >
+        <p>{{ isTranslated ? $t(appName) : appName }}</p>
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

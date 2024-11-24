@@ -110,10 +110,13 @@ onBeforeMount(() => {
       <Settings v-if="app.id === 'settings'" :app="app" />
 
       <!-- VS Code -->
-      <DesktopAppVSCode v-else-if="app.id === 'vscode'" :app="app" />
+      <DesktopAppVSCode v-else-if="app.id === 'code'" :app="app" />
 
       <!-- Brave -->
       <DesktopAppBrave v-else-if="app.id === 'brave'" :app="app" />
+
+      <!-- Terminal -->
+      <DesktopAppTerminal v-else-if="app.id === 'terminal'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>

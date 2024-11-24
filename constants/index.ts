@@ -5,14 +5,29 @@ import type {
   SystemLog,
   AppNode,
   BackgroundImage,
+  NodePermissions,
+  CommandSpec,
 } from "@/types";
-import { assignIds } from "~/helpers";
+import { assignDefaultProperties } from "~/helpers";
+import { zshContent } from "./files";
 
 export const defaultUsername = "Gianluca";
 
 export const defaultBootDuration = 5000;
 
 export const defaultDimScreenThreshold = "300000"; // 5 minutes
+
+export const defaultFilePermissions = {
+  owner: { read: true, write: true, execute: false },
+  group: { read: true, write: false, execute: false },
+  others: { read: true, write: false, execute: false },
+};
+
+export const defaultFolderPermissions = {
+  owner: { read: true, write: true, execute: true },
+  group: { read: true, write: false, execute: true },
+  others: { read: true, write: false, execute: true },
+};
 
 export const defaultBackgroundImage: BackgroundImage = {
   url: "img/bg-desktop.jpg",
@@ -23,7 +38,7 @@ export const defaultBackgroundImages: BackgroundImage[] = [
   defaultBackgroundImage,
 ];
 
-export const defaultFullscreenApps = ["brave", "vscode"];
+export const defaultFullscreenApps = ["brave", "code"];
 
 export const desktopEnvironments = [
   "gnome",
@@ -175,64 +190,65 @@ export const defaultNetworks: WifiNetwork[] = [
 
 const trashNode: AppNode = {
   id: "trash",
-  name: "trash",
+  name: "Trash",
   type: "app",
   icon: "app:trash",
-  isTranslated: true,
 };
 
-export const defaultBookmarks = ["projects"];
+export const defaultBookmarks = ["coding"];
 
 // TODO: Add more defaults apps without any functionality
 export const defaultApps: AppNode[] = [
   trashNode,
   {
-    name: "settings",
+    name: "Settings",
     type: "app",
     icon: "app:settings",
     id: "settings",
   },
   {
-    name: "files",
+    name: "Files",
     type: "app",
     icon: "app:files",
     id: "files",
   },
   {
-    name: "terminal",
+    name: "Terminal",
     type: "app",
     icon: "app:terminal",
     id: "terminal",
   },
   {
-    name: "brave",
+    name: "Brave",
     type: "app",
     icon: "app:brave",
     id: "brave",
   },
   {
-    name: "thunderbird",
+    name: "Thunderbird",
     type: "app",
     icon: "app:thunderbird",
     id: "thunderbird",
   },
   {
-    name: "vscode",
+    name: "Visual Studio Code",
     type: "app",
     icon: "app:vscode",
-    id: "vscode",
+    id: "code",
   },
   {
     name: "linkedin_profile",
     type: "social",
     icon: "app:linkedin",
     id: "linkedin",
+    isTranslated: true,
   },
   {
     name: "github_profile",
     type: "social",
     icon: "app:github",
     id: "github",
+    isTranslated: true,
   },
 ].map((app) => ({
   ...app,
@@ -254,139 +270,280 @@ export const defaultApps: AppNode[] = [
 }));
 
 export const defaultFileSystem = (username: string): FileSystemNode =>
-  assignIds({
-    id: "root",
-    name: "/",
-    type: "folder",
-    canMove: false,
-    canDelete: false,
-    icon: "folder:folder",
-    children: [
-      {
-        name: "home",
-        type: "folder",
-        canMove: false,
-        canDelete: false,
-        icon: "folder:folder",
-        isTranslated: true,
-        children: [
-          {
-            id: "home",
-            name: username,
-            type: "folder",
-            canMove: false,
-            canDelete: false,
-            icon: "folder:folder",
-            isTranslated: true,
-            children: [
-              {
-                id: "downloads",
-                name: "downloads",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "documents",
-                name: "documents",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "pictures",
-                name: "pictures",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "music",
-                name: "music",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "videos",
-                name: "videos",
-                type: "folder",
-                icon: "folder:folder",
-                children: [],
-                isTranslated: true,
-              },
-              {
-                id: "desktop",
-                name: "desktop",
-                type: "folder",
-                icon: "folder:folder",
-                canMove: false,
-                canDelete: false,
-                isTranslated: true,
-                children: [
-                  trashNode,
-                  {
-                    id: "projects",
-                    name: "projects",
-                    type: "folder",
-                    icon: "folder:folder",
-                    children: [],
-                    isTranslated: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "bin",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "etc",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "proc",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "run",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "usr",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "var",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-      {
-        name: "tmp",
-        type: "folder",
-        icon: "folder:folder",
-        children: [],
-      },
-    ],
-  });
+  assignDefaultProperties(
+    {
+      id: "root",
+      name: "/",
+      type: "folder",
+      canMove: false,
+      canDelete: false,
+      icon: "folder:folder",
+      children: [
+        {
+          name: "home",
+          type: "folder",
+          canMove: false,
+          canDelete: false,
+          icon: "folder:folder",
+          children: [
+            {
+              id: "home",
+              name: username,
+              type: "folder",
+              canMove: false,
+              canDelete: false,
+              icon: "folder:folder",
+              children: [
+                {
+                  id: "downloads",
+                  name: "Downloads",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  id: "documents",
+                  name: "Documents",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  id: "pictures",
+                  name: "Pictures",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  id: "music",
+                  name: "Music",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  id: "videos",
+                  name: "Videos",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  id: "desktop",
+                  name: "Desktop",
+                  type: "folder",
+                  icon: "folder:folder",
+                  canMove: false,
+                  canDelete: false,
+                  children: [
+                    trashNode,
+                    {
+                      id: "coding",
+                      name: "Coding",
+                      type: "folder",
+                      icon: "folder:folder",
+                      children: [],
+                    },
+                  ],
+                },
+                {
+                  name: ".zshrc",
+                  type: "file",
+                  icon: "file:file",
+                  content: zshContent,
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "bin",
+          type: "folder",
+          icon: "folder:folder",
+          children: [
+            {
+              id: "cd",
+              name: "cd",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "ls",
+              name: "ls",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "pwd",
+              name: "pwd",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "tree",
+              name: "tree",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "chown",
+              name: "chown",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "chmod",
+              name: "chmod",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "touch",
+              name: "touch",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "mkdir",
+              name: "mkdir",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "mv",
+              name: "mv",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "rm",
+              name: "rm",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "cat",
+              name: "cat",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "ps",
+              name: "ps",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "kill",
+              name: "kill",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "pkill",
+              name: "pkill",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "free",
+              name: "free",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "df",
+              name: "df",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "whoami",
+              name: "whoami",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "neofetch",
+              name: "neofetch",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "clear",
+              name: "clear",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
+              id: "help",
+              name: "help",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            ...defaultApps.slice(1, -2).map((app) => ({
+              ...app,
+              id: `${app.id}-bin`,
+              name: app.id.toLowerCase(),
+            })),
+          ],
+        },
+        {
+          name: "etc",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "proc",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "run",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "var",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "tmp",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+      ],
+    },
+    username,
+  );
 
 export const powerUpSystemLogs: SystemLog[] = [
   {
@@ -1127,3 +1284,162 @@ export const powerOffSystemLogs: SystemLog[] = [
     message: "System Power Off.",
   },
 ];
+
+export const commandSpecs: { [commandName: string]: CommandSpec } = {
+  cd: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "directory", required: false }],
+  },
+  ls: {
+    acceptsFlags: ["-l", "-a", "-h"],
+    flagAliases: {
+      "--list": "-l",
+      "--all": "-a",
+      "--human-readable": "-h",
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "path", required: false }],
+  },
+  pwd: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  tree: {
+    acceptsFlags: ["-L", "-h"],
+    flagAliases: {
+      "--level": "-L",
+      "--help": "-h",
+    },
+    flagsWithValues: ["-L"],
+    positionalArgs: [{ name: "path", required: false }],
+  },
+  chown: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [
+      { name: "owner:group", required: true },
+      { name: "file", required: true },
+    ],
+  },
+  chmod: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [
+      { name: "mode", required: true },
+      { name: "file", required: true },
+    ],
+  },
+  touch: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  mkdir: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "directory", required: true }],
+  },
+  mv: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [
+      { name: "source", required: true },
+      { name: "destination", required: true },
+    ],
+  },
+  rm: {
+    acceptsFlags: ["-r", "-h"],
+    flagAliases: {
+      "--recursive": "-r",
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  cat: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "file", required: true }],
+  },
+  ps: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  kill: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "pid", required: true }],
+  },
+  pkill: {
+    acceptsFlags: ["-f", "-h"],
+    flagAliases: {
+      "--full": "-f",
+      "--help": "-h",
+    },
+    positionalArgs: [{ name: "pattern", required: true }],
+  },
+  free: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--human": "-h",
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  df: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--human": "-h",
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  whoami: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  clear: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  neofetch: {
+    acceptsFlags: ["-h"],
+    flagAliases: {
+      "--help": "-h",
+    },
+    positionalArgs: [],
+  },
+  help: {
+    acceptsFlags: [],
+    flagAliases: {},
+    positionalArgs: [],
+  },
+};

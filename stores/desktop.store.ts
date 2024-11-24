@@ -6,10 +6,21 @@ import {
   defaultBackgroundImages,
 } from "@/constants";
 import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
-import type { AppNode, FileSystemNode, BackgroundImage } from "~/types";
-import { findParentById, canMove, canEdit, canDelete } from "@/helpers";
+import type {
+  AppNode,
+  FileSystemNode,
+  BackgroundImage,
+  Process,
+} from "~/types";
+import {
+  findParentById,
+  canMove,
+  canEdit,
+  canDelete,
+  getNextPid,
+} from "@/helpers";
 import { v4 as uuidv4 } from "uuid";
-import { useIdle, useTimestamp, watchThrottled } from "@vueuse/core";
+import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -20,6 +31,8 @@ export const useDesktopStore = defineStore({
     ),
     nodeMap: new Map<string, FileSystemNode>(),
     bookmarks: defaultBookmarks,
+    uptime: 0,
+    processes: [],
 
     // Docks
     isDockVisible: true,
@@ -35,6 +48,10 @@ export const useDesktopStore = defineStore({
     backgroundImages: defaultBackgroundImages,
   }),
   getters: {
+    homeNode(state): FileSystemNode | null {
+      return findNodeByIdRecursive(state.fileSystem, "home");
+    },
+    
     desktopNode(state): FileSystemNode | null {
       return findNodeByIdRecursive(state.fileSystem, "desktop");
     },
@@ -78,6 +95,7 @@ export const useDesktopStore = defineStore({
     init(): void {
       this.initializeNodeMap(this.fileSystem);
       this.initIdleDetection();
+      this.initUptime();
     },
 
     /**
@@ -154,6 +172,15 @@ export const useDesktopStore = defineStore({
     },
 
     /**
+     * Initializes the uptime.
+     */
+    initUptime(): void {
+      useIntervalFn(() => {
+        this.uptime += 1;
+      }, 1000);
+    },
+
+    /**
      * Moves an item to a target folder.
      * @param itemId The ID of the item to move.
      * @param targetFolderId The ID of the target folder.
@@ -194,7 +221,7 @@ export const useDesktopStore = defineStore({
      */
     createItem(
       parentId: string,
-      newItem: Omit<FileSystemNode, "id">,
+      newItem: Omit<FileSystemNode, "id" | "children" | "isNewlyCreated">,
     ): FileSystemNode | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
@@ -202,11 +229,39 @@ export const useDesktopStore = defineStore({
       // Check permissions
       if (!canEdit(parent)) return null;
 
-      const itemWithId: FileSystemNode = { ...newItem, id: uuidv4() };
+      const username = useGlobalStore().username;
+      const createdAt = Intl.DateTimeFormat("it-IT", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: false,
+      }).format(new Date());
+
+      // Create new node with default properties
+      const newNode: FileSystemNode = {
+        ...newItem,
+        id: uuidv4(),
+        owner: username.toLowerCase(),
+        group: username.toLowerCase(),
+        createdAt,
+        content: newItem.content || "",
+        isNewlyCreated: true,
+        children: [],
+      };
+
+      // If file type, set icon based on extension
+      if (newNode.type === "file") {
+        const extension = newNode.name.split(".").pop();
+        if (extension) {
+          newNode.icon = getNodeIcon(extension);
+        }
+      }
+
       parent.children = parent.children || [];
-      parent.children.push(itemWithId);
-      this.nodeMap.set(itemWithId.id, itemWithId);
-      return itemWithId;
+      parent.children.push(newNode);
+      this.nodeMap.set(newNode.id, newNode);
+      return newNode;
     },
 
     /**
@@ -309,6 +364,9 @@ export const useDesktopStore = defineStore({
           isActive: app.id === appId ? true : app.isActive,
         }));
         this.hasAppsLoading = false;
+
+        // Create a process for the app
+        this.createProcess(app.id, app.name.toLowerCase());
         return;
       } else {
         this.toggleMinimizeApp(appId);
@@ -331,6 +389,9 @@ export const useDesktopStore = defineStore({
         x: app.id === appId ? 0 : app.x,
         y: app.id === appId ? 0 : app.y,
       }));
+
+      // Close the process
+      this.closeProcess(appId);
     },
 
     /**
@@ -394,6 +455,32 @@ export const useDesktopStore = defineStore({
         this.backgroundImage = defaultBackgroundImage;
       }
     },
+
+    /**
+     * Create a process.
+     * @param process The process to add.
+     */
+    createProcess(appId: string, command: string) {
+      // Check if the process for that appId is already running
+      if (this.processes.some((process) => process.appId === appId)) return;
+
+      this.processes.push({
+        pid: getNextPid(this.processes),
+        appId: appId,
+        startTimeTimestamp: useTimestamp({ offset: 0 }).value,
+        command,
+      });
+    },
+
+    /**
+     * Closes a process.
+     * @param appId The appId of the process.
+     */
+    closeProcess(appId: string) {
+      this.processes = this.processes.filter(
+        (process) => process.appId !== appId,
+      );
+    },
   },
 });
 
@@ -402,6 +489,8 @@ interface DesktopStore {
   fileSystem: FileSystemNode;
   nodeMap: Map<string, FileSystemNode>;
   bookmarks: string[]; // Array of ids
+  uptime: number;
+  processes: Process[];
 
   // Docks
   isDockVisible: boolean;

@@ -65,7 +65,8 @@
   "quit": "Quit",
   "vscode_not_available_on_mobile": "Can't open Visual Studio Code from mobile, try on desktop.",
   "brave_not_available_on_mobile": "Can't open Brave from mobile, try on desktop.",
-
+  "terminal_not_available_on_mobile": "Can't open Terminal from mobile, try on desktop.",
+  
   "-----------------SETTINGS-------------------": "",
   "network": "Network",
   "displays": "Displays",
@@ -120,7 +121,7 @@
   "disk_capacity": "Disk Capacity",
   "windowing_system": "Windowing System",
   "device_name": "Device Name",
-  "navigate_settingss": "Please use the sidebar on the left to navigate the settings.",
+  "navigate_settings": "Please use the sidebar on the left to navigate the settings.",
 
   "--------------------TIMES----------------------": "",
   "never": "Never",

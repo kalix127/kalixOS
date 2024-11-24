@@ -1,5 +1,6 @@
 import type { FileSystemNode, AppNode } from "@/types";
 import { useEventListener } from "@vueuse/core";
+import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
 export function useContextMenu() {
   const { t } = useI18n();
@@ -136,7 +137,7 @@ export function useContextMenu() {
                 { isSeparator: true },
                 {
                   label: t("app_details"),
-                  action: () => handleAppDetails(),
+                  action: () => handleAppDetails(targetNode.value),
                 },
               ]),
           // Show "Quit" option only if the app is open
@@ -162,8 +163,7 @@ export function useContextMenu() {
         type: "folder",
         icon: "folder:folder",
         isRenaming: true,
-        isNewlyCreated: true,
-        children: [],
+        permissions: defaultFolderPermissions,
       });
     }
     closeContextMenu();
@@ -176,8 +176,7 @@ export function useContextMenu() {
         type: "file",
         icon: "file:file",
         isRenaming: true,
-        isNewlyCreated: true,
-        children: [],
+        permissions: defaultFilePermissions,
       });
     }
     closeContextMenu();
@@ -212,7 +211,7 @@ export function useContextMenu() {
   };
 
   // TODO: Implement
-  const handleAppDetails = (node: AppNode | null) => {
+  const handleAppDetails = (node: FileSystemNode | AppNode | null) => {
     if (node) {
       console.log(`App Details: ${node.name}`);
     }

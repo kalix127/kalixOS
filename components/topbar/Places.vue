@@ -76,9 +76,7 @@ const items = [
         @click="() => openFolder(item.id)"
       >
         <Icon name="gnome:symbolic-folder" size="16" />
-        <span class="text-sm">{{
-          item.isTranslated ? $t(item.name) : item.name
-        }}</span>
+        <span class="text-sm">{{ item.name }}</span>
       </Button>
       <div v-if="bookmarksNodes.length > 4" class="grid place-content-center">
         <span class="select-none text-muted-foreground">...</span>

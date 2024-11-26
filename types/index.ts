@@ -1,3 +1,4 @@
+#!/bin/bash
 export interface WifiNetwork {
   id: number;
   name: string;
@@ -18,64 +19,71 @@ export interface WifiNetwork {
   };
 }
 
-export interface FileSystemNode {
+interface BaseNode {
   id: string;
-  icon: string;
   name: string;
-  type: "folder" | "file" | "app" | "social";
-  children?: (FileSystemNode | AppNode)[];
-  isRenaming?: boolean;
-  isNewlyCreated?: boolean; // Indicates if the node has just been created
+  icon: string;
+  type: string;
+  permissions: PermissionsNode;
+  owner: string;
+  group: string;
+  createdAt: Date;
   content?: string;
-  owner?: string;
-  group?: string;
-  createdAt?: string;
-  permissions: {
-    owner: {
-      read: boolean;
-      write: boolean;
-      execute: boolean;
-    };
-    group: {
-      read: boolean;
-      write: boolean;
-      execute: boolean;
-    };
-    others: {
-      read: boolean;
-      write: boolean;
-      execute: boolean;
-    };
-  };
-  canEdit?: boolean;
+  parentId?: string | null;
   canMove?: boolean;
+  canEdit?: boolean;
   canDelete?: boolean;
+  isRenaming?: boolean;
 }
 
-export interface AppNode extends FileSystemNode {
-  // General
+export interface PermissionsNode {
+  owner: { read: boolean; write: boolean; execute: boolean };
+  group: { read: boolean; write: boolean; execute: boolean };
+  others: { read: boolean; write: boolean; execute: boolean };
+}
+
+export interface FolderNode extends BaseNode {
+  type: "folder";
+  children: Node[];
+  isNewlyCreated?: boolean;
+}
+
+export interface FileNode extends BaseNode {
+  type: "file";
+  isNewlyCreated?: boolean;
+}
+
+export interface AppNode extends BaseNode {
+  type: "app" | "social";
   isOpen: boolean;
   isActive: boolean;
   isMinimized: boolean;
   isFullscreen: boolean;
   isModalOpen: boolean;
-  isTranslated?: boolean;
-
-  // Size
   width: number;
   height: number;
-
-  // Position
   x: number;
   y: number;
-
-  prev: {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  };
+  prev: { width: number; height: number; x: number; y: number };
 }
+
+export interface ShortcutNode extends BaseNode {
+  type: "shortcut";
+  targetId: string;
+  targetType: "app" | "folder" | "file";
+}
+
+export type ContextMenuTargetType =
+  | "desktop"
+  | "social"
+  | "dock"
+  | "folder"
+  | "file"
+  | "app"
+  | "shortcut";
+
+// Union type for all node types
+export type Node = FolderNode | FileNode | AppNode | ShortcutNode;
 
 export interface SystemLog {
   ok: boolean;

@@ -5,21 +5,16 @@ import {
   defaultBackgroundImage,
   defaultBackgroundImages,
 } from "@/constants";
-import { findNodeByIdRecursive, getNodeIcon } from "@/helpers";
+import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
   AppNode,
-  FileSystemNode,
+  Node,
   BackgroundImage,
   Process,
+  FolderNode,
+  ShortcutNode,
 } from "~/types";
-import {
-  findParentById,
-  canMove,
-  canEdit,
-  canDelete,
-  getNextPid,
-} from "@/helpers";
-import { v4 as uuidv4 } from "uuid";
+import { canMove, canEdit, canDelete, getNextPid } from "@/helpers";
 import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
@@ -29,7 +24,7 @@ export const useDesktopStore = defineStore({
     fileSystem: defaultFileSystem(
       storeToRefs(useGlobalStore()).username.value.toLowerCase(),
     ),
-    nodeMap: new Map<string, FileSystemNode>(),
+    nodeMap: new Map<string, Node>(),
     bookmarks: defaultBookmarks,
     uptime: 0,
     processes: [],
@@ -48,24 +43,24 @@ export const useDesktopStore = defineStore({
     backgroundImages: defaultBackgroundImages,
   }),
   getters: {
-    homeNode(state): FileSystemNode | null {
-      return findNodeByIdRecursive(state.fileSystem, "home");
-    },
-    
-    desktopNode(state): FileSystemNode | null {
-      return findNodeByIdRecursive(state.fileSystem, "desktop");
+    homeNode(state): FolderNode | null {
+      return findNodeByIdRecursive(state.fileSystem, "home") as FolderNode;
     },
 
-    trashNode(state): FileSystemNode | null {
-      return findNodeByIdRecursive(state.fileSystem, "trash");
+    desktopNode(state): FolderNode | null {
+      return findNodeByIdRecursive(state.fileSystem, "desktop") as FolderNode;
     },
 
-    desktopItems(state): FileSystemNode[] {
+    trashNode(state): FolderNode | null {
+      return findNodeByIdRecursive(state.fileSystem, "trash") as FolderNode;
+    },
+
+    desktopItems(state): Node[] {
       if (!this.desktopNode) return [];
       return this.desktopNode.children ? this.desktopNode.children : [];
     },
 
-    trashItems(state): FileSystemNode[] {
+    trashItems(state): Node[] {
       if (!this.trashNode) return [];
       return this.trashNode.children ? this.trashNode.children : [];
     },
@@ -82,10 +77,10 @@ export const useDesktopStore = defineStore({
       return this.openApps.some((app) => app.isFullscreen);
     },
 
-    bookmarksNodes(state): FileSystemNode[] {
+    bookmarksNodes(state): Node[] {
       return state.bookmarks
         .map((id) => state.nodeMap.get(id))
-        .filter((node): node is FileSystemNode => node !== undefined);
+        .filter((node): node is Node => node !== undefined);
     },
   },
   actions: {
@@ -93,19 +88,21 @@ export const useDesktopStore = defineStore({
      * Initializes the nodeMap.
      */
     init(): void {
-      this.initializeNodeMap(this.fileSystem);
+      this.initializeNodeMap(this.fileSystem as FolderNode);
       this.initIdleDetection();
       this.initUptime();
     },
 
     /**
      * Recursively initializes the nodeMap with all nodes in the filesystem.
-     * @param node The current FileSystemNode.
+     * @param node The current Node.
      */
-    initializeNodeMap(node: FileSystemNode): void {
+    initializeNodeMap(node: Node): void {
       this.nodeMap.set(node.id, node);
-      if (node.children) {
-        node.children.forEach((child) => this.initializeNodeMap(child));
+      if (node.type === "folder") {
+        (node as FolderNode).children.forEach((child) =>
+          this.initializeNodeMap(child),
+        );
       }
     },
 
@@ -180,148 +177,170 @@ export const useDesktopStore = defineStore({
       }, 1000);
     },
 
-    /**
-     * Moves an item to a target folder.
-     * @param itemId The ID of the item to move.
-     * @param targetFolderId The ID of the target folder.
-     * @returns True if successful, false otherwise.
-     */
     moveItem(itemId: string, targetFolderId: string): boolean {
       const item = this.nodeMap.get(itemId);
       const targetFolder = this.nodeMap.get(targetFolderId);
 
-      if (!item || !targetFolder || targetFolder.type === "file") return false;
+      if (!item || !targetFolder || targetFolder.type !== "folder")
+        return false;
 
-      // Check permissions
       if (!canMove(item)) return false;
 
-      // Prevent moving an item to itself
       if (itemId === targetFolderId) return false;
 
-      const currentParent = findParentById(this.fileSystem, itemId);
+      if (item.type === "folder" && this.isDescendant(item, targetFolder)) {
+        return false;
+      }
+
+      const currentParentId = item.parentId;
+      if (!currentParentId) return false;
+      const currentParent = this.nodeMap.get(currentParentId);
       if (!currentParent || currentParent.type !== "folder") return false;
 
-      // Remove from current parent
-      currentParent.children = currentParent.children!.filter(
+      currentParent.children = currentParent.children.filter(
         (child) => child.id !== itemId,
       );
 
-      // Add to target folder
       targetFolder.children = targetFolder.children || [];
       targetFolder.children.push(item);
+
+      item.parentId = targetFolder.id;
 
       return true;
     },
 
-    /**
-     * Creates a new item within a parent folder.
-     * @param parentId The ID of the parent folder.
-     * @param newItem The new FileSystemNode to create (without an ID).
-     * @returns The created FileSystemNode or null if failed.
-     */
+    isDescendant(node: Node, targetNode: Node): boolean {
+      if (!targetNode.parentId) return false;
+      if (targetNode.parentId === node.id) return true;
+      const parentNode = this.nodeMap.get(targetNode.parentId);
+      if (!parentNode) return false;
+      return this.isDescendant(node, parentNode);
+    },
+
     createItem(
       parentId: string,
-      newItem: Omit<FileSystemNode, "id" | "children" | "isNewlyCreated">,
-    ): FileSystemNode | null {
+      newItem: Partial<Omit<Node, "id" | "parentId" | "children">>,
+    ): Node | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
 
-      // Check permissions
       if (!canEdit(parent)) return null;
 
       const username = useGlobalStore().username;
-      const createdAt = Intl.DateTimeFormat("it-IT", {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: false,
-      }).format(new Date());
 
-      // Create new node with default properties
-      const newNode: FileSystemNode = {
-        ...newItem,
-        id: uuidv4(),
-        owner: username.toLowerCase(),
-        group: username.toLowerCase(),
-        createdAt,
-        content: newItem.content || "",
-        isNewlyCreated: true,
-        children: [],
-      };
+      if (!newItem.type) return null;
 
-      // If file type, set icon based on extension
-      if (newNode.type === "file") {
-        const extension = newNode.name.split(".").pop();
-        if (extension) {
-          newNode.icon = getNodeIcon(extension);
+      if (newItem.type === "shortcut") {
+        if (!(newItem as ShortcutNode).targetId) {
+          return null;
+        }
+        const targetNode = this.nodeMap.get((newItem as ShortcutNode).targetId);
+        if (!targetNode) {
+          return null;
+        }
+        if (targetNode.type === "shortcut") {
+          return null;
         }
       }
 
-      parent.children = parent.children || [];
+      const newNode: Node = assignDefaultProperties(
+        {
+          ...newItem,
+        } as Node,
+        username,
+        parent.id,
+      );
+
       parent.children.push(newNode);
       this.nodeMap.set(newNode.id, newNode);
+
       return newNode;
     },
 
-    /**
-     * Edits an existing item's properties.
-     * @param itemId The ID of the item to edit.
-     * @param updatedData The properties to update.
-     * @returns True if successful, false otherwise.
-     */
     editItem(
       itemId: string,
-      updatedData: Partial<Omit<FileSystemNode, "id">>,
+      updatedData: Partial<Omit<Node, "id" | "parentId" | "children">>,
     ): boolean {
       const item = this.nodeMap.get(itemId);
       if (!item) return false;
 
-      // Check permissions
       if (!canEdit(item)) return false;
 
-      // If the item is a file, check the extension if present, and update the icon
-      if (item.type === "file") {
-        const extension = item.name.split(".").pop();
-        if (extension) {
-          item.icon = getNodeIcon(extension);
+      if (updatedData.type && updatedData.type !== item.type) {
+        return false;
+      }
+
+      if (item.type === "shortcut" && (updatedData as ShortcutNode).targetId) {
+        const targetNode = this.nodeMap.get(
+          (updatedData as ShortcutNode).targetId,
+        );
+        if (!targetNode || targetNode.type === "shortcut") {
+          return false;
         }
+        (item as ShortcutNode).targetId = (
+          updatedData as ShortcutNode
+        ).targetId;
       }
 
       Object.assign(item, updatedData);
+
       return true;
     },
 
-    /**
-     * Deletes an item from the filesystem.
-     * @param itemId The ID of the item to delete.
-     * @returns True if successful, false otherwise.
-     */
     deleteItem(itemId: string): boolean {
       const item = this.nodeMap.get(itemId);
       if (!item) return false;
 
-      // Check permissions
       if (!canDelete(item)) return false;
 
-      const parent = findParentById(this.fileSystem, itemId);
-      if (!parent || !parent.children) return false;
+      const parentId = item.parentId;
+      if (!parentId) return false;
+
+      const parent = this.nodeMap.get(parentId);
+      if (!parent || parent.type !== "folder") return false;
 
       const index = parent.children.findIndex((child) => child.id === itemId);
       if (index === -1) return false;
 
       parent.children.splice(index, 1);
-      this.nodeMap.delete(itemId);
+
+      this.deleteNodeRecursively(item);
+
+      this.removeShortcutsTo(itemId);
+
       return true;
+    },
+
+    deleteNodeRecursively(node: Node): void {
+      if (node.type === "folder") {
+        node.children.forEach((child) => {
+          this.deleteNodeRecursively(child);
+        });
+      }
+      this.nodeMap.delete(node.id);
+    },
+
+    removeShortcutsTo(targetId: string): void {
+      const shortcutsToRemove: string[] = [];
+
+      for (const [id, node] of this.nodeMap.entries()) {
+        if (node.type === "shortcut" && node.targetId === targetId) {
+          shortcutsToRemove.push(id);
+        }
+      }
+
+      for (const shortcutId of shortcutsToRemove) {
+        this.deleteItem(shortcutId);
+      }
     },
 
     /**
      * Updates the desktopItems based on the new list from the UI.
      * This should handle reordering or moving items as needed.
-     * @param newItems The updated list of FileSystemNodes.
+     * @param newItems The updated list of Nodes.
      */
     // TODO: Implement this better
-    updateDesktopItems(newItems: FileSystemNode[]) {
+    updateDesktopItems(newItems: Node[]) {
       // Clear the current children
       if (this.desktopNode) {
         this.desktopNode.children = [];
@@ -486,8 +505,8 @@ export const useDesktopStore = defineStore({
 
 interface DesktopStore {
   // Filesystem
-  fileSystem: FileSystemNode;
-  nodeMap: Map<string, FileSystemNode>;
+  fileSystem: FolderNode;
+  nodeMap: Map<string, Node>;
   bookmarks: string[]; // Array of ids
   uptime: number;
   processes: Process[];

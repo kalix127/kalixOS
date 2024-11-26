@@ -1,16 +1,21 @@
 import { Terminal } from "@xterm/xterm";
-import type { FileSystemNode, CommandSpec, ParsedArgs } from "~/types";
+import type {
+  Node,
+  CommandSpec,
+  ParsedArgs,
+  PermissionsNode,
+  FolderNode,
+  ShortcutNode,
+} from "@/types";
 import {
-  findNodeByAbsolutePath,
-  findParentById,
   splitPath,
-  findNodeByPath,
   resolvePath,
   getNextPid,
-} from "~/helpers";
+  findNodeByIdRecursive,
+} from "@/helpers";
 import { useWindowSize, useTimestamp } from "@vueuse/core";
-import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 import { helpMessages } from "~/constants/helpMessages";
+import { defaultFilePermissions, defaultFolderPermissions } from "~/constants";
 
 const { editItem, createItem, moveItem, deleteItem } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
@@ -24,29 +29,19 @@ export function handleCd(
     flagValues: { [key: string]: string };
     positionalArgs: string[];
   },
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
-  homeNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
   const toDir = positionalArgs[0];
+
   if (!toDir) {
-    setCurrentDirectory(homeNode);
+    const { homeNode } = storeToRefs(useDesktopStore());
+    setCurrentDirectory(homeNode.value as FolderNode);
     return true;
   }
 
-  let targetNode: FileSystemNode | null = null;
-
-  if (toDir.startsWith("/")) {
-    // Absolute path
-    targetNode = findNodeByAbsolutePath(fileSystem, toDir);
-  } else if (toDir === "..") {
-    // Parent directory
-    targetNode = findParentById(fileSystem, currentDirectoryNode.id);
-  } else {
-    // Relative path
-    targetNode = findNodeByPath(currentDirectoryNode, splitPath(toDir));
-  }
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, toDir);
 
   if (!targetNode) {
     term.write(`\r\ncd: ${toDir}: No such file or directory`);
@@ -65,37 +60,39 @@ export function handleCd(
 export function handleLs(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { flags, positionalArgs } = parsedArgs;
   const longFormat = flags.includes("-l");
   const showAll = flags.includes("-a");
 
   const path = positionalArgs[0] || ".";
-  let targetNode: FileSystemNode | null = resolvePath(
-    fileSystem,
-    currentDirectoryNode,
-    path,
-  );
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, path);
 
   if (!targetNode) {
     term.write(`\r\nls: cannot access '${path}': No such file or directory`);
     return false;
   }
 
-  const nodes = targetNode.children ?? [];
+  if (targetNode.type !== "folder") {
+    term.write(`\r\nls: cannot access '${path}': Not a directory`);
+    return false;
+  }
+
+  const nodes = targetNode.children;
+
   const filteredNodes = showAll
     ? nodes
     : nodes.filter((node) => !node.name.startsWith("."));
 
   if (longFormat) {
     const maxOwnerLength = Math.max(
-      ...filteredNodes.map((node) => (node.owner ?? "unknown").length),
+      ...filteredNodes.map((node) => node.owner.length),
       5,
     );
     const maxGroupLength = Math.max(
-      ...filteredNodes.map((node) => (node.group ?? "unknown").length),
+      ...filteredNodes.map((node) => node.group.length),
       5,
     );
     const maxSizeLength = Math.max(
@@ -108,32 +105,28 @@ export function handleLs(
     );
 
     filteredNodes.forEach((node) => {
-      const type = node.type === "folder" ? "d" : "-";
+      let nodeName = node.name;
 
-      if (!node.permissions) {
-        term.write(
-          `\r\nls: cannot read permissions of '${node.name}': Permissions undefined`,
-        );
-        return;
-      }
-
-      const permissions = formatPermissions(node.permissions);
+      const permissions = formatPermissions(node.type, node.permissions);
       const size = node.type === "file" ? (node.content?.length ?? 0) : 4096;
       const sizeStr = size.toString();
 
-      const date = node.createdAt ?? "";
-      const owner = node.owner ?? "unknown";
-      const group = node.group ?? "unknown";
-      const nodeName = formatNodeName(node);
+      const date = formatLsDate(node.createdAt);
+      const owner = node.owner;
+      const group = node.group;
+      nodeName = formatNodeName(node, fileSystem, true);
 
       term.write(
-        `\r\n${type}${permissions} ${owner.padEnd(maxOwnerLength)} ${group.padEnd(maxGroupLength)} ${sizeStr.padStart(maxSizeLength)} ${date} ${nodeName}`,
+        `\r\n${permissions} ${owner.padEnd(maxOwnerLength)} ${group.padEnd(
+          maxGroupLength,
+        )} ${sizeStr.padStart(maxSizeLength)} ${date} ${nodeName}`,
       );
     });
     return true;
   }
-
-  const output = filteredNodes.map((node) => formatNodeName(node)).join("  ");
+  const output = filteredNodes
+    .map((node) => formatNodeName(node, fileSystem))
+    .join("  ");
   if (output.trim() !== "") {
     term.write(`\r\n${output}`);
   }
@@ -143,8 +136,8 @@ export function handleLs(
 export function handleTree(
   term: Terminal,
   args: string[],
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   try {
     // Initialize default values
@@ -235,8 +228,8 @@ export function handleTree(
 export function handleChown(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -245,13 +238,14 @@ export function handleChown(
     return false;
   }
 
-  const [user, group] = positionalArgs[0].split(":");
+  const [userGroup, targetPath] = positionalArgs;
+  const [user, group] = userGroup.split(":");
+
   if (!user || !group) {
     term.write(`\r\nchown: invalid format; expected 'user:group'`);
     return false;
   }
 
-  const targetPath = positionalArgs[1];
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
   if (!targetNode) {
     term.write(
@@ -260,15 +254,22 @@ export function handleChown(
     return false;
   }
 
-  editItem(targetNode.id, { owner: user, group });
+  const success = editItem(targetNode.id, { owner: user, group });
+  if (!success) {
+    term.write(
+      `\r\nchown: cannot change owner of '${targetPath}': Permission denied`,
+    );
+    return false;
+  }
+
   return true;
 }
 
 export function handleChmod(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -286,9 +287,8 @@ export function handleChmod(
     return false;
   }
 
-  const permissions = targetNode.permissions;
-
   if (/^[ugoa]*[+-=][rwx]+$/.test(mode)) {
+    const permissions = { ...targetNode.permissions };
     const targets: Array<"owner" | "group" | "others"> = [];
 
     if (!/[ugo]/.test(mode[0]) || mode.startsWith("a")) {
@@ -306,7 +306,7 @@ export function handleChmod(
       permissionTypes.forEach((perm) => {
         const permKey = (
           perm === "r" ? "read" : perm === "w" ? "write" : "execute"
-        ) as keyof (typeof permissions)[typeof target];
+        ) as keyof PermissionsNode[typeof target];
         switch (operation) {
           case "+":
             permissions[target][permKey] = true;
@@ -322,11 +322,18 @@ export function handleChmod(
       });
     });
 
-    editItem(targetNode.id, { permissions });
+    const success = editItem(targetNode.id, { permissions });
+    if (!success) {
+      term.write(
+        `\r\nchmod: cannot change permissions of '${targetPath}': Permission denied`,
+      );
+      return false;
+    }
+
     return true;
   } else if (/^[0-7]{3}$/.test(mode)) {
     const values = mode.split("").map((char) => parseInt(char, 8));
-    const newPermissions: FileSystemNode["permissions"] = {
+    const newPermissions: PermissionsNode = {
       owner: {
         read: !!(values[0] & 4),
         write: !!(values[0] & 2),
@@ -344,7 +351,14 @@ export function handleChmod(
       },
     };
 
-    editItem(targetNode.id, { permissions: newPermissions });
+    const success = editItem(targetNode.id, { permissions: newPermissions });
+    if (!success) {
+      term.write(
+        `\r\nchmod: cannot change permissions of '${targetPath}': Permission denied`,
+      );
+      return false;
+    }
+
     return true;
   } else {
     term.write(`\r\nchmod: invalid mode: '${mode}'`);
@@ -355,8 +369,8 @@ export function handleChmod(
 export function handleTouch(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -366,45 +380,57 @@ export function handleTouch(
   }
 
   const filePath = positionalArgs[0];
-  let targetDirectory: FileSystemNode;
-  let fileName: string;
+  const pathParts = splitPath(filePath);
+  const fileName = pathParts.pop() || "";
+  const dirPath = pathParts.join("/");
 
-  if (filePath.startsWith("/")) {
-    const pathParts = splitPath(filePath);
-    fileName = pathParts.pop() || "";
-    const dirPath = pathParts.join("/");
-    targetDirectory =
-      findNodeByAbsolutePath(fileSystem, dirPath) || currentDirectoryNode;
-  } else {
-    const pathParts = splitPath(filePath);
-    fileName = pathParts.pop() || "";
-    if (pathParts.length > 0) {
-      targetDirectory =
-        findNodeByPath(currentDirectoryNode, pathParts) || currentDirectoryNode;
-    } else {
-      targetDirectory = currentDirectoryNode;
-    }
+  const targetDirectory = resolvePath(
+    fileSystem,
+    currentDirectoryNode,
+    dirPath || ".",
+  );
+
+  if (!targetDirectory) {
+    term.write(
+      `\r\ntouch: cannot touch '${filePath}': No such file or directory`,
+    );
+    return false;
   }
 
-  const existingNode = targetDirectory.children?.find(
+  if (targetDirectory.type !== "folder") {
+    term.write(`\r\ntouch: cannot touch '${filePath}': Not a directory`);
+    return false;
+  }
+
+  const folderNode = targetDirectory as FolderNode;
+  const existingNode = folderNode.children.find(
     (child) => child.name === fileName,
   );
+
   if (!existingNode) {
-    createItem(targetDirectory.id, {
+    const newNode = createItem(folderNode.id, {
       name: fileName,
       type: "file",
       icon: "file:file",
       permissions: defaultFilePermissions,
     });
+
+    if (!newNode) {
+      term.write(
+        `\r\ntouch: cannot create file '${fileName}': Permission denied`,
+      );
+      return false;
+    }
   }
+
   return true;
 }
 
 export function handleMkdir(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -414,45 +440,62 @@ export function handleMkdir(
   }
 
   const dirPath = positionalArgs[0];
-  let targetDirectory: FileSystemNode;
-  let dirName: string;
+  const pathParts = splitPath(dirPath);
+  const dirName = pathParts.pop() || "";
+  const parentPath = pathParts.join("/");
 
-  if (dirPath.startsWith("/")) {
-    const pathParts = splitPath(dirPath);
-    dirName = pathParts.pop() || "";
-    const parentPath = pathParts.join("/");
-    targetDirectory =
-      findNodeByAbsolutePath(fileSystem, parentPath) || currentDirectoryNode;
-  } else {
-    const pathParts = splitPath(dirPath);
-    dirName = pathParts.pop() || "";
-    if (pathParts.length > 0) {
-      targetDirectory =
-        findNodeByPath(currentDirectoryNode, pathParts) || currentDirectoryNode;
-    } else {
-      targetDirectory = currentDirectoryNode;
-    }
+  const targetDirectory = resolvePath(
+    fileSystem,
+    currentDirectoryNode,
+    parentPath || ".",
+  );
+
+  if (!targetDirectory) {
+    term.write(
+      `\r\nmkdir: cannot create directory '${dirPath}': No such file or directory`,
+    );
+    return false;
   }
 
-  const existingNode = targetDirectory.children?.find(
+  if (targetDirectory.type !== "folder") {
+    term.write(
+      `\r\nmkdir: cannot create directory '${dirPath}': Not a directory`,
+    );
+    return false;
+  }
+
+  const folderNode = targetDirectory as FolderNode;
+  const existingNode = folderNode.children.find(
     (child) => child.name === dirName,
   );
+
   if (!existingNode) {
-    createItem(targetDirectory.id, {
+    const newNode = createItem(folderNode.id, {
       name: dirName,
       type: "folder",
       icon: "folder:folder",
       permissions: defaultFolderPermissions,
     });
+
+    if (!newNode) {
+      term.write(
+        `\r\nmkdir: cannot create directory '${dirName}': Permission denied`,
+      );
+      return false;
+    }
+  } else {
+    term.write(`\r\nmkdir: cannot create directory '${dirPath}': File exists`);
+    return false;
   }
+
   return true;
 }
 
 export function handleMv(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -465,13 +508,7 @@ export function handleMv(
   const targetPath = positionalArgs[1];
 
   // Find source node
-  let sourceNode: FileSystemNode | null = null;
-  if (sourcePath.startsWith("/")) {
-    sourceNode = findNodeByAbsolutePath(fileSystem, sourcePath);
-  } else {
-    sourceNode = findNodeByPath(currentDirectoryNode, splitPath(sourcePath));
-  }
-
+  const sourceNode = resolvePath(fileSystem, currentDirectoryNode, sourcePath);
   if (!sourceNode) {
     term.write(
       `\r\nmv: cannot stat '${sourcePath}': No such file or directory`,
@@ -479,25 +516,18 @@ export function handleMv(
     return false;
   }
 
-  // Find target node/parent
-  let targetNode: FileSystemNode | null = null;
-  if (targetPath.startsWith("/")) {
-    targetNode = findNodeByAbsolutePath(fileSystem, targetPath);
-  } else {
-    targetNode = findNodeByPath(currentDirectoryNode, splitPath(targetPath));
-  }
+  // Find target node
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
 
   if (!targetNode) {
     const targetPathParts = splitPath(targetPath);
-    const parentPath = targetPathParts.join("/");
+    const parentPath = targetPathParts.slice(0, -1).join("/");
 
-    let parentNode: FileSystemNode | null;
-    if (targetPath.startsWith("/")) {
-      parentNode = findNodeByAbsolutePath(fileSystem, parentPath);
-    } else {
-      parentNode = findNodeByPath(currentDirectoryNode, targetPathParts);
-    }
-
+    const parentNode = resolvePath(
+      fileSystem,
+      currentDirectoryNode,
+      parentPath,
+    );
     if (!parentNode || parentNode.type !== "folder") {
       term.write(
         `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': No such directory`,
@@ -515,7 +545,6 @@ export function handleMv(
     return true;
   }
 
-  // If target exists and is a directory, move source into it
   if (targetNode.type === "folder") {
     const success = moveItem(sourceNode.id, targetNode.id);
     if (!success) {
@@ -534,8 +563,8 @@ export function handleMv(
 export function handleRm(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { flags, positionalArgs } = parsedArgs;
 
@@ -548,12 +577,7 @@ export function handleRm(
   const targetPath = positionalArgs[0];
 
   // Resolve target node
-  let targetNode: FileSystemNode | null;
-  if (targetPath.startsWith("/")) {
-    targetNode = findNodeByAbsolutePath(fileSystem, targetPath);
-  } else {
-    targetNode = findNodeByPath(currentDirectoryNode, splitPath(targetPath));
-  }
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
 
   if (!targetNode) {
     term.write(
@@ -562,13 +586,21 @@ export function handleRm(
     return false;
   }
 
-  // Check if trying to delete a folder without -f flag
+  // Check if trying to delete a folder without -r flag
   if (targetNode.type === "folder" && !recursiveDelete) {
     term.write(`\r\nrm: cannot remove '${targetPath}': Is a directory`);
     return false;
   }
 
-  const parentNode = findParentById(fileSystem, targetNode.id);
+  // Resolve parent node
+  if (!targetNode.parentId) {
+    term.write(
+      `\r\nrm: cannot remove '${targetPath}': No such file or directory`,
+    );
+    return false;
+  }
+
+  const parentNode = findNodeByIdRecursive(fileSystem, targetNode.parentId);
   if (!parentNode || parentNode.type !== "folder") {
     term.write(
       `\r\nrm: cannot remove '${targetPath}': No such file or directory`,
@@ -589,8 +621,8 @@ export function handleRm(
 export function handleCat(
   term: Terminal,
   parsedArgs: ParsedArgs,
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -600,13 +632,7 @@ export function handleCat(
   }
 
   const filePath = positionalArgs[0];
-  let targetNode: FileSystemNode | null = null;
-
-  if (filePath.startsWith("/")) {
-    targetNode = findNodeByAbsolutePath(fileSystem, filePath);
-  } else {
-    targetNode = findNodeByPath(currentDirectoryNode, splitPath(filePath));
-  }
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, filePath);
 
   if (!targetNode) {
     term.write(`\r\ncat: ${filePath}: No such file or directory`);
@@ -618,7 +644,7 @@ export function handleCat(
     return false;
   }
 
-  term.write(`\r\n${targetNode.content}`);
+  term.write(`\r\n${targetNode.content || ""}`);
   return true;
 }
 
@@ -648,14 +674,14 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const { processes } = storeToRefs(useDesktopStore());
 
   const psLines = processes.value.map((proc) => {
-    const time = formatTime(proc.startTimeTimestamp);
+    const time = formatPsTime(proc.startTimeTimestamp);
     return formatPsRow(proc.pid, "pts/1", time, proc.command, widths);
   });
 
   const currentTimeTimestamp = useTimestamp({ offset: 0 }).value;
   const psProcess = {
     pid: getNextPid(processes.value),
-    time: formatTime(currentTimeTimestamp),
+    time: formatPsTime(currentTimeTimestamp),
     cmd: "ps",
   };
   psLines.push(
@@ -923,6 +949,7 @@ export function handleHelp(term: Terminal): boolean {
 /* Utility functions */
 
 export function parseArguments(
+  commandName: string,
   args: string[],
   commandSpec: CommandSpec,
 ): ParsedArgs {
@@ -989,7 +1016,12 @@ export function parseArguments(
   }
 
   // If help flag is present, skip positional args check
-  if (flags.includes("-h") || flags.includes("--help")) {
+  if (flags.includes("--help")) {
+    return { flags, flagValues, positionalArgs };
+  }
+
+  // For df and free commands, treat -h as a normal flag
+  if (commandName !== "df" && commandName !== "free" && flags.includes("-h")) {
     return { flags, flagValues, positionalArgs };
   }
 
@@ -1014,8 +1046,46 @@ export function generateLink(url: string, label: string): string {
   return `\x1b]8;;${url}\x07${label}\x1b]8;;\x07`;
 }
 
-export function formatNodeName(node: FileSystemNode): string {
-  return node.type === "folder" ? `\x1b[1;34m${node.name}\x1b[0m` : node.name;
+export function formatNodeName(
+  node: Node,
+  fileSystem?: Node,
+  longFormat: boolean = false,
+): string {
+  let displayName = node.name;
+  if (node.type === "shortcut" && longFormat) {
+    const shortcutNode = node as ShortcutNode;
+    const targetNode = findNodeByIdRecursive(
+      fileSystem!,
+      shortcutNode.targetId,
+    );
+    if (targetNode) {
+      // shortcut name in cyan
+      displayName = `\x1b[1;36m${displayName}\x1b[0m`;
+      // Add arrow
+      displayName += ` -> `;
+      // target color based on its type
+      switch (targetNode.type) {
+        case "folder":
+          displayName += `\x1b[1;34m${targetNode.name}\x1b[0m`;
+          break;
+        case "shortcut":
+          displayName += `\x1b[1;36m${targetNode.name}\x1b[0m`;
+          break;
+        default:
+          displayName += targetNode.name;
+      }
+      return displayName;
+    }
+  }
+
+  switch (node.type) {
+    case "folder":
+      return `\x1b[1;34m${displayName}\x1b[0m`;
+    case "shortcut":
+      return `\x1b[1;36m${displayName}\x1b[0m`;
+    default:
+      return node.name;
+  }
 }
 
 /**
@@ -1023,7 +1093,7 @@ export function formatNodeName(node: FileSystemNode): string {
  * @param timestamp The timestamp in milliseconds.
  * @returns The formatted time string.
  */
-function formatTime(timestamp: number): string {
+function formatPsTime(timestamp: number): string {
   // Get current timestamp
   const now = Date.now();
 
@@ -1041,6 +1111,14 @@ function formatTime(timestamp: number): string {
 
   return `${hours}:${minutes}:${seconds}`;
 }
+
+export const formatLsDate = (date: Date): string => {
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const day = date.getDate();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${month} ${day} ${hours}:${minutes}`;
+};
 
 /**
  * Generates a random integer between min and max (inclusive).
@@ -1078,7 +1156,7 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
 
 /**
  * Recursively traverses the file system and builds the tree structure.
- * @param node The current FileSystemNode.
+ * @param node The current Node.
  * @param prefix The string prefix for the current level (e.g., "│   ", "    ").
  * @param isLast Indicates if the current node is the last child of its parent.
  * @param depth The maximum depth to traverse.
@@ -1086,7 +1164,7 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
  * @param lines An array to accumulate the tree lines.
  */
 function traverseTree(
-  node: FileSystemNode,
+  node: Node,
   prefix: string,
   isLast: boolean,
   depth: number,
@@ -1121,12 +1199,7 @@ function traverseTree(
   }
 }
 
-/**
- * Converts the permissions object to a string like rwxr-xr-x.
- * @param permissions The permissions object.
- * @returns The formatted permissions string.
- */
-function formatPermissions(permissions: FileSystemNode["permissions"]): string {
+function formatPermissions(type: string, permissions: PermissionsNode): string {
   const permissionString = (perm: {
     read: boolean;
     write: boolean;
@@ -1134,8 +1207,20 @@ function formatPermissions(permissions: FileSystemNode["permissions"]): string {
   }) =>
     `${perm.read ? "r" : "-"}${perm.write ? "w" : "-"}${perm.execute ? "x" : "-"}`;
 
+  let typeChar = "-";
+  switch (type) {
+    case "folder":
+      typeChar = "d";
+      break;
+    case "shortcut":
+      typeChar = "l";
+      break;
+    default:
+      break;
+  }
+
   return (
-    `${permissionString(permissions.owner)}` +
+    `${typeChar}${permissionString(permissions.owner)}` +
     `${permissionString(permissions.group)}` +
     `${permissionString(permissions.others)}`
   );

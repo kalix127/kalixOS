@@ -1429,18 +1429,18 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     positionalArgs: [{ name: "pattern", required: true }],
   },
   free: {
-    acceptsFlags: ["-h"],
+    acceptsFlags: ["-h", "--help"],
     flagAliases: {
       "--human": "-h",
-      "--help": "-h",
+      "--help": "--help",
     },
     positionalArgs: [],
   },
   df: {
-    acceptsFlags: ["-h"],
+    acceptsFlags: ["-h", "--help"],
     flagAliases: {
       "--human": "-h",
-      "--help": "-h",
+      "--help": "--help",
     },
     positionalArgs: [],
   },

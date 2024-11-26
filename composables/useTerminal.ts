@@ -269,7 +269,7 @@ export function useTerminal(terminalElement: HTMLElement) {
 
     let parsedArgs;
     try {
-      parsedArgs = parseArguments(args.slice(1), commandSpec);
+      parsedArgs = parseArguments(exec, args.slice(1), commandSpec);
     } catch (error: any) {
       term.write(`\r\n${error.message}`);
       return false;
@@ -281,7 +281,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       return shouldAddToHistory;
     }
 
-    if (parsedArgs.flags.includes("-h")) {
+    if (parsedArgs.flags.includes("-h") && exec !== "df" && exec !== "free" || parsedArgs.flags.includes("--help")) {
       term.write(`\r\n${helpMessages[exec]}`);
       shouldAddToHistory = true;
       return shouldAddToHistory;
@@ -294,7 +294,6 @@ export function useTerminal(terminalElement: HTMLElement) {
           parsedArgs,
           fileSystem,
           currentDirectoryNode.value!,
-          homeNode.value!,
         );
         break;
 

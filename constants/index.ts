@@ -29,6 +29,12 @@ export const defaultFolderPermissions = {
   others: { read: true, write: false, execute: true },
 };
 
+export const defaultShortcutPermissions = {
+  owner: { read: true, write: true, execute: true },
+  group: { read: true, write: true, execute: true },
+  others: { read: true, write: true, execute: true },
+};
+
 export const defaultBackgroundImage: BackgroundImage = {
   url: "img/bg-desktop.jpg",
   name: "default",

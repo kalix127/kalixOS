@@ -194,53 +194,45 @@ export const defaultNetworks: WifiNetwork[] = [
   },
 ];
 
-const trashNode: AppNode = {
-  id: "trash",
-  name: "Trash",
-  type: "app",
-  icon: "app:trash",
-};
-
 export const defaultBookmarks = ["coding"];
 
 // TODO: Add more defaults apps without any functionality
 export const defaultApps: AppNode[] = [
-  trashNode,
   {
+    id: "settings",
     name: "Settings",
     type: "app",
     icon: "app:settings",
-    id: "settings",
   },
   {
+    id: "files",
     name: "Files",
     type: "app",
     icon: "app:files",
-    id: "files",
   },
   {
+    id: "terminal",
     name: "Terminal",
     type: "app",
     icon: "app:terminal",
-    id: "terminal",
   },
   {
+    id: "brave",
     name: "Brave",
     type: "app",
     icon: "app:brave",
-    id: "brave",
   },
   {
+    id: "thunderbird",
     name: "Thunderbird",
     type: "app",
     icon: "app:thunderbird",
-    id: "thunderbird",
   },
   {
+    id: "code",
     name: "Visual Studio Code",
     type: "app",
     icon: "app:vscode",
-    id: "code",
   },
   {
     name: "linkedin_profile",
@@ -343,13 +335,41 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                   canMove: false,
                   canDelete: false,
                   children: [
-                    trashNode,
                     {
-                      id: "coding",
-                      name: "Coding",
+                      id: "trash-shortcut",
+                      name: "Trash",
+                      type: "shortcut",
+                      icon: "app:trash",
+                      isShortcut: true,
+                      targetId: "trash",
+                      children: [],
+                    },
+                  ],
+                },
+                {
+                  name: ".local",
+                  type: "folder",
+                  icon: "folder:folder",
+                  canMove: false,
+                  canDelete: false,
+                  children: [
+                    {
+                      name: "share",
                       type: "folder",
                       icon: "folder:folder",
-                      children: [],
+                      canMove: false,
+                      canDelete: false,
+                      children: [
+                        {
+                          id: "trash",
+                          name: "Trash",
+                          type: "folder",
+                          icon: "folder:folder",
+                          canMove: false,
+                          canDelete: false,
+                          children: [],
+                        },
+                      ],
                     },
                   ],
                 },
@@ -509,10 +529,12 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               icon: "file:bash",
               children: [],
             },
-            ...defaultApps.slice(1, -2).map((app) => ({
+            ...defaultApps.slice(0, -2).map((app) => ({
               ...app,
               id: `${app.id}-bin`,
               name: app.id.toLowerCase(),
+              canMove: false,
+              canDelete: false,
             })),
           ],
         },

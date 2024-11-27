@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, hasAppsLoading } =
+const { desktopItems, openApps, desktopRef, hasAppsLoading, nodeMap } =
   storeToRefs(desktopStore);
 const { init, moveItem, updateDesktopItems } = desktopStore;
 
@@ -37,6 +37,16 @@ const targetNodeId = ref<string | null>(null);
 function handleDrop() {
   if (!draggedNodeId.value || !targetNodeId.value) {
     return;
+  }
+
+  // If target is a shortcut, check if it points to a folder and move item there
+  const targetNode = nodeMap.value.get(targetNodeId.value);
+  if (targetNode?.type === "shortcut") {
+    const targetFolder = nodeMap.value.get(targetNode.targetId);
+    if (targetFolder?.type === "folder") {
+      moveItem(draggedNodeId.value, targetFolder.id);
+      return;
+    }
   }
 
   moveItem(draggedNodeId.value, targetNodeId.value);

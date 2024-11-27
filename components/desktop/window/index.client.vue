@@ -87,8 +87,13 @@ onBeforeMount(() => {
     :style="{
       zIndex: app.isActive ? 10000 : 5000,
     }"
-    class="absolute left-0 top-0 rounded-t-xl !border-none shadow-xl duration-300"
-    :class="[app.isFullscreen ? '' : 'rounded-t-xl']"
+    class="absolute left-0 top-0 rounded-t-xl !border-none duration-300"
+    :class="[
+      app.isFullscreen ? '' : 'rounded-t-xl',
+      app.isActive
+        ? 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]'
+        : 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)]',
+    ]"
   >
     <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
       <!-- Top bar -->
@@ -104,7 +109,6 @@ onBeforeMount(() => {
         class="app-topbar"
       />
 
-      <!-- Apps content -->
       <!-- Settings -->
       <Settings v-if="app.id === 'settings'" :app="app" />
 

@@ -9,7 +9,6 @@ import {
 import { defaultFullscreenApps } from "@/constants";
 
 const desktopStore = useDesktopStore();
-const { desktopRef } = storeToRefs(desktopStore);
 storeToRefs(desktopStore);
 const { closeApp, toggleMinimizeApp } = desktopStore;
 

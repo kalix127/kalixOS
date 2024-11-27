@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { FileSystemNode } from "@/types";
+import type { Node, ContextMenuTargetType } from "@/types";
 import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  item: FileSystemNode;
+  item: Node;
 }>();
 
 const { openContextMenu } = useContextMenuStore();
@@ -22,7 +22,7 @@ const handleContextMenu = (event: MouseEvent) => {
   openContextMenu(
     event.clientX,
     event.clientY,
-    props.item.type as TargetType,
+    props.item.type as ContextMenuTargetType,
     props.item,
   );
 };

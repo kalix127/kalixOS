@@ -30,9 +30,7 @@ interface BaseNode {
   createdAt: Date;
   content?: string;
   parentId?: string | null;
-  canMove?: boolean;
-  canEdit?: boolean;
-  canDelete?: boolean;
+  isProtected?: boolean;
   isRenaming?: boolean;
   isTranslated?: boolean;
   isNewlyCreated?: boolean;

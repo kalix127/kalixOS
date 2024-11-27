@@ -86,20 +86,20 @@ export const useDesktopStore = defineStore({
   actions: {
     resetDesktopEnv() {
       const username = storeToRefs(useGlobalStore()).username.value;
-      
+
       // Clear existing state
       this.nodeMap.clear();
       this.bookmarks = [];
       this.processes = [];
-      
+
       // Re-create filesystem with new username
       this.fileSystem = defaultFileSystem(username.toLowerCase());
-      
+
       // Re-initialize apps and background
       this.apps = defaultApps;
       this.backgroundImage = defaultBackgroundImage;
       this.backgroundImages = defaultBackgroundImages;
-      
+
       // Re-initialize nodeMap with new filesystem
       this.initializeNodeMap(this.fileSystem as FolderNode);
     },
@@ -109,8 +109,11 @@ export const useDesktopStore = defineStore({
      */
     init(): void {
       const username = storeToRefs(useGlobalStore()).username.value;
-      const homeNode = findNodeByIdRecursive(this.fileSystem, "home") as FolderNode;
-      
+      const homeNode = findNodeByIdRecursive(
+        this.fileSystem,
+        "home",
+      ) as FolderNode;
+
       // Reset filesystem if username doesn't match home directory
       if (homeNode && homeNode.name.toLowerCase() !== username.toLowerCase()) {
         this.resetDesktopEnv();
@@ -213,7 +216,7 @@ export const useDesktopStore = defineStore({
       if (!item || !targetFolder || targetFolder.type !== "folder")
         return false;
 
-      if (!canMove(item)) return false;
+      if (item.isProtected) return false;
 
       if (itemId === targetFolderId) return false;
 
@@ -245,9 +248,10 @@ export const useDesktopStore = defineStore({
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
 
-      if (!canEdit(parent)) return null;
+      if (parent.isProtected) return null;
 
-      const username = useGlobalStore().username;
+      const username =
+        storeToRefs(useGlobalStore()).username.value.toLowerCase();
 
       if (!newItem.type) return null;
 
@@ -285,7 +289,7 @@ export const useDesktopStore = defineStore({
       const item = this.nodeMap.get(itemId);
       if (!item) return false;
 
-      if (!canEdit(item)) return false;
+      if (item.isProtected) return false;
 
       if (updatedData.type && updatedData.type !== item.type) {
         return false;
@@ -312,7 +316,7 @@ export const useDesktopStore = defineStore({
       const item = this.nodeMap.get(itemId);
       if (!item) return false;
 
-      if (!canDelete(item)) return false;
+      if (item.isProtected) return false;
 
       const parentId = item.parentId;
       if (!parentId) return false;
@@ -326,7 +330,6 @@ export const useDesktopStore = defineStore({
       parent.children.splice(index, 1);
 
       this.deleteNodeRecursively(item);
-
       this.removeShortcutsTo(itemId);
 
       return true;

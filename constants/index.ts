@@ -273,23 +273,20 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
       id: "root",
       name: "/",
       type: "folder",
-      canMove: false,
-      canDelete: false,
+      isProtected: true,
       icon: "folder:folder",
       children: [
         {
           name: "home",
           type: "folder",
-          canMove: false,
-          canDelete: false,
+          isProtected: true,
           icon: "folder:folder",
           children: [
             {
               id: "home",
               name: username,
+              isProtected: true,
               type: "folder",
-              canMove: false,
-              canDelete: false,
               icon: "folder:folder",
               children: [
                 {
@@ -332,8 +329,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                   name: "Desktop",
                   type: "folder",
                   icon: "folder:folder",
-                  canMove: false,
-                  canDelete: false,
+                  isProtected: true,
                   children: [
                     {
                       id: "trash-shortcut",
@@ -343,8 +339,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                       isShortcut: true,
                       targetId: "trash",
                       children: [],
-                      canMove: false,
-                      canDelete: false,
+                      isProtected: true,
                       permissions: defaultShortcutPermissions,
                     },
                   ],
@@ -353,23 +348,20 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
                   name: ".local",
                   type: "folder",
                   icon: "folder:folder",
-                  canMove: false,
-                  canDelete: false,
+                  isProtected: true,
                   children: [
                     {
                       name: "share",
                       type: "folder",
                       icon: "folder:folder",
-                      canMove: false,
-                      canDelete: false,
+                      isProtected: true,
                       children: [
                         {
                           id: "trash",
                           name: "Trash",
                           type: "folder",
                           icon: "folder:folder",
-                          canMove: false,
-                          canDelete: false,
+                          isProtected: true,
                           children: [],
                         },
                       ],
@@ -536,8 +528,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               ...app,
               id: `${app.id}-bin`,
               name: app.id.toLowerCase(),
-              canMove: false,
-              canDelete: false,
             })),
           ],
         },

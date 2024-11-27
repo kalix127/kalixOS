@@ -18,7 +18,7 @@ useIntervalFn(
     const randomCpuUsage = getRandomValue(5, 80); // CPU between 5 and 80%
     const randomMemoryUsage = getRandomValue(15, 95); // Memory between 15 and 95%
     cpuUsage.value = randomCpuUsage.value;
-    memoryUsage.value = `${randomMemoryUsage.value}%`;
+    memoryUsage.value = `${randomMemoryUsage.value}`;
     memoryUsedPercentage.value = randomMemoryUsage.percentage;
   },
   1000,

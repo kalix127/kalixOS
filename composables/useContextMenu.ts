@@ -220,7 +220,7 @@ export function useContextMenu() {
         icon: "folder:folder",
         isRenaming: true,
         isNewlyCreated: true,
-      });
+      },  true);
     }
     closeContextMenu();
   };
@@ -233,7 +233,7 @@ export function useContextMenu() {
         icon: "file:file",
         isRenaming: true,
         isNewlyCreated: true,
-      });
+      }, true);
     }
     closeContextMenu();
   };

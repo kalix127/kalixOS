@@ -244,6 +244,7 @@ export const useDesktopStore = defineStore({
     createNode(
       parentId: string,
       newNode: Partial<Omit<Node, "id" | "parentId" | "children">>,
+      checkDuplicates: boolean = false
     ): Node | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
@@ -264,6 +265,16 @@ export const useDesktopStore = defineStore({
         if (targetNode.type === "shortcut") {
           return null;
         }
+      }
+
+      if (checkDuplicates && newNode.name) {
+        let counter = 1;
+        let newName = newNode.name;
+        while (parent.children.some(child => child.name === newName)) {
+          newName = `${newNode.name} (${counter})`;
+          counter++;
+        }
+        newNode.name = newName;
       }
 
       const createdNode: Node = assignDefaultProperties(

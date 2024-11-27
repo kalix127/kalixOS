@@ -84,11 +84,40 @@ export const useDesktopStore = defineStore({
     },
   },
   actions: {
+    resetDesktopEnv() {
+      const username = storeToRefs(useGlobalStore()).username.value;
+      
+      // Clear existing state
+      this.nodeMap.clear();
+      this.bookmarks = [];
+      this.processes = [];
+      
+      // Re-create filesystem with new username
+      this.fileSystem = defaultFileSystem(username.toLowerCase());
+      
+      // Re-initialize apps and background
+      this.apps = defaultApps;
+      this.backgroundImage = defaultBackgroundImage;
+      this.backgroundImages = defaultBackgroundImages;
+      
+      // Re-initialize nodeMap with new filesystem
+      this.initializeNodeMap(this.fileSystem as FolderNode);
+    },
+
     /**
-     * Initializes the nodeMap.
+     * Initializes the nodeMap and checks if filesystem needs to be reset for new user.
      */
     init(): void {
-      this.initializeNodeMap(this.fileSystem as FolderNode);
+      const username = storeToRefs(useGlobalStore()).username.value;
+      const homeNode = findNodeByIdRecursive(this.fileSystem, "home") as FolderNode;
+      
+      // Reset filesystem if username doesn't match home directory
+      if (homeNode && homeNode.name.toLowerCase() !== username.toLowerCase()) {
+        this.resetDesktopEnv();
+      } else {
+        this.initializeNodeMap(this.fileSystem as FolderNode);
+      }
+
       this.initIdleDetection();
       this.initUptime();
     },

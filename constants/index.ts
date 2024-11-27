@@ -280,7 +280,7 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
           name: "home",
           type: "folder",
           isProtected: true,
-          icon: "folder:folder",
+          icon: "folder:home",
           children: [
             {
               id: "home",
@@ -290,45 +290,53 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               icon: "folder:folder",
               children: [
                 {
+                  id: "applications",
+                  name: "Applications",
+                  type: "folder",
+                  icon: "folder:applications",
+                  isProtected: true,
+                  children: [...defaultApps.slice(0, -2)],
+                },
+                {
                   id: "downloads",
                   name: "Downloads",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:donwloads",
                   children: [],
                 },
                 {
                   id: "documents",
                   name: "Documents",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:documents",
                   children: [],
                 },
                 {
                   id: "pictures",
                   name: "Pictures",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:pictures",
                   children: [],
                 },
                 {
                   id: "music",
                   name: "Music",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:music",
                   children: [],
                 },
                 {
                   id: "videos",
                   name: "Videos",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:videos",
                   children: [],
                 },
                 {
                   id: "desktop",
                   name: "Desktop",
                   type: "folder",
-                  icon: "folder:folder",
+                  icon: "folder:desktop",
                   isProtected: true,
                   children: [
                     {
@@ -524,11 +532,6 @@ export const defaultFileSystem = (username: string): FileSystemNode =>
               icon: "file:bash",
               children: [],
             },
-            ...defaultApps.slice(0, -2).map((app) => ({
-              ...app,
-              id: `${app.id}-bin`,
-              name: app.id.toLowerCase(),
-            })),
           ],
         },
         {

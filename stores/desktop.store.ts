@@ -209,14 +209,6 @@ export const useDesktopStore = defineStore({
       return true;
     },
 
-    isDescendant(node: Node, targetNode: Node): boolean {
-      if (!targetNode.parentId) return false;
-      if (targetNode.parentId === node.id) return true;
-      const parentNode = this.nodeMap.get(targetNode.parentId);
-      if (!parentNode) return false;
-      return this.isDescendant(node, parentNode);
-    },
-
     createItem(
       parentId: string,
       newItem: Partial<Omit<Node, "id" | "parentId" | "children">>,
@@ -311,6 +303,14 @@ export const useDesktopStore = defineStore({
       return true;
     },
 
+    isDescendant(node: Node, targetNode: Node): boolean {
+      if (!targetNode.parentId) return false;
+      if (targetNode.parentId === node.id) return true;
+      const parentNode = this.nodeMap.get(targetNode.parentId);
+      if (!parentNode) return false;
+      return this.isDescendant(node, parentNode);
+    },
+
     deleteNodeRecursively(node: Node): void {
       if (node.type === "folder") {
         node.children.forEach((child) => {
@@ -368,7 +368,7 @@ export const useDesktopStore = defineStore({
      * Opens an app.
      * @param appId The ID of the app to open.
      */
-    async openApp(appId: string) {
+    async openApp(appId: string, toggleMinimize?: boolean) {
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
 
@@ -387,7 +387,12 @@ export const useDesktopStore = defineStore({
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
         return;
-      } else {
+      }
+
+      // Set the app as active
+      this.updateApp(appId, { isActive: true });
+
+      if (toggleMinimize) {
         this.toggleMinimizeApp(appId);
       }
     },

@@ -34,6 +34,8 @@ interface BaseNode {
   canEdit?: boolean;
   canDelete?: boolean;
   isRenaming?: boolean;
+  isTranslated?: boolean;
+  isNewlyCreated?: boolean;
 }
 
 export interface PermissionsNode {
@@ -45,12 +47,10 @@ export interface PermissionsNode {
 export interface FolderNode extends BaseNode {
   type: "folder";
   children: Node[];
-  isNewlyCreated?: boolean;
 }
 
 export interface FileNode extends BaseNode {
   type: "file";
-  isNewlyCreated?: boolean;
 }
 
 export interface AppNode extends BaseNode {

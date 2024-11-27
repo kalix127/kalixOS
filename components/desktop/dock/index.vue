@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { useSwipe, watchDebounced, useDebounceFn, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import {
+  useSwipe,
+  watchDebounced,
+  useDebounceFn,
+  breakpointsTailwind,
+  useBreakpoints,
+} from "@vueuse/core";
 const desktopStore = useDesktopStore();
 const { isDockVisible, isDockPinned, hasAppFullscreen } =
   storeToRefs(desktopStore);
@@ -16,14 +22,12 @@ watch(direction, (newVal) => {
   }
 });
 
-const setVisibility = useDebounceFn((value: boolean) => {
+const setVisibility = (value: boolean) => {
   if (hasAppFullscreen.value) {
     isDockPinned.value = false;
   }
-
-  if (isDockPinned.value) return;
-  isDockVisible.value = value;
-}, 100);
+  isDockVisible.value = true;
+};
 
 // Hide the dock when an app is fullscreen, but still show on hover
 watchDebounced(

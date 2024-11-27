@@ -1,4 +1,4 @@
-import type { FileNode, FolderNode, Node, PermissionsNode, Process } from "~/types";
+import type { FolderNode, Node, PermissionsNode, Process } from "~/types";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 
@@ -217,62 +217,6 @@ export const getNodeFullPath = (root: Node, node: Node): string => {
   }
 
   return `/${pathParts.slice(1).join("/")}`;
-};
-
-/* Permissions */
-
-/**
- * Determines if a node can be moved.
- * @param node The Node to check.
- * @returns True if movable, else false.
- */
-export const canMove = (node: Node): boolean => {
-  if (node.canMove === false) {
-    return false;
-  }
-
-  switch (node.type) {
-    case "app":
-      return false;
-    default:
-      return true;
-  }
-};
-
-/**
- * Determines if a node can be edited.
- * @param node The Node to check.
- * @returns True if editable, else false.
- */
-export const canEdit = (node: Node): boolean => {
-  if (node.canEdit === false) {
-    return false;
-  }
-
-  switch (node.type) {
-    case "app":
-      return false;
-    default:
-      return true;
-  }
-};
-
-/**
- * Determines if a node can be deleted.
- * @param node The Node to check.
- * @returns True if deletable, else false.
- */
-export const canDelete = (node: Node): boolean => {
-  if (node.canDelete === false) {
-    return false;
-  }
-
-  switch (node.type) {
-    case "app":
-      return false;
-    default:
-      return true;
-  }
 };
 
 /**

@@ -14,7 +14,7 @@ import type {
   FolderNode,
   ShortcutNode,
 } from "~/types";
-import { canMove, canEdit, canDelete, getNextPid } from "@/helpers";
+import { getNextPid } from "@/helpers";
 import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({

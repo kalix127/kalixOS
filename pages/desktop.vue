@@ -11,7 +11,7 @@ definePageMeta({
 const desktopStore = useDesktopStore();
 const { desktopItems, openApps, desktopRef, hasAppsLoading, nodeMap } =
   storeToRefs(desktopStore);
-const { init, moveItem, updateDesktopItems } = desktopStore;
+const { init, moveNode, updateDesktopItems } = desktopStore;
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
@@ -44,12 +44,12 @@ function handleDrop() {
   if (targetNode?.type === "shortcut") {
     const targetFolder = nodeMap.value.get(targetNode.targetId);
     if (targetFolder?.type === "folder") {
-      moveItem(draggedNodeId.value, targetFolder.id);
+      moveNode(draggedNodeId.value, targetFolder.id);
       return;
     }
   }
 
-  moveItem(draggedNodeId.value, targetNodeId.value);
+  moveNode(draggedNodeId.value, targetNodeId.value);
 }
 
 onMounted(async () => {

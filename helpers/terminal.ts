@@ -17,7 +17,7 @@ import { useWindowSize, useTimestamp } from "@vueuse/core";
 import { helpMessages } from "~/constants/helpMessages";
 import { defaultFilePermissions, defaultFolderPermissions } from "~/constants";
 
-const { editItem, createItem, moveItem, deleteItem } = useDesktopStore();
+const { editNode, createNode, moveNode, deleteNode } = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 // Command handlers
@@ -254,7 +254,7 @@ export function handleChown(
     return false;
   }
 
-  const success = editItem(targetNode.id, { owner: user, group });
+  const success = editNode(targetNode.id, { owner: user, group });
   if (!success) {
     term.write(
       `\r\nchown: cannot change owner of '${targetPath}': Permission denied`,
@@ -322,7 +322,7 @@ export function handleChmod(
       });
     });
 
-    const success = editItem(targetNode.id, { permissions });
+    const success = editNode(targetNode.id, { permissions });
     if (!success) {
       term.write(
         `\r\nchmod: cannot change permissions of '${targetPath}': Permission denied`,
@@ -351,7 +351,7 @@ export function handleChmod(
       },
     };
 
-    const success = editItem(targetNode.id, { permissions: newPermissions });
+    const success = editNode(targetNode.id, { permissions: newPermissions });
     if (!success) {
       term.write(
         `\r\nchmod: cannot change permissions of '${targetPath}': Permission denied`,
@@ -408,7 +408,7 @@ export function handleTouch(
   );
 
   if (!existingNode) {
-    const newNode = createItem(folderNode.id, {
+    const newNode = createNode(folderNode.id, {
       name: fileName,
       type: "file",
       icon: "file:file",
@@ -470,7 +470,7 @@ export function handleMkdir(
   );
 
   if (!existingNode) {
-    const newNode = createItem(folderNode.id, {
+    const newNode = createNode(folderNode.id, {
       name: dirName,
       type: "folder",
       icon: "folder:folder",
@@ -535,7 +535,7 @@ export function handleMv(
       return false;
     }
 
-    const success = moveItem(sourceNode.id, parentNode.id);
+    const success = moveNode(sourceNode.id, parentNode.id);
     if (!success) {
       term.write(
         `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': Permission denied`,
@@ -546,7 +546,7 @@ export function handleMv(
   }
 
   if (targetNode.type === "folder") {
-    const success = moveItem(sourceNode.id, targetNode.id);
+    const success = moveNode(sourceNode.id, targetNode.id);
     if (!success) {
       term.write(
         `\r\nmv: cannot move '${sourcePath}' to '${targetPath}': Permission denied`,
@@ -609,7 +609,7 @@ export function handleRm(
   }
 
   // Delete the item
-  const success = deleteItem(targetNode.id);
+  const success = deleteNode(targetNode.id);
   if (!success) {
     term.write(`\r\nrm: cannot remove '${targetPath}': Permission denied`);
     return false;

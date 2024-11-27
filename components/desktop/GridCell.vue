@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
-const { editItem } = desktopStore;
+const { editNode } = desktopStore;
 
 const formattedName = computed(() => {
   return props.item?.name.length > 21
@@ -28,7 +28,7 @@ const handleContextMenu = (event: MouseEvent) => {
 };
 
 const handleStopRenaming = () => {
-  editItem(props.item.id, { isRenaming: false, isNewlyCreated: false });
+  editNode(props.item.id, { isRenaming: false, isNewlyCreated: false });
 };
 </script>
 

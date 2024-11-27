@@ -209,57 +209,55 @@ export const useDesktopStore = defineStore({
       }, 1000);
     },
 
-    moveItem(itemId: string, targetFolderId: string): boolean {
-      const item = this.nodeMap.get(itemId);
+    moveNode(nodeId: string, targetFolderId: string): boolean {
+      const node = this.nodeMap.get(nodeId);
       const targetFolder = this.nodeMap.get(targetFolderId);
 
-      if (!item || !targetFolder || targetFolder.type !== "folder")
+      if (!node || !targetFolder || targetFolder.type !== "folder")
         return false;
 
-      if (item.isProtected) return false;
+      if (node.isProtected) return false;
 
-      if (itemId === targetFolderId) return false;
+      if (nodeId === targetFolderId) return false;
 
-      if (item.type === "folder" && this.isDescendant(item, targetFolder)) {
+      if (node.type === "folder" && this.isDescendant(node, targetFolder)) {
         return false;
       }
 
-      const currentParentId = item.parentId;
+      const currentParentId = node.parentId;
       if (!currentParentId) return false;
       const currentParent = this.nodeMap.get(currentParentId);
       if (!currentParent || currentParent.type !== "folder") return false;
 
       currentParent.children = currentParent.children.filter(
-        (child) => child.id !== itemId,
+        (child) => child.id !== nodeId,
       );
 
       targetFolder.children = targetFolder.children || [];
-      targetFolder.children.push(item);
+      targetFolder.children.push(node);
 
-      item.parentId = targetFolder.id;
+      node.parentId = targetFolder.id;
 
       return true;
     },
 
-    createItem(
+    createNode(
       parentId: string,
-      newItem: Partial<Omit<Node, "id" | "parentId" | "children">>,
+      newNode: Partial<Omit<Node, "id" | "parentId" | "children">>,
     ): Node | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
 
-      if (parent.isProtected) return null;
-
       const username =
         storeToRefs(useGlobalStore()).username.value.toLowerCase();
 
-      if (!newItem.type) return null;
+      if (!newNode.type) return null;
 
-      if (newItem.type === "shortcut") {
-        if (!(newItem as ShortcutNode).targetId) {
+      if (newNode.type === "shortcut") {
+        if (!(newNode as ShortcutNode).targetId) {
           return null;
         }
-        const targetNode = this.nodeMap.get((newItem as ShortcutNode).targetId);
+        const targetNode = this.nodeMap.get((newNode as ShortcutNode).targetId);
         if (!targetNode) {
           return null;
         }
@@ -268,69 +266,69 @@ export const useDesktopStore = defineStore({
         }
       }
 
-      const newNode: Node = assignDefaultProperties(
+      const createdNode: Node = assignDefaultProperties(
         {
-          ...newItem,
+          ...newNode,
         } as Node,
         username,
         parent.id,
       );
 
-      parent.children.push(newNode);
-      this.nodeMap.set(newNode.id, newNode);
+      parent.children.push(createdNode);
+      this.nodeMap.set(createdNode.id, createdNode);
 
-      return newNode;
+      return createdNode;
     },
 
-    editItem(
-      itemId: string,
+    editNode(
+      nodeId: string,
       updatedData: Partial<Omit<Node, "id" | "parentId" | "children">>,
     ): boolean {
-      const item = this.nodeMap.get(itemId);
-      if (!item) return false;
+      const node = this.nodeMap.get(nodeId);
+      if (!node) return false;
 
-      if (item.isProtected) return false;
+      if (node.isProtected) return false;
 
-      if (updatedData.type && updatedData.type !== item.type) {
+      if (updatedData.type && updatedData.type !== node.type) {
         return false;
       }
 
-      if (item.type === "shortcut" && (updatedData as ShortcutNode).targetId) {
+      if (node.type === "shortcut" && (updatedData as ShortcutNode).targetId) {
         const targetNode = this.nodeMap.get(
           (updatedData as ShortcutNode).targetId,
         );
         if (!targetNode || targetNode.type === "shortcut") {
           return false;
         }
-        (item as ShortcutNode).targetId = (
+        (node as ShortcutNode).targetId = (
           updatedData as ShortcutNode
         ).targetId;
       }
 
-      Object.assign(item, updatedData);
+      Object.assign(node, updatedData);
 
       return true;
     },
 
-    deleteItem(itemId: string): boolean {
-      const item = this.nodeMap.get(itemId);
-      if (!item) return false;
+    deleteNode(nodeId: string): boolean {
+      const node = this.nodeMap.get(nodeId);
+      if (!node) return false;
 
-      if (item.isProtected) return false;
+      if (node.isProtected) return false;
 
-      const parentId = item.parentId;
+      const parentId = node.parentId;
       if (!parentId) return false;
 
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return false;
 
-      const index = parent.children.findIndex((child) => child.id === itemId);
+      const index = parent.children.findIndex((child) => child.id === nodeId);
       if (index === -1) return false;
 
       parent.children.splice(index, 1);
 
-      this.deleteNodeRecursively(item);
-      this.removeShortcutsTo(itemId);
+      this.deleteNodeRecursively(node);
+      this.removeShortcutsTo(nodeId);
 
       return true;
     },
@@ -362,7 +360,7 @@ export const useDesktopStore = defineStore({
       }
 
       for (const shortcutId of shortcutsToRemove) {
-        this.deleteItem(shortcutId);
+        this.deleteNode(shortcutId);
       }
     },
 

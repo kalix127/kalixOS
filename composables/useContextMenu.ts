@@ -23,7 +23,7 @@ export function useContextMenu() {
 
   const { desktopNode, isDockPinned, isDockVisible } =
     storeToRefs(desktopStore);
-  const { createItem, editItem, moveItem, addToBookmarks, openApp, closeApp } =
+  const { createNode, editNode, moveNode, addToBookmarks, openApp, closeApp } =
     desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
@@ -214,7 +214,7 @@ export function useContextMenu() {
 
   const createNewFolder = () => {
     if (desktopNode.value) {
-      createItem(desktopNode.value.id, {
+      createNode(desktopNode.value.id, {
         name: t("new_folder"),
         type: "folder",
         icon: "folder:folder",
@@ -227,7 +227,7 @@ export function useContextMenu() {
 
   const createNewDocument = () => {
     if (desktopNode.value) {
-      createItem(desktopNode.value.id, {
+      createNode(desktopNode.value.id, {
         name: t("new_document"),
         type: "file",
         icon: "file:file",
@@ -300,14 +300,14 @@ export function useContextMenu() {
   const renameNode = (node: Node | null) => {
     if (!node) return;
 
-    editItem(node.id, { isRenaming: true });
+    editNode(node.id, { isRenaming: true });
     closeContextMenu();
   };
 
   const moveToTrash = (node: Node | null) => {
     if (!node) return;
 
-    moveItem(node.id, "trash");
+    moveNode(node.id, "trash");
     closeContextMenu();
   };
 

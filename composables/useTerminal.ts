@@ -3,6 +3,7 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 import {
   handleCd,
   handleLs,
+  handleLn,
   handleChown,
   handleChmod,
   handleNeofetch,
@@ -67,14 +68,22 @@ export function useTerminal(terminalElement: HTMLElement) {
 
   // Default new line in the format -> <user>@<user>: <current-directory> $
   const newLine = computed(() => {
-    const usernameAnsi = `\x1b[1;32m${username}@${username}\x1b[1;37m`;
+    let textLine = `\x1b[1;32m${username}@${username}\x1b[1;37m`;
+    textLine += ":";
 
     // If the current directory is the home directory, show '~/' instead of the full path
     if (currentDirectory.value === `/home/${username}`) {
-      return `${usernameAnsi}:\x1b[1;34m ~ \x1b[1;37m$ `;
+      textLine += `\x1b[1;34m ~ \x1b[1;37m$ `;
+    } else if (currentDirectory.value.startsWith(`/home/${username}/`)) {
+      const relativePath = currentDirectory.value.substring(
+        `/home/${username}/`.length,
+      );
+      textLine += ` \x1b[1;34m~/${relativePath}\x1b[1;37m $ `;
+    } else {
+      textLine += ` \x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
     }
 
-    return `${usernameAnsi}:\x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
+    return textLine;
   });
 
   // Show neofetch on startup
@@ -281,7 +290,10 @@ export function useTerminal(terminalElement: HTMLElement) {
       return shouldAddToHistory;
     }
 
-    if (parsedArgs.flags.includes("-h") && exec !== "df" && exec !== "free" || parsedArgs.flags.includes("--help")) {
+    if (
+      (parsedArgs.flags.includes("-h") && exec !== "df" && exec !== "free") ||
+      parsedArgs.flags.includes("--help")
+    ) {
       term.write(`\r\n${helpMessages[exec]}`);
       shouldAddToHistory = true;
       return shouldAddToHistory;
@@ -299,6 +311,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "ls":
         shouldAddToHistory = handleLs(
+          term,
+          parsedArgs,
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "ln":
+        shouldAddToHistory = handleLn(
           term,
           parsedArgs,
           fileSystem,

@@ -5,6 +5,7 @@ import {
   watchThrottled,
   breakpointsTailwind,
   useBreakpoints,
+  watchDebounced,
 } from "@vueuse/core";
 
 const props = defineProps<{
@@ -22,7 +23,7 @@ onMounted(() => {
   const { term } = useTerminal(terminalElement.value);
 
   // Necessary to make it responsive
-  watchThrottled(
+  watchDebounced(
     app,
     () => {
       // 40px is the height of the app's topbar
@@ -31,7 +32,7 @@ onMounted(() => {
       const cols = Math.floor(app.value.width / 8) + 3;
       term.resize(cols, rows);
     },
-    { throttle: 20, deep: true, immediate: true },
+    { debounce: 100, deep: true, immediate: true },
   );
 });
 </script>

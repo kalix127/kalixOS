@@ -200,6 +200,12 @@ export const defaultShortcutPermissions = {
   others: { read: true, write: true, execute: true },
 };
 
+export const defaultAppPermissions = {
+  owner: { read: true, write: true, execute: true },
+  group: { read: true, write: true, execute: true },
+  others: { read: true, write: true, execute: true },
+};
+
 export const defaultApps: AppNode[] = [
   {
     id: "settings",
@@ -410,6 +416,13 @@ export const defaultFileSystem = (username: string): Node =>
               children: [],
             },
             {
+              id: "ln",
+              name: "ln",
+              type: "file",
+              icon: "file:bash",
+              children: [],
+            },
+            {
               id: "pwd",
               name: "pwd",
               type: "file",
@@ -591,6 +604,17 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
       "--help": "-h",
     },
     positionalArgs: [{ name: "path", required: false }],
+  },
+  ln: {
+    acceptsFlags: ["-s", "-h"],
+    flagAliases: {
+      "--symbolic": "-s",
+      "--help": "-h",
+    },
+    positionalArgs: [
+      { name: "target", required: true },
+      { name: "link", required: true }
+    ],
   },
   pwd: {
     acceptsFlags: ["-h"],

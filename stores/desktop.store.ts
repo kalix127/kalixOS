@@ -277,19 +277,10 @@ export const useDesktopStore = defineStore({
         newNode.name = newName;
       }
 
-      // Determine icon based on type and extension
-      let icon = "";
-      if (newNode.type === "file" && newNode.name) {
-        const extension = newNode.name.split(".").pop() || "";
-        icon = getNodeIcon(extension);
-      } else {
-        icon = "folder:folder";
-      }
-
       const createdNode: Node = assignDefaultProperties(
         {
           ...newNode,
-          icon,
+          icon: getNodeIcon(newNode.type, newNode.name || ""),
         } as Node,
         username,
         parent.id,
@@ -299,6 +290,46 @@ export const useDesktopStore = defineStore({
       this.nodeMap.set(createdNode.id, createdNode);
 
       return createdNode;
+    },
+
+    createNodeShortcut(
+      targetNode: Node,
+      linkParentNode: FolderNode,
+      linkName: string,
+    ): [boolean, string] {
+      const username =
+        storeToRefs(useGlobalStore()).username.value.toLowerCase();
+
+      // Check if a node with the same name already exists in the parent
+      const existingNode = linkParentNode.children.find(
+        (child) => child.name === linkName,
+      );
+      if (existingNode) {
+        return [false, `cannot create link '${linkName}': File exists`];
+      }
+
+      // Check if target node is already a shortcut
+      if (targetNode.type === "shortcut") {
+        return [false, "cannot create link to a shortcut"];
+      }
+
+      // Create the shortcut node
+      const shortcutNode = assignDefaultProperties(
+        {
+          name: linkName,
+          type: "shortcut",
+          targetId: targetNode.id,
+          parentId: linkParentNode.id,
+        } as ShortcutNode,
+        username,
+        linkParentNode.id,
+      );
+
+      // Add to parent's children and nodeMap
+      linkParentNode.children.push(shortcutNode);
+      this.nodeMap.set(shortcutNode.id, shortcutNode);
+
+      return [true, ""];
     },
 
     editNode(
@@ -329,7 +360,7 @@ export const useDesktopStore = defineStore({
       // Update icon for files based on extension
       if (node.type === "file" && node.name) {
         const extension = node.name.split(".").pop() || "";
-        updatedData.icon = getNodeIcon(extension);
+        updatedData.icon = getNodeIcon(node.type, extension);
       }
 
       Object.assign(node, updatedData);
@@ -566,7 +597,7 @@ export const useDesktopStore = defineStore({
 
 interface DesktopStore {
   // Filesystem
-  fileSystem: FolderNode;
+  fileSystem: Node;
   nodeMap: Map<string, Node>;
   bookmarks: string[]; // Array of ids
   uptime: number;

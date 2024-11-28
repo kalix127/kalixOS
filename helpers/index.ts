@@ -1,5 +1,10 @@
 import type { FolderNode, Node, PermissionsNode, Process } from "~/types";
-import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
+import {
+  defaultFilePermissions,
+  defaultFolderPermissions,
+  defaultShortcutPermissions,
+  defaultAppPermissions,
+} from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 
 export const assignDefaultProperties = (
@@ -47,11 +52,11 @@ export function defaultPermissionsForType(type: string): PermissionsNode {
   switch (type) {
     case "folder":
       return defaultFolderPermissions;
-    case "file":
     case "shortcut":
-      return defaultFilePermissions;
+      return defaultShortcutPermissions;
     case "app":
-      return defaultFilePermissions; // Adjust as needed
+      return defaultAppPermissions;
+    case "file":
     default:
       return defaultFilePermissions;
   }
@@ -229,68 +234,78 @@ export const splitPath = (path: string): string[] => {
 };
 
 /**
- * Gets the appropriate icon for a file based on its extension.
- * @param extension The file extension (without the dot).
+ * Gets the appropriate icon for a node based on its type and name.
+ * @param type The node type (e.g. 'file', 'folder', etc).
+ * @param name The node name.
  * @returns A string representing the icon name.
  */
-export const getNodeIcon = (extension: string): string => {
-  switch (extension.toLowerCase()) {
-    case "css":
-      return "file:css";
-    case "js":
-      return "file:javascript";
-    case "html":
-      return "file:html";
-    case "json":
-      return "file:json";
-    case "md":
-      return "file:markdown";
-    case "txt":
-      return "file:text";
-    case "py":
-      return "file:python";
-    case "java":
-      return "file:java";
-    case "vue":
-      return "file:vue";
-    case "deb":
-      return "file:deb";
-    case "sh":
-      return "file:bash";
-    case "pdf":
-      return "file:pdf";
-    case "doc":
-    case "docx":
-      return "file:docx";
-    case "xlsx":
-      return "file:xlsx";
-    case "mp3":
-    case "wav":
-      return "file:audio";
-    case "mp4":
-    case "mov":
-      return "file:video";
-    case "png":
-    case "jpg":
-    case "jpeg":
-    case "bmp":
-      return "file:image";
-    case "zip":
-    case "rar":
-    case "tar":
-    case "7z":
-      return "file:archive";
-    case "pem":
-    case "crt":
-    case "key":
-      return "file:certificate";
-    case "enc":
-      return "file:encrypt";
-    case "bin":
-      return "file:bin";
-    default:
-      return "file:file";
+export const getNodeIcon = (type: string, name: string): string => {
+  if (type === "folder") {
+    return "folder:folder";
   }
+
+  if (type === "file") {
+    const extension = name.split(".").pop()?.toLowerCase() || "";
+    switch (extension) {
+      case "css":
+        return "file:css";
+      case "js":
+        return "file:javascript";
+      case "html":
+        return "file:html";
+      case "json":
+        return "file:json";
+      case "md":
+        return "file:markdown";
+      case "txt":
+        return "file:text";
+      case "py":
+        return "file:python";
+      case "java":
+        return "file:java";
+      case "vue":
+        return "file:vue";
+      case "deb":
+        return "file:deb";
+      case "sh":
+        return "file:bash";
+      case "pdf":
+        return "file:pdf";
+      case "doc":
+      case "docx":
+        return "file:docx";
+      case "xlsx":
+        return "file:xlsx";
+      case "mp3":
+      case "wav":
+        return "file:audio";
+      case "mp4":
+      case "mov":
+        return "file:video";
+      case "png":
+      case "jpg":
+      case "jpeg":
+      case "bmp":
+        return "file:image";
+      case "zip":
+      case "rar":
+      case "tar":
+      case "7z":
+        return "file:archive";
+      case "pem":
+      case "crt":
+      case "key":
+        return "file:certificate";
+      case "enc":
+        return "file:encrypt";
+      case "bin":
+        return "file:bin";
+      default:
+        return "file:file";
+    }
+  }
+
+  return "file:file";
 };
 
 export const getNextPid = (processes: Process[]): number => {

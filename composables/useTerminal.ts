@@ -3,6 +3,7 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 import {
   handleCd,
   handleLs,
+  handleLn,
   handleChown,
   handleChmod,
   handleNeofetch,
@@ -310,6 +311,15 @@ export function useTerminal(terminalElement: HTMLElement) {
 
       case "ls":
         shouldAddToHistory = handleLs(
+          term,
+          parsedArgs,
+          fileSystem,
+          currentDirectoryNode.value!,
+        );
+        break;
+
+      case "ln":
+        shouldAddToHistory = handleLn(
           term,
           parsedArgs,
           fileSystem,

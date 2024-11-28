@@ -1,5 +1,10 @@
 import type { FolderNode, Node, PermissionsNode, Process } from "~/types";
-import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
+import {
+  defaultFilePermissions,
+  defaultFolderPermissions,
+  defaultShortcutPermissions,
+  defaultAppPermissions,
+} from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 
 export const assignDefaultProperties = (
@@ -47,11 +52,11 @@ export function defaultPermissionsForType(type: string): PermissionsNode {
   switch (type) {
     case "folder":
       return defaultFolderPermissions;
-    case "file":
     case "shortcut":
-      return defaultFilePermissions;
+      return defaultShortcutPermissions;
     case "app":
-      return defaultFilePermissions; // Adjust as needed
+      return defaultAppPermissions;
+    case "file":
     default:
       return defaultFilePermissions;
   }
@@ -245,7 +250,7 @@ export const getNodeIcon = (type: string, name: string): string => {
       case "css":
         return "file:css";
       case "js":
-        return "file:javascript"; 
+        return "file:javascript";
       case "html":
         return "file:html";
       case "json":

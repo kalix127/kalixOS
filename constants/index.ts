@@ -200,6 +200,12 @@ export const defaultShortcutPermissions = {
   others: { read: true, write: true, execute: true },
 };
 
+export const defaultAppPermissions = {
+  owner: { read: true, write: true, execute: true },
+  group: { read: true, write: true, execute: true },
+  others: { read: true, write: true, execute: true },
+};
+
 export const defaultApps: AppNode[] = [
   {
     id: "settings",

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { type AppNode } from "@/types";
 
-const showLaunchIcon = ref(false);
-
 const { hasAppsLoading } = storeToRefs(useDesktopStore());
 
 const emit = defineEmits<{
@@ -19,11 +17,6 @@ function handleClick() {
   emit("openApp", app.value);
 
   if (app.value.isOpen) return;
-
-  showLaunchIcon.value = true;
-  setTimeout(() => {
-    showLaunchIcon.value = false;
-  }, 250);
 }
 </script>
 
@@ -38,14 +31,6 @@ function handleClick() {
       :class="[hasAppsLoading ? 'cursor-progress' : '']"
     >
       <Icon :name="app.icon" class="size-9 sm:size-10" />
-      <Transition name="launch" mode="in-out">
-        <Icon
-          v-show="showLaunchIcon"
-          :name="app.icon"
-          class="size-9 sm:size-10 absolute -translate-y-1/2 -translate-x-1/2 prevent-flicker"
-        />
-      </Transition>
-
       <div
         v-if="app.isOpen"
         class="absolute bottom-0.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-white"

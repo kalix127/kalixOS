@@ -2,16 +2,24 @@
 const globalStore = useGlobalStore();
 const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
 
-const { backgroundImage } = storeToRefs(useDesktopStore());
+const { backgroundImage, isShowAppsOverlayVisible } =
+  storeToRefs(useDesktopStore());
 </script>
 
 <template>
   <div class="wrapper-desktop relative">
+    <!-- Overlays -->
     <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
 
     <Transition name="lock">
       <OverlayLock v-if="isLocked" />
     </Transition>
+
+    <Transition>
+      <OverlayAppsList v-if="isShowAppsOverlayVisible" />
+    </Transition>
+
+    <!-- Desktop -->
     <div class="relative max-h-[100svh] max-w-[100svw]">
       <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->

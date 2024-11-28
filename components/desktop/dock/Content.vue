@@ -10,7 +10,8 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading } = storeToRefs(desktopStore);
+const { apps, hasAppsLoading, isShowAppsOverlayVisible } =
+  storeToRefs(desktopStore);
 const { updateDockApps } = desktopStore;
 
 const { openContextMenu } = useContextMenuStore();
@@ -25,10 +26,21 @@ const draggableDockItems = computed({
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
-const { handleOpenApp } = useContextMenu();
+const { handleOpenApp: openApp } = useContextMenu();
 
 const handleContextMenu = (event: MouseEvent, app: AppNode) => {
+  if (app.id === "show-apps") return;
   openContextMenu(event.clientX, event.clientY, "dock", app);
+};
+
+const handleOpenApp = (app: AppNode) => {
+  // Toggle the apps list overlay
+  if (app.id === "show-apps") {
+    isShowAppsOverlayVisible.value = !isShowAppsOverlayVisible.value;
+    return;
+  }
+
+  openApp(app);
 };
 
 onBeforeMount(async () => {

@@ -1,11 +1,21 @@
 <script lang="ts" setup>
 import type { AppNode } from "@/types";
+import { useMagicKeys } from "@vueuse/core";
 
 const { apps, isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
 const { handleOpenApp: openApp } = useContextMenu();
 
 const query = ref("");
 const appIdsToRemove = ["linkedin", "github", "show-apps"];
+
+const { escape } = useMagicKeys();
+
+// Close the overlay on 'ESC' key
+watch(escape, (v) => {
+  if (v) {
+    closeOverlay();
+  }
+});
 
 const filteredApps = computed(() => {
   return apps.value.filter(

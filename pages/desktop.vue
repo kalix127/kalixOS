@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
-import type { FileSystemNode } from "@/types";
+import type { Node } from "@/types";
 import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 definePageMeta({
@@ -9,9 +9,9 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, hasAppsLoading } =
+const { desktopItems, openApps, desktopRef, hasAppsLoading, nodeMap } =
   storeToRefs(desktopStore);
-const { init, moveItem, updateDesktopItems } = desktopStore;
+const { init, moveNode, updateDesktopItems } = desktopStore;
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
@@ -21,7 +21,7 @@ const { openContextMenu } = contextMenuStore;
 const desktopGridRef = ref<HTMLElement | null>(null);
 const draggableItems = computed({
   get: () => desktopItems.value,
-  set: (newItems: FileSystemNode[]) => {
+  set: (newItems: Node[]) => {
     updateDesktopItems(newItems);
   },
 });
@@ -39,7 +39,17 @@ function handleDrop() {
     return;
   }
 
-  moveItem(draggedNodeId.value, targetNodeId.value);
+  // If target is a shortcut, check if it points to a folder and move item there
+  const targetNode = nodeMap.value.get(targetNodeId.value);
+  if (targetNode?.type === "shortcut") {
+    const targetFolder = nodeMap.value.get(targetNode.targetId);
+    if (targetFolder?.type === "folder") {
+      moveNode(draggedNodeId.value, targetFolder.id);
+      return;
+    }
+  }
+
+  moveNode(draggedNodeId.value, targetNodeId.value);
 }
 
 onMounted(async () => {

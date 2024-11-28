@@ -117,14 +117,14 @@ Display the amount of free and used memory in the system.
 
 Options:
   -h, --human          human-readable output.
-  -h, --help           display this help and exit.`,
+      --help           display this help and exit.`,
 
   df: `Usage: df [OPTIONS]...
 Show disk space usage.
 
 Options:
   -h, --human          human-readable output.
-  -h, --help           display this help and exit.`,
+      --help           display this help and exit.`,
 
   whoami: `Usage: whoami
 Print the current user name.

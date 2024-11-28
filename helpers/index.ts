@@ -1,78 +1,100 @@
-import type { FileSystemNode, Process } from "~/types";
+import type { FolderNode, Node, PermissionsNode, Process } from "~/types";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
-/**
- * Recursively assigns default properties to each node in the file system.
- * @param node The root FileSystemNode.
- * @returns A new FileSystemNode with default properties assigned to itself and all descendants.
- */
-export const assignDefaultProperties = (
-  node: FileSystemNode,
-  username: string,
-): FileSystemNode => {
-  const createdAt = Intl.DateTimeFormat("it-IT", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: false,
-  }).format(new Date());
 
-  // Create new node with default properties
-  const newNode: FileSystemNode = {
+export const assignDefaultProperties = (
+  node: Node,
+  username: string,
+  parentId: string | null = null,
+): Node => {
+  const createdAt = new Date();
+
+  const newNode: Node = {
     ...node,
     id: node.id || uuidv4(),
-    permissions:
-      node.permissions || node.type === "folder"
-        ? defaultFolderPermissions
-        : defaultFilePermissions,
-    owner: node.owner || username,
-    group: node.group || username,
+    permissions: node.permissions || defaultPermissionsForType(node.type),
+    owner: node.owner || username.toLowerCase(),
+    group: node.group || username.toLowerCase(),
     createdAt: node.createdAt || createdAt,
-    content: node.content || "",
+    parentId: parentId,
   };
 
-  // Recursively process children
-  if (newNode.children && newNode.children.length > 0) {
+  // Assign children for folders
+  if (newNode.type === "folder") {
+    (newNode as FolderNode).children = (node as FolderNode).children || [];
+  }
+
+  // Assign content for files
+  if (newNode.type === "file") {
+    newNode.content = node.content || "";
+  }
+
+  // Recursively assign default properties for every children
+  if (
+    newNode.type === "folder" &&
+    newNode.children &&
+    newNode.children.length > 0
+  ) {
     newNode.children = newNode.children.map((child) =>
-      assignDefaultProperties(child, username),
+      assignDefaultProperties(child, username.toLowerCase(), newNode.id),
     );
   }
 
   return newNode;
 };
 
+export function defaultPermissionsForType(type: string): PermissionsNode {
+  switch (type) {
+    case "folder":
+      return defaultFolderPermissions;
+    case "file":
+    case "shortcut":
+      return defaultFilePermissions;
+    case "app":
+      return defaultFilePermissions; // Adjust as needed
+    default:
+      return defaultFilePermissions;
+  }
+}
+
+/* Paths */
+
 /**
  * Resolves a given path starting from a specified directory node.
- * @param fileSystem The root FileSystemNode.
+ * @param fileSystem The root Node.
  * @param currentDirectoryNode The node from which to start resolving the path.
  * @param path The path to resolve (absolute or relative).
- * @returns The FileSystemNode corresponding to the path, or null if not found.
+ * @returns The Node corresponding to the path, or null if not found.
  */
 export function resolvePath(
-  fileSystem: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
   path: string,
-): FileSystemNode | null {
+): Node | null {
   if (!path) return null;
 
-  // Determine if the path is absolute
   const isAbsolute = path.startsWith("/");
 
-  // Split the path into parts, ignoring empty segments
   const parts = path.split("/").filter((part) => part.length > 0);
 
-  // Start from root if absolute, else from current directory
-  let node: FileSystemNode = isAbsolute ? fileSystem : currentDirectoryNode;
+  let node: Node = isAbsolute ? fileSystem : currentDirectoryNode;
 
   for (const part of parts) {
     if (part === ".") {
       continue; // Current directory, no change
     } else if (part === "..") {
-      // Parent directory handling requires parent references
-      // Since our FileSystemNode does not have a parent reference, we cannot traverse up
-      // Thus, return null or handle accordingly
-      return null; // Unable to navigate to parent
+      if (node.parentId) {
+        const parentNode = findNodeByIdRecursive(fileSystem, node.parentId);
+        if (parentNode) {
+          node = parentNode;
+        } else {
+          // Parent node not found
+          return null;
+        }
+      } else {
+        // Already at root
+        return null;
+      }
     } else {
       if (node.type !== "folder" || !node.children) {
         return null; // Cannot traverse further
@@ -92,45 +114,54 @@ export function resolvePath(
 
 /**
  * Checks if a given path is valid in the file system.
- * @param root The root FileSystemNode of the file system.
- * @param currentDirectoryNode The current directory FileSystemNode.
+ * @param nodeMap The Map of node IDs to Nodes.
+ * @param root The root Node of the file system.
+ * @param currentDirectoryNode The current directory Node.
  * @param path The path to validate.
  * @returns True if the path is valid, false otherwise.
  */
 export const isPathValid = (
-  root: FileSystemNode,
-  currentDirectoryNode: FileSystemNode,
+  root: Node,
+  currentDirectoryNode: Node,
   path: string,
 ): boolean => {
   return !!resolvePath(root, currentDirectoryNode, path);
 };
 
 /**
- * Splits a UNIX-like path into its components.
- * @param path The path string (e.g., "/home/user/Desktop").
- * @returns An array of path segments.
+ * Recursively finds a node by its ID starting from a node.
+ * @param node The current Node.
+ * @param id The ID to search for.
+ * @returns The Node if found, otherwise null.
  */
-export const splitPath = (path: string): string[] => {
-  return path.split("/").filter((segment) => segment.length > 0);
+export const findNodeByIdRecursive = (node: Node, id: string): Node | null => {
+  if (node.id === id) return node;
+  if (node.type === "folder" && node.children) {
+    for (const child of node.children) {
+      const result = findNodeByIdRecursive(child, id);
+      if (result) return result;
+    }
+  }
+  return null;
 };
 
 /**
- * Recursively finds a node based on the provided path segments.
- * @param node The current FileSystemNode.
+ * Finds a node based on the provided path segments.
+ * @param node The current Node.
  * @param pathSegments The remaining segments of the path.
- * @returns The FileSystemNode if found, otherwise null.
+ * @returns The Node if found, otherwise null.
  */
 export const findNodeByPath = (
-  node: FileSystemNode,
+  node: Node,
   pathSegments: string[],
-): FileSystemNode | null => {
+): Node | null => {
   if (pathSegments.length === 0) {
     return node;
   }
 
   const [currentSegment, ...remainingSegments] = pathSegments;
 
-  if (!node.children || node.type !== "folder") {
+  if (node.type !== "folder" || !node.children) {
     return null;
   }
 
@@ -144,14 +175,14 @@ export const findNodeByPath = (
 
 /**
  * Finds a node by its absolute path.
- * @param root The root FileSystemNode.
+ * @param root The root Node.
  * @param path The absolute path string (e.g., "/home/user/Desktop").
- * @returns The FileSystemNode if found, otherwise null.
+ * @returns The Node if found, otherwise null.
  */
 export const findNodeByAbsolutePath = (
-  root: FileSystemNode,
+  root: Node,
   path: string,
-): FileSystemNode | null => {
+): Node | null => {
   if (path === "/") {
     return root;
   }
@@ -161,104 +192,40 @@ export const findNodeByAbsolutePath = (
 };
 
 /**
- * Recursively finds a node by its ID.
- * @param node The current FileSystemNode.
- * @param id The ID to search for.
- * @returns The FileSystemNode if found, otherwise null.
- */
-export const findNodeByIdRecursive = (
-  node: FileSystemNode,
-  id: string,
-): FileSystemNode | null => {
-  if (node.id === id) return node;
-  if (node.type === "folder" && node.children) {
-    for (const child of node.children) {
-      const result = findNodeByIdRecursive(child, id);
-      if (result) return result;
-    }
-  }
-  return null;
-};
-
-/**
- * Finds the parent of a node by the child's ID.
- * @param node The current FileSystemNode.
- * @param childId The ID of the child node.
- * @returns The parent FileSystemNode if found, otherwise null.
- */
-export const findParentById = (
-  node: FileSystemNode,
-  childId: string,
-): FileSystemNode | null => {
-  if (node.type !== "folder" || !node.children) return null;
-
-  for (const child of node.children) {
-    if (child.id === childId) {
-      return node;
-    }
-    if (child.type === "folder") {
-      const result = findParentById(child, childId);
-      if (result) return result;
-    }
-  }
-  return null;
-};
-
-/**
  * Gets the full path of a node by traversing up to the root.
- * @param root Optional root node to traverse up to. If not provided, traverses to filesystem root.
- * @param node The FileSystemNode to get the path for.
+ * @param nodeMap The Map of node IDs to Nodes.
+ * @param root The root Node to traverse up to.
+ * @param node The Node to get the path for.
  * @returns The full path as a string, starting with '/'.
  */
-export const getNodeFullPath = (
-  root: FileSystemNode,
-  node: FileSystemNode,
-): string => {
+export const getNodeFullPath = (root: Node, node: Node): string => {
   const pathParts: string[] = [];
-  let current = node;
+  let current: Node | null = node;
 
   while (current) {
-    // Stop if we've reached the provided root node
-    if (current.id === root.id) {
-      pathParts.unshift(current.name); // Include the root name
+    if (current === root) {
+      pathParts.unshift(current.name);
       break;
     }
 
-    pathParts.unshift(current.name); // Add the current node's name to the path
-    const parent = findParentById(root, current.id); // Pass the root to search within the entire structure
-    current = parent!;
+    pathParts.unshift(current.name);
+    if (current.parentId) {
+      current = findNodeByIdRecursive(root, current.parentId);
+    } else {
+      current = null;
+    }
   }
 
-  const path = `/${pathParts.slice(1).join("/")}`;
-
-  return path;
+  return `/${pathParts.slice(1).join("/")}`;
 };
 
 /**
- * Determines if a node can be moved.
- * @param node The FileSystemNode to check.
- * @returns True if movable, else false.
+ * Splits a UNIX-like path into its components.
+ * @param path The path string (e.g., "/home/user/Desktop").
+ * @returns An array of path segments.
  */
-export const canMove = (node: FileSystemNode): boolean => {
-  return node.canMove !== false;
-};
-
-/**
- * Determines if a node can be edited.
- * @param node The FileSystemNode to check.
- * @returns True if editable, else false.
- */
-export const canEdit = (node: FileSystemNode): boolean => {
-  return node.canEdit !== false;
-};
-
-/**
- * Determines if a node can be deleted.
- * @param node The FileSystemNode to check.
- * @returns True if deletable, else false.
- */
-export const canDelete = (node: FileSystemNode): boolean => {
-  return node.canDelete !== false;
+export const splitPath = (path: string): string[] => {
+  return path.split("/").filter((segment) => segment.length > 0);
 };
 
 /**

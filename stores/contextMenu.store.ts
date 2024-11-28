@@ -1,14 +1,13 @@
-import type { FileSystemNode, AppNode } from "@/types";
+import type { Node, ContextMenuTargetType } from "@/types";
+import { defineStore } from "pinia";
 import { useWindowSize } from "@vueuse/core";
-
-export type TargetType = "desktop" | "file" | "folder" | "app" | "dock" | null;
 
 export interface ContextMenuState {
   isOpen: boolean;
   x: number;
   y: number;
-  targetType: TargetType;
-  targetNode: FileSystemNode | AppNode | null;
+  targetType: ContextMenuTargetType | null;
+  targetNode: Node | null;
 }
 
 export const useContextMenuStore = defineStore("contextMenu", {
@@ -20,18 +19,11 @@ export const useContextMenuStore = defineStore("contextMenu", {
     targetNode: null,
   }),
   actions: {
-    /**
-     * Opens the context menu at the specified position with the given target.
-     * @param x The x-coordinate for the context menu.
-     * @param y The y-coordinate for the context menu.
-     * @param targetType The type of the target ('desktop', 'file' ...).
-     * @param targetNode The Node that was right-clicked, if any.
-     */
     openContextMenu(
       x: number,
       y: number,
-      targetType: TargetType,
-      targetNode: FileSystemNode | AppNode | null = null,
+      targetType: ContextMenuTargetType,
+      targetNode: Node | null = null,
     ) {
       const { width, height } = useWindowSize();
       const isOutside = x + 288 > width.value;
@@ -44,10 +36,8 @@ export const useContextMenuStore = defineStore("contextMenu", {
         difference = width.value - (x + 288);
         updatedX += difference;
       }
-
-      // Adjust the y position for the dock apps
+      
       if (targetType === "dock") {
-        // If the app is open, the context menu is 235px, else 182px (hardcoded)
         const contextMenuHeight = targetNode?.type === "social" ? 76 : 129;
         const currentBottomOffset = height.value - y;
 
@@ -62,9 +52,6 @@ export const useContextMenuStore = defineStore("contextMenu", {
       this.targetType = targetType;
       this.targetNode = targetNode;
     },
-    /**
-     * Closes the context menu.
-     */
     closeContextMenu() {
       this.isOpen = false;
       this.x = 0;

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { FileSystemNode } from "@/types";
+import type { Node, ContextMenuTargetType } from "@/types";
 import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  item: FileSystemNode;
+  item: Node;
 }>();
 
 const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
-const { editItem } = desktopStore;
+const { editNode } = desktopStore;
 
 const formattedName = computed(() => {
   return props.item?.name.length > 21
@@ -22,13 +22,13 @@ const handleContextMenu = (event: MouseEvent) => {
   openContextMenu(
     event.clientX,
     event.clientY,
-    props.item.type as TargetType,
+    props.item.type as ContextMenuTargetType,
     props.item,
   );
 };
 
 const handleStopRenaming = () => {
-  editItem(props.item.id, { isRenaming: false, isNewlyCreated: false });
+  editNode(props.item.id, { isRenaming: false, isNewlyCreated: false });
 };
 </script>
 
@@ -37,7 +37,7 @@ const handleStopRenaming = () => {
     @contextmenu.prevent.stop="handleContextMenu"
     :class="
       cn(
-        'group flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
+        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
         props.class,
       )
     "
@@ -45,6 +45,10 @@ const handleStopRenaming = () => {
     <div class="rounded-md p-0.5 group-hover:bg-accent/50">
       <Icon :name="item?.icon" size="56" />
     </div>
+    <span
+      class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
+      >{{ formattedName }}</span
+    >
     <!-- Renaming popover -->
     <Popover :open="item.isRenaming" @update:open="handleStopRenaming">
       <PopoverTrigger> </PopoverTrigger>
@@ -77,10 +81,12 @@ const handleStopRenaming = () => {
         </form>
       </PopoverContent>
     </Popover>
-    <span
-      class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
-      >{{ formattedName }}</span
-    >
+
+    <!-- Shortcut icon -->
+    <div v-if="item.type === 'shortcut'" class="absolute grid place-content-center bg-secondary rounded-full right-1 top-0 p-0.5">
+
+      <Icon name="gnome:arrow-shortcut" size="12" class="text-white" />
+    </div>
   </div>
 </template>
 

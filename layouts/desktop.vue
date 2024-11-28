@@ -28,7 +28,7 @@ const { backgroundImage } = storeToRefs(useDesktopStore());
     </div>
     <ClientOnly>
       <!-- Context menu -->
-      <DesktopGridContextMenu />
+      <DesktopContextMenu />
 
       <!-- Dockbar -->
       <DesktopDock v-if="!isLocked" />

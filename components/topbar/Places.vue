@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FileSystemNode } from "@/types";
+import type { Node } from "@/types";
 const { hasAppsAtTop, bookmarksNodes } = storeToRefs(useDesktopStore());
 
 function openFolder(nodeId: string) {
@@ -66,7 +66,10 @@ const items = [
         <span class="text-sm">{{ $t(item.name) }}</span>
       </Button>
 
-      <div class="my-2 h-px w-full bg-gray-500/30"></div>
+      <div
+        v-if="bookmarksNodes.length > 0"
+        class="my-2 h-px w-full bg-gray-500/30"
+      ></div>
 
       <Button
         v-for="item in bookmarksNodes.slice(0, 4)"

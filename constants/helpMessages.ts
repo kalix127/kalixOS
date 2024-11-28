@@ -3,6 +3,7 @@ export const helpMessages: { [commandName: string]: string } = {
 
   cd        change the working directory.
   ls        list information about the FILEs (the current directory by default)
+  ln        create links between files.
   pwd       print the absolute path of the current working directory.
   tree      display a tree of the directory structure.
   chown     change the owner and/or group of each FILE to OWNER and/or GROUP.
@@ -36,6 +37,13 @@ Options:
   -l, --list           use a long listing format.
   -a, --all            do not ignore entries starting with .
   -h, --help           display this help and exit.`,
+
+  ln: `Usage: ln [OPTIONS]... TARGET LINK_NAME
+Create links between files.
+
+Options:
+  -s, --symbolic      make symbolic links instead of hard links
+  -h, --help          display this help and exit.`,
 
   pwd: `Usage: pwd
 Print the absolute path of the current working directory.

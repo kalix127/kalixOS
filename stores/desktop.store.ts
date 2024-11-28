@@ -277,19 +277,10 @@ export const useDesktopStore = defineStore({
         newNode.name = newName;
       }
 
-      // Determine icon based on type and extension
-      let icon = "";
-      if (newNode.type === "file" && newNode.name) {
-        const extension = newNode.name.split(".").pop() || "";
-        icon = getNodeIcon(extension);
-      } else {
-        icon = "folder:folder";
-      }
-
       const createdNode: Node = assignDefaultProperties(
         {
           ...newNode,
-          icon,
+          icon: getNodeIcon(newNode.type, newNode.name || ""),
         } as Node,
         username,
         parent.id,
@@ -329,7 +320,7 @@ export const useDesktopStore = defineStore({
       // Update icon for files based on extension
       if (node.type === "file" && node.name) {
         const extension = node.name.split(".").pop() || "";
-        updatedData.icon = getNodeIcon(extension);
+        updatedData.icon = getNodeIcon(node.type, extension);
       }
 
       Object.assign(node, updatedData);
@@ -566,7 +557,7 @@ export const useDesktopStore = defineStore({
 
 interface DesktopStore {
   // Filesystem
-  fileSystem: FolderNode;
+  fileSystem: Node;
   nodeMap: Map<string, Node>;
   bookmarks: string[]; // Array of ids
   uptime: number;

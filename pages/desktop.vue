@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
-import type { FileSystemNode } from "@/types";
+import type { Node } from "@/types";
 import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 definePageMeta({
@@ -21,7 +21,7 @@ const { openContextMenu } = contextMenuStore;
 const desktopGridRef = ref<HTMLElement | null>(null);
 const draggableItems = computed({
   get: () => desktopItems.value,
-  set: (newItems: FileSystemNode[]) => {
+  set: (newItems: Node[]) => {
     updateDesktopItems(newItems);
   },
 });

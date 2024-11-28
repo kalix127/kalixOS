@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FileSystemNode } from "@/types";
+import type { Node } from "@/types";
 const { hasAppsAtTop, bookmarksNodes } = storeToRefs(useDesktopStore());
 
 function openFolder(nodeId: string) {

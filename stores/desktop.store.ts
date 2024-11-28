@@ -292,6 +292,46 @@ export const useDesktopStore = defineStore({
       return createdNode;
     },
 
+    createNodeShortcut(
+      targetNode: Node,
+      linkParentNode: FolderNode,
+      linkName: string,
+    ): [boolean, string] {
+      const username =
+        storeToRefs(useGlobalStore()).username.value.toLowerCase();
+
+      // Check if a node with the same name already exists in the parent
+      const existingNode = linkParentNode.children.find(
+        (child) => child.name === linkName,
+      );
+      if (existingNode) {
+        return [false, `cannot create link '${linkName}': File exists`];
+      }
+
+      // Check if target node is already a shortcut
+      if (targetNode.type === "shortcut") {
+        return [false, "cannot create link to a shortcut"];
+      }
+
+      // Create the shortcut node
+      const shortcutNode = assignDefaultProperties(
+        {
+          name: linkName,
+          type: "shortcut",
+          targetId: targetNode.id,
+          parentId: linkParentNode.id,
+        } as ShortcutNode,
+        username,
+        linkParentNode.id,
+      );
+
+      // Add to parent's children and nodeMap
+      linkParentNode.children.push(shortcutNode);
+      this.nodeMap.set(shortcutNode.id, shortcutNode);
+
+      return [true, ""];
+    },
+
     editNode(
       nodeId: string,
       updatedData: Partial<Omit<Node, "id" | "parentId">>,

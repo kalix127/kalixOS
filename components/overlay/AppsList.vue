@@ -42,7 +42,7 @@ function closeOverlay() {
   >
     <!-- Filter apps  -->
     <div
-      class="relative col-start-2 row-start-1 flex items-center gap-4"
+      class="relative flex items-center gap-4"
       @click.stop=""
     >
       <div class="absolute inset-y-0 start-0 grid place-content-center px-3">
@@ -56,7 +56,7 @@ function closeOverlay() {
 
     <!-- Apps list -->
     <div
-      class="col-start-1 col-end-4 row-start-2 row-end-4 flex flex-wrap justify-center gap-4"
+      class="flex flex-wrap justify-center gap-4"
       @contextmenu.prevent=""
     >
       <TransitionGroup name="apps">

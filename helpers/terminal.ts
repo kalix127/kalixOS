@@ -17,7 +17,8 @@ import { useWindowSize, useTimestamp } from "@vueuse/core";
 import { helpMessages } from "~/constants/helpMessages";
 import { defaultFilePermissions, defaultFolderPermissions } from "~/constants";
 
-const { editNode, createNode, moveNode, deleteNode } = useDesktopStore();
+const { editNode, createNode, moveNode, deleteNode, createNodeShortcut } =
+  useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 // Command handlers
@@ -129,6 +130,69 @@ export function handleLs(
     .join("  ");
   if (output.trim() !== "") {
     term.write(`\r\n${output}`);
+  }
+  return true;
+}
+
+export function handleLn(
+  term: Terminal,
+  parsedArgs: ParsedArgs,
+  fileSystem: Node,
+  currentDirectoryNode: Node,
+): boolean {
+  const { flags, positionalArgs } = parsedArgs;
+  if (!flags.includes("-s")) {
+    term.write("\r\nln: symbolic link flag (-s) is required");
+    return false;
+  }
+
+  const [targetPath, linkPath] = positionalArgs;
+
+  // Resolve target path
+  const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
+  if (!targetNode) {
+    term.write(
+      `\r\nln: failed to access '${targetPath}': No such file or directory`,
+    );
+    return false;
+  }
+
+  // Resolve link path
+  const linkPathSegments = splitPath(linkPath);
+  const linkName = linkPathSegments.pop()!;
+  const linkParentPath =
+    linkPathSegments.length > 0 ? linkPathSegments.join("/") : "/";
+
+  // Check if link already exists at destination
+  const linkNode = resolvePath(fileSystem, currentDirectoryNode, linkPath);
+  if (linkNode) {
+    term.write(
+      `\r\nln: failed to create symbolic link '${linkPath}': File exists`,
+    );
+    return false;
+  }
+
+  // Get parent folder node where link will be created
+  const linkParentNode = resolvePath(
+    fileSystem,
+    currentDirectoryNode,
+    linkParentPath,
+  );
+
+  if (!linkParentNode || linkParentNode.type !== "folder") {
+    term.write(`\r\nln: failed to access '${linkParentPath}': Not a directory`);
+    return false;
+  }
+
+  // Create the symbolic link
+  const [success, message] = createNodeShortcut(
+    targetNode,
+    linkParentNode,
+    linkName,
+  );
+  if (!success) {
+    term.write(`\r\nln: ${message}`);
+    return false;
   }
   return true;
 }

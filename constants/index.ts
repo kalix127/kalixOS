@@ -244,19 +244,26 @@ export const defaultApps: AppNode[] = [
     icon: "app:vscode",
   },
   {
+    id: "linkedin",
     name: "linkedin_profile",
     type: "social",
     icon: "app:linkedin",
-    id: "linkedin",
     isTranslated: true,
   },
   {
+    id: "github",
     name: "github_profile",
     type: "social",
     icon: "app:github",
-    id: "github",
     isTranslated: true,
   },
+  {
+    id: "show-apps",
+    name: "show_apps",
+    type: "app",
+    icon: "gnome:grid",
+    isTranslated: true,
+  }
 ].map((app) => ({
   ...app,
   isOpen: false,

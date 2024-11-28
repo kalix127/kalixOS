@@ -41,6 +41,7 @@ export const useDesktopStore = defineStore({
     desktopRef: null,
     backgroundImage: defaultBackgroundImage,
     backgroundImages: defaultBackgroundImages,
+    isShowAppsOverlayVisible: false,
   }),
   getters: {
     homeNode(state): FolderNode | null {
@@ -615,4 +616,5 @@ interface DesktopStore {
   desktopRef: HTMLElement | null;
   backgroundImage: BackgroundImage;
   backgroundImages: BackgroundImage[];
+  isShowAppsOverlayVisible: boolean;
 }

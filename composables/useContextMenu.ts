@@ -217,7 +217,6 @@ export function useContextMenu() {
       createNode(desktopNode.value.id, {
         name: t("new_folder"),
         type: "folder",
-        icon: "folder:folder",
         isRenaming: true,
         isNewlyCreated: true,
       },  true);
@@ -230,7 +229,6 @@ export function useContextMenu() {
       createNode(desktopNode.value.id, {
         name: t("new_document"),
         type: "file",
-        icon: "file:file",
         isRenaming: true,
         isNewlyCreated: true,
       }, true);

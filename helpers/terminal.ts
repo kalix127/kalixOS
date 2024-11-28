@@ -411,7 +411,6 @@ export function handleTouch(
     const newNode = createNode(folderNode.id, {
       name: fileName,
       type: "file",
-      icon: "file:file",
       permissions: defaultFilePermissions,
     });
 
@@ -473,7 +472,6 @@ export function handleMkdir(
     const newNode = createNode(folderNode.id, {
       name: dirName,
       type: "folder",
-      icon: "folder:folder",
       permissions: defaultFolderPermissions,
     });
 

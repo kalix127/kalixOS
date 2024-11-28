@@ -14,7 +14,7 @@ import type {
   FolderNode,
   ShortcutNode,
 } from "~/types";
-import { getNextPid } from "@/helpers";
+import { getNextPid, getNodeIcon } from "@/helpers";
 import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
@@ -243,8 +243,8 @@ export const useDesktopStore = defineStore({
 
     createNode(
       parentId: string,
-      newNode: Partial<Omit<Node, "id" | "parentId" | "children">>,
-      checkDuplicates: boolean = false
+      newNode: Partial<Omit<Node, "id" | "parentId" | "icon">>,
+      checkDuplicates: boolean = false,
     ): Node | null {
       const parent = this.nodeMap.get(parentId);
       if (!parent || parent.type !== "folder") return null;
@@ -270,16 +270,26 @@ export const useDesktopStore = defineStore({
       if (checkDuplicates && newNode.name) {
         let counter = 1;
         let newName = newNode.name;
-        while (parent.children.some(child => child.name === newName)) {
+        while (parent.children.some((child) => child.name === newName)) {
           newName = `${newNode.name} (${counter})`;
           counter++;
         }
         newNode.name = newName;
       }
 
+      // Determine icon based on type and extension
+      let icon = "";
+      if (newNode.type === "file" && newNode.name) {
+        const extension = newNode.name.split(".").pop() || "";
+        icon = getNodeIcon(extension);
+      } else {
+        icon = "folder:folder";
+      }
+
       const createdNode: Node = assignDefaultProperties(
         {
           ...newNode,
+          icon,
         } as Node,
         username,
         parent.id,
@@ -293,7 +303,7 @@ export const useDesktopStore = defineStore({
 
     editNode(
       nodeId: string,
-      updatedData: Partial<Omit<Node, "id" | "parentId" | "children">>,
+      updatedData: Partial<Omit<Node, "id" | "parentId">>,
     ): boolean {
       const node = this.nodeMap.get(nodeId);
       if (!node) return false;
@@ -316,8 +326,13 @@ export const useDesktopStore = defineStore({
         ).targetId;
       }
 
-      Object.assign(node, updatedData);
+      // Update icon for files based on extension
+      if (node.type === "file" && node.name) {
+        const extension = node.name.split(".").pop() || "";
+        updatedData.icon = getNodeIcon(extension);
+      }
 
+      Object.assign(node, updatedData);
       return true;
     },
 

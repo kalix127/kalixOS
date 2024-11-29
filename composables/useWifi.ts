@@ -11,6 +11,7 @@ export function useWifi() {
     connectedWifiNetwork,
     isSearchingWifiNetworks,
   } = storeToRefs(globalStore);
+  const { t } = useI18n();
 
   const idConnectingNetwork = ref<number | null>(null);
   const currentNetwork = ref<WifiNetwork | null>(null);
@@ -39,6 +40,21 @@ export function useWifi() {
     // Update the connected network and reset the connection state
     connectedWifiNetwork.value = currentNetwork.value;
     resetConnectionState();
+
+    // Send notification
+    const { addNotification } = useDesktopStore();
+    addNotification(
+      {
+        id: `wifi-${connectedWifiNetwork.value.id}`,
+        title: t("wifi_connected_title"),
+        description: t("wifi_connected_description", {
+          network: connectedWifiNetwork.value.name,
+        }),
+        icon: "gnome:wifi-4",
+        isTranslated: false,
+      },
+      3000,
+    );
   }
 
   function resetConnectionState() {
@@ -70,7 +86,6 @@ export function useWifi() {
 
     // Start the timeout to simulate the connection delay
     start();
-
   }
 
   function forgetConnection(network: WifiNetwork) {

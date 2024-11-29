@@ -66,7 +66,7 @@ onBeforeMount(async () => {
   >
     <div
       ref="dockRef"
-      class="grid grid-cols-3 place-items-center gap-1 xs:grid-cols-5 sm:flex"
+      class="grid grid-cols-5 place-items-center gap-1 sm:flex"
     >
       <DesktopDockItem
         v-for="app in apps"

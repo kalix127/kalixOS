@@ -13,9 +13,15 @@ import type {
   Process,
   FolderNode,
   ShortcutNode,
+  Notification,
 } from "~/types";
 import { getNextPid, getNodeIcon } from "@/helpers";
-import { useIdle, useIntervalFn, useTimestamp } from "@vueuse/core";
+import {
+  useIdle,
+  useIntervalFn,
+  useTimeoutFn,
+  useTimestamp,
+} from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -42,6 +48,7 @@ export const useDesktopStore = defineStore({
     backgroundImage: defaultBackgroundImage,
     backgroundImages: defaultBackgroundImages,
     isShowAppsOverlayVisible: false,
+    notifications: [],
   }),
   getters: {
     homeNode(state): FolderNode | null {
@@ -162,6 +169,8 @@ export const useDesktopStore = defineStore({
           Math.floor((now.value - lastActive.value) / 1000),
         );
 
+        let hasShownNotification = false;
+
         watch(idledFor, (newValue: number) => {
           // If dim screen is disabled or set to 0, do nothing
           if (dimScreenThreshold.value === "0") return;
@@ -183,7 +192,28 @@ export const useDesktopStore = defineStore({
                     ((updatedDimScreenThreshold * 0.3) / 1000),
                   1,
                 ); // Scale 0-100% over remaining 30%
+
+          // Reset notification flag when user becomes active
+          if (newValue === 0) {
+            hasShownNotification = false;
+          }
+
           isAboutToSuspend.value = newValue >= idleThreshold;
+
+          // Show notification only once per suspend cycle
+          if (isAboutToSuspend.value && !hasShownNotification) {
+            this.addNotification(
+              {
+                id: "suspend",
+                title: "automatic_suspend_title",
+                description: "automatic_suspend_description",
+                icon: "gnome:suspend",
+                isTranslated: true,
+              },
+              10000,
+            );
+            hasShownNotification = true;
+          }
 
           // if Dim screen is enabled, Gradually show the suspended overlay after 70% of the suspend duration
           if (isDimScreenEnabled.value) {
@@ -460,6 +490,31 @@ export const useDesktopStore = defineStore({
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
 
+      const applicationsNode = this.nodeMap.get("applications");
+      if (!applicationsNode || applicationsNode.type !== "folder") return;
+
+      // Check if app exists in filesystem
+      const appExists = applicationsNode.children?.some(
+        (child) => child.id === appId,
+      );
+      if (!appExists) {
+        const { t } = useNuxtApp().$i18n;
+
+        this.addNotification(
+          {
+            id: `app-not-found-${app.id}`,
+            title: t("app_not_found"),
+            description: t("app_not_found_description", {
+              appName: app.name,
+            }),
+            icon: "gnome:triangle-warning",
+            isTranslated: false,
+          },
+          5000,
+        );
+        return;
+      }
+
       // If the node is not open, open it with delay
       if (!app.isOpen) {
         this.hasAppsLoading = true;
@@ -568,10 +623,8 @@ export const useDesktopStore = defineStore({
       }
     },
 
-    /**
-     * Create a process.
-     * @param process The process to add.
-     */
+    /* Processes */
+
     createProcess(appId: string, command: string) {
       // Check if the process for that appId is already running
       if (this.processes.some((process) => process.appId === appId)) return;
@@ -583,14 +636,27 @@ export const useDesktopStore = defineStore({
         command,
       });
     },
-
-    /**
-     * Closes a process.
-     * @param appId The appId of the process.
-     */
     closeProcess(appId: string) {
       this.processes = this.processes.filter(
         (process) => process.appId !== appId,
+      );
+    },
+
+    /* Notifications */
+    addNotification(notification: Notification, timeout = 5000) {
+      // Check if notification already exists
+      if (!this.notifications.some((n) => n.id === notification.id)) {
+        this.notifications.push(notification);
+      }
+
+      // Delete notification after timeout
+      useTimeoutFn(() => {
+        this.deleteNotification(notification.id);
+      }, timeout);
+    },
+    deleteNotification(id: string) {
+      this.notifications = this.notifications.filter(
+        (notification) => notification.id !== id,
       );
     },
   },
@@ -617,4 +683,5 @@ interface DesktopStore {
   backgroundImage: BackgroundImage;
   backgroundImages: BackgroundImage[];
   isShowAppsOverlayVisible: boolean;
+  notifications: Notification[];
 }

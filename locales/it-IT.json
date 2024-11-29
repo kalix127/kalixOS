@@ -67,6 +67,10 @@
   "brave_not_available_on_mobile": "Non è possibile aprire Brave da telefono, riprova da desktop.",
   "terminal_not_available_on_mobile": "Non è possibile aprire Terminale da telefono, riprova da desktop.",
   "show_apps": "Mostra Applicazioni",
+  "wifi_connected_title": "Connesso al Wi-Fi",
+  "wifi_connected_description": "Connessione riuscita a {network}",
+  "app_not_found": "Applicazione non trovata",
+  "app_not_found_description": "Impossibile avviare '{appName}'.",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Rete",

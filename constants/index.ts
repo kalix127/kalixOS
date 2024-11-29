@@ -244,17 +244,24 @@ export const defaultApps: AppNode[] = [
     icon: "app:vscode",
   },
   {
-    id: "linkedin",
-    name: "linkedin_profile",
-    type: "social",
-    icon: "app:linkedin",
-    isTranslated: true,
-  },
-  {
     id: "github",
     name: "github_profile",
     type: "social",
     icon: "app:github",
+    isTranslated: true,
+  },
+  {
+    id: "reddit",
+    name: "reddit_profile",
+    type: "social",
+    icon: "app:reddit",
+    isTranslated: true,
+  },
+  {
+    id: "linkedin",
+    name: "linkedin_profile",
+    type: "social",
+    icon: "app:linkedin",
     isTranslated: true,
   },
   {

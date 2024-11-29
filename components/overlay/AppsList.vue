@@ -6,7 +6,7 @@ const { apps, isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
 const { handleOpenApp: openApp } = useContextMenu();
 
 const query = ref("");
-const appIdsToRemove = ["linkedin", "github", "show-apps"];
+const appIdsToRemove = ["github", "linkedin", "reddit", "show-apps"];
 
 const { escape } = useMagicKeys();
 
@@ -41,10 +41,7 @@ function closeOverlay() {
     @click="closeOverlay"
   >
     <!-- Filter apps  -->
-    <div
-      class="relative flex items-center gap-4"
-      @click.stop=""
-    >
+    <div class="relative flex items-center gap-4" @click.stop="">
       <div class="absolute inset-y-0 start-0 grid place-content-center px-3">
         <Icon name="gnome:search" size="20" class="text-[#b3b2b2]" />
       </div>
@@ -55,10 +52,7 @@ function closeOverlay() {
     </div>
 
     <!-- Apps list -->
-    <div
-      class="flex flex-wrap justify-center gap-4"
-      @contextmenu.prevent=""
-    >
+    <div class="flex flex-wrap justify-center gap-4" @contextmenu.prevent="">
       <TransitionGroup name="apps">
         <div
           class="flex size-36 select-none flex-col items-center justify-center gap-2 rounded-3xl transition-colors duration-300 hover:bg-popover"

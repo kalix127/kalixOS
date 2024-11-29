@@ -4,13 +4,18 @@ import { desktopEnvironments } from "@/constants";
 const globalStore = useGlobalStore();
 const { loginView, desktopEnvironment } = storeToRefs(globalStore);
 
-const { github, linkedin } = useRuntimeConfig().public.socialUrl;
+const { github, linkedin, reddit } = useRuntimeConfig().public.socialUrl;
 
 const socialLinks = [
   {
     name: "Github",
     icon: "logo:github",
     url: github,
+  },
+  {
+    name: "Reddit",
+    icon: "logo:reddit",
+    url: reddit,
   },
   {
     name: "Linkedin",

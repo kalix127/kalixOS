@@ -214,24 +214,32 @@ export function useContextMenu() {
 
   const createNewFolder = () => {
     if (desktopNode.value) {
-      createNode(desktopNode.value.id, {
-        name: t("new_folder"),
-        type: "folder",
-        isRenaming: true,
-        isNewlyCreated: true,
-      },  true);
+      createNode(
+        desktopNode.value.id,
+        {
+          name: t("new_folder"),
+          type: "folder",
+          isRenaming: true,
+          isNewlyCreated: true,
+        },
+        true,
+      );
     }
     closeContextMenu();
   };
 
   const createNewDocument = () => {
     if (desktopNode.value) {
-      createNode(desktopNode.value.id, {
-        name: t("new_document"),
-        type: "file",
-        isRenaming: true,
-        isNewlyCreated: true,
-      }, true);
+      createNode(
+        desktopNode.value.id,
+        {
+          name: t("new_document"),
+          type: "file",
+          isRenaming: true,
+          isNewlyCreated: true,
+        },
+        true,
+      );
     }
     closeContextMenu();
   };
@@ -246,10 +254,23 @@ export function useContextMenu() {
     }
 
     if (node.type === "social") {
-      const { linkedin, github } = useRuntimeConfig().public.socialUrl;
-      const url = node.id === "linkedin" ? linkedin : github;
+      const { linkedin, github, reddit } = useRuntimeConfig().public.socialUrl;
+      let url = "";
+      
+      switch (node.id) {
+        case "linkedin":
+          url = linkedin;
+          break;
+        case "github":
+          url = github;
+          break;
+        case "reddit":
+          url = reddit;
+          break;
+      }
+      
       if (url) {
-        window.open(url as string, "_blank");
+        window.open(url, "_blank");
       }
       return;
     }

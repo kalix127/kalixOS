@@ -64,9 +64,7 @@ const route = useRoute();
         <DesktopNotification
           v-for="notification in notifications"
           :key="notification.title"
-          :icon="notification.icon"
-          :title="notification.title"
-          :description="notification.description"
+          :notification="notification"
           :class="isLocked ? 'hidden' : ''"
         />
       </TransitionGroup>

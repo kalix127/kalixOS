@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
+import type { Notification } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface Props {
   class?: HTMLAttributes["class"];
-  title: string;
-  description: string;
-  icon: string;
-  iconSize?: number;
+  notification: Notification;
 }
 
-withDefaults(defineProps<Props>(), {
-  iconSize: 28,
-});
+const props = defineProps<Props>();
+
+const { title, description, isTranslated, icon, iconSize } = toRefs(
+  props.notification,
+);
 </script>
 
 <template>
@@ -22,13 +22,13 @@ withDefaults(defineProps<Props>(), {
     "
   >
     <div class="flex items-center gap-4">
-      <Icon :name="icon" :size="iconSize" />
-      <div class="space-y-1">
+      <Icon :name="icon" :size="28" />
+      <div class="space-y-2">
         <AlertTitle class="font-extrabold tracking-normal">
-          {{ $t(title) }}
+          {{ isTranslated ? $t(title) : title }}
         </AlertTitle>
         <AlertDescription class="text-xs">
-          {{ $t(description) }}
+          {{ isTranslated ? $t(description) : description }}
         </AlertDescription>
       </div>
     </div>

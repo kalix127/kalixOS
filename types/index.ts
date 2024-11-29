@@ -120,4 +120,5 @@ export interface Notification {
   description: string;
   icon: string;
   iconSize?: number;
+  isTranslated: boolean;
 }

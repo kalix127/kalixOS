@@ -209,6 +209,7 @@ export const useDesktopStore = defineStore({
                 title: "automatic_suspend_title",
                 description: "automatic_suspend_description",
                 icon: "gnome:suspend",
+                isTranslated: true,
               },
               10000,
             );

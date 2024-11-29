@@ -45,7 +45,7 @@ const route = useRoute();
 
         <!-- Loading Skeleton -->
         <template #fallback>
-          <Skeleton class="h-7 w-40 bg-secondary/60" />
+          <Skeleton class="h-7 w-40 bg-secondary/60 rounded-full" />
         </template>
       </ClientOnly>
     </div>

@@ -6,7 +6,7 @@ import type {
   BackgroundImage,
   NodePermissions,
   CommandSpec,
-  Node
+  Node,
 } from "@/types";
 import { assignDefaultProperties } from "~/helpers";
 import { zshContent } from "./files";
@@ -263,7 +263,7 @@ export const defaultApps: AppNode[] = [
     type: "app",
     icon: "gnome:grid",
     isTranslated: true,
-  }
+  },
 ].map((app) => ({
   ...app,
   isOpen: false,
@@ -311,7 +311,12 @@ export const defaultFileSystem = (username: string): Node =>
                   type: "folder",
                   icon: "folder:applications",
                   isProtected: true,
-                  children: [...defaultApps.slice(0, -2)],
+                  children: [
+                    ...defaultApps.slice(0, -2).map((app) => ({
+                      ...app,
+                      name: `${app.name.replaceAll(" ", "")}.AppImage`,
+                    })),
+                  ],
                 },
                 {
                   id: "downloads",
@@ -620,7 +625,7 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     },
     positionalArgs: [
       { name: "target", required: true },
-      { name: "link", required: true }
+      { name: "link", required: true },
     ],
   },
   pwd: {

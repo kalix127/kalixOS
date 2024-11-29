@@ -10,9 +10,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const { title, description, isTranslated, icon } = toRefs(
-  props.notification,
-);
+const { title, description, isTranslated, icon } = toRefs(props.notification);
 </script>
 
 <template>

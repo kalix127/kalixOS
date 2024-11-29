@@ -53,7 +53,7 @@ const items = [
       </div>
     </PopoverTrigger>
     <PopoverContent
-      class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2 shadow-md"
+      class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2 depth-shadow"
     >
       <Button
         v-for="item in items"

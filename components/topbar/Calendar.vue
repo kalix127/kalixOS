@@ -64,7 +64,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
       </div>
     </PopoverTrigger>
     <PopoverContent
-      class="z-[50000] ml-1.5 mt-1.5 rounded-3xl shadow-md xs:w-80"
+      class="z-[50000] ml-1.5 mt-1.5 rounded-3xl depth-shadow xs:w-80"
     >
       <div class="flex select-none flex-col items-center">
         <span

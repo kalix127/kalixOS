@@ -61,7 +61,7 @@ onMounted(() => {
         </TooltipTrigger>
         <TooltipContent
           :side-offset="-12"
-          class="z-[50000] rounded-3xl p-0"
+          class="depth-shadow z-[50000] rounded-3xl p-0"
           @mouseenter="() => setVisibility(true)"
           @mouseleave="() => setVisibility(false)"
         >

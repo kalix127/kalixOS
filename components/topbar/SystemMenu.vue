@@ -62,7 +62,7 @@ const { hasAppsLoading } = storeToRefs(useDesktopStore());
     </PopoverTrigger>
 
     <PopoverContent
-      class="z-[60000] mr-1.5 mt-1.5 rounded-3xl p-0 shadow-md sm:w-[400px]"
+      class="z-[60000] mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]"
     >
       <div
         :class="[

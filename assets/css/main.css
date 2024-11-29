@@ -88,3 +88,7 @@ body {
 .v-leave-to {
   opacity: 0;
 }
+
+.depth-shadow {
+  @apply shadow-[0_0_25px_-12px_rgba(0,0,0,0.5)];
+}

@@ -36,17 +36,12 @@ export function useWindowHandlers(
 
   /* Drag handlers */
   const handleDragStop = useThrottleFn((x: number, y: number) => {
-    // Prevent the app from being dragged outside the desktop bounds
-    // Set 1 to avoid animation bug when the value is 0
-    if (x <= 0) x = 1;
-    if (y <= 0) y = 1;
-
     updateWindowPosition(x, y);
   }, 25);
 
   const handleDragging = useThrottleFn((x: number, y: number) => {
     // Update the app's position only if the user is dragging the app to the top bar
-    if (y < 2 || (y > 2 && y < 20)) {
+    if ((y > 0 && y < 200)) {
       handleDragStop(x, y);
     }
   }, 25);
@@ -67,7 +62,7 @@ export function useWindowHandlers(
           desktopRef.value?.offsetWidth || 0,
           desktopRef.value?.offsetHeight || 0,
         );
-        updateWindowPosition(1, 1);
+        updateWindowPosition(0, 0);
       } else {
         // Restore previous size/position
         updateWindowSizes(app.value.prev.width, app.value.prev.height);
@@ -96,7 +91,7 @@ export function useWindowHandlers(
       desktopRef.value?.offsetWidth || 0,
       desktopRef.value?.offsetHeight || 0,
     );
-    updateWindowPosition(1, 1);
+    updateWindowPosition(0, 0);
   };
 
   // Hooks

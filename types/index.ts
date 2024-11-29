@@ -113,3 +113,11 @@ export interface ParsedArgs {
   flagValues: { [key: string]: string };
   positionalArgs: string[];
 }
+
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  iconSize?: number;
+}

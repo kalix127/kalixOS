@@ -22,7 +22,6 @@ import {
   useTimeoutFn,
   useTimestamp,
 } from "@vueuse/core";
-import { v4 as uuidv4 } from "uuid";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",
@@ -490,6 +489,31 @@ export const useDesktopStore = defineStore({
     async openApp(appId: string, toggleMinimize?: boolean) {
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
+
+      const applicationsNode = this.nodeMap.get("applications");
+      if (!applicationsNode || applicationsNode.type !== "folder") return;
+
+      // Check if app exists in filesystem
+      const appExists = applicationsNode.children?.some(
+        (child) => child.id === appId,
+      );
+      if (!appExists) {
+        const { t } = useNuxtApp().$i18n;
+
+        this.addNotification(
+          {
+            id: `app-not-found-${app.id}`,
+            title: t("app_not_found"),
+            description: t("app_not_found_description", {
+              appName: app.name,
+            }),
+            icon: "gnome:triangle-warning",
+            isTranslated: false,
+          },
+          5000,
+        );
+        return;
+      }
 
       // If the node is not open, open it with delay
       if (!app.isOpen) {

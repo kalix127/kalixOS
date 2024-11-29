@@ -69,6 +69,8 @@
   "show_apps": "Mostra Applicazioni",
   "wifi_connected_title": "Connesso al Wi-Fi",
   "wifi_connected_description": "Connessione riuscita a {network}",
+  "app_not_found": "Applicazione non trovata",
+  "app_not_found_description": "Impossibile avviare '{appName}'.",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Rete",

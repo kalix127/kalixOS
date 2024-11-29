@@ -41,7 +41,7 @@ export function useWindowHandlers(
 
   const handleDragging = useThrottleFn((x: number, y: number) => {
     // Update the app's position only if the user is dragging the app to the top bar
-    if ((y > 0 && y < 200)) {
+    if (y >= 0 && y < 200) {
       handleDragStop(x, y);
     }
   }, 25);

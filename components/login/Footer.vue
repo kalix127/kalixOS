@@ -4,18 +4,13 @@ import { desktopEnvironments } from "@/constants";
 const globalStore = useGlobalStore();
 const { loginView, desktopEnvironment } = storeToRefs(globalStore);
 
-const { github, linkedin, twitter } = useRuntimeConfig().public.socialUrl;
+const { github, linkedin } = useRuntimeConfig().public.socialUrl;
 
 const socialLinks = [
   {
     name: "Github",
     icon: "logo:github",
     url: github,
-  },
-  {
-    name: "Twitter",
-    icon: "logo:twitter",
-    url: twitter,
   },
   {
     name: "Linkedin",
@@ -73,7 +68,7 @@ const socialLinks = [
       >
         <Icon name="gnome:settings" size="16" />
       </PopoverTrigger>
-      <PopoverContent class="w-fit rounded-2xl mr-2">
+      <PopoverContent class="mr-2 w-fit rounded-2xl">
         <RadioGroup v-model="desktopEnvironment">
           <div
             v-for="environment in desktopEnvironments"

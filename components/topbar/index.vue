@@ -14,7 +14,7 @@ const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
 const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
-const { hasAppsAtTop, isShowAppsOverlayVisible } =
+const { hasAppsAtTop, isShowAppsOverlayVisible, notifications } =
   storeToRefs(useDesktopStore());
 
 const route = useRoute();
@@ -56,26 +56,21 @@ const route = useRoute();
       <TopbarSystemMenu v-if="!isLocked" />
     </div>
 
-    <!-- Automatic suspend alert -->
-    <Transition name="fade">
-      <Alert
-        class="absolute -bottom-24 left-1/2 z-[50000] max-w-72 -translate-x-1/2 border-none bg-popover xs:max-w-80 sm:-bottom-20 sm:max-w-96"
-        :class="isLocked ? 'hidden' : ''"
-        v-if="isAboutToSuspend"
-      >
-        <div class="flex items-center gap-4">
-          <Icon name="gnome:suspend" size="28" />
-          <div class="space-y-1">
-            <AlertTitle class="font-extrabold tracking-normal">{{
-              $t("automatic_suspend_title")
-            }}</AlertTitle>
-            <AlertDescription class="text-xs">
-              {{ $t("automatic_suspend_description") }}
-            </AlertDescription>
-          </div>
-        </div>
-      </Alert>
-    </Transition>
+    <!-- Notifications -->
+    <div
+      class="absolute left-1/2 top-12 z-[50000] flex -translate-x-1/2 flex-col gap-4"
+    >
+      <TransitionGroup name="fade">
+        <DesktopNotification
+          v-for="notification in notifications"
+          :key="notification.title"
+          :icon="notification.icon"
+          :title="notification.title"
+          :description="notification.description"
+          :class="isLocked ? 'hidden' : ''"
+        />
+      </TransitionGroup>
+    </div>
 
     <!-- Power off modals -->
     <TopbarPowerOffModal

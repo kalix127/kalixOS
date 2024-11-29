@@ -10,7 +10,7 @@ const { app } = toRefs(props);
 const { username } = storeToRefs(useGlobalStore());
 
 const deviceName = computed(() => {
-  return `${username.value}-desktop`.toLowerCase();
+  return username.value.toLowerCase();
 });
 </script>
 

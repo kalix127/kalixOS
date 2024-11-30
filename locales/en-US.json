@@ -68,6 +68,7 @@
   "vscode_not_available_on_mobile": "Can't open Visual Studio Code from mobile, try on desktop.",
   "brave_not_available_on_mobile": "Can't open Brave from mobile, try on desktop.",
   "terminal_not_available_on_mobile": "Can't open Terminal from mobile, try on desktop.",
+  "kate_not_available_on_mobile": "Can't open Kate from mobile, try on desktop.",
   "show_apps": "Show Apps",
   "wifi_connected_title": "Connected to Wi-Fi",
   "wifi_connected_description": "Successfully connected to {network}",

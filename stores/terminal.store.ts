@@ -1,4 +1,4 @@
-import { findNodeByIdRecursive, getNodeFullPath } from "@/helpers";
+import { getNodeFullPath } from "@/helpers";
 import type { FolderNode } from "@/types";
 
 const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();

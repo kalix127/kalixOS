@@ -2,7 +2,6 @@
 import {
   useSwipe,
   watchDebounced,
-  useDebounceFn,
   breakpointsTailwind,
   useBreakpoints,
 } from "@vueuse/core";
@@ -12,6 +11,7 @@ const { isDockVisible, isDockPinned, hasAppFullscreen } =
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
 const { openApp } = useDesktopStore();
+const { isUserFirstTime } = storeToRefs(useGlobalStore());
 const isDesktop = useBreakpoints(breakpointsTailwind).greaterOrEqual("lg");
 
 // Handle swipe direction
@@ -42,7 +42,7 @@ watchDebounced(
 
 // Open terminal on mount
 onMounted(() => {
-  if (isDesktop.value) {
+  if (isDesktop.value && isUserFirstTime.value) {
     openApp("terminal");
   }
 });

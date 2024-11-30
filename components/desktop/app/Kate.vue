@@ -4,6 +4,7 @@ import * as monaco from "monaco-editor";
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { monacoEditorLanguageMap } from "@/constants";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
@@ -18,16 +19,23 @@ const { openedNode } = storeToRefs(textEditorStore);
 let editorObj: monaco.editor.IEditor | undefined;
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
+const getLanguage = (name: string): string => {
+  const extension = name.split(".").pop();
+  const language = monacoEditorLanguageMap[extension ?? ""] || "plaintext";
+  return language;
+};
+
 onMounted(() => {
   if (isMobileOrTablet.value) return;
 
   editorObj = monaco.editor.create(document.getElementById("editor")!, {
     value: openedNode.value?.content || "",
-    language: "javascript",
+    language: getLanguage(openedNode.value!.name),
     theme: "vs-dark",
     automaticLayout: false,
   });
 
+  // Update the size of monaco
   watch(
     app,
     (newApp) => {
@@ -39,10 +47,22 @@ onMounted(() => {
     },
     { deep: true, immediate: true },
   );
+
+  // Update the language based on node's extension
+  watch(
+    openedNode,
+    (newOpenedNode) => {
+      const language = getLanguage(newOpenedNode!.name);
+      // @ts-ignore
+      monaco.editor.setModelLanguage(editorObj.getModel()!, language);
+    },
+    { deep: true, immediate: true },
+  );
 });
 
 onUnmounted(() => {
   editorObj?.dispose();
+  textEditorStore.$reset();
 });
 </script>
 

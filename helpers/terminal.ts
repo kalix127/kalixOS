@@ -161,7 +161,7 @@ export function handleLn(
   const linkPathSegments = splitPath(linkPath);
   const linkName = linkPathSegments.pop()!;
   const linkParentPath =
-    linkPathSegments.length > 0 ? linkPathSegments.join("/") : "/";
+    linkPathSegments.length > 0 ? linkPathSegments.join("/") : "./";
 
   // Check if link already exists at destination
   const linkNode = resolvePath(fileSystem, currentDirectoryNode, linkPath);

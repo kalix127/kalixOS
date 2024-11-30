@@ -46,7 +46,6 @@ export function useContextMenu() {
   }));
 
   /* Menu options based on type */
-
   const getDesktopOptions = () => [
     { label: t("new_folder"), action: () => createNewFolder() },
     { label: t("new_document"), action: () => createNewDocument() },
@@ -68,51 +67,77 @@ export function useContextMenu() {
       },
     },
   ];
+  const getFileOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+    const options = [
+      { label: "Open", action: () => openFile(node) },
+      {
+        label: shortcut ? t("rename_shortcut") : t("rename"),
+        action: () => renameNode(shortcut || node),
+      },
+      {
+        label: t("move_to_trash"),
+        action: () => moveToTrash(shortcut || node),
+      },
+      { isSeparator: true },
+      { label: t("properties"), action: () => console.log("Properties") },
+    ];
 
-  const getFileOptions = (node: Node | null) => [
-    { label: "Open", action: () => openFile(node) },
-    {
-      label: `${t("rename")}...`,
-      action: () => renameNode(node),
-    },
-    {
-      label: t("move_to_trash"),
-      action: () => moveToTrash(node),
-    },
-    { isSeparator: true },
-    { label: t("properties"), action: () => console.log("Properties") },
-  ];
+    // Remove 'rename' and 'move to trash' options if node is protected
+    if (node?.isProtected) {
+      options.splice(1, 2);
+    }
 
-  const getFolderOptions = (node: Node | null) => [
-    { label: t("open"), action: () => openFolder(node) },
-    {
-      label: `${t("rename")}...`,
-      action: () => renameNode(node),
-    },
-    {
-      label: t("move_to_trash"),
-      action: () => moveToTrash(node),
-    },
-    { isSeparator: true },
-    {
-      label: t("compress_folder"),
-      action: () => console.log("Compress 1 folder"),
-    },
-    {
-      label: t("new_folder_with_1_item"),
-      action: () => console.log("New folder with 1 item"),
-    },
-    { isSeparator: true },
-    {
-      label: t("add_to_bookmarks"),
-      action: () => addToBookmarksAction(node),
-    },
-    { label: t("properties"), action: () => console.log("Properties") },
-    {
-      label: t("show_x_in_files", { target: t("folder") }),
-      action: () => console.log("Show in Files"),
-    },
-  ];
+    return options;
+  };
+
+  const getFolderOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+    const baseOptions: Array<{
+      label?: string;
+      action?: () => void;
+      isSeparator?: boolean;
+    }> = [
+      { label: t("open"), action: () => openFolder(node) },
+      {
+        label: shortcut ? t("rename_shortcut") : t("rename"),
+        action: () => renameNode(shortcut || node),
+      },
+      {
+        label: t("move_to_trash"),
+        action: () => moveToTrash(shortcut || node),
+      },
+    ];
+
+    // Remove 'rename', 'move to trash' options if node is protected
+    if (node?.isProtected) {
+      baseOptions.splice(1, 2);
+    }
+
+    if (!shortcut) {
+      baseOptions.push(
+        { isSeparator: true },
+        {
+          label: t("show_x_in_files", { target: t("folder") }),
+          action: () => console.log("Show in Files"),
+        },
+        {
+          label: t("compress_folder"),
+          action: () => console.log("Compress 1 folder"),
+        },
+        {
+          label: t("new_folder_with_1_item"),
+          action: () => console.log("New folder with 1 item"),
+        },
+        { isSeparator: true },
+        {
+          label: t("add_to_bookmarks"),
+          action: () => addToBookmarksAction(node),
+        },
+        { label: t("properties"), action: () => console.log("Properties") },
+      );
+    }
+
+    return baseOptions;
+  };
 
   const getDockOptions = (node: Node | null) => {
     const options = [];
@@ -161,8 +186,20 @@ export function useContextMenu() {
     return options;
   };
 
-  const getAppOptions = (node: Node | null) => [
+  const getAppOptions = (node: Node | null, shortcut?: ShortcutNode) => [
     { id: "open", label: t("open"), action: () => handleOpenApp(node) },
+    ...(shortcut
+      ? [
+          {
+            label: t("rename_shortcut"),
+            action: () => renameNode(shortcut),
+          },
+          {
+            label: t("move_to_trash"),
+            action: () => moveToTrash(shortcut),
+          },
+        ]
+      : []),
   ];
 
   const menuOptions = computed(() => {
@@ -175,12 +212,22 @@ export function useContextMenu() {
       (targetNode.value as ShortcutNode).targetId
     ) {
       const shortcut = targetNode.value as ShortcutNode;
-      actualTargetNode = findNodeByIdRecursive(
+      const target = findNodeByIdRecursive(
         desktopStore.fileSystem,
         shortcut.targetId,
       );
-      if (actualTargetNode) {
-        actualTargetType = actualTargetNode.type;
+
+      if (target) {
+        switch (target.type) {
+          case "file":
+            return getFileOptions(target, shortcut);
+          case "folder":
+            return getFolderOptions(target, shortcut);
+          case "app":
+            return getAppOptions(target, shortcut);
+          default:
+            return [];
+        }
       }
     }
 
@@ -195,18 +242,6 @@ export function useContextMenu() {
         return getDockOptions(actualTargetNode);
       case "app":
         return getAppOptions(actualTargetNode);
-      case "shortcut":
-        // For shortcuts, use the options based on the target's type
-        switch (actualTargetNode?.type) {
-          case "file":
-            return getFileOptions(actualTargetNode);
-          case "folder":
-            return getFolderOptions(actualTargetNode);
-          case "app":
-            return getAppOptions(actualTargetNode);
-          default:
-            return [];
-        }
       default:
         return [];
     }
@@ -256,7 +291,7 @@ export function useContextMenu() {
     if (node.type === "social") {
       const { linkedin, github, reddit } = useRuntimeConfig().public.socialUrl;
       let url = "";
-      
+
       switch (node.id) {
         case "linkedin":
           url = linkedin;
@@ -268,7 +303,7 @@ export function useContextMenu() {
           url = reddit;
           break;
       }
-      
+
       if (url) {
         window.open(url, "_blank");
       }

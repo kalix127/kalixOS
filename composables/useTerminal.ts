@@ -58,6 +58,7 @@ export function useTerminal(terminalElement: HTMLElement) {
       brightCyan: "#299890",
       brightBlue: "#268bd2",
       brightWhite: "#d0cfcc",
+      green: "#859801",
       brightGreen: "#5fd601",
       background: "#161420",
     },

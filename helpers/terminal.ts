@@ -1145,6 +1145,8 @@ export function formatNodeName(
       return `\x1b[1;34m${displayName}\x1b[0m`;
     case "shortcut":
       return `\x1b[1;36m${displayName}\x1b[0m`;
+    case "app":
+      return `\x1b[0m\x1b[32m${displayName}\x1b[0m`;
     default:
       return node.name;
   }

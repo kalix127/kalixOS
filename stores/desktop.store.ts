@@ -349,6 +349,7 @@ export const useDesktopStore = defineStore({
         {
           name: linkName,
           type: "shortcut",
+          icon: targetNode.icon,
           targetId: targetNode.id,
           parentId: linkParentNode.id,
         } as ShortcutNode,

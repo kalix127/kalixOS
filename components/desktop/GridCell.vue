@@ -31,8 +31,6 @@ function handleContextMenu(event: MouseEvent) {
 function handleDoubleClick(e: MouseEvent) {
   const nodeType = props.item.type;
 
-  console.log("DOuble click", nodeType);
-
   switch (nodeType) {
     case "file":
       // Set the node in the text editor store

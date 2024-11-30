@@ -23,6 +23,18 @@ onMounted(() => {
     theme: "vs-dark",
     automaticLayout: false,
   });
+
+  watch(
+    app,
+    (newApp) => {
+      if (!editorObj) return;
+      editorObj.layout({
+        width: newApp.width,
+        height: newApp.height - 40, // 40px the height of the topbar
+      });
+    },
+    { deep: true, immediate: true },
+  );
 });
 
 onUnmounted(() => {

@@ -5,6 +5,7 @@ import type {
   ContextMenuTargetType,
   AppNode,
   FolderNode,
+  FileNode,
 } from "@/types";
 import { findNodeByIdRecursive } from "~/helpers";
 import { useEventListener } from "@vueuse/core";
@@ -27,6 +28,7 @@ export function useContextMenu() {
     desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
+  const { setNode } = useTextEditorStore();
 
   useEventListener("click", () => {
     if (isOpen.value) {
@@ -67,7 +69,7 @@ export function useContextMenu() {
       },
     },
   ];
-  const getFileOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+  const getFileOptions = (node: FileNode | null, shortcut?: ShortcutNode) => {
     const options = [
       { label: "Open", action: () => openFile(node) },
       {
@@ -235,7 +237,7 @@ export function useContextMenu() {
       case "desktop":
         return getDesktopOptions();
       case "file":
-        return getFileOptions(actualTargetNode);
+        return getFileOptions(actualTargetNode as FileNode);
       case "folder":
         return getFolderOptions(actualTargetNode);
       case "dock":
@@ -335,10 +337,11 @@ export function useContextMenu() {
     closeContextMenu();
   };
 
-  const openFile = (node: Node | null) => {
+  const openFile = (node: FileNode | null) => {
     if (!node) return;
 
-    console.log(`Opening file: ${node.name}`);
+    setNode(node);
+    openApp("kate");
     closeContextMenu();
   };
 

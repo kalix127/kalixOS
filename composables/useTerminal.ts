@@ -20,8 +20,9 @@ import {
   handlePkill,
   parseArguments,
   handleHelp,
+  formatNodeName,
 } from "@/helpers/terminal";
-import { findNodeByPath } from "@/helpers";
+import { findNodeByPath, resolvePath } from "@/helpers";
 import { commandSpecs } from "@/constants";
 import { helpMessages } from "~/constants/helpMessages";
 
@@ -100,7 +101,6 @@ export function useTerminal(terminalElement: HTMLElement) {
     term.write(`\r\n${newLine.value}`);
   }
 
-  // TODO Handle text input logic
   function onKey(data: { key: string; domEvent: KeyboardEvent }) {
     const { key, domEvent } = data;
 
@@ -136,12 +136,9 @@ export function useTerminal(terminalElement: HTMLElement) {
         }
         break;
 
-      // TODO: Ctrl+C
       case "\x03":
         term.write(`\r\n${newLine.value}`);
         resetCommandAndCursor();
-
-        // TODO: Before exit, check if there are command / apps open.
         break;
 
       // Ctrl+L
@@ -214,24 +211,14 @@ export function useTerminal(terminalElement: HTMLElement) {
         }
         break;
 
-      // TODO: Ctrl+R
-      case "\x12":
-        // Action: Show a list of previous commands used, numbered.
-        // If the user has already typed something, filter the list based on the current input.
-        // Implement a search or selection mechanism for the user to choose a previous command.
-        break;
-
-      // TODO: Tab Key
       case "\t":
         // Handle Autocomplete
-        // if (command.value.trim() === "") return;
+        handleAutocomplete();
         break;
 
       // Any Other Key
       default:
         // Invalidate specific keys and combinations
-        if (key === "\u001b[A") break; // Arrow up TODO: Switch to prev command
-        if (key === "\u001b[B") break; // Arrow down TODO: Switch to next command if presents
         if (key === "\u001b[D") break; // Arrow left
         if (key === "\u001b[C") break; // Arrow right
         if (key === "\u001b[1;5A") break; // Ctrl + Arrow up
@@ -451,6 +438,115 @@ export function useTerminal(terminalElement: HTMLElement) {
     }
 
     return shouldAddToHistory;
+  }
+
+  function handleAutocomplete(): void {
+    const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
+    const trimmedCommand = command.value;
+    const isTrailingSpace = trimmedCommand.endsWith(" ");
+    const commandTokens = trimmedCommand.trim().split(/\s+/);
+    const tokensLength = commandTokens.length;
+    let lastToken = isTrailingSpace
+      ? ""
+      : commandTokens[commandTokens.length - 1];
+
+    if (tokensLength === 1 && !isTrailingSpace) {
+      // autocomplete binaries
+      const binNode = findNodeByPath(fileSystem, ["bin"]);
+      if (binNode && binNode.type === "folder") {
+        const commandNodes = binNode.children || [];
+        const matchingCommands = commandNodes
+          .filter((node) => node.name.startsWith(lastToken))
+          .map((node) => node.name);
+        if (matchingCommands.length === 1) {
+          // autocomplete the command
+          const completion = matchingCommands[0].substring(lastToken.length);
+          command.value += completion;
+          cursorPosition.value += completion.length;
+          term.write(completion);
+        } else if (matchingCommands.length > 1) {
+          // show completions
+          term.write("\r\n");
+          const output = matchingCommands
+            .map((cmd) => {
+              const cmdNode = commandNodes.find((node) => node.name === cmd);
+              return cmdNode ? formatNodeName(cmdNode) : cmd;
+            })
+            .join("  ");
+          term.write(output);
+          // re-show the prompt and command
+          term.write(`\r\n${newLine.value}${command.value}`);
+        }
+      }
+    } else {
+      // autocomplete file paths
+      let pathToComplete = lastToken;
+      if (!pathToComplete) {
+        pathToComplete = "";
+      }
+      const { dir, incomplete } = splitPathAndIncomplete(pathToComplete);
+
+      const targetDirNode = resolvePath(
+        fileSystem,
+        currentDirectoryNode.value!,
+        dir || ".",
+      );
+      if (targetDirNode && targetDirNode.type === "folder") {
+        const childNodes = targetDirNode.children || [];
+        const matchingNodes = childNodes
+          .filter((node) => node.name.startsWith(incomplete))
+          .map((node) => node.name);
+
+        if (matchingNodes.length === 1) {
+          // autocomplete the path
+          const completion = matchingNodes[0].substring(incomplete.length);
+          // append a '/' if the node is a folder
+          const matchedNode = childNodes.find(
+            (node) => node.name === matchingNodes[0],
+          );
+          if (matchedNode) {
+            const isDir = matchedNode.type === "folder";
+            const appendChar = isDir ? "/" : " ";
+
+            command.value += completion + appendChar;
+            cursorPosition.value += completion.length + appendChar.length;
+            term.write(completion + appendChar);
+          }
+        } else if (matchingNodes.length > 1) {
+          // show completions
+          term.write("\r\n");
+          const output = matchingNodes
+            .map((name) => {
+              const node = childNodes.find((n) => n.name === name);
+              return node ? formatNodeName(node) : name;
+            })
+            .join("  ");
+          term.write(output);
+          // re-show the prompt and command
+          term.write(`\r\n${newLine.value}${command.value}`);
+        }
+      }
+    }
+  }
+
+  function splitPathAndIncomplete(path: string): {
+    dir: string;
+    incomplete: string;
+  } {
+    const lastSlashIndex = path.lastIndexOf("/");
+    if (lastSlashIndex === -1) {
+      return {
+        dir: "",
+        incomplete: path,
+      };
+    } else {
+      const dir = path.substring(0, lastSlashIndex + 1);
+      const incomplete = path.substring(lastSlashIndex + 1);
+      return {
+        dir,
+        incomplete,
+      };
+    }
   }
 
   return {

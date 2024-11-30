@@ -2,7 +2,6 @@
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
 import {
-  watchThrottled,
   breakpointsTailwind,
   useBreakpoints,
   watchDebounced,
@@ -38,7 +37,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="!isMobileOrTablet" ref="terminalElement" class="bg-[#161420]"></div>
+  <div
+    v-if="!isMobileOrTablet"
+    ref="terminalElement"
+    class="bg-[#161420]"
+  ></div>
   <div v-else class="grid h-full w-full place-content-center bg-background p-8">
     <div class="flex flex-col items-center gap-6">
       <Icon name="gnome:warning" size="140" class="text-muted-foreground" />

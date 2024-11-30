@@ -2,7 +2,6 @@
 import {
   useSwipe,
   watchDebounced,
-  useDebounceFn,
   breakpointsTailwind,
   useBreakpoints,
 } from "@vueuse/core";

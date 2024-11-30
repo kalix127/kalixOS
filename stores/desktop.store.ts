@@ -4,6 +4,7 @@ import {
   defaultBookmarks,
   defaultBackgroundImage,
   defaultBackgroundImages,
+  defaultDockbarItems,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -41,7 +42,7 @@ export const useDesktopStore = defineStore({
 
     // Apps
     hasAppsLoading: false,
-    apps: defaultApps,
+    apps: defaultDockbarItems,
 
     // Desktop
     desktopRef: null,

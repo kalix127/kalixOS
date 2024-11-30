@@ -244,6 +244,33 @@ export const defaultApps: AppNode[] = [
     icon: "app:vscode",
   },
   {
+    id: "kate",
+    name: "Kate",
+    type: "app",
+    icon: "app:kate",
+  },
+].map((app) => ({
+  ...app,
+  isOpen: false,
+  isActive: false,
+  isMinimized: false,
+  isFullscreen: false,
+  isModalOpen: false,
+  width: 0,
+  height: 0,
+  x: 0,
+  y: 1,
+  prev: {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  },
+}));
+
+export const defaultDockbarItems: AppNodes[] = [
+  ...defaultApps,
+  {
     id: "github",
     name: "github_profile",
     type: "social",
@@ -271,24 +298,7 @@ export const defaultApps: AppNode[] = [
     icon: "gnome:grid",
     isTranslated: true,
   },
-].map((app) => ({
-  ...app,
-  isOpen: false,
-  isActive: false,
-  isMinimized: false,
-  isFullscreen: false,
-  isModalOpen: false,
-  width: 0,
-  height: 0,
-  x: 0,
-  y: 1,
-  prev: {
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0,
-  },
-}));
+];
 
 export const defaultFileSystem = (username: string): Node =>
   assignDefaultProperties(
@@ -319,7 +329,7 @@ export const defaultFileSystem = (username: string): Node =>
                   icon: "folder:applications",
                   isProtected: true,
                   children: [
-                    ...defaultApps.slice(0, -4).map((app) => ({
+                    ...defaultApps.map((app) => ({
                       ...app,
                       name: `${app.name.replaceAll(" ", "")}.AppImage`,
                     })),

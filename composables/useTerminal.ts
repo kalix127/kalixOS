@@ -43,6 +43,10 @@ export function useTerminal(terminalElement: HTMLElement) {
   // Set the initial directories
   setCurrentDirectory(homeNode.value!);
 
+  // Set the user first time avoiding the terminal to start on the next Boot
+  const { setUserFirstTime } = useGlobalStore();
+  setUserFirstTime(false)
+
   // Init terminal and addons
   const webLinksAddon = new WebLinksAddon();
   const term = new Terminal({

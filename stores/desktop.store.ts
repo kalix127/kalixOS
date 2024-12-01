@@ -492,6 +492,12 @@ export const useDesktopStore = defineStore({
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
 
+      // Ensure the kate app is not opened if no node is selected
+      if (appId === "kate") {
+        const { openedNode } = storeToRefs(useTextEditorStore());
+        if (!openedNode.value) return;
+      }
+
       const applicationsNode = this.nodeMap.get("applications");
       if (!applicationsNode || applicationsNode.type !== "folder") return;
 

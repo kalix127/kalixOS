@@ -10,7 +10,7 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading, isShowAppsOverlayVisible } =
+const { dockbarItems, hasAppsLoading, isShowAppsOverlayVisible } =
   storeToRefs(desktopStore);
 const { updateDockApps } = desktopStore;
 
@@ -18,7 +18,7 @@ const { openContextMenu } = useContextMenuStore();
 
 const dockRef = ref<HTMLElement | null>(null);
 const draggableDockItems = computed({
-  get: () => apps.value,
+  get: () => dockbarItems.value,
   set: (newItems: AppNode[]) => {
     updateDockApps(newItems);
   },
@@ -69,7 +69,7 @@ onBeforeMount(async () => {
       class="grid grid-cols-5 place-items-center gap-1 sm:flex"
     >
       <DesktopDockItem
-        v-for="app in apps"
+        v-for="app in dockbarItems"
         :key="app.id"
         :app="app"
         @openApp="handleOpenApp"

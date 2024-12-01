@@ -270,7 +270,7 @@ export const defaultApps: AppNode[] = [
 }));
 
 export const defaultDockbarItems: AppNodes[] = [
-  ...defaultApps,
+  ...defaultApps.slice(0, -1),
   {
     id: "github",
     name: "github_profile",

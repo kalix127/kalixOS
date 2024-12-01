@@ -1,10 +1,10 @@
 import {
   defaultFileSystem,
-  defaultApps,
   defaultBookmarks,
   defaultBackgroundImage,
   defaultBackgroundImages,
   defaultDockbarItems,
+  defaultApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -39,10 +39,11 @@ export const useDesktopStore = defineStore({
     // Docks
     isDockVisible: true,
     isDockPinned: true,
+    dockbarItems: defaultDockbarItems,
 
     // Apps
     hasAppsLoading: false,
-    apps: defaultDockbarItems,
+    apps: defaultApps,
 
     // Desktop
     desktopRef: null,
@@ -479,7 +480,7 @@ export const useDesktopStore = defineStore({
      */
     updateDockApps(newItems: AppNode[]) {
       // Filter out duplicates based on app id
-      this.apps = newItems.filter(
+      this.dockbarItems = newItems.filter(
         (app, index, self) => index === self.findIndex((t) => t.id === app.id),
       );
     },
@@ -681,6 +682,7 @@ interface DesktopStore {
   // Docks
   isDockVisible: boolean;
   isDockPinned: boolean;
+  dockbarItems: AppNode[];
 
   // Apps
   hasAppsLoading: boolean;

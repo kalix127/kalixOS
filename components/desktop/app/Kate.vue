@@ -4,7 +4,7 @@ import * as monaco from "monaco-editor";
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import { monacoEditorLanguageMap } from "@/constants";
+import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
@@ -30,12 +30,17 @@ const getLanguage = (name: string | undefined): string => {
 
 onMounted(() => {
   if (isMobileOrTablet.value) return;
+  // @ts-ignore
+  monaco.editor.defineTheme("github-custom", monacoTheme);
 
   editorObj = monaco.editor.create(document.getElementById("editor")!, {
     value: openedNode.value?.content || "",
     language: getLanguage(openedNode.value?.name),
-    theme: "vs-dark",
+    theme: "github-custom",
     automaticLayout: false,
+    "semanticHighlighting.enabled": true,
+    tabSize: 2,
+    wordWrap: "on",
   });
 
   // Update the content
@@ -64,7 +69,6 @@ onMounted(() => {
     openedNode,
     (newOpenedNode) => {
       const language = getLanguage(newOpenedNode?.name);
-      // @ts-ignore
       monaco.editor.setModelLanguage(model, language);
 
       // Update the App's title
@@ -99,4 +103,8 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.monaco-editor {
+  @apply duration-300;
+}
+</style>

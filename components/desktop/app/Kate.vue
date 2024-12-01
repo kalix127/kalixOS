@@ -18,6 +18,7 @@ const { openedNode } = storeToRefs(textEditorStore);
 const { updateApp } = useDesktopStore();
 
 let editorObj: monaco.editor.IEditor | undefined;
+
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
 const getLanguage = (name: string | undefined): string => {
@@ -35,6 +36,14 @@ onMounted(() => {
     language: getLanguage(openedNode.value?.name),
     theme: "vs-dark",
     automaticLayout: false,
+  });
+
+  // Update the content
+  const model = editorObj.getModel() as monaco.editor.ITextModel;
+  model.onDidChangeContent((e: any) => {
+    if (!openedNode.value) return;
+    const content = model.getValue();
+    openedNode.value.content = content;
   });
 
   // Update the size of monaco
@@ -56,7 +65,7 @@ onMounted(() => {
     (newOpenedNode) => {
       const language = getLanguage(newOpenedNode?.name);
       // @ts-ignore
-      monaco.editor.setModelLanguage(editorObj.getModel()!, language);
+      monaco.editor.setModelLanguage(model, language);
 
       // Update the App's title
       if (app.value.title !== newOpenedNode?.name) {

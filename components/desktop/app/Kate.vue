@@ -71,6 +71,11 @@ onMounted(() => {
       if (app.value.title !== newOpenedNode?.name) {
         updateApp(app.value.id, { title: newOpenedNode?.name });
       }
+
+      // Update the editor's text value when the user open another file
+      if (model.getValue() !== newOpenedNode?.content) {
+        model.setValue(newOpenedNode?.content || "");
+      }
     },
     { deep: true, immediate: true },
   );

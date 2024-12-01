@@ -251,6 +251,7 @@ export const defaultApps: AppNode[] = [
   },
 ].map((app) => ({
   ...app,
+  title: "",
   isOpen: false,
   isActive: false,
   isMinimized: false,

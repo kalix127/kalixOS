@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, hasAppsLoading, nodeMap } =
+const { desktopItems, openApps, desktopRef, nodeMap } =
   storeToRefs(desktopStore);
 const { init, moveNode, updateDesktopItems } = desktopStore;
 
@@ -110,7 +110,6 @@ onUnmounted(() => {
   <main
     ref="desktopRef"
     class="relative select-none"
-    :class="[hasAppsLoading ? 'cursor-progress' : '']"
   >
     <!-- Apps -->
     <TransitionGroup name="apps">

@@ -42,7 +42,6 @@ export const useDesktopStore = defineStore({
     dockbarItems: defaultDockbarItems,
 
     // Apps
-    hasAppsLoading: false,
     apps: defaultApps,
 
     // Desktop
@@ -526,15 +525,12 @@ export const useDesktopStore = defineStore({
 
       // If the node is not open, open it with delay
       if (!app.isOpen) {
-        this.hasAppsLoading = true;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         this.apps = this.apps.map((app) => ({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
           isActive: app.id === appId ? true : app.isActive,
         }));
-        this.hasAppsLoading = false;
 
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
@@ -685,7 +681,6 @@ interface DesktopStore {
   dockbarItems: AppNode[];
 
   // Apps
-  hasAppsLoading: boolean;
   apps: AppNode[];
 
   // Desktop

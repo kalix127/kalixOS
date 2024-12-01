@@ -13,7 +13,6 @@ const {
 } = storeToRefs(globalStore);
 
 const desktopStore = useDesktopStore();
-const { hasAppsLoading } = storeToRefs(desktopStore);
 const { openApp } = desktopStore;
 
 const { handleLock } = globalStore;
@@ -69,7 +68,6 @@ function handleBatteryMenu() {
       <Button
         variant="ghost"
         class="flex size-fit select-none items-center space-x-2 rounded-full bg-secondary p-2 duration-0 hover:bg-secondary-hover sm:p-3"
-        :class="[hasAppsLoading ? 'cursor-progress' : '']"
         :disabled="isAnyTopbarMenuOpen"
         @click="handleBatteryMenu"
       >
@@ -87,7 +85,6 @@ function handleBatteryMenu() {
         size="icon"
         variant="ghost"
         class="size-fit rounded-full bg-secondary p-2.5 duration-0 hover:bg-secondary-hover sm:p-3"
-        :class="[hasAppsLoading ? 'cursor-progress' : '']"
         @click="item.handler"
       >
         <Icon :name="item.icon" class="size-[14px] sm:size-4" />

@@ -10,7 +10,7 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { dockbarItems, hasAppsLoading, isShowAppsOverlayVisible } =
+const { dockbarItems, isShowAppsOverlayVisible } =
   storeToRefs(desktopStore);
 const { updateDockApps } = desktopStore;
 
@@ -62,7 +62,6 @@ onBeforeMount(async () => {
   <div
     v-on-click-outside="() => $emit('close')"
     class="z-[50000] flex h-full w-full flex-col items-center gap-2 rounded-3xl px-3 py-2 sm:flex-row"
-    :class="[hasAppsLoading ? 'cursor-progress' : '']"
   >
     <div
       ref="dockRef"

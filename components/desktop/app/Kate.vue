@@ -59,7 +59,9 @@ onMounted(() => {
       monaco.editor.setModelLanguage(editorObj.getModel()!, language);
 
       // Update the App's title
-      updateApp(app.value.id, { title: newOpenedNode?.name });
+      if (app.value.title !== newOpenedNode?.name) {
+        updateApp(app.value.id, { title: newOpenedNode?.name });
+      }
     },
     { deep: true, immediate: true },
   );

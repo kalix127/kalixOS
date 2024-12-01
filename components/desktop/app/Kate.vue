@@ -15,11 +15,13 @@ const { app } = toRefs(props);
 
 const textEditorStore = useTextEditorStore();
 const { openedNode } = storeToRefs(textEditorStore);
+const { updateApp } = useDesktopStore();
 
 let editorObj: monaco.editor.IEditor | undefined;
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
-const getLanguage = (name: string): string => {
+const getLanguage = (name: string | undefined): string => {
+  if (!name) return "plaintext";
   const extension = name.split(".").pop();
   const language = monacoEditorLanguageMap[extension ?? ""] || "plaintext";
   return language;
@@ -30,7 +32,7 @@ onMounted(() => {
 
   editorObj = monaco.editor.create(document.getElementById("editor")!, {
     value: openedNode.value?.content || "",
-    language: getLanguage(openedNode.value!.name),
+    language: getLanguage(openedNode.value?.name),
     theme: "vs-dark",
     automaticLayout: false,
   });
@@ -52,9 +54,12 @@ onMounted(() => {
   watch(
     openedNode,
     (newOpenedNode) => {
-      const language = getLanguage(newOpenedNode!.name);
+      const language = getLanguage(newOpenedNode?.name);
       // @ts-ignore
       monaco.editor.setModelLanguage(editorObj.getModel()!, language);
+
+      // Update the App's title
+      updateApp(app.value.id, { title: newOpenedNode?.name });
     },
     { deep: true, immediate: true },
   );

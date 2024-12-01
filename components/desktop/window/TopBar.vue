@@ -55,7 +55,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ app.name }}
+      {{ app.title ? `${app.name} - ${app.title}` : app.name }}
     </div>
 
     <!-- Actions -->

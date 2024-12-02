@@ -53,6 +53,7 @@ export interface FileNode extends BaseNode {
 
 export interface AppNode extends BaseNode {
   type: "app" | "social";
+  title: string; 
   isOpen: boolean;
   isActive: boolean;
   isMinimized: boolean;

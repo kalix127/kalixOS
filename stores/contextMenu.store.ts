@@ -1,5 +1,4 @@
 import type { Node, ContextMenuTargetType } from "@/types";
-import { defineStore } from "pinia";
 import { useWindowSize } from "@vueuse/core";
 
 export interface ContextMenuState {

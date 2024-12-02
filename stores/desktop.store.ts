@@ -1,9 +1,10 @@
 import {
   defaultFileSystem,
-  defaultApps,
   defaultBookmarks,
   defaultBackgroundImage,
   defaultBackgroundImages,
+  defaultDockbarItems,
+  defaultApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -38,9 +39,9 @@ export const useDesktopStore = defineStore({
     // Docks
     isDockVisible: true,
     isDockPinned: true,
+    dockbarItems: defaultDockbarItems,
 
     // Apps
-    hasAppsLoading: false,
     apps: defaultApps,
 
     // Desktop
@@ -478,7 +479,7 @@ export const useDesktopStore = defineStore({
      */
     updateDockApps(newItems: AppNode[]) {
       // Filter out duplicates based on app id
-      this.apps = newItems.filter(
+      this.dockbarItems = newItems.filter(
         (app, index, self) => index === self.findIndex((t) => t.id === app.id),
       );
     },
@@ -490,6 +491,12 @@ export const useDesktopStore = defineStore({
     async openApp(appId: string, toggleMinimize?: boolean) {
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
+
+      // Ensure the kate app is not opened if no node is selected
+      if (appId === "kate") {
+        const { openedNode } = storeToRefs(useTextEditorStore());
+        if (!openedNode.value) return;
+      }
 
       const applicationsNode = this.nodeMap.get("applications");
       if (!applicationsNode || applicationsNode.type !== "folder") return;
@@ -518,15 +525,12 @@ export const useDesktopStore = defineStore({
 
       // If the node is not open, open it with delay
       if (!app.isOpen) {
-        this.hasAppsLoading = true;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         this.apps = this.apps.map((app) => ({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
           isActive: app.id === appId ? true : app.isActive,
         }));
-        this.hasAppsLoading = false;
 
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
@@ -674,9 +678,9 @@ interface DesktopStore {
   // Docks
   isDockVisible: boolean;
   isDockPinned: boolean;
+  dockbarItems: AppNode[];
 
   // Apps
-  hasAppsLoading: boolean;
   apps: AppNode[];
 
   // Desktop

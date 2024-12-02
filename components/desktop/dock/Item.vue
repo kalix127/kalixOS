@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { type AppNode } from "@/types";
 
-const { hasAppsLoading } = storeToRefs(useDesktopStore());
-
 const emit = defineEmits<{
   (e: "openApp", app: AppNode): void;
   (e: "context", event: MouseEvent, app: AppNode): void;
@@ -28,7 +26,6 @@ function handleClick() {
       variant="ghost"
       size="icon"
       class="group relative grid place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7"
-      :class="[hasAppsLoading ? 'cursor-progress' : '']"
     >
       <Icon :name="app.icon" class="size-9 sm:size-10" />
       <div

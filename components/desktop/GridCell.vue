@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
-const { editNode } = desktopStore;
+const { editNode, openApp } = desktopStore;
 
 const formattedName = computed(() => {
   return props.item?.name.length > 21
@@ -18,26 +18,58 @@ const formattedName = computed(() => {
     : props.item?.name;
 });
 
-const handleContextMenu = (event: MouseEvent) => {
+function handleContextMenu(event: MouseEvent) {
   openContextMenu(
     event.clientX,
     event.clientY,
     props.item.type as ContextMenuTargetType,
     props.item,
   );
-};
+}
 
-const handleStopRenaming = () => {
+// Double-click handler
+function handleDoubleClick(e: MouseEvent) {
+  const nodeType = props.item.type;
+
+  switch (nodeType) {
+    case "file":
+      // Set the node in the text editor store
+      const { setNode } = useTextEditorStore();
+      setNode(props.item);
+      // Open the 'Kate' app
+      openApp("kate");
+      break;
+
+    case "folder":
+      // TODO: Implement files app first
+      // openApp('files')
+      break;
+
+    case "shortcut":
+      openApp(props.item.targetId);
+      break;
+
+    case "app":
+      // TODO: Implement
+      break;
+
+    default:
+      break;
+  }
+}
+
+function handleStopRenaming() {
   editNode(props.item.id, { isRenaming: false, isNewlyCreated: false });
-};
+}
 </script>
 
 <template>
   <div
     @contextmenu.prevent.stop="handleContextMenu"
+    @dblclick="handleDoubleClick"
     :class="
       cn(
-        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
+        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150 cursor-pointer',
         props.class,
       )
     "
@@ -83,8 +115,10 @@ const handleStopRenaming = () => {
     </Popover>
 
     <!-- Shortcut icon -->
-    <div v-if="item.type === 'shortcut'" class="absolute grid place-content-center bg-secondary rounded-full right-1 top-0 p-0.5">
-
+    <div
+      v-if="item.type === 'shortcut'"
+      class="absolute right-1 top-0 grid place-content-center rounded-full bg-secondary p-0.5"
+    >
       <Icon name="gnome:arrow-shortcut" size="12" class="text-white" />
     </div>
   </div>

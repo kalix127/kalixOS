@@ -103,7 +103,7 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .monaco-editor {
   @apply duration-300;
 }

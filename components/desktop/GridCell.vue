@@ -69,7 +69,7 @@ function handleStopRenaming() {
     @dblclick="handleDoubleClick"
     :class="
       cn(
-        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150',
+        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150 cursor-pointer',
         props.class,
       )
     "

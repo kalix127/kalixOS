@@ -12,6 +12,12 @@ const props = defineProps<{
   app: AppNode;
 }>();
 
+defineEmits<{
+  (e: "close"): void;
+  (e: "minimize"): void;
+  (e: "fullscreen"): void;
+}>();
+
 const { app } = toRefs(props);
 
 const terminalElement = ref<HTMLElement | null>(null);
@@ -37,17 +43,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    v-if="!isMobileOrTablet"
-    ref="terminalElement"
-    class="bg-[#161420]"
-  ></div>
-  <div v-else class="grid h-full w-full place-content-center bg-background p-8">
-    <div class="flex flex-col items-center gap-6">
-      <Icon name="gnome:warning" size="140" class="text-muted-foreground" />
-      <p class="text-center">
-        {{ $t("terminal_not_available_on_mobile") }}
-      </p>
+  <div class="grid h-full w-full grid-rows-[40px_1fr]">
+    <!-- Top bar -->
+    <DesktopWindowTopBar
+      @minimize="$emit('minimize')"
+      @fullscreen="$emit('fullscreen')"
+      @close="$emit('close')"
+      :app="app"
+    />
+
+    <!-- Terminal -->
+    <div
+      v-if="!isMobileOrTablet"
+      ref="terminalElement"
+      class="bg-[#161420]"
+    ></div>
+
+    <!-- Mobile error -->
+    <div
+      v-else
+      class="grid h-full w-full place-content-center bg-background p-8"
+    >
+      <div class="flex flex-col items-center gap-6">
+        <Icon name="gnome:warning" size="140" class="text-muted-foreground" />
+        <p class="text-center">
+          {{ $t("terminal_not_available_on_mobile") }}
+        </p>
+      </div>
     </div>
   </div>
 </template>

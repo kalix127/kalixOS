@@ -15,6 +15,7 @@ const props = defineProps<{
 }>();
 
 const { app } = toRefs(props);
+const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
 const actions = computed(() => [
   {
@@ -41,10 +42,7 @@ const actions = computed(() => [
   <div
     :class="[
       cn(
-        'grid h-10 grid-cols-3 p-2 transition-colors duration-300 app-topbar',
-        app.isFullscreen ? '' : 'rounded-t-xl',
-        app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
-        app.isActive ? 'bg-popover' : 'bg-muted',
+        'grid h-10 grid-cols-3 p-2 transition-colors duration-300',
         $props.class,
       ),
     ]"
@@ -55,9 +53,9 @@ const actions = computed(() => [
 
     <!-- Title -->
     <div
-      class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
+      class="text truncatetext-center grid min-w-fit select-none place-content-center text-sm font-extrabold"
     >
-      {{ app.title ? `${app.name} - ${app.title}` : app.name }}
+      {{ currentSettingsTab ? $t(currentSettingsTab) : '' }}
     </div>
 
     <!-- Actions -->
@@ -65,8 +63,7 @@ const actions = computed(() => [
       <Button
         variant="ghost"
         size="icon"
-        class="size-6 rounded-full duration-300 hover:bg-secondary-hover"
-        :class="[app.isActive ? 'bg-secondary' : 'bg-popover']"
+        class="size-6 rounded-full duration-300 hover:bg-secondary bg-popover"
         v-for="action in actions"
         :key="action.icon"
       >
@@ -76,4 +73,6 @@ const actions = computed(() => [
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

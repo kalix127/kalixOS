@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from "vue";
 import type { AppNode } from "@/types";
 import VueDraggableResizable from "vue-draggable-resizable";
 import {
@@ -21,6 +22,8 @@ const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 
 const { minWindowSizes } = useWindowSizes();
 const { width, height } = useViewportSize();
+
+const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
 const {
   handleActive,
@@ -52,11 +55,30 @@ onBeforeMount(() => {
   app.value.isModalOpen = false;
 
   // If on mobile or brave, set the app to fullscreen
-  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("sm");
-  if (isMobileOrTablet.value || defaultFullscreenApps.includes(app.value.id)) {
+  if (isMobile.value || defaultFullscreenApps.includes(app.value.id)) {
     handleFullscreen(true);
   }
 });
+
+import Settings from "@/components/desktop/app/settings/index.vue";
+import DesktopAppVSCode from "@/components/desktop/app/VSCode.vue";
+import DesktopAppBrave from "@/components/desktop/app/Brave.vue";
+import DesktopAppTerminal from "@/components/desktop/app/Terminal.vue";
+import DesktopAppKate from "@/components/desktop/app/Kate.vue";
+import DesktopAppFiles from "@/components/desktop/app/files/index.vue";
+
+const appComponents: { [appId: string]: Component } = {
+  settings: Settings,
+  code: DesktopAppVSCode,
+  brave: DesktopAppBrave,
+  terminal: DesktopAppTerminal,
+  kate: DesktopAppKate,
+  files: DesktopAppFiles,
+};
+
+const getAppComponent = (appId: string): Component => {
+  return appComponents[appId] || null;
+};
 </script>
 
 <template>
@@ -69,8 +91,8 @@ onBeforeMount(() => {
     :x="app.x"
     :y="app.y"
     :active="app.isActive"
-    :resizable="app.isFullscreen || app.isModalOpen ? false : true"
-    :draggable="app.isFullscreen ? false : true"
+    :resizable="!app.isFullscreen && !app.isModalOpen"
+    :draggable="!app.isFullscreen"
     :parent="true"
     @dragging="handleDragging"
     @dragStop="handleDragStop"
@@ -83,10 +105,8 @@ onBeforeMount(() => {
     classNameHandle="handle"
     classNameDragging="app-dragging"
     classNameResizing="app-resizing"
-    :style="{
-      zIndex: app.isActive ? 10000 : 5000,
-    }"
-    class="absolute left-0 top-0 rounded-t-xl !border-none duration-300"
+    :style="{ zIndex: app.isActive ? 10000 : 5000 }"
+    class="absolute left-0 top-0 !border-none duration-300"
     :class="[
       app.isFullscreen ? '' : 'rounded-t-xl',
       app.isActive
@@ -94,34 +114,14 @@ onBeforeMount(() => {
         : 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)]',
     ]"
   >
-    <div :id="app.id" class="relative grid h-full w-full grid-rows-[40px_1fr]">
-      <!-- Top bar -->
-      <DesktopWindowTopBar
-        @minimize="() => toggleMinimizeApp(app.id)"
-        @fullscreen="handleFullscreen()"
-        @close="() => closeApp(app.id)"
+    <div :id="app.id" class="relative h-full w-full">
+      <component
+        :is="getAppComponent(app.id)"
         :app="app"
-        :class="[
-          app.isModalOpen ? 'pointer-events-none brightness-[0.8]' : '',
-          app.isActive ? 'bg-popover' : 'bg-muted',
-        ]"
-        class="app-topbar"
+        @minimize="() => toggleMinimizeApp(app.id)"
+        @fullscreen="() => handleFullscreen()"
+        @close="() => closeApp(app.id)"
       />
-
-      <!-- Settings -->
-      <Settings v-if="app.id === 'settings'" :app="app" />
-
-      <!-- VS Code -->
-      <DesktopAppVSCode v-else-if="app.id === 'code'" :app="app" />
-
-      <!-- Brave -->
-      <DesktopAppBrave v-else-if="app.id === 'brave'" :app="app" />
-
-      <!-- Terminal -->
-      <DesktopAppTerminal v-else-if="app.id === 'terminal'" :app="app" />
-
-      <!-- Text editor -->
-      <DesktopAppKate v-else-if="app.id === 'kate'" :app="app" />
     </div>
   </vue-draggable-resizable>
 </template>
@@ -141,7 +141,6 @@ onBeforeMount(() => {
   @apply z-10 !block h-1 w-1 border-none bg-transparent sm:h-2 sm:w-2;
 }
 
-/* Top */
 .handle-tl {
   @apply left-1 top-1;
 }
@@ -154,8 +153,6 @@ onBeforeMount(() => {
   @apply right-1 top-1;
 }
 
-/* Middle */
-
 .handle-ml {
   @apply left-0 top-4 h-[calc(100%-18px)];
 }
@@ -164,7 +161,6 @@ onBeforeMount(() => {
   @apply right-0 top-4 h-[calc(100%-18px)];
 }
 
-/* Bottom */
 .handle-bl {
   @apply bottom-0 left-0;
 }

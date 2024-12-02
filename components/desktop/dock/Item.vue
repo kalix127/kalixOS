@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { type AppNode } from "@/types";
+import type { HTMLAttributes } from "vue";
+import type { AppNode } from "@/types";
+import { cn } from "@/lib/utils";
 
 const emit = defineEmits<{
   (e: "openApp", app: AppNode): void;
@@ -7,6 +9,7 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+  class?: HTMLAttributes["class"];
   app: AppNode;
 }>();
 const { app } = toRefs(props);
@@ -19,13 +22,21 @@ function handleClick() {
 </script>
 
 <template>
-  <DesktopDockItemTooltip :app-name="app.name" :is-translated="app.isTranslated">
+  <DesktopDockItemTooltip
+    :app-name="app.name"
+    :is-translated="app.isTranslated"
+  >
     <Button
       @contextmenu.prevent="(event) => $emit('context', event, app)"
       @click="handleClick"
       variant="ghost"
       size="icon"
-      class="group relative grid place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7"
+      :class="
+        cn(
+          'group relative grid place-content-center rounded-2xl p-6 duration-0 hover:bg-accent/70 sm:p-7',
+          $props.class,
+        )
+      "
     >
       <Icon :name="app.icon" class="size-9 sm:size-10" />
       <div

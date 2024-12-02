@@ -249,28 +249,6 @@ export const defaultApps: AppNode[] = [
     type: "app",
     icon: "app:kate",
   },
-].map((app) => ({
-  ...app,
-  title: "",
-  isOpen: false,
-  isActive: false,
-  isMinimized: false,
-  isFullscreen: false,
-  isModalOpen: false,
-  width: 0,
-  height: 0,
-  x: 0,
-  y: 1,
-  prev: {
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0,
-  },
-}));
-
-export const defaultDockbarItems: AppNodes[] = [
-  ...defaultApps.slice(0, -1),
   {
     id: "github",
     name: "github_profile",
@@ -299,7 +277,25 @@ export const defaultDockbarItems: AppNodes[] = [
     icon: "gnome:grid",
     isTranslated: true,
   },
-];
+].map((app) => ({
+  ...app,
+  title: "",
+  isOpen: false,
+  isActive: false,
+  isMinimized: false,
+  isFullscreen: false,
+  isModalOpen: false,
+  width: 0,
+  height: 0,
+  x: 0,
+  y: 1,
+  prev: {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  },
+}));
 
 export const defaultFileSystem = (username: string): Node =>
   assignDefaultProperties(

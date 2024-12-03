@@ -33,7 +33,7 @@ onUnmounted(() => {
       // Mobile grid: single column
       'grid-cols-1 grid-rows-[auto_1fr_1fr]',
       // Desktop grid: two columns, two rows
-      'md:grid-cols-[25%_1fr] md:grid-rows-[auto_1fr]',
+      'md:grid-cols-[30%_1fr] md:grid-rows-[auto_1fr]',
     ]"
   >
     <!-- Sidebar -->

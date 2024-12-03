@@ -34,8 +34,8 @@ function handleDoubleClick(e: MouseEvent) {
   switch (nodeType) {
     case "file":
       // Set the node in the text editor store
-      const { setNode } = useTextEditorStore();
-      setNode(props.item);
+      const { setFileNode } = useKateStore();
+      setFileNode(props.item);
       // Open the 'Kate' app
       openApp("kate");
       break;

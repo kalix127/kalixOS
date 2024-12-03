@@ -2,8 +2,8 @@ import { monacoEditorLanguageMap } from "@/constants";
 import type { FileNode } from "~/types";
 
 
-export const useTextEditorStore = defineStore("textEditor", {
-  state: (): TextEditorState => ({
+export const useKateStore = defineStore("kate", {
+  state: (): KateStore => ({
     openedNode: null,
   }),
   getters: {
@@ -17,12 +17,12 @@ export const useTextEditorStore = defineStore("textEditor", {
     },
   },
   actions: {
-    setNode(node: FileNode) {
+    setFileNode(node: FileNode) {
       this.openedNode = node;
     },
   },
 });
 
-interface TextEditorState {
+interface KateStore {
   openedNode: FileNode | null;
 }

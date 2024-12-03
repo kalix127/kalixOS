@@ -19,7 +19,7 @@ defineEmits<{
 
 const { app } = toRefs(props);
 
-const textEditorStore = useTextEditorStore();
+const textEditorStore = useKateStore();
 const { openedNode } = storeToRefs(textEditorStore);
 const { updateApp } = useDesktopStore();
 

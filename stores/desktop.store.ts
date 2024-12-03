@@ -492,7 +492,7 @@ export const useDesktopStore = defineStore({
 
       // Ensure the kate app is not opened if no node is selected
       if (appId === "kate") {
-        const { openedNode } = storeToRefs(useTextEditorStore());
+        const { openedNode } = storeToRefs(useKateStore());
         if (!openedNode.value) return;
       }
 

@@ -28,7 +28,7 @@ export function useContextMenu() {
     desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
-  const { setNode } = useTextEditorStore();
+  const { setFileNode } = useKateStore();
 
   useEventListener("click", () => {
     if (isOpen.value) {
@@ -340,7 +340,7 @@ export function useContextMenu() {
   const openFile = (node: FileNode | null) => {
     if (!node) return;
 
-    setNode(node);
+    setFileNode(node);
     openApp("kate");
     closeContextMenu();
   };

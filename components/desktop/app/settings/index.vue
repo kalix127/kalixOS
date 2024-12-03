@@ -76,7 +76,7 @@ onUnmounted(() => {
         // Desktop: content in column 2, row 2
         'md:col-start-2 md:row-start-2',
       ]"
-      :style="{ height: `${app.height}px` }"
+      :style="{ height: `${app.height - 40}px` }"
     >
       <Transition mode="out-in">
         <!-- Wifi -->

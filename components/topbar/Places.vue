@@ -1,42 +1,52 @@
 <script setup lang="ts">
-import type { Node } from "@/types";
-const { hasAppsAtTop, bookmarksNodes } = storeToRefs(useDesktopStore());
+import type { Node, FolderNode } from "@/types";
 
-function openFolder(nodeId: string) {
-  console.log("Open folder", nodeId);
+const desktopStore = useDesktopStore();
+const { hasAppsAtTop, bookmarksNodes } = storeToRefs(desktopStore);
+const { openApp } = desktopStore;
+
+const { setFilesNodeId } = useFilesStore();
+
+function openFolder(id: string) {
+  setFilesNodeId(id);
+  openApp("files");
 }
 
-// TODO: Add actions
 const items = [
   {
-    name: "home",
-    icon: "gnome:home",
     id: "home",
+    name: "Home",
+    icon: "gnome:home",
   },
   {
-    name: "documents",
-    icon: "gnome:documents",
+    id: "applications",
+    name: "Applications",
+    icon: "gnome:applications",
+  },
+  {
     id: "documents",
+    name: "Documents",
+    icon: "gnome:documents",
   },
   {
-    name: "downloads",
-    icon: "gnome:downloads",
     id: "downloads",
+    name: "Downloads",
+    icon: "gnome:downloads",
   },
   {
-    name: "music",
-    icon: "gnome:music",
     id: "music",
+    name: "Music",
+    icon: "gnome:music",
   },
   {
-    name: "pictures",
-    icon: "gnome:pictures",
     id: "pictures",
+    name: "Pictures",
+    icon: "gnome:pictures",
   },
   {
-    name: "videos",
-    icon: "gnome:videos",
     id: "videos",
+    name: "Videos",
+    icon: "gnome:videos",
   },
 ];
 </script>
@@ -53,7 +63,7 @@ const items = [
       </div>
     </PopoverTrigger>
     <PopoverContent
-      class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2 depth-shadow"
+      class="depth-shadow z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2"
     >
       <Button
         v-for="item in items"
@@ -63,7 +73,7 @@ const items = [
         @click="() => openFolder(item.id)"
       >
         <Icon :name="item.icon" size="16" />
-        <span class="text-sm">{{ $t(item.name) }}</span>
+        <span class="text-sm">{{ item.name }}</span>
       </Button>
 
       <div

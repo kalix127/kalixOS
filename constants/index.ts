@@ -182,6 +182,49 @@ export const defaultNetworks: WifiNetwork[] = [
 
 /* File system */
 
+export const defaultFolders = [
+  {
+    id: "home",
+    name: "Home",
+    icon: "gnome:home",
+  },
+  {
+    id: "applications",
+    name: "Applications",
+    icon: "gnome:applications",
+  },
+  {
+    id: "documents",
+    name: "Documents",
+    icon: "gnome:documents",
+  },
+  {
+    id: "downloads",
+    name: "Downloads",
+    icon: "gnome:downloads",
+  },
+  {
+    id: "music",
+    name: "Music",
+    icon: "gnome:music",
+  },
+  {
+    id: "pictures",
+    name: "Pictures",
+    icon: "gnome:pictures",
+  },
+  {
+    id: "videos",
+    name: "Videos",
+    icon: "gnome:videos",
+  },
+  {
+    id: "trash",
+    name: "Trash",
+    icon: "gnome:trash"
+  }
+];
+
 export const defaultFilePermissions = {
   owner: { read: true, write: true, execute: false },
   group: { read: true, write: false, execute: false },

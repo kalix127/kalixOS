@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Node, FolderNode } from "@/types";
+import { defaultFolders } from "@/constants";
 
 const desktopStore = useDesktopStore();
 const { hasAppsAtTop, bookmarksNodes } = storeToRefs(desktopStore);
@@ -11,44 +11,6 @@ function openFolder(id: string) {
   setFilesNodeId(id);
   openApp("files");
 }
-
-const items = [
-  {
-    id: "home",
-    name: "Home",
-    icon: "gnome:home",
-  },
-  {
-    id: "applications",
-    name: "Applications",
-    icon: "gnome:applications",
-  },
-  {
-    id: "documents",
-    name: "Documents",
-    icon: "gnome:documents",
-  },
-  {
-    id: "downloads",
-    name: "Downloads",
-    icon: "gnome:downloads",
-  },
-  {
-    id: "music",
-    name: "Music",
-    icon: "gnome:music",
-  },
-  {
-    id: "pictures",
-    name: "Pictures",
-    icon: "gnome:pictures",
-  },
-  {
-    id: "videos",
-    name: "Videos",
-    icon: "gnome:videos",
-  },
-];
 </script>
 
 <template>
@@ -66,7 +28,7 @@ const items = [
       class="depth-shadow z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2"
     >
       <Button
-        v-for="item in items"
+        v-for="item in defaultFolders"
         :key="item.name"
         variant="ghost"
         class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
@@ -16,6 +17,7 @@ const props = defineProps<{
 
 const { app } = toRefs(props);
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
+const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
 const actions = computed(() => [
   {
@@ -55,7 +57,12 @@ const actions = computed(() => [
     <div
       class="text truncatetext-center grid min-w-fit select-none place-content-center text-sm font-extrabold"
     >
-      {{ currentSettingsTab ? $t(currentSettingsTab) : '' }}
+      <template v-if="isMobile">
+        {{ $t("settings") }}
+      </template>
+      <template v-else>
+        {{ currentSettingsTab ? $t(currentSettingsTab) : "" }}
+      </template>
     </div>
 
     <!-- Actions -->
@@ -63,16 +70,14 @@ const actions = computed(() => [
       <Button
         variant="ghost"
         size="icon"
-        class="size-6 rounded-full duration-300 hover:bg-secondary bg-popover"
+        class="size-6 rounded-full bg-popover duration-300 hover:bg-secondary"
         v-for="action in actions"
         :key="action.icon"
       >
-        <Icon :name="action.icon" size="18" @click="$emit(action.emit)" />
+        <Icon :name="action.icon" size="18" @click="() => $emit(action.emit)" />
       </Button>
     </div>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -29,11 +29,12 @@ onUnmounted(() => {
 <template>
   <div
     :class="[
-      'grid h-full w-full rounded-t-xl bg-background',
+      'grid h-full w-full bg-background',
       // Mobile grid: single column
       'grid-cols-1 grid-rows-[auto_1fr_1fr]',
       // Desktop grid: two columns, two rows
       'md:grid-cols-[30%_1fr] md:grid-rows-[auto_1fr]',
+      app.isFullscreen ? '' : 'rounded-t-xl',
     ]"
   >
     <!-- Sidebar -->
@@ -47,7 +48,7 @@ onUnmounted(() => {
         // Desktop: sidebar spans rows 1-2 in column 1
         'md:col-start-1 md:row-span-2 md:row-start-1',
 
-        app.isFullscreen ? '' : 'rounded-tl-xl'
+        app.isFullscreen ? '' : 'rounded-tl-xl',
       ]"
     />
 

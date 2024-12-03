@@ -59,6 +59,7 @@ export interface AppNode extends BaseNode {
   isMinimized: boolean;
   isFullscreen: boolean;
   isModalOpen: boolean;
+  isNewlyOpened: boolean;
   width: number;
   height: number;
   x: number;

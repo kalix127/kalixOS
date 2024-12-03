@@ -528,6 +528,7 @@ export const useDesktopStore = defineStore({
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
           isActive: app.id === appId ? true : app.isActive,
+          isNewlyOpened: true,
         }));
 
         // Create a process for the app

@@ -191,7 +191,7 @@ export const defaultFolders = [
   {
     id: "desktop",
     name: "Desktop",
-    icon: "gnome:desktop"
+    icon: "gnome:desktop",
   },
   {
     id: "applications",
@@ -226,8 +226,13 @@ export const defaultFolders = [
   {
     id: "trash",
     name: "Trash",
-    icon: "gnome:trash"
-  }
+    icon: "gnome:trash",
+  },
+  {
+    id: "root",
+    name: "Manjaro Linux",
+    icon: "gnome:hdd-2",
+  },
 ];
 
 export const defaultFilePermissions = {

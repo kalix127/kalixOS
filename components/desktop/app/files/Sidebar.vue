@@ -44,10 +44,8 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
     "
   >
     <!-- Top-Sidebar -->
-    <div class="hidden h-10 items-start justify-between sm:flex app-topbar">
-      <div
-        class="grid place-content-center p-2"
-      >
+    <div class="app-topbar hidden h-10 items-start justify-between sm:flex">
+      <div class="grid place-content-center p-2">
         <Icon name="gnome:search" size="16" />
       </div>
       <div class="pt-2 text-sm font-extrabold">

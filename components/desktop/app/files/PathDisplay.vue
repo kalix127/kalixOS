@@ -11,10 +11,13 @@ const displaySegments = computed(() => {
   const mappedSegments = pathSegments
     .map((segment) => {
       if (segment === "home") return "Home";
-      if (segment === "") return "Manjaro Linux";
-      return segment.charAt(0).toUpperCase() + segment.slice(1);
+      return segment.charAt(0) + segment.slice(1);
     })
     .filter(Boolean);
+
+  if (!absolutePath.value.startsWith("/home")) {
+    mappedSegments.unshift("Manjaro Linux");
+  }
 
   if (mappedSegments.length > maxSegments) {
     return ["..."].concat(mappedSegments.slice(-maxSegments));
@@ -26,10 +29,9 @@ const displaySegments = computed(() => {
 const pathIcon = computed(() => {
   if (absolutePath.value.startsWith("/home")) {
     return "gnome:home";
-  } else if (absolutePath.value === "/") {
-    return "gnome:computer";
+  } else {
+    return "gnome:hdd";
   }
-  return "";
 });
 </script>
 
@@ -42,9 +44,7 @@ const pathIcon = computed(() => {
       <div v-for="(segment, index) in displaySegments" :key="index">
         <span
           :class="[
-            index < displaySegments.length - 1
-              ? 'text-muted-foreground'
-              : '',
+            index < displaySegments.length - 1 ? 'text-muted-foreground' : '',
           ]"
         >
           {{ segment }}
@@ -61,7 +61,6 @@ const pathIcon = computed(() => {
 </template>
 
 <style scoped>
-/* Ensure the path display does not shrink or overflow */
 div {
   white-space: nowrap;
 }

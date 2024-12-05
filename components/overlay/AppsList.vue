@@ -20,7 +20,12 @@ watch(escape, (v) => {
 const filteredApps = computed(() => {
   return defaultApps
     .slice(0, -1)
-    .filter((app) => app.name.toLowerCase().includes(query.value));
+    .filter(
+      (app) =>
+        app.id !== "kate" &&
+        app.type !== "social" &&
+        app.name.toLowerCase().includes(query.value),
+    );
 });
 
 function handleOpenApp(app: AppNode) {

@@ -2,7 +2,7 @@
 import { defaultFolders } from "@/constants";
 
 const desktopStore = useDesktopStore();
-const { hasAppsAtTop, bookmarksNodes } = storeToRefs(desktopStore);
+const { hasAppsAtTop } = storeToRefs(desktopStore);
 const { openApp } = desktopStore;
 
 const { setFilesNodeId } = useFilesStore();
@@ -37,25 +37,6 @@ function openFolder(id: string) {
         <Icon :name="item.icon" size="16" />
         <span class="text-sm">{{ item.name }}</span>
       </Button>
-
-      <div
-        v-if="bookmarksNodes.length > 0"
-        class="my-2 h-px w-full bg-gray-500/30"
-      ></div>
-
-      <Button
-        v-for="item in bookmarksNodes.slice(0, 4)"
-        :key="item.name"
-        variant="ghost"
-        class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
-        @click="() => openFolder(item.id)"
-      >
-        <Icon name="gnome:symbolic-folder" size="16" />
-        <span class="text-sm">{{ item.name }}</span>
-      </Button>
-      <div v-if="bookmarksNodes.length > 4" class="grid place-content-center">
-        <span class="select-none text-muted-foreground">...</span>
-      </div>
     </PopoverContent>
   </Popover>
 </template>

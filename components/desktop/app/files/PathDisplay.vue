@@ -3,7 +3,7 @@ const props = defineProps<{ absolutePath: string }>();
 
 const { absolutePath } = toRefs(props);
 
-const maxSegments = 3;
+const maxSegments = 4;
 
 const displaySegments = computed(() => {
   const pathSegments = absolutePath.value.split("/").filter(Boolean);

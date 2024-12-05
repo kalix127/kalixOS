@@ -32,7 +32,7 @@ export function useWindowSizes() {
     }
 
     // Desktop
-    const minWidth = 700;
+    const minWidth = 900;
     const minHeight = (minWidth * 9) / 16;
     return { minWidth, minHeight };
   });

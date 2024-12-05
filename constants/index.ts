@@ -189,19 +189,24 @@ export const defaultFolders = [
     icon: "gnome:home",
   },
   {
+    id: "desktop",
+    name: "Desktop",
+    icon: "gnome:desktop"
+  },
+  {
     id: "applications",
     name: "Applications",
     icon: "gnome:applications",
   },
   {
-    id: "documents",
-    name: "Documents",
-    icon: "gnome:documents",
-  },
-  {
     id: "downloads",
     name: "Downloads",
     icon: "gnome:downloads",
+  },
+  {
+    id: "documents",
+    name: "Documents",
+    icon: "gnome:documents",
   },
   {
     id: "music",
@@ -364,6 +369,26 @@ export const defaultFileSystem = (username: string): Node =>
               icon: "folder:folder",
               children: [
                 {
+                  id: "desktop",
+                  name: "Desktop",
+                  type: "folder",
+                  icon: "folder:desktop",
+                  isProtected: true,
+                  children: [
+                    {
+                      id: "trash-shortcut",
+                      name: "Trash",
+                      type: "shortcut",
+                      icon: "app:trash",
+                      isShortcut: true,
+                      targetId: "trash",
+                      children: [],
+                      isProtected: true,
+                      permissions: defaultShortcutPermissions,
+                    },
+                  ],
+                },
+                {
                   id: "applications",
                   name: "Applications",
                   type: "folder",
@@ -410,26 +435,6 @@ export const defaultFileSystem = (username: string): Node =>
                   type: "folder",
                   icon: "folder:videos",
                   children: [],
-                },
-                {
-                  id: "desktop",
-                  name: "Desktop",
-                  type: "folder",
-                  icon: "folder:desktop",
-                  isProtected: true,
-                  children: [
-                    {
-                      id: "trash-shortcut",
-                      name: "Trash",
-                      type: "shortcut",
-                      icon: "app:trash",
-                      isShortcut: true,
-                      targetId: "trash",
-                      children: [],
-                      isProtected: true,
-                      permissions: defaultShortcutPermissions,
-                    },
-                  ],
                 },
                 {
                   name: ".local",

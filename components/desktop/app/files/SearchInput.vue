@@ -9,7 +9,6 @@ function stopSearching() {
 
 <template>
   <div
-    @dblclick.stop=""
     class="relative flex w-full items-center gap-4"
   >
     <Input

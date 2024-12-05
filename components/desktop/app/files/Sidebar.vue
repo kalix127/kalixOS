@@ -44,7 +44,7 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
     "
   >
     <!-- Top-Sidebar -->
-    <div class="hidden h-10 items-start justify-between sm:flex">
+    <div class="hidden h-10 items-start justify-between sm:flex app-topbar">
       <div
         class="grid place-content-center p-2"
       >

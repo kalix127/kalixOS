@@ -20,8 +20,15 @@ const props = defineProps<{
 const { app } = toRefs(props);
 
 const filesStore = useFilesStore();
-const { openedNode, isGridView, isSearching, searchQuery } =
-  storeToRefs(filesStore);
+const {
+  openedNode,
+  isGridView,
+  isSearching,
+  searchQuery,
+  canMoveBack,
+  canMoveForward
+} = storeToRefs(filesStore);
+const { moveBack, moveForward, toggleGridView } = filesStore;
 
 const desktopStore = useDesktopStore();
 const { fileSystem } = storeToRefs(desktopStore);
@@ -51,10 +58,6 @@ const fullPath = computed(() => {
   return getNodeFullPath(fileSystem.value, openedNode.value);
 });
 
-function toggleTypeView() {
-  isGridView.value = !isGridView.value;
-}
-
 function toggleSearch() {
   isSearching.value = !isSearching.value;
 }
@@ -64,21 +67,48 @@ function toggleSearch() {
   <div
     :class="[
       cn(
-        'flex h-14 items-center justify-between p-2 transition-colors duration-300',
+        'flex h-14 items-center justify-between gap-2 p-2 transition-colors duration-300',
         $props.class,
       ),
     ]"
     @dblclick="$emit('fullscreen')"
   >
     <div
-      v-on-click-outside="() => isSearching = false"
-      class="flex w-3/5 items-center gap-2"
+      v-on-click-outside="() => (isSearching = false)"
+      class="flex w-full items-center gap-2"
+      @dblclick.stop=""
     >
+      <div class="flex gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          :disabled="!canMoveBack"
+          :class="[
+            'size-8 duration-300 hover:bg-popover',
+            !canMoveBack ? 'text-muted-foreground' : '',
+          ]"
+          @click="moveBack"
+        >
+          <Icon name="gnome:arrow-long-left" size="18" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          :disabled="!canMoveForward"
+          :class="[
+            'size-8 duration-300 hover:bg-popover',
+            !canMoveForward ? 'text-muted-foreground' : '',
+          ]"
+          @click="moveForward"
+        >
+          <Icon name="gnome:arrow-long-right" size="18" />
+        </Button>
+      </div>
+
       <FilesSearchInput v-if="isSearching || searchQuery" />
       <FilesPathDisplay v-else :absolutePath="fullPath" />
       <Button
         @click="toggleSearch"
-        @dblclick.stop=""
         variant="ghost"
         size="icon"
         :class="['h-8 hover:bg-popover', isSearching ? 'bg-popover' : '']"
@@ -94,7 +124,7 @@ function toggleSearch() {
           variant="ghost"
           size="icon"
           class="size-8 duration-300 hover:bg-popover"
-          @click.stop="toggleTypeView"
+          @click.stop="toggleGridView"
         >
           <Icon v-show="isGridView" name="gnome:view-grid" size="18" />
           <Icon v-show="!isGridView" name="gnome:view-list" size="18" />

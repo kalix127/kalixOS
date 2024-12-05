@@ -10,6 +10,7 @@
   "input": "Ingresso",
   "sounds": "Suoni",
   "unknown": "Sconosciuto",
+  "search_in_folder": "Cerca nella cartella",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",

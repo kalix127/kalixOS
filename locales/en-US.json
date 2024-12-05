@@ -10,6 +10,7 @@
   "input": "Input",
   "sounds": "Sounds",
   "unknown": "Unknown",
+  "search_in_folder": "Search current folder",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",

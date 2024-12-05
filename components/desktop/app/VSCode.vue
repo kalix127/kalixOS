@@ -2,7 +2,6 @@
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
 import { cn } from "@/lib/utils";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
@@ -16,8 +15,6 @@ defineEmits<{
 }>();
 
 const { app } = toRefs(props);
-
-const isMobile = useBreakpoints(breakpointsTailwind).isSmaller("md");
 </script>
 
 <template>
@@ -32,7 +29,6 @@ const isMobile = useBreakpoints(breakpointsTailwind).isSmaller("md");
 
     <!-- VsCode -->
     <iframe
-      v-if="!isMobile"
       src="https://github1s.com/GianlucaIavicoli/GianlucaIavicoli"
       :class="cn('h-full w-full bg-background', $props.class)"
       sandbox="allow-scripts allow-same-origin allow-forms"
@@ -42,19 +38,6 @@ const isMobile = useBreakpoints(breakpointsTailwind).isSmaller("md");
       loading="lazy"
       title="VS Code"
     ></iframe>
-
-    <!-- Mobile error -->
-    <div
-      v-else
-      class="grid h-full w-full place-content-center bg-background p-8"
-    >
-      <div class="flex flex-col items-center gap-6">
-        <Icon name="gnome:warning" size="140" class="text-muted-foreground" />
-        <p class="text-center">
-          {{ $t("vscode_not_available_on_mobile") }}
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 
 const props = defineProps<{
@@ -18,8 +17,6 @@ defineEmits<{
 const { app } = toRefs(props);
 
 const { openedNode, searchQuery } = storeToRefs(useFilesStore());
-
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 
 </script>
 

@@ -4,6 +4,7 @@ import {
   defaultBackgroundImage,
   defaultBackgroundImages,
   defaultApps,
+  desktopOnlyApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -21,6 +22,8 @@ import {
   useIntervalFn,
   useTimeoutFn,
   useTimestamp,
+  breakpointsTailwind,
+  useBreakpoints,
 } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
@@ -521,8 +524,29 @@ export const useDesktopStore = defineStore({
         return;
       }
 
-      // If the node is not open, open it with delay
+      // Check if the app can be open on mobile
+      const isMobileOrTablet =
+        useBreakpoints(breakpointsTailwind).smaller("lg").value;
+      if (desktopOnlyApps.includes(app.id) && isMobileOrTablet) {
+        const { t } = useNuxtApp().$i18n;
+
+        this.addNotification(
+          {
+            id: `app-not-available-${app.id}`,
+            title: t("app_not_available"),
+            description: t(`${app.id}_not_available_on_mobile`, {
+              appName: app.name,
+            }),
+            icon: "gnome:triangle-warning",
+            isTranslated: false,
+          },
+          5000,
+        );
+        return;
+      }
+
       if (!app.isOpen) {
+        // If the node is not open, open it with delay
         this.apps = this.apps.map((app) => ({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
@@ -536,7 +560,6 @@ export const useDesktopStore = defineStore({
         return;
       }
 
-      // Set the app as active
       this.updateApp(appId, { isActive: true });
 
       if (toggleMinimize) {

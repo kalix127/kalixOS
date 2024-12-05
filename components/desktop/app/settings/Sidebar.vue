@@ -257,7 +257,7 @@ onUnmounted(() => {
               : 'hover:bg-popover/50',
             searchTerm ? 'h-fit p-2' : 'h-11 p-2',
           ]"
-          @click="handleItemClick(item.id ?? '')"
+          @click="() => handleItemClick(item.id ?? '')"
         >
           <div v-if="item.icon" class="grid place-content-center">
             <Icon :name="item.icon" size="16" />

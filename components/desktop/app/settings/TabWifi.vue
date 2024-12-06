@@ -7,7 +7,6 @@ const props = defineProps<{
 
 const { app } = toRefs(props);
 
-const isWifiModalOpen = ref(false);
 const selectedWifiNetwork = ref<WifiNetwork | null>(null);
 
 const globalStore = useGlobalStore();
@@ -23,14 +22,6 @@ const { toggleWifi, toggleAirplaneMode } = globalStore;
 
 const { connectToWifi, idConnectingNetwork } = useWifi();
 
-function toggleWifiModal(wifiNetwork: WifiNetwork) {
-  isWifiModalOpen.value = true;
-  selectedWifiNetwork.value = wifiNetwork;
-}
-
-function closeWifiModal() {
-  isWifiModalOpen.value = false;
-}
 </script>
 
 <template>
@@ -129,16 +120,6 @@ function closeWifiModal() {
                   class="text-muted-foreground"
                   >{{ $t("connected") }}</span
                 >
-
-                <Button
-                  v-if="network.isSaved"
-                  class="size-8 hover:bg-secondary-hover"
-                  variant="ghost"
-                  size="icon"
-                  @click.stop="() => toggleWifiModal(network)"
-                >
-                  <Icon name="gnome:info-rounded" size="18" />
-                </Button>
               </div>
             </template>
           </SettingsOption>
@@ -185,12 +166,6 @@ function closeWifiModal() {
         </div>
       </Transition>
     </div>
-    <SettingsTabWifiModal
-      v-if="isWifiModalOpen"
-      :app="app"
-      :network="selectedWifiNetwork"
-      @close="closeWifiModal"
-    />
   </SettingsContent>
 </template>
 

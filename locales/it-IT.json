@@ -152,18 +152,6 @@
   "10_minutes": "10 minuti",
   "15_minutes": "15 minuti",
 
-  "-----------------WIFI-DETAILS-------------------": "",
-  "linkSpeed": "Velocità collegamento",
-  "security": "Sicurezza",
-  "ipv4": "Indirizzo IPv4",
-  "ipv6": "Indirizzo IPv6",
-  "hardwareAddress": "Indirizzo hardware",
-  "supportedFrequencies": "Frequenze supportate",
-  "defaultRoute": "Rotta predefinita",
-  "dns4": "DNS4",
-  "dns6": "DNS6",
-  "forget_connection": "Dimentica connessione",
-
   "-----------------NODES-------------------": "",
   "home": "Home",
   "desktop": "Scrivania",

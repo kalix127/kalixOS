@@ -29,12 +29,13 @@ onUnmounted(() => {
 <template>
   <div
     :class="[
-      'grid h-full w-full bg-background',
+      'grid h-full w-full bg-background transition-all duration-300',
       // Mobile grid: single column
       'grid-cols-1 grid-rows-[auto_1fr_1fr]',
       // Desktop grid: two columns, two rows
       'md:grid-cols-[30%_1fr] md:grid-rows-[auto_1fr]',
       app.isFullscreen ? '' : 'rounded-t-xl',
+      !app.isActive ? 'brightness-[0.75]' : '',
     ]"
   >
     <!-- Sidebar -->

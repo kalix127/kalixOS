@@ -11,12 +11,7 @@ const { app } = toRefs(props);
 </script>
 
 <template>
-  <ScrollArea
-    class="relative h-full w-full transition-all duration-300"
-    :class="{
-      'pointer-events-none brightness-[0.8]': app.isModalOpen,
-    }"
-  >
+  <ScrollArea class="relative h-full w-full transition-all duration-300">
     <Button
       variant="ghost"
       size="icon"

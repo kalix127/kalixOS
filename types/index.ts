@@ -40,12 +40,12 @@ export interface FileNode extends BaseNode {
 
 export interface AppNode extends BaseNode {
   type: "app" | "social";
-  title: string; 
+  title: string;
   isOpen: boolean;
   isActive: boolean;
   isMinimized: boolean;
   isFullscreen: boolean;
-  isModalOpen: boolean;
+  isDropdownOpen: boolean;
   isNewlyOpened: boolean;
   width: number;
   height: number;

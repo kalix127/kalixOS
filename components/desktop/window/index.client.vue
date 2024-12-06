@@ -52,7 +52,7 @@ watch([width, height], ([newWidth, newHeight]) => {
 
 // Make sure the modal is closed by default
 onBeforeMount(() => {
-  app.value.isModalOpen = false;
+  app.value.isDropdownOpen = false;
 
   // If on mobile or brave, set the app to fullscreen
   if (isMobile.value || defaultFullscreenApps.includes(app.value.id)) {
@@ -91,7 +91,7 @@ const getAppComponent = (appId: string): Component => {
     :x="app.x"
     :y="app.y"
     :active="app.isActive"
-    :resizable="!app.isFullscreen && !app.isModalOpen"
+    :resizable="!app.isFullscreen"
     :draggable="!app.isFullscreen"
     :parent="true"
     @dragging="handleDragging"

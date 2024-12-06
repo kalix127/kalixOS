@@ -250,7 +250,7 @@ export const defaultApps: AppNode[] = [
   isActive: false,
   isMinimized: false,
   isFullscreen: false,
-  isModalOpen: false,
+  isDropdownOpen: false,
   isNewlyOpened: false,
   width: 0,
   height: 0,

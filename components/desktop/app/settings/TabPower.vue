@@ -29,8 +29,11 @@ function toggleDimScreen() {
   <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Battery level -->
-      <SettingsOptionGroup class="gap-0" :title="$t('battery_level')">
-        <SettingsOption class="min-h-6 pb-0 pt-3" is-first>
+      <SettingsOptionGroup class="group gap-0" :title="$t('battery_level')">
+        <SettingsOption
+          class="min-h-6 pb-0 pt-3 group-hover:bg-secondary/80"
+          is-first
+        >
           <template #center>
             <Slider
               class="h-2 bg-green-300"
@@ -41,7 +44,11 @@ function toggleDimScreen() {
             />
           </template>
         </SettingsOption>
-        <SettingsOption :label="$t('fully_charged')" is-last>
+        <SettingsOption
+          class="group-hover:bg-secondary/80"
+          :label="$t('fully_charged')"
+          is-last
+        >
           <template #action> 100 % </template>
         </SettingsOption>
       </SettingsOptionGroup>

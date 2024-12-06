@@ -24,6 +24,7 @@ export function useWindowHandlers(
   };
 
   const handleActive = (value: boolean) => {
+    if (!value && app.value.isDropdownOpen) return;
     app.value.isActive = value;
   };
 

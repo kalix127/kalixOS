@@ -105,8 +105,10 @@ function toggleSearch() {
         </Button>
       </div>
 
-      <FilesSearchInput v-if="isSearching || searchQuery" />
-      <FilesPathDisplay v-else :absolutePath="fullPath" />
+      <Transition name="search-input" mode="out-in">
+        <FilesSearchInput v-if="isSearching || searchQuery" />
+        <FilesPathDisplay v-else :absolutePath="fullPath" />
+      </Transition>
       <Button
         @click="toggleSearch"
         variant="ghost"
@@ -154,4 +156,14 @@ function toggleSearch() {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.search-input-enter-active,
+.search-input-leave-active {
+  transition: opacity 0.2s ease-in-out
+}
+
+.search-input-enter-from,
+.search-input-leave-to {
+  opacity: .5;
+}
+</style>

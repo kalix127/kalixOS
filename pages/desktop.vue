@@ -100,9 +100,12 @@ onMounted(async () => {
 onUnmounted(() => {
   desktopStore.$dispose();
   contextMenuStore.$dispose();
+  const filesStore = useFilesStore()
+  useFilesStore().$dispose()
   // Delete the store state
   delete useNuxtApp().$pinia.state.value[desktopStore.$id];
   delete useNuxtApp().$pinia.state.value[contextMenuStore.$id];
+  delete useNuxtApp().$pinia.state.value[filesStore.$id];
 });
 </script>
 

@@ -3,17 +3,24 @@ const props = defineProps<{ absolutePath: string }>();
 
 const { absolutePath } = toRefs(props);
 
-const maxSegments = 4;
+const maxSegments = 3;
+const maxSegmentLength = 12;
+
+function truncateSegment(segment: string, maxLength: number): string {
+  if (segment.length <= maxLength) return segment;
+  const start = segment.slice(0, 4);
+  const end = segment.slice(-4);
+  // Example: ThisIsALongSegment -> This...ment
+  return `${start}...${end}`;
+}
 
 const displaySegments = computed(() => {
   const pathSegments = absolutePath.value.split("/").filter(Boolean);
 
-  const mappedSegments = pathSegments
-    .map((segment) => {
-      if (segment === "home") return "Home";
-      return segment.charAt(0) + segment.slice(1);
-    })
-    .filter(Boolean);
+  const mappedSegments = pathSegments.map((segment) => {
+    if (segment === "home") return "Home";
+    return truncateSegment(segment, maxSegmentLength);
+  });
 
   if (!absolutePath.value.startsWith("/home")) {
     mappedSegments.unshift("Manjaro Linux");
@@ -21,31 +28,31 @@ const displaySegments = computed(() => {
 
   if (mappedSegments.length > maxSegments) {
     return ["..."].concat(mappedSegments.slice(-maxSegments));
-  } else {
-    return mappedSegments;
   }
+
+  return mappedSegments;
 });
 
 const pathIcon = computed(() => {
-  if (absolutePath.value.startsWith("/home")) {
-    return "gnome:home";
-  } else {
-    return "gnome:hdd";
-  }
+  return absolutePath.value.startsWith("/home") ? "gnome:home" : "gnome:hdd";
 });
 </script>
 
 <template>
   <div
-    class="flex h-8 w-full items-center overflow-hidden rounded-md bg-popover pl-2"
+    class="app-topbar flex h-8 w-full items-center overflow-hidden whitespace-nowrap rounded-md bg-popover pl-2"
   >
     <Icon v-if="pathIcon" :name="pathIcon" size="16" class="mr-2" />
-    <div class="flex items-center text-sm font-extrabold">
-      <div v-for="(segment, index) in displaySegments" :key="index">
+    <div class="flex items-center overflow-hidden text-sm font-extrabold">
+      <div
+        v-for="(segment, index) in displaySegments"
+        :key="index"
+        class="max-w-[10rem] flex-shrink-0 overflow-hidden text-ellipsis"
+      >
         <span
-          :class="[
-            index < displaySegments.length - 1 ? 'text-muted-foreground' : '',
-          ]"
+          :class="
+            index < displaySegments.length - 1 ? 'text-muted-foreground' : ''
+          "
         >
           {{ segment }}
         </span>
@@ -60,8 +67,4 @@ const pathIcon = computed(() => {
   </div>
 </template>
 
-<style scoped>
-div {
-  white-space: nowrap;
-}
-</style>
+<style scoped></style>

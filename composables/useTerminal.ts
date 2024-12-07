@@ -41,7 +41,7 @@ export function useTerminal(terminalElement: HTMLElement) {
   const { homeNode } = storeToRefs(useDesktopStore());
 
   // If not already set, Set the initial directories
-  if (!currentDirectoryNode) {
+  if (!currentDirectoryNode.value) {
     setCurrentDirectory(homeNode.value!);
   }
 

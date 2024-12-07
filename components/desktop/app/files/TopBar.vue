@@ -2,6 +2,7 @@
 import { getNodeFullPath } from "@/helpers";
 import { cn } from "@/lib/utils";
 import { vOnClickOutside } from "@vueuse/components";
+import { useClipboard } from "@vueuse/core";
 
 import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
@@ -18,6 +19,7 @@ const props = defineProps<{
 }>();
 
 const { app } = toRefs(props);
+const { t } = useI18n();
 
 const filesStore = useFilesStore();
 const {
@@ -26,14 +28,18 @@ const {
   isSearching,
   searchQuery,
   canMoveBack,
-  canMoveForward
+  canMoveForward,
 } = storeToRefs(filesStore);
 const { moveBack, moveForward, toggleGridView } = filesStore;
 
 const desktopStore = useDesktopStore();
 const { fileSystem } = storeToRefs(desktopStore);
+const { createNode, openApp, addNotification, updateApp } = desktopStore;
+const { setCurrentDirectory } = useTerminalStore();
 
-const actions = computed(() => [
+const { copy, isSupported } = useClipboard();
+
+const windowActions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
@@ -53,6 +59,17 @@ const actions = computed(() => [
   },
 ]);
 
+const generalActions = computed(() => [
+  { label: t("new_folder"), action: () => createNewFolder() },
+  { label: t("new_document"), action: () => createNewDocument() },
+  { isSeparator: true },
+
+  { label: t("open_in_terminal"), action: () => openInTerminal() },
+  { isSeparator: true },
+  { label: t("copy_location"), action: () => copyLocation() },
+  { label: t("properties"), action: () => console.log("Properties") },
+]);
+
 const fullPath = computed(() => {
   if (!openedNode.value) return "";
   return getNodeFullPath(fileSystem.value, openedNode.value);
@@ -61,13 +78,64 @@ const fullPath = computed(() => {
 function toggleSearch() {
   isSearching.value = !isSearching.value;
 }
+
+const createNewFolder = () => {
+  if (openedNode.value) {
+    createNode(
+      openedNode.value.id,
+      {
+        name: t("new_folder"),
+        type: "folder",
+        isRenaming: true,
+        isNewlyCreated: true,
+      },
+      true,
+    );
+  }
+};
+
+const createNewDocument = () => {
+  if (openedNode.value) {
+    createNode(
+      openedNode.value.id,
+      {
+        name: t("new_document"),
+        type: "file",
+        isRenaming: true,
+        isNewlyCreated: true,
+      },
+      true,
+    );
+  }
+};
+
+const openInTerminal = () => {
+  if (!openedNode.value) return;
+  setCurrentDirectory(openedNode.value);
+  openApp("terminal");
+};
+
+const copyLocation = () => {
+  if (!isSupported.value) {
+    addNotification({
+      id: "clipboard-not-supported",
+      title: "clipboard_not_supported_title",
+      description: "clipboard_not_supported_description",
+      icon: "gnome:triangle-warning",
+      isTranslated: true,
+    });
+    return;
+  }
+
+  copy(fullPath.value);
+};
 </script>
 
 <template>
   <div
     :class="[
       cn(
-        'flex h-14 items-center justify-between gap-2 p-2 transition-colors duration-300',
+        'flex h-12 items-center justify-between gap-2 p-2 transition-colors duration-300',
         $props.class,
       ),
     ]"
@@ -78,6 +146,7 @@ function toggleSearch() {
       class="flex w-full items-center gap-2"
       @dblclick.stop=""
     >
+      <!-- Back / forward arrows -->
       <div class="flex gap-2">
         <Button
           variant="ghost"
@@ -105,10 +174,13 @@ function toggleSearch() {
         </Button>
       </div>
 
+      <!-- Path / input-->
       <Transition name="search-input" mode="out-in">
         <FilesSearchInput v-if="isSearching || searchQuery" />
         <FilesPathDisplay v-else :absolutePath="fullPath" />
       </Transition>
+
+      <!-- Search in folder -->
       <Button
         @click="toggleSearch"
         variant="ghost"
@@ -120,8 +192,8 @@ function toggleSearch() {
     </div>
 
     <div class="flex items-center justify-end gap-2">
-      <!-- Change view / general actions -->
       <div class="group flex items-center gap-px" @dblclick.stop="">
+        <!-- Change view / -->
         <Button
           variant="ghost"
           size="icon"
@@ -132,13 +204,40 @@ function toggleSearch() {
           <Icon v-show="!isGridView" name="gnome:view-list" size="18" />
         </Button>
         <div class="h-6 w-px bg-gray-500/50 group-hover:bg-gray-500/20"></div>
-        <Button
-          variant="ghost"
-          size="icon"
-          class="size-8 duration-300 hover:bg-popover"
+
+        <!-- General actions  -->
+        <DropdownMenu
+          @update:open="
+            (value) => updateApp('files', { isDropdownOpen: value })
+          "
         >
-          <Icon name="gnome:pan-down" size="18" />
-        </Button>
+          <DropdownMenuTrigger as-child>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="size-8 duration-300 hover:bg-popover"
+            >
+              <Icon name="gnome:pan-down" size="18" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent class="z-[50000] min-w-40">
+            <div
+              v-for="option in generalActions"
+              :key="option.label"
+              @contextmenu.prevent=""
+            >
+              <DropdownMenuSeparator v-if="option.isSeparator" />
+
+              <DropdownMenuItem
+                v-else
+                @click="option.action"
+                class="duration-0"
+              >
+                {{ option.label }}
+              </DropdownMenuItem>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <!-- Window actions -->
@@ -146,7 +245,7 @@ function toggleSearch() {
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-popover duration-300 hover:bg-secondary"
-        v-for="action in actions"
+        v-for="action in windowActions"
         :key="action.icon"
         @click="() => $emit(action.emit)"
       >
@@ -159,11 +258,11 @@ function toggleSearch() {
 <style scoped>
 .search-input-enter-active,
 .search-input-leave-active {
-  transition: opacity 0.2s ease-in-out
+  transition: opacity 0.2s ease-in-out;
 }
 
 .search-input-enter-from,
 .search-input-leave-to {
-  opacity: .5;
+  opacity: 0.5;
 }
 </style>

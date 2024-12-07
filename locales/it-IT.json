@@ -11,6 +11,8 @@
   "sounds": "Suoni",
   "unknown": "Sconosciuto",
   "search_in_folder": "Cerca nella cartella",
+  "clipboard_not_supported_title": "Appunti Non Supportati",
+  "clipboard_not_supported_description": "Il tuo browser non supporta la copia negli appunti.",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",
@@ -78,6 +80,7 @@
   "app_not_found": "Applicazione non trovata",
   "app_not_found_description": "Impossibile avviare '{appName}'.",
   "open_in_terminal": "Apri nel terminale",
+  "copy_location": "Copia Posizione",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Rete",

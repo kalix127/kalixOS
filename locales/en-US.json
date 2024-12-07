@@ -11,6 +11,8 @@
   "sounds": "Sounds",
   "unknown": "Unknown",
   "search_in_folder": "Search current folder",
+  "clipboard_not_supported_title": "Clipboard Not Supported",
+  "clipboard_not_supported_description": "Your browser does not support copying to the clipboard.",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",
@@ -78,6 +80,7 @@
   "app_not_found": "Application not found",
   "app_not_found_description": "Unable to launch '{appName}'.",
   "open_in_terminal": "Open in Terminal",
+  "copy_location": "Copy Location",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Network",

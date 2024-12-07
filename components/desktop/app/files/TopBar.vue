@@ -228,11 +228,7 @@ const copyLocation = () => {
             >
               <DropdownMenuSeparator v-if="option.isSeparator" />
 
-              <DropdownMenuItem
-                v-else
-                @click="option.action"
-                class="duration-0"
-              >
+              <DropdownMenuItem v-else @click="option.action">
                 {{ option.label }}
               </DropdownMenuItem>
             </div>

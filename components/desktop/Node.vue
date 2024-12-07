@@ -12,6 +12,9 @@ const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
 const { editNode, openApp } = desktopStore;
 
+const { setKateNodeId } = useKateStore();
+const { setFilesNodeId } = useFilesStore();
+
 const formattedName = computed(() => {
   return props.item?.name.length > 21
     ? props.item?.name.slice(0, 21) + "..."
@@ -31,15 +34,17 @@ function handleDoubleClick(e: MouseEvent) {
   const nodeType = props.item.type;
 
   switch (nodeType) {
+    case "app":
+      openApp(props.item.id);
+      break;
+
     case "file":
-      const { setFileNode } = useKateStore();
-      setFileNode(props.item);
+      setKateNodeId(props.item.id);
       openApp("kate");
       break;
 
     case "folder":
-      const { setFilesNodeId } = useFilesStore();
-      setFilesNodeId(props.item.id)
+      setFilesNodeId(props.item.id);
       openApp("files");
       break;
 
@@ -48,8 +53,9 @@ function handleDoubleClick(e: MouseEvent) {
       // openApp(props.item.targetId);
       break;
 
-    case "app":
-      // TODO: Implement
+        default:
+          break;
+      }
       break;
 
     default:

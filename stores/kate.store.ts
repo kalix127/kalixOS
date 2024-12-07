@@ -4,12 +4,17 @@ import type { FileNode } from "~/types";
 
 export const useKateStore = defineStore("kate", {
   state: (): KateStore => ({
-    openedNode: null,
+    openedNodeId: null,
   }),
   getters: {
+    openedNode(state) {
+      if (!state.openedNodeId) return null;
+      const { nodeMap } = storeToRefs(useDesktopStore());
+      return nodeMap.value.get(state.openedNodeId) as FileNode;
+    },
     editorLanguage(state): string {
-      if (state.openedNode && state.openedNode.type === "file") {
-        const fileName = state.openedNode.name;
+      if (this.openedNode && this.openedNode.type === "file") {
+        const fileName = this.openedNode.name;
         const extension = fileName.split(".").pop()?.toLowerCase() || "";
         return monacoEditorLanguageMap[extension] || "plaintext";
       }
@@ -17,12 +22,12 @@ export const useKateStore = defineStore("kate", {
     },
   },
   actions: {
-    setFileNode(node: FileNode) {
-      this.openedNode = node;
+    setKateNodeId(id: string) {
+      this.openedNodeId = id;
     },
   },
 });
 
 interface KateStore {
-  openedNode: FileNode | null;
+  openedNodeId: string | null;
 }

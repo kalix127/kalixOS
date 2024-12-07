@@ -28,8 +28,8 @@ export function useContextMenu() {
     desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
-  const { setFileNode } = useKateStore();
   const { setCurrentDirectory } = useTerminalStore();
+  const { setKateNodeId } = useKateStore();
   const { setFilesNodeId } = useFilesStore();
 
   useEventListener("click", () => {
@@ -349,7 +349,7 @@ export function useContextMenu() {
   const openFolder = (node: FolderNode | null) => {
     if (!node) return;
 
-    setFilesNodeId(node.id)
+    setFilesNodeId(node.id);
     openApp("files");
     closeContextMenu();
   };
@@ -357,7 +357,7 @@ export function useContextMenu() {
   const openFile = (node: FileNode | null) => {
     if (!node) return;
 
-    setFileNode(node);
+    setKateNodeId(node.id);
     openApp("kate");
     closeContextMenu();
   };

@@ -323,7 +323,7 @@ export const defaultFileSystem = (username: string): Node =>
                   id: "downloads",
                   name: "Downloads",
                   type: "folder",
-                  icon: "folder:donwloads",
+                  icon: "folder:downloads",
                   children: [],
                 },
                 {

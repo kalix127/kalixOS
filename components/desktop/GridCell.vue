@@ -100,7 +100,9 @@ function handleStopRenaming() {
           @submit.prevent="handleStopRenaming"
         >
           <Input
+            type="text"
             class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
+            maxlength="20"
             v-model="item.name"
           />
           <Button

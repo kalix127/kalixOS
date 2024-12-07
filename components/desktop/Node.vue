@@ -49,12 +49,23 @@ function handleDoubleClick(e: MouseEvent) {
       break;
 
     case "shortcut":
-      // TODO: Fix handles apps, files and folders shortcut
-      // openApp(props.item.targetId);
-      break;
-
-        default:
+      const { nodeMap } = storeToRefs(desktopStore);
+      const targetNode = nodeMap.value.get(props.item.targetId);
+      switch (targetNode?.type) {
+        case "app":
+          openApp(targetNode.id);
           break;
+
+        case "file":
+          setKateNodeId(targetNode.id);
+          openApp("kate");
+          break;
+
+        case "folder":
+          setFilesNodeId(targetNode.id);
+          openApp("files");
+          break;
+
       }
       break;
 

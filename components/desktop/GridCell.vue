@@ -27,26 +27,25 @@ function handleContextMenu(event: MouseEvent) {
   );
 }
 
-// Double-click handler
 function handleDoubleClick(e: MouseEvent) {
   const nodeType = props.item.type;
 
   switch (nodeType) {
     case "file":
-      // Set the node in the text editor store
       const { setFileNode } = useKateStore();
       setFileNode(props.item);
-      // Open the 'Kate' app
       openApp("kate");
       break;
 
     case "folder":
-      // TODO: Implement files app first
-      // openApp('files')
+      const { setFilesNodeId } = useFilesStore();
+      setFilesNodeId(props.item.id)
+      openApp("files");
       break;
 
     case "shortcut":
-      openApp(props.item.targetId);
+      // TODO: Fix handles apps, files and folders shortcut
+      // openApp(props.item.targetId);
       break;
 
     case "app":
@@ -69,7 +68,7 @@ function handleStopRenaming() {
     @dblclick="handleDoubleClick"
     :class="
       cn(
-        'group relative flex aspect-square flex-col items-center justify-start text-center transition-all duration-150 cursor-pointer',
+        'group relative flex aspect-square cursor-pointer flex-col items-center justify-start text-center transition-all duration-150',
         props.class,
       )
     "

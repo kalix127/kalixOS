@@ -29,6 +29,7 @@ export function useContextMenu() {
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
   const { setFileNode } = useKateStore();
+  const { setCurrentDirectory } = useTerminalStore();
 
   useEventListener("click", () => {
     if (isOpen.value) {
@@ -69,6 +70,7 @@ export function useContextMenu() {
       },
     },
   ];
+
   const getFileOptions = (node: FileNode | null, shortcut?: ShortcutNode) => {
     const options = [
       { label: "Open", action: () => openFile(node) },
@@ -92,7 +94,7 @@ export function useContextMenu() {
     return options;
   };
 
-  const getFolderOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+  const getFolderOptions = (node: FolderNode | null, shortcut?: ShortcutNode) => {
     const baseOptions: Array<{
       label?: string;
       action?: () => void;
@@ -133,6 +135,10 @@ export function useContextMenu() {
         {
           label: t("add_to_bookmarks"),
           action: () => addToBookmarksAction(node),
+        },
+        {
+          label: t("open_in_terminal"),
+          action: () => openInTerminal(node),
         },
         { label: t("properties"), action: () => console.log("Properties") },
       );
@@ -239,7 +245,7 @@ export function useContextMenu() {
       case "file":
         return getFileOptions(actualTargetNode as FileNode);
       case "folder":
-        return getFolderOptions(actualTargetNode);
+        return getFolderOptions(actualTargetNode as FolderNode);
       case "dock":
         return getDockOptions(actualTargetNode);
       case "app":
@@ -279,6 +285,13 @@ export function useContextMenu() {
       );
     }
     closeContextMenu();
+  };
+
+  const openInTerminal = (node: FolderNode | null) => {
+    if (!node) return;
+
+    setCurrentDirectory(node);
+    openApp("terminal");
   };
 
   const handleOpenApp = async (node: Node | null) => {

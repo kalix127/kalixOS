@@ -77,6 +77,7 @@
   "wifi_connected_description": "Connessione riuscita a {network}",
   "app_not_found": "Applicazione non trovata",
   "app_not_found_description": "Impossibile avviare '{appName}'.",
+  "open_in_terminal": "Apri nel terminale",
 
   "-----------------SETTINGS-------------------": "",
   "network": "Rete",

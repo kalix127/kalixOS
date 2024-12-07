@@ -37,7 +37,7 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
   <ScrollArea
     :class="
       cn(
-        'w-full min-w-fit p-2 transition-colors duration-300',
+        'p-2 transition-colors duration-300',
         isMobile ? '' : 'border-r border-r-black/30',
         $props.class,
       )

@@ -158,9 +158,6 @@ const handleItemClick = (id: string) => {
   isSearchActive.value = false;
 };
 
-onUnmounted(() => {
-  currentSettingsTab.value = null;
-});
 </script>
 
 <template>

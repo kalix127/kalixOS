@@ -25,7 +25,7 @@ const route = useRoute();
     @contextmenu.prevent=""
     :class="[
       cn(
-        'relative z-[50000] flex min-h-[35px] select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
+        'relative z-[50000] flex h-9 select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
         props.class,
       ),
       route.name === 'login' ? '!bg-transparent' : '',

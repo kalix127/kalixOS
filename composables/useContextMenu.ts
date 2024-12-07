@@ -30,6 +30,7 @@ export function useContextMenu() {
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
   const { setFileNode } = useKateStore();
   const { setCurrentDirectory } = useTerminalStore();
+  const { setFilesNodeId } = useFilesStore();
 
   useEventListener("click", () => {
     if (isOpen.value) {
@@ -94,7 +95,10 @@ export function useContextMenu() {
     return options;
   };
 
-  const getFolderOptions = (node: FolderNode | null, shortcut?: ShortcutNode) => {
+  const getFolderOptions = (
+    node: FolderNode | null,
+    shortcut?: ShortcutNode,
+  ) => {
     const baseOptions: Array<{
       label?: string;
       action?: () => void;
@@ -147,18 +151,17 @@ export function useContextMenu() {
     return baseOptions;
   };
 
-  const getDockOptions = (node: Node | null) => {
+  const getDockOptions = (node: AppNode | null) => {
     const options = [];
 
     if (!node) {
       return [];
     }
 
-    const appNode = node as AppNode;
     const isSocialApp = node.type === "social";
 
     // Add open option if app is not open
-    if (!appNode.isOpen) {
+    if (!node.isOpen) {
       options.push(
         { isSeparator: true },
         {
@@ -182,7 +185,7 @@ export function useContextMenu() {
     }
 
     // Add quit option if app is open
-    if (appNode.isOpen) {
+    if (node.isOpen) {
       options.push(
         { isSeparator: true },
         {
@@ -194,7 +197,7 @@ export function useContextMenu() {
     return options;
   };
 
-  const getAppOptions = (node: Node | null, shortcut?: ShortcutNode) => [
+  const getAppOptions = (node: AppNode | null, shortcut?: ShortcutNode) => [
     { id: "open", label: t("open"), action: () => handleOpenApp(node) },
     ...(shortcut
       ? [
@@ -247,9 +250,9 @@ export function useContextMenu() {
       case "folder":
         return getFolderOptions(actualTargetNode as FolderNode);
       case "dock":
-        return getDockOptions(actualTargetNode);
+        return getDockOptions(actualTargetNode as AppNode);
       case "app":
-        return getAppOptions(actualTargetNode);
+        return getAppOptions(actualTargetNode as AppNode);
       default:
         return [];
     }
@@ -297,7 +300,7 @@ export function useContextMenu() {
   const handleOpenApp = async (node: Node | null) => {
     if (!node) return;
 
-    const minimizeIfALreadyOpen = node.type === "app" ? true : false;
+    const minimizeIfAlreadyOpen = node.type === "app" ? true : false;
 
     if (!isDockPinned.value) {
       isDockVisible.value = false;
@@ -325,28 +328,29 @@ export function useContextMenu() {
       return;
     }
 
-    openApp(node.id, minimizeIfALreadyOpen);
+    openApp(node.id, minimizeIfAlreadyOpen);
     closeContextMenu();
   };
 
-  const handleCloseApp = (node: Node | null) => {
+  const handleCloseApp = (node: AppNode | null) => {
     if (!node) return;
 
     closeApp(node.id);
     closeContextMenu();
   };
 
-  const handleAppDetails = (node: Node | null) => {
+  const handleAppDetails = (node: AppNode | null) => {
     if (!node) return;
 
     console.log(`App Details: ${node.name}`);
     closeContextMenu();
   };
 
-  const openFolder = (node: Node | null) => {
+  const openFolder = (node: FolderNode | null) => {
     if (!node) return;
 
-    console.log(`Opening folder: ${node.name}`);
+    setFilesNodeId(node.id)
+    openApp("files");
     closeContextMenu();
   };
 
@@ -358,7 +362,7 @@ export function useContextMenu() {
     closeContextMenu();
   };
 
-  const addToBookmarksAction = (node: Node | null) => {
+  const addToBookmarksAction = (node: FolderNode | null) => {
     if (!node || node.type !== "folder") {
       return;
     }

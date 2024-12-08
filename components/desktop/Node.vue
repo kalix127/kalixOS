@@ -19,11 +19,6 @@ const { editNode, openApp, updateApp } = desktopStore;
 const { setKateNodeId } = useKateStore();
 const { setFilesNodeId } = useFilesStore();
 
-const formattedName = computed(() => {
-  return item.value?.name.length > 21
-    ? item.value?.name.slice(0, 21) + "..."
-    : item.value?.name;
-});
 
 function handleContextMenu(event: MouseEvent) {
   openContextMenu(
@@ -106,7 +101,7 @@ function handleStopRenaming() {
     </div>
     <span
       class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"
-      >{{ formattedName }}</span
+      >{{ item.name }}</span
     >
     <!-- Renaming popover -->
     <Popover :open="item.isRenaming">

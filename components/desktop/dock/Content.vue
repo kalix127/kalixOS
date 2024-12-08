@@ -25,11 +25,11 @@ const draggableDockItems = computed({
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
-const { handleOpenApp: openApp } = useContextMenu();
+const { openApp } = useDesktopStore();
 
 const handleContextMenu = (event: MouseEvent, app: AppNode) => {
   if (app.id === "show-apps") return;
-  openContextMenu(event.clientX, event.clientY, "dock", app);
+  openContextMenu(event.clientX, event.clientY, "dock", app, false);
 };
 
 const handleOpenApp = (app: AppNode) => {
@@ -39,7 +39,7 @@ const handleOpenApp = (app: AppNode) => {
     return;
   }
 
-  openApp(app);
+  openApp(app.id);
 };
 
 onBeforeMount(async () => {

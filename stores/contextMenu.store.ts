@@ -7,6 +7,7 @@ export interface ContextMenuState {
   y: number;
   targetType: ContextMenuTargetType | null;
   targetNode: Node | null;
+  isForDesktop: boolean | null; // Indicate if the context menu should be t
 }
 
 export const useContextMenuStore = defineStore("contextMenu", {
@@ -16,6 +17,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
     y: 0,
     targetType: null,
     targetNode: null,
+    isForDesktop: null,
   }),
   actions: {
     openContextMenu(
@@ -23,6 +25,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
       y: number,
       targetType: ContextMenuTargetType,
       targetNode: Node | null = null,
+      isForDesktop: boolean,
     ) {
       const { width, height } = useWindowSize();
       const isOutside = x + 288 > width.value;
@@ -35,7 +38,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
         difference = width.value - (x + 288);
         updatedX += difference;
       }
-      
+
       if (targetType === "dock") {
         const contextMenuHeight = targetNode?.type === "social" ? 76 : 129;
         const currentBottomOffset = height.value - y;
@@ -50,6 +53,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
       this.y = updatedY;
       this.targetType = targetType;
       this.targetNode = targetNode;
+      this.isForDesktop = isForDesktop;
     },
     closeContextMenu() {
       this.isOpen = false;
@@ -57,6 +61,13 @@ export const useContextMenuStore = defineStore("contextMenu", {
       this.y = 0;
       this.targetType = null;
       this.targetNode = null;
+      this.isForDesktop = null;
+
+      // If the menu was opened on a node within the files app
+      if (!this.isForDesktop) {
+        const { updateApp } = useDesktopStore();
+        updateApp("files", { isDropdownOpen: false });
+      }
     },
   },
 });

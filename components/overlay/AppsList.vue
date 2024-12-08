@@ -4,7 +4,7 @@ import { useMagicKeys } from "@vueuse/core";
 import { defaultApps } from "@/constants";
 
 const { isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
-const { handleOpenApp: openApp } = useContextMenu();
+const { openApp } = useDesktopStore();
 
 const query = ref("");
 
@@ -30,7 +30,7 @@ const filteredApps = computed(() => {
 
 function handleOpenApp(app: AppNode) {
   closeOverlay();
-  openApp(app);
+  openApp(app.id);
 }
 
 function closeOverlay() {

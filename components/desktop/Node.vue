@@ -2,55 +2,65 @@
 import type { Node, ContextMenuTargetType } from "@/types";
 import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
+import { vOnClickOutside } from "@vueuse/components";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
   item: Node;
+  isDesktop: boolean;
 }>();
+
+const { item, isDesktop } = toRefs(props);
 
 const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
-const { editNode, openApp } = desktopStore;
+const { editNode, openApp, updateApp } = desktopStore;
 
 const { setKateNodeId } = useKateStore();
 const { setFilesNodeId } = useFilesStore();
 
 const formattedName = computed(() => {
-  return props.item?.name.length > 21
-    ? props.item?.name.slice(0, 21) + "..."
-    : props.item?.name;
+  return item.value?.name.length > 21
+    ? item.value?.name.slice(0, 21) + "..."
+    : item.value?.name;
 });
 
 function handleContextMenu(event: MouseEvent) {
   openContextMenu(
     event.clientX,
     event.clientY,
-    props.item.type as ContextMenuTargetType,
-    props.item,
+    item.value.type as ContextMenuTargetType,
+    item.value,
+    isDesktop.value
   );
+
+  // If this component is rendered inside the 'files' app
+  if (!isDesktop.value) {
+    updateApp("files", { isDropdownOpen: true });
+  }
 }
 
 function handleDoubleClick(e: MouseEvent) {
-  const nodeType = props.item.type;
+  const nodeType = item.value.type;
 
   switch (nodeType) {
     case "app":
-      openApp(props.item.id);
+      openApp(item.value.id);
       break;
 
     case "file":
-      setKateNodeId(props.item.id);
+      setKateNodeId(item.value.id);
       openApp("kate");
       break;
 
     case "folder":
-      setFilesNodeId(props.item.id);
+      setFilesNodeId(item.value.id);
       openApp("files");
       break;
 
     case "shortcut":
       const { nodeMap } = storeToRefs(desktopStore);
-      const targetNode = nodeMap.value.get(props.item.targetId);
+      const targetNode = nodeMap.value.get(item.value.targetId);
       switch (targetNode?.type) {
         case "app":
           openApp(targetNode.id);
@@ -65,7 +75,6 @@ function handleDoubleClick(e: MouseEvent) {
           setFilesNodeId(targetNode.id);
           openApp("files");
           break;
-
       }
       break;
 
@@ -75,7 +84,9 @@ function handleDoubleClick(e: MouseEvent) {
 }
 
 function handleStopRenaming() {
-  editNode(props.item.id, { isRenaming: false, isNewlyCreated: false });
+  if (!item.value.isRenaming) return;
+
+  editNode(item.value.id, { isRenaming: false, isNewlyCreated: false });
 }
 </script>
 
@@ -98,37 +109,40 @@ function handleStopRenaming() {
       >{{ formattedName }}</span
     >
     <!-- Renaming popover -->
-    <Popover :open="item.isRenaming" @update:open="handleStopRenaming">
+    <Popover :open="item.isRenaming">
       <PopoverTrigger> </PopoverTrigger>
-      <PopoverContent
-        class="flex w-72 flex-col gap-2 border-none bg-secondary p-3"
-      >
-        <span class="text-sm font-medium">
-          {{
-            item.type === "file"
-              ? $t("rename_file_title")
-              : $t("rename_folder_title")
-          }}
-        </span>
-        <form
-          class="flex items-center gap-2"
-          spellcheck="false"
-          @submit.prevent="handleStopRenaming"
+      <PopoverContent class="z-[50000] w-72 border-none bg-secondary p-3">
+        <div
+          v-on-click-outside="() => handleStopRenaming()"
+          class="flex flex-col gap-2"
         >
-          <Input
-            type="text"
-            class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
-            maxlength="20"
-            v-model="item.name"
-          />
-          <Button
-            size="sm"
-            class="w-fit font-extrabold"
-            @click="handleStopRenaming"
+          <span class="text-sm font-medium">
+            {{
+              item.type === "file"
+                ? $t("rename_file_title")
+                : $t("rename_folder_title")
+            }}
+          </span>
+          <form
+            class="flex items-center gap-2"
+            spellcheck="false"
+            @submit.prevent="handleStopRenaming"
           >
-            {{ item.isNewlyCreated ? "OK" : $t("rename") }}
-          </Button>
-        </form>
+            <Input
+              type="text"
+              class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
+              maxlength="20"
+              v-model="item.name"
+            />
+            <Button
+              size="sm"
+              class="w-fit font-extrabold"
+              @click="handleStopRenaming"
+            >
+              {{ item.isNewlyCreated ? "OK" : $t("rename") }}
+            </Button>
+          </form>
+        </div>
       </PopoverContent>
     </Popover>
 

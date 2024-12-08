@@ -18,30 +18,27 @@ const { app } = toRefs(props);
 
 const { openedNode, searchQuery } = storeToRefs(useFilesStore());
 
+const filteredItems = computed(() => {
+  return openedNode.value?.children.filter((node) => {
+    return node.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+  });
+});
 </script>
 
 <template>
   <div
     :class="[
-      'grid h-full w-full bg-background  transition-all duration-300',
-      // Mobile grid: single column
-      'grid-cols-1 grid-rows-[auto_1fr_1fr]',
-      // Desktop grid: two columns, two rows
-      'md:grid-cols-[minmax(max-content,25%)_1fr] md:grid-rows-[auto_1fr]',
+      'grid grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr]',
+      'h-full w-full bg-background transition-all duration-300',
       app.isFullscreen ? '' : 'rounded-t-xl',
-      !app.isActive ? 'brightness-[0.75]' : ''
+      !app.isActive ? 'brightness-[0.75]' : '',
     ]"
   >
     <!-- Sidebar -->
     <FilesSidebar
       :style="{ height: `${app.height}px` }"
       :class="[
-        'bg-muted',
-        // Mobile: sidebar in row 2
-        'col-span-1 row-start-2',
-        // Desktop: sidebar spans rows 1-2 in column 1
-        'md:col-start-1 md:row-span-2 md:row-start-1',
-
+        'col-start-1 row-span-2 row-start-1 bg-muted',
         app.isFullscreen ? '' : 'rounded-tl-xl',
       ]"
     />
@@ -52,29 +49,32 @@ const { openedNode, searchQuery } = storeToRefs(useFilesStore());
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
       :app="app"
-      :class="[
-        'app-topbar',
-        // Mobile: topbar in row 1
-        'col-span-1 row-start-1',
-        // Desktop: topbar in column 2, row 1
-        'md:col-start-2 md:row-start-1',
-      ]"
+      class="app-topbar'col-start-2 row-start-1"
     />
 
     <!-- Content -->
-    <div
-      :class="[
-        'flex flex-col items-center justify-start',
-        // Mobile: content in row 3
-        'col-span-1 row-start-3',
-        // Desktop: content in column 2, row 2
-        'md:col-start-2 md:row-start-2',
-      ]"
-      :style="{ height: `${app.height - 40}px` }"
+    <ScrollArea
+      class="col-start-2 row-start-2"
+      :style="{
+        height: `${app.height - 48}px`,
+      }"
+      @contextmenu.prevent=""
     >
-
-    </div>
+      <div class="grid-wrapper">
+        <DesktopNode
+          v-for="item in filteredItems"
+          :key="item.id"
+          :item="item"
+          :isDesktop="false"
+        />
+      </div>
+    </ScrollArea>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.grid-wrapper {
+  @apply grid place-content-start gap-4 p-2;
+  @apply grid-cols-[repeat(auto-fill,minmax(90px,1fr))];
+}
+</style>

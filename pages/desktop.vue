@@ -28,7 +28,7 @@ const draggableItems = computed({
 
 // Context menu handler
 const handleContextMenu = (event: MouseEvent) => {
-  openContextMenu(event.clientX, event.clientY, "desktop");
+  openContextMenu(event.clientX, event.clientY, "desktop", null, true);
 };
 
 const draggedNodeId = ref<string | null>(null);
@@ -125,6 +125,7 @@ onUnmounted(() => {
         v-for="item in desktopItems"
         :key="item.id"
         :item="item"
+        :isDesktop="true"
       />
     </DesktopGrid>
   </main>

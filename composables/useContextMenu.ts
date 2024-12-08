@@ -24,8 +24,15 @@ export function useContextMenu() {
 
   const { desktopNode, isDockPinned, isDockVisible } =
     storeToRefs(desktopStore);
-  const { createNode, editNode, moveNode, addToBookmarks, openApp, closeApp } =
-    desktopStore;
+  const {
+    createNode,
+    editNode,
+    moveNode,
+    emptyTrash,
+    addToBookmarks,
+    openApp,
+    closeApp,
+  } = desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
   const { setCurrentDirectory } = useTerminalStore();
@@ -113,6 +120,14 @@ export function useContextMenu() {
         label: t("move_to_trash"),
         action: () => moveToTrash(shortcut || node),
       },
+      ...(node?.id === "trash"
+        ? [
+            {
+              label: t("empty_trash"),
+              action: () => emptyTrash(),
+            },
+          ]
+        : []),
     ];
 
     // Remove 'rename', 'move to trash' options if node is protected

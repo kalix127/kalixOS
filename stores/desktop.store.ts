@@ -485,6 +485,14 @@ export const useDesktopStore = defineStore({
       );
     },
 
+    emptyTrash() {
+      if (this.trashItems.length === 0) return;
+      const itemsToDelete = [...this.trashItems];
+      for (const item of itemsToDelete) {
+        this.deleteNode(item.id);
+      }
+    },
+
     /**
      * Opens an app.
      * @param appId The ID of the app to open.

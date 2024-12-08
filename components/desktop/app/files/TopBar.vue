@@ -24,7 +24,7 @@ const { t } = useI18n();
 const filesStore = useFilesStore();
 const {
   openedNode,
-  isGridView,
+  isGridLayout,
   isSearching,
   searchQuery,
   canMoveBack,
@@ -204,8 +204,8 @@ const copyLocation = () => {
           class="size-8 duration-300 hover:bg-popover"
           @click.stop="toggleGridView"
         >
-          <Icon v-show="isGridView" name="gnome:view-grid" size="18" />
-          <Icon v-show="!isGridView" name="gnome:view-list" size="18" />
+        <Icon v-show="isGridLayout" name="gnome:view-list" size="18" />
+        <Icon v-show="!isGridLayout" name="gnome:view-grid" size="18" />
         </Button>
         <div class="h-6 w-px bg-gray-500/50 group-hover:bg-gray-500/20"></div>
 

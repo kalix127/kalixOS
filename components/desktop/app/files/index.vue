@@ -18,7 +18,7 @@ defineEmits<{
 
 const { app } = toRefs(props);
 
-const { openedNode, searchQuery } = storeToRefs(useFilesStore());
+const { openedNode, searchQuery, isGridLayout } = storeToRefs(useFilesStore());
 const desktopStore = useDesktopStore();
 const { nodeMap } = storeToRefs(desktopStore);
 const { moveNode } = desktopStore;
@@ -110,20 +110,40 @@ onMounted(async () => {
 
     <!-- Content -->
     <ScrollArea
-      class="col-start-2 row-start-2"
+      class="col-start-2 row-start-2 p-2"
       :style="{
         height: `${app.height - 48}px`,
       }"
       @contextmenu.prevent=""
     >
-      <div ref="filesGridRef" class="grid-wrapper">
+      <div v-if="isGridLayout" ref="filesGridRef" class="grid-wrapper">
         <DesktopNode
           v-for="item in filteredItems"
           :key="item.id"
           :item="item"
           :isDesktop="false"
+          :isGridLayout="isGridLayout"
         />
       </div>
+
+      <Table v-else>
+        <TableHeader>
+          <TableRow class="*:h-2 *:pl-2">
+            <TableHead class="w-4/6 py-1.5"> {{ $t("name") }} </TableHead>
+            <TableHead class="w-1/6 py-1.5">{{ $t("size") }}</TableHead>
+            <TableHead class="w-1/6 py-1.5">{{ $t("modified") }}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <DesktopNode
+            v-for="item in filteredItems"
+            :key="item.id"
+            :item="item"
+            :isDesktop="false"
+            :isGridLayout="isGridLayout"
+          />
+        </TableBody>
+      </Table>
 
       <!-- No results -->
       <div
@@ -147,7 +167,7 @@ onMounted(async () => {
 
 <style scoped>
 .grid-wrapper {
-  @apply grid place-content-start gap-4 p-2;
+  @apply grid place-content-start gap-4;
   @apply grid-cols-[repeat(auto-fill,minmax(90px,1fr))];
 }
 </style>

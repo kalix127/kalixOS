@@ -320,3 +320,23 @@ export const getNextPid = (processes: Process[]): number => {
   const randomIncrement = Math.floor(Math.random() * 500) + 1;
   return highestPid + randomIncrement;
 };
+
+
+/**
+ * Formats a number of bytes into a human-readable string with units.
+ * @param chars The length of the file in characters (bytes).
+ * @param decimals The number of decimal places to include.
+ * @returns The formatted string (e.g., "15 GiB").
+ */
+export function formatNodeSize(chars: number, decimals: number = 1): string {
+  if (chars === 0) return "0 B";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
+
+  const i = Math.floor(Math.log(chars) / Math.log(k));
+  const index = i < sizes.length ? i : sizes.length - 1;
+
+  return parseFloat((chars / Math.pow(k, index)).toFixed(dm)) + " " + sizes[index];
+}

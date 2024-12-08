@@ -124,6 +124,7 @@ onUnmounted(() => {
         :key="item.id"
         :item="item"
         :isDesktop="true"
+        :isGridLayout="true"
       />
     </DesktopGrid>
   </main>

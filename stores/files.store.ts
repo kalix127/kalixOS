@@ -5,7 +5,7 @@ export const useFilesStore = defineStore("files", {
     openedNodeId: "home",
     history: ["home"],
     currentHistoryIndex: 0,
-    isGridView: false,
+    isGridLayout: true,
     searchQuery: "",
     isSearching: false,
   }),
@@ -52,7 +52,7 @@ export const useFilesStore = defineStore("files", {
       }
     },
     toggleGridView() {
-      this.isGridView = !this.isGridView;
+      this.isGridLayout = !this.isGridLayout;
     },
   },
 });
@@ -61,7 +61,7 @@ interface FilesState {
   openedNodeId: string;
   history: string[];
   currentHistoryIndex: number;
-  isGridView: boolean;
+  isGridLayout: boolean;
   searchQuery: string;
   isSearching: boolean;
 }

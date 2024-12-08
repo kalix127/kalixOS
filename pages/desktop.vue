@@ -57,6 +57,7 @@ onMounted(async () => {
   init();
 
   await until(desktopGridRef).toBeTruthy();
+  if (!desktopGridRef.value) return;
 
   // Initialize drag-and-drop
   dragAndDrop({
@@ -100,8 +101,8 @@ onMounted(async () => {
 onUnmounted(() => {
   desktopStore.$dispose();
   contextMenuStore.$dispose();
-  const filesStore = useFilesStore()
-  useFilesStore().$dispose()
+  const filesStore = useFilesStore();
+  useFilesStore().$dispose();
   // Delete the store state
   delete useNuxtApp().$pinia.state.value[desktopStore.$id];
   delete useNuxtApp().$pinia.state.value[contextMenuStore.$id];
@@ -110,10 +111,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main
-    ref="desktopRef"
-    class="relative select-none"
-  >
+  <main ref="desktopRef" class="relative select-none">
     <!-- Apps -->
     <TransitionGroup name="apps">
       <LazyDesktopWindow v-for="app in openApps" :key="app.id" :app="app" />

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
+import type { AppNode, Node } from "@/types";
 import { storeToRefs } from "pinia";
+import { dragAndDrop } from "@formkit/drag-and-drop/vue";
+import { until } from "@vueuse/core";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
@@ -17,10 +19,64 @@ defineEmits<{
 const { app } = toRefs(props);
 
 const { openedNode, searchQuery } = storeToRefs(useFilesStore());
+const desktopStore = useDesktopStore();
+const { nodeMap } = storeToRefs(desktopStore);
+const { moveNode } = desktopStore;
 
-const filteredItems = computed(() => {
-  return openedNode.value?.children.filter((node) => {
-    return node.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+const filesGridRef = ref<HTMLElement | null>(null);
+const filteredItems = computed({
+  get: () =>
+    openedNode.value?.children.filter((node) => {
+      return node.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    }) || [],
+  set: (newItems: Node[]) => newItems,
+});
+
+const draggedNodeId = ref<string | null>(null);
+const targetNodeId = ref<string | null>(null);
+
+function handleDrop() {
+  if (!draggedNodeId.value || !targetNodeId.value) {
+    return;
+  }
+
+  // If target is a shortcut, check if it points to a folder and move item there
+  const targetNode = nodeMap.value.get(targetNodeId.value);
+  if (targetNode?.type === "shortcut") {
+    const targetFolder = nodeMap.value.get(targetNode.targetId);
+    if (targetFolder?.type === "folder") {
+      moveNode(draggedNodeId.value, targetFolder.id);
+      return;
+    }
+  }
+
+  moveNode(draggedNodeId.value, targetNodeId.value);
+}
+
+onMounted(async () => {
+  await until(filesGridRef).toBeTruthy();
+  if (!filesGridRef.value) return;
+
+  // Initialize drag-and-drop
+  dragAndDrop({
+    parent: filesGridRef.value,
+    values: filteredItems,
+    sortable: false,
+
+    // Assign dragged and target node ids on desktop
+    handleNodeDragover(data, state) {
+      if (!state.currentTargetValue) {
+        return;
+      }
+
+      draggedNodeId.value = state.currentTargetValue.id;
+      targetNodeId.value = data.targetData.node.data.value.id;
+    },
+
+    // Handle drop node for desktop
+    handleNodeDrop(data, state) {
+      handleDrop();
+    },
   });
 });
 </script>
@@ -60,7 +116,7 @@ const filteredItems = computed(() => {
       }"
       @contextmenu.prevent=""
     >
-      <div class="grid-wrapper">
+      <div ref="filesGridRef" class="grid-wrapper">
         <DesktopNode
           v-for="item in filteredItems"
           :key="item.id"

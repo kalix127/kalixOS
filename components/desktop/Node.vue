@@ -19,14 +19,13 @@ const { editNode, openApp, updateApp } = desktopStore;
 const { setKateNodeId } = useKateStore();
 const { setFilesNodeId } = useFilesStore();
 
-
 function handleContextMenu(event: MouseEvent) {
   openContextMenu(
     event.clientX,
     event.clientY,
     item.value.type as ContextMenuTargetType,
     item.value,
-    isDesktop.value
+    isDesktop.value,
   );
 
   // If this component is rendered inside the 'files' app
@@ -141,12 +140,18 @@ function handleStopRenaming() {
       </PopoverContent>
     </Popover>
 
-    <!-- Shortcut icon -->
     <div
-      v-if="item.type === 'shortcut'"
-      class="absolute right-1 top-0 grid place-content-center rounded-full bg-secondary p-0.5"
+      class="*:absolute *:right-0 *:top-0 *:grid *:place-content-center *:rounded-full *:bg-secondary"
     >
-      <Icon name="gnome:arrow-shortcut" size="12" class="text-white" />
+      <!-- Shortcut icon -->
+      <div v-if="item.type === 'shortcut'" class="p-0.5">
+        <Icon name="gnome:arrow-shortcut" size="12" class="text-white" />
+      </div>
+
+      <!-- Protected Icon -->
+      <div v-else-if="item.isProtected" class="p-[3px]">
+        <Icon name="gnome:lock" size="11" class="text-white" />
+      </div>
     </div>
   </div>
 </template>

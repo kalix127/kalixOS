@@ -71,7 +71,7 @@ const generalActions = computed(() => [
 ]);
 
 const fullPath = computed(() => {
-  if (!openedNode.value) return "";
+  if (!openedNode.value) return { absolutePath: "", nodes: [] };
   return getNodeFullPath(fileSystem.value, openedNode.value);
 });
 
@@ -127,7 +127,7 @@ const copyLocation = () => {
     return;
   }
 
-  copy(fullPath.value);
+  copy(fullPath.value.absolutePath);
 };
 </script>
 

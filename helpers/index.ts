@@ -197,23 +197,24 @@ export const findNodeByAbsolutePath = (
 };
 
 /**
- * Gets the full path of a node by traversing up to the root.
- * @param nodeMap The Map of node IDs to Nodes.
+ * Gets the full path and ordered list of nodes of a node by traversing up to the root.
  * @param root The root Node to traverse up to.
- * @param node The Node to get the path for.
- * @returns The full path as a string, starting with '/'.
+ * @param node The Node to get the path and nodes for.
  */
-export const getNodeFullPath = (root: Node, node: Node): string => {
+export const getNodeFullPath = (root: Node, node: Node): { absolutePath: string; nodes: Node[] } => {
   const pathParts: string[] = [];
+  const nodes: Node[] = [];
   let current: Node | null = node;
 
   while (current) {
     if (current === root) {
       pathParts.unshift(current.name);
+      nodes.unshift(current);
       break;
     }
 
     pathParts.unshift(current.name);
+    nodes.unshift(current);
     if (current.parentId) {
       current = findNodeByIdRecursive(root, current.parentId);
     } else {
@@ -221,7 +222,10 @@ export const getNodeFullPath = (root: Node, node: Node): string => {
     }
   }
 
-  return `/${pathParts.slice(1).join("/")}`;
+  return {
+    absolutePath: `/${pathParts.slice(1).join("/")}`,
+    nodes: nodes.slice(1),
+  };
 };
 
 /**

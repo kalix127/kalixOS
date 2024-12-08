@@ -141,8 +141,4 @@ onUnmounted(() => {
 .apps-leave-to {
   opacity: 0;
 }
-
-.node-dragging {
-  @apply absolute;
-}
 </style>

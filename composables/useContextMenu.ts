@@ -22,7 +22,7 @@ export function useContextMenu() {
     storeToRefs(contextMenuStore);
   const { closeContextMenu } = contextMenuStore;
 
-  const { desktopNode, isDockPinned, isDockVisible } =
+  const { desktopNode, isDockPinned, isDockVisible, bookmarks } =
     storeToRefs(desktopStore);
   const {
     createNode,
@@ -30,6 +30,7 @@ export function useContextMenu() {
     moveNode,
     emptyTrash,
     addToBookmarks,
+    removeFromBookmarks,
     openApp,
     closeApp,
   } = desktopStore;
@@ -151,10 +152,19 @@ export function useContextMenu() {
           action: () => console.log("New folder with 1 item"),
         },
         { isSeparator: true },
-        {
-          label: t("add_to_bookmarks"),
-          action: () => addToBookmarksAction(node),
-        },
+        ...(node && bookmarks.value.includes(node?.id)
+          ? [
+              {
+                label: t("remove_from_bookmarks"),
+                action: () => removeFromBookmarksAction(node),
+              },
+            ]
+          : [
+              {
+                label: t("add_to_bookmarks"),
+                action: () => addToBookmarksAction(node),
+              },
+            ]),
         {
           label: t("open_in_terminal"),
           action: () => openInTerminal(node),
@@ -383,6 +393,15 @@ export function useContextMenu() {
     }
 
     addToBookmarks(node.id);
+    closeContextMenu();
+  };
+
+  const removeFromBookmarksAction = (node: FolderNode | null) => {
+    if (!node || node.type !== "folder") {
+      return;
+    }
+
+    removeFromBookmarks(node.id);
     closeContextMenu();
   };
 

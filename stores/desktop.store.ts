@@ -629,6 +629,14 @@ export const useDesktopStore = defineStore({
     },
 
     /**
+     * Removes a node from bookmarks if present.
+     * @param nodeId The ID of the node to remove from bookmarks.
+     */
+    removeFromBookmarks(nodeId: string) {
+      this.bookmarks = this.bookmarks.filter(id => id !== nodeId);
+    },
+
+    /**
      * Sets the background image.
      * @param image The background image to set.
      */

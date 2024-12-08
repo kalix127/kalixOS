@@ -177,7 +177,11 @@ const copyLocation = () => {
       <!-- Path / input-->
       <Transition name="search-input" mode="out-in">
         <FilesSearchInput v-if="isSearching || searchQuery" />
-        <FilesCurrentPath v-else :absolutePath="fullPath" />
+        <FilesCurrentPath
+          v-else
+          :absolutePath="fullPath.absolutePath"
+          :nodes="fullPath.nodes"
+        />
       </Transition>
 
       <!-- Search in folder -->

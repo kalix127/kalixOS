@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const props = defineProps<{ absolutePath: string }>();
+import type { Node } from "@/types";
 
-const { absolutePath } = toRefs(props);
+const props = defineProps<{ absolutePath: string; nodes: Node[] }>();
+
+const { absolutePath, nodes } = toRefs(props);
+
+const { setFilesNodeId } = useFilesStore();
 
 const maxSegments = 3;
 const maxSegmentLength = 12;
-
 function truncateSegment(segment: string, maxLength: number): string {
   if (segment.length <= maxLength) return segment;
   const start = segment.slice(0, 4);
@@ -17,17 +20,20 @@ function truncateSegment(segment: string, maxLength: number): string {
 const displaySegments = computed(() => {
   const pathSegments = absolutePath.value.split("/").filter(Boolean);
 
-  const mappedSegments = pathSegments.map((segment) => {
-    if (segment === "home") return "Home";
-    return truncateSegment(segment, maxSegmentLength);
+  const mappedSegments = pathSegments.map((segment, index) => {
+    if (segment === "home") return { name: "Home", id: nodes.value[index].id };
+    return {
+      name: truncateSegment(segment, maxSegmentLength),
+      id: nodes.value[index].id,
+    };
   });
 
   if (!absolutePath.value.startsWith("/home")) {
-    mappedSegments.unshift("Manjaro Linux");
+    mappedSegments.unshift({ name: "Manjaro Linux", id: "root" });
   }
 
   if (mappedSegments.length > maxSegments) {
-    return ["..."].concat(mappedSegments.slice(-maxSegments));
+    return [{ name: "...", id: "" }].concat(mappedSegments.slice(-maxSegments));
   }
 
   return mappedSegments;
@@ -36,6 +42,11 @@ const displaySegments = computed(() => {
 const pathIcon = computed(() => {
   return absolutePath.value.startsWith("/home") ? "gnome:home" : "gnome:hdd";
 });
+
+function handleClickSegment(id: string) {
+  if (!id) return;
+  setFilesNodeId(id);
+}
 </script>
 
 <template>
@@ -47,15 +58,18 @@ const pathIcon = computed(() => {
       <div
         v-for="(segment, index) in displaySegments"
         :key="index"
-        class="max-w-[10rem] flex-shrink-0 overflow-hidden text-ellipsis"
+        class="max-w-[10rem] flex-shrink-0 truncate"
       >
-        <span
-          :class="
-            index < displaySegments.length - 1 ? 'text-muted-foreground' : ''
-          "
+        <button
+          @click="() => handleClickSegment(segment.id)"
+          :class="[
+            'duration-300',
+            index < displaySegments.length - 1 ? 'text-muted-foreground' : '',
+            segment.id ? 'hover:text-foreground' : 'cursor-default',
+          ]"
         >
-          {{ segment }}
-        </span>
+          {{ segment.name }}
+        </button>
         <span
           v-if="index < displaySegments.length - 1"
           class="mx-2 text-muted-foreground"

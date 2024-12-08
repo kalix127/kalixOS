@@ -68,6 +68,23 @@ const filteredItems = computed(() => {
           :isDesktop="false"
         />
       </div>
+
+      <!-- No results -->
+      <div
+        v-if="filteredItems?.length === 0 && searchQuery"
+        class="grid place-content-center"
+        :style="{
+          height: `${app.height - 48}px`,
+        }"
+      >
+        <div class="flex flex-col items-center gap-4">
+          <Icon name="gnome:folder-search" size="160" />
+          <h2 class="text-2xl font-extrabold">{{ $t("no_results_found") }}</h2>
+          <p class="text-muted-foreground">
+            {{ $t("no_match_in_x", { folderName: openedNode?.name }) }}
+          </p>
+        </div>
+      </div>
     </ScrollArea>
   </div>
 </template>

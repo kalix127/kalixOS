@@ -13,6 +13,8 @@
   "search_in_folder": "Search current folder",
   "clipboard_not_supported_title": "Clipboard Not Supported",
   "clipboard_not_supported_description": "Your browser does not support copying to the clipboard.",
+  "no_results_found": "No Results Found",
+  "no_match_in_x": "No matches in '{folderName}'",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",

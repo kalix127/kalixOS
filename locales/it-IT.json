@@ -13,6 +13,8 @@
   "search_in_folder": "Cerca nella cartella",
   "clipboard_not_supported_title": "Appunti Non Supportati",
   "clipboard_not_supported_description": "Il tuo browser non supporta la copia negli appunti.",
+  "no_results_found": "Nessun risultato trovato",
+  "no_match_in_x": "Nessuna corrispondenza in '{folderName}'",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",

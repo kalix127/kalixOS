@@ -10,8 +10,7 @@ defineEmits<{
 }>();
 
 const desktopStore = useDesktopStore();
-const { apps, hasAppsLoading, isShowAppsOverlayVisible } =
-  storeToRefs(desktopStore);
+const { apps, isShowAppsOverlayVisible } = storeToRefs(desktopStore);
 const { updateDockApps } = desktopStore;
 
 const { openContextMenu } = useContextMenuStore();
@@ -26,11 +25,11 @@ const draggableDockItems = computed({
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
-const { handleOpenApp: openApp } = useContextMenu();
+const { openApp } = useDesktopStore();
 
 const handleContextMenu = (event: MouseEvent, app: AppNode) => {
   if (app.id === "show-apps") return;
-  openContextMenu(event.clientX, event.clientY, "dock", app);
+  openContextMenu(event.clientX, event.clientY, "dock", app, false);
 };
 
 const handleOpenApp = (app: AppNode) => {
@@ -40,7 +39,7 @@ const handleOpenApp = (app: AppNode) => {
     return;
   }
 
-  openApp(app);
+  openApp(app.id);
 };
 
 onBeforeMount(async () => {
@@ -62,7 +61,6 @@ onBeforeMount(async () => {
   <div
     v-on-click-outside="() => $emit('close')"
     class="z-[50000] flex h-full w-full flex-col items-center gap-2 rounded-3xl px-3 py-2 sm:flex-row"
-    :class="[hasAppsLoading ? 'cursor-progress' : '']"
   >
     <div
       ref="dockRef"
@@ -74,6 +72,7 @@ onBeforeMount(async () => {
         :app="app"
         @openApp="handleOpenApp"
         @context="handleContextMenu"
+        :class="[app.id === 'kate' ? 'hidden' : '']"
       />
     </div>
   </div>

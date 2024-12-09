@@ -14,6 +14,7 @@ const {
   isShowBatteryPercentageEnabled,
   isDimScreenEnabled,
 } = storeToRefs(globalStore);
+const { updateApp } = useDesktopStore();
 
 function toggleShowBatteryPercentage() {
   isShowBatteryPercentageEnabled.value = !isShowBatteryPercentageEnabled.value;
@@ -28,13 +29,26 @@ function toggleDimScreen() {
   <SettingsContent :app="app">
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Battery level -->
-      <SettingsOptionGroup class="gap-0" :title="$t('battery_level')">
-        <SettingsOption class="pb-0 pt-3 min-h-6" is-first>
+      <SettingsOptionGroup class="group gap-0" :title="$t('battery_level')">
+        <SettingsOption
+          class="min-h-6 pb-0 pt-3 group-hover:bg-secondary/80"
+          is-first
+        >
           <template #center>
-            <Slider class="h-2 bg-green-300" :default-value="[0]" :max="100" :step="1" />
+            <Slider
+              class="h-2 bg-green-300"
+              :default-value="[0]"
+              :max="100"
+              :step="1"
+              :disabled="true"
+            />
           </template>
         </SettingsOption>
-        <SettingsOption :label="$t('fully_charged')" is-last>
+        <SettingsOption
+          class="group-hover:bg-secondary/80"
+          :label="$t('fully_charged')"
+          is-last
+        >
           <template #action> 100 % </template>
         </SettingsOption>
       </SettingsOptionGroup>
@@ -63,14 +77,21 @@ function toggleDimScreen() {
             <Select
               v-model="dimScreenThreshold"
               :default-value="defaultDimScreenThreshold"
+              @update:open="
+                (value) => updateApp('settings', { isDropdownOpen: value })
+              "
             >
               <SelectTrigger class="h-9 w-fit gap-2 bg-transparent ring-0">
                 <SelectValue :placeholder="$t('never')" />
               </SelectTrigger>
               <SelectContent class="z-[100000]">
                 <SelectGroup>
-                  <SelectItem value="0"> {{ $t("never") }} </SelectItem>
-                  <SelectItem value="60000"> {{ $t("1_minute") }} </SelectItem>
+                  <SelectItem value="0">
+                    {{ $t("never") }}
+                  </SelectItem>
+                  <SelectItem value="60000">
+                    {{ $t("1_minute") }}
+                  </SelectItem>
                   <SelectItem value="120000">
                     {{ $t("2_minutes") }}
                   </SelectItem>

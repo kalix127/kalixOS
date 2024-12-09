@@ -44,6 +44,10 @@ export default defineNuxtConfig({
         path: "~/components/desktop/app/settings",
         prefix: "Settings",
       },
+      {
+        path: "~/components/desktop/app/files",
+        prefix: "Files",
+      },
       "~/components",
     ],
   },

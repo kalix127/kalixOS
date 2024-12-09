@@ -40,12 +40,14 @@ export function useTerminal(terminalElement: HTMLElement) {
   const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
   const { homeNode } = storeToRefs(useDesktopStore());
 
-  // Set the initial directories
-  setCurrentDirectory(homeNode.value!);
+  // If not already set, Set the initial directories
+  if (!currentDirectoryNode.value) {
+    setCurrentDirectory(homeNode.value!);
+  }
 
   // Set the user first time avoiding the terminal to start on the next Boot
   const { setUserFirstTime } = useGlobalStore();
-  setUserFirstTime(false)
+  setUserFirstTime(false);
 
   // Init terminal and addons
   const webLinksAddon = new WebLinksAddon();
@@ -96,6 +98,9 @@ export function useTerminal(terminalElement: HTMLElement) {
   handleNeofetch(term, username);
   term.write(newLine.value);
 
+  // Update the current newline with a new path
+  watch(currentDirectoryNode, () => deleteAndPrintNewLine());
+
   function resetCommandAndCursor() {
     command.value = "";
     cursorPosition.value = 0;
@@ -103,6 +108,12 @@ export function useTerminal(terminalElement: HTMLElement) {
 
   function showNewLine() {
     term.write(`\r\n${newLine.value}`);
+  }
+
+  function deleteAndPrintNewLine() {
+    term.write("\r\x1B[K");
+    term.write(`${newLine.value}`);
+    term.write(command.value);
   }
 
   function onKey(data: { key: string; domEvent: KeyboardEvent }) {
@@ -181,9 +192,7 @@ export function useTerminal(terminalElement: HTMLElement) {
             command.value = commandHistory.value[commandHistoryIndex.value];
             cursorPosition.value = command.value.length;
 
-            term.write("\r\x1B[K"); // Clear current line
-            term.write(`${newLine.value}`);
-            term.write(command.value);
+            deleteAndPrintNewLine()
           }
         }
         break;

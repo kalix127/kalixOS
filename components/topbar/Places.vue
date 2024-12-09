@@ -1,44 +1,16 @@
 <script setup lang="ts">
-import type { Node } from "@/types";
-const { hasAppsAtTop, bookmarksNodes } = storeToRefs(useDesktopStore());
+import { defaultFolders } from "@/constants";
 
-function openFolder(nodeId: string) {
-  console.log("Open folder", nodeId);
+const desktopStore = useDesktopStore();
+const { hasAppsAtTop } = storeToRefs(desktopStore);
+const { openApp } = desktopStore;
+
+const { setFilesNodeId } = useFilesStore();
+
+function openFolder(id: string) {
+  setFilesNodeId(id);
+  openApp("files");
 }
-
-// TODO: Add actions
-const items = [
-  {
-    name: "home",
-    icon: "gnome:home",
-    id: "home",
-  },
-  {
-    name: "documents",
-    icon: "gnome:documents",
-    id: "documents",
-  },
-  {
-    name: "downloads",
-    icon: "gnome:downloads",
-    id: "downloads",
-  },
-  {
-    name: "music",
-    icon: "gnome:music",
-    id: "music",
-  },
-  {
-    name: "pictures",
-    icon: "gnome:pictures",
-    id: "pictures",
-  },
-  {
-    name: "videos",
-    icon: "gnome:videos",
-    id: "videos",
-  },
-];
 </script>
 
 <template>
@@ -53,37 +25,18 @@ const items = [
       </div>
     </PopoverTrigger>
     <PopoverContent
-      class="z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2 depth-shadow"
+      class="depth-shadow z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2"
     >
       <Button
-        v-for="item in items"
+        v-for="item in defaultFolders"
         :key="item.name"
         variant="ghost"
         class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
         @click="() => openFolder(item.id)"
       >
         <Icon :name="item.icon" size="16" />
-        <span class="text-sm">{{ $t(item.name) }}</span>
-      </Button>
-
-      <div
-        v-if="bookmarksNodes.length > 0"
-        class="my-2 h-px w-full bg-gray-500/30"
-      ></div>
-
-      <Button
-        v-for="item in bookmarksNodes.slice(0, 4)"
-        :key="item.name"
-        variant="ghost"
-        class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
-        @click="() => openFolder(item.id)"
-      >
-        <Icon name="gnome:symbolic-folder" size="16" />
         <span class="text-sm">{{ item.name }}</span>
       </Button>
-      <div v-if="bookmarksNodes.length > 4" class="grid place-content-center">
-        <span class="select-none text-muted-foreground">...</span>
-      </div>
     </PopoverContent>
   </Popover>
 </template>

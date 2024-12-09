@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, hasAppsLoading, nodeMap } =
+const { desktopItems, openApps, desktopRef, nodeMap } =
   storeToRefs(desktopStore);
 const { init, moveNode, updateDesktopItems } = desktopStore;
 
@@ -28,7 +28,7 @@ const draggableItems = computed({
 
 // Context menu handler
 const handleContextMenu = (event: MouseEvent) => {
-  openContextMenu(event.clientX, event.clientY, "desktop");
+  openContextMenu(event.clientX, event.clientY, "desktop", null, true);
 };
 
 const draggedNodeId = ref<string | null>(null);
@@ -57,6 +57,7 @@ onMounted(async () => {
   init();
 
   await until(desktopGridRef).toBeTruthy();
+  if (!desktopGridRef.value) return;
 
   // Initialize drag-and-drop
   dragAndDrop({
@@ -100,31 +101,32 @@ onMounted(async () => {
 onUnmounted(() => {
   desktopStore.$dispose();
   contextMenuStore.$dispose();
+  const filesStore = useFilesStore();
+  useFilesStore().$dispose();
   // Delete the store state
   delete useNuxtApp().$pinia.state.value[desktopStore.$id];
   delete useNuxtApp().$pinia.state.value[contextMenuStore.$id];
+  delete useNuxtApp().$pinia.state.value[filesStore.$id];
 });
 </script>
 
 <template>
-  <main
-    ref="desktopRef"
-    class="relative select-none"
-    :class="[hasAppsLoading ? 'cursor-progress' : '']"
-  >
+  <main ref="desktopRef" class="relative select-none">
     <!-- Apps -->
     <TransitionGroup name="apps">
       <LazyDesktopWindow v-for="app in openApps" :key="app.id" :app="app" />
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
-    <DesktopGridWrapper @context="handleContextMenu" ref="desktopGridRef">
-      <DesktopGridCell
+    <DesktopGrid @context="handleContextMenu" ref="desktopGridRef">
+      <DesktopNode
         v-for="item in desktopItems"
         :key="item.id"
         :item="item"
+        :isDesktop="true"
+        :isGridLayout="true"
       />
-    </DesktopGridWrapper>
+    </DesktopGrid>
   </main>
 </template>
 
@@ -137,9 +139,5 @@ onUnmounted(() => {
 .apps-enter-from,
 .apps-leave-to {
   opacity: 0;
-}
-
-.node-dragging {
-  @apply absolute;
 }
 </style>

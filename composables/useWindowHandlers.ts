@@ -8,6 +8,7 @@ export function useWindowHandlers(
 ) {
   const desktopStore = useDesktopStore();
   const { desktopRef } = storeToRefs(desktopStore);
+  const { updateApp } = desktopStore;
 
   const { initialWindowSizes } = useWindowSizes();
   const { initialWindowPositions } = useWindowPositions();
@@ -23,6 +24,7 @@ export function useWindowHandlers(
   };
 
   const handleActive = (value: boolean) => {
+    if (!value && app.value.isDropdownOpen) return;
     app.value.isActive = value;
   };
 
@@ -97,6 +99,8 @@ export function useWindowHandlers(
   // Hooks
 
   onBeforeMount(() => {
+    if (!app.value.isNewlyOpened) return;
+
     // Update the app's size and position if it's the first open
     if (!app.value.width || !app.value.height || !app.value.x || !app.value.y) {
       updateWindowSizes(
@@ -107,6 +111,7 @@ export function useWindowHandlers(
         initialWindowPositions.value.x,
         initialWindowPositions.value.y,
       );
+      updateApp(app.value.id, { isNewlyOpened: false });
     }
   });
 

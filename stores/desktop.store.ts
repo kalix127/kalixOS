@@ -1,9 +1,10 @@
 import {
   defaultFileSystem,
-  defaultApps,
   defaultBookmarks,
   defaultBackgroundImage,
   defaultBackgroundImages,
+  defaultApps,
+  desktopOnlyApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -21,6 +22,8 @@ import {
   useIntervalFn,
   useTimeoutFn,
   useTimestamp,
+  breakpointsTailwind,
+  useBreakpoints,
 } from "@vueuse/core";
 
 export const useDesktopStore = defineStore({
@@ -40,7 +43,6 @@ export const useDesktopStore = defineStore({
     isDockPinned: true,
 
     // Apps
-    hasAppsLoading: false,
     apps: defaultApps,
 
     // Desktop
@@ -483,6 +485,14 @@ export const useDesktopStore = defineStore({
       );
     },
 
+    emptyTrash() {
+      if (this.trashItems.length === 0) return;
+      const itemsToDelete = [...this.trashItems];
+      for (const item of itemsToDelete) {
+        this.deleteNode(item.id);
+      }
+    },
+
     /**
      * Opens an app.
      * @param appId The ID of the app to open.
@@ -490,6 +500,12 @@ export const useDesktopStore = defineStore({
     async openApp(appId: string, toggleMinimize?: boolean) {
       const app = this.apps.find((app) => app.id === appId);
       if (!app) return;
+
+      // Ensure the kate app is not opened if no node is selected
+      if (appId === "kate") {
+        const { openedNode } = storeToRefs(useKateStore());
+        if (!openedNode.value) return;
+      }
 
       const applicationsNode = this.nodeMap.get("applications");
       if (!applicationsNode || applicationsNode.type !== "folder") return;
@@ -516,24 +532,42 @@ export const useDesktopStore = defineStore({
         return;
       }
 
-      // If the node is not open, open it with delay
+      // Check if the app can be open on mobile
+      const isMobileOrTablet =
+        useBreakpoints(breakpointsTailwind).smaller("lg").value;
+      if (desktopOnlyApps.includes(app.id) && isMobileOrTablet) {
+        const { t } = useNuxtApp().$i18n;
+
+        this.addNotification(
+          {
+            id: `app-not-available-${app.id}`,
+            title: t("app_not_available"),
+            description: t(`${app.id}_not_available_on_mobile`, {
+              appName: app.name,
+            }),
+            icon: "gnome:triangle-warning",
+            isTranslated: false,
+          },
+          5000,
+        );
+        return;
+      }
+
       if (!app.isOpen) {
-        this.hasAppsLoading = true;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // If the node is not open, open it with delay
         this.apps = this.apps.map((app) => ({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
           isActive: app.id === appId ? true : app.isActive,
+          isNewlyOpened: true,
         }));
-        this.hasAppsLoading = false;
 
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
         return;
       }
 
-      // Set the app as active
       this.updateApp(appId, { isActive: true });
 
       if (toggleMinimize) {
@@ -592,6 +626,14 @@ export const useDesktopStore = defineStore({
       if (!this.bookmarks.includes(nodeId)) {
         this.bookmarks.push(nodeId);
       }
+    },
+
+    /**
+     * Removes a node from bookmarks if present.
+     * @param nodeId The ID of the node to remove from bookmarks.
+     */
+    removeFromBookmarks(nodeId: string) {
+      this.bookmarks = this.bookmarks.filter(id => id !== nodeId);
     },
 
     /**
@@ -676,7 +718,6 @@ interface DesktopStore {
   isDockPinned: boolean;
 
   // Apps
-  hasAppsLoading: boolean;
   apps: AppNode[];
 
   // Desktop

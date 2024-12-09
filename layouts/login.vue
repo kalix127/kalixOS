@@ -17,7 +17,7 @@ const { isAboutToSuspend, isSuspended } = storeToRefs(useGlobalStore());
 .wrapper-login {
   min-height: 100svh;
   display: grid;
-  grid-template-rows: 35px 1fr;
+  grid-template-rows: 36px 1fr;
   grid-template-areas:
     "topbar"
     "main";

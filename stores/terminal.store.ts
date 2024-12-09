@@ -17,7 +17,7 @@ export const useTerminalStore = defineStore("terminal", {
   actions: {
     setCurrentDirectory(directoryNode: FolderNode) {
       const rootNode = storeToRefs(useDesktopStore()).fileSystem.value;
-      const fullPath = getNodeFullPath(rootNode, directoryNode);
+      const fullPath = getNodeFullPath(rootNode, directoryNode).absolutePath;
       this.currentDirectory = fullPath;
       this.currentDirectoryNode = directoryNode;
     },

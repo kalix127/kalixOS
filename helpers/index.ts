@@ -197,23 +197,24 @@ export const findNodeByAbsolutePath = (
 };
 
 /**
- * Gets the full path of a node by traversing up to the root.
- * @param nodeMap The Map of node IDs to Nodes.
+ * Gets the full path and ordered list of nodes of a node by traversing up to the root.
  * @param root The root Node to traverse up to.
- * @param node The Node to get the path for.
- * @returns The full path as a string, starting with '/'.
+ * @param node The Node to get the path and nodes for.
  */
-export const getNodeFullPath = (root: Node, node: Node): string => {
+export const getNodeFullPath = (root: Node, node: Node): { absolutePath: string; nodes: Node[] } => {
   const pathParts: string[] = [];
+  const nodes: Node[] = [];
   let current: Node | null = node;
 
   while (current) {
     if (current === root) {
       pathParts.unshift(current.name);
+      nodes.unshift(current);
       break;
     }
 
     pathParts.unshift(current.name);
+    nodes.unshift(current);
     if (current.parentId) {
       current = findNodeByIdRecursive(root, current.parentId);
     } else {
@@ -221,7 +222,10 @@ export const getNodeFullPath = (root: Node, node: Node): string => {
     }
   }
 
-  return `/${pathParts.slice(1).join("/")}`;
+  return {
+    absolutePath: `/${pathParts.slice(1).join("/")}`,
+    nodes: nodes.slice(1),
+  };
 };
 
 /**
@@ -316,3 +320,23 @@ export const getNextPid = (processes: Process[]): number => {
   const randomIncrement = Math.floor(Math.random() * 500) + 1;
   return highestPid + randomIncrement;
 };
+
+
+/**
+ * Formats a number of bytes into a human-readable string with units.
+ * @param chars The length of the file in characters (bytes).
+ * @param decimals The number of decimal places to include.
+ * @returns The formatted string (e.g., "15 GiB").
+ */
+export function formatNodeSize(chars: number, decimals: number = 1): string {
+  if (chars === 0) return "0 B";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
+
+  const i = Math.floor(Math.log(chars) / Math.log(k));
+  const index = i < sizes.length ? i : sizes.length - 1;
+
+  return parseFloat((chars / Math.pow(k, index)).toFixed(dm)) + " " + sizes[index];
+}

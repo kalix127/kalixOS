@@ -5,6 +5,7 @@ import type {
   ContextMenuTargetType,
   AppNode,
   FolderNode,
+  FileNode,
 } from "@/types";
 import { findNodeByIdRecursive } from "~/helpers";
 import { useEventListener } from "@vueuse/core";
@@ -21,12 +22,23 @@ export function useContextMenu() {
     storeToRefs(contextMenuStore);
   const { closeContextMenu } = contextMenuStore;
 
-  const { desktopNode, isDockPinned, isDockVisible } =
+  const { desktopNode, isDockPinned, isDockVisible, bookmarks } =
     storeToRefs(desktopStore);
-  const { createNode, editNode, moveNode, addToBookmarks, openApp, closeApp } =
-    desktopStore;
+  const {
+    createNode,
+    editNode,
+    moveNode,
+    emptyTrash,
+    addToBookmarks,
+    removeFromBookmarks,
+    openApp,
+    closeApp,
+  } = desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
+  const { setCurrentDirectory } = useTerminalStore();
+  const { setKateNodeId } = useKateStore();
+  const { setFilesNodeId } = useFilesStore();
 
   useEventListener("click", () => {
     if (isOpen.value) {
@@ -67,7 +79,8 @@ export function useContextMenu() {
       },
     },
   ];
-  const getFileOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+
+  const getFileOptions = (node: FileNode | null, shortcut?: ShortcutNode) => {
     const options = [
       { label: "Open", action: () => openFile(node) },
       {
@@ -90,7 +103,10 @@ export function useContextMenu() {
     return options;
   };
 
-  const getFolderOptions = (node: Node | null, shortcut?: ShortcutNode) => {
+  const getFolderOptions = (
+    node: FolderNode | null,
+    shortcut?: ShortcutNode,
+  ) => {
     const baseOptions: Array<{
       label?: string;
       action?: () => void;
@@ -105,6 +121,14 @@ export function useContextMenu() {
         label: t("move_to_trash"),
         action: () => moveToTrash(shortcut || node),
       },
+      ...(node?.id === "trash"
+        ? [
+            {
+              label: t("empty_trash"),
+              action: () => emptyTrash(),
+            },
+          ]
+        : []),
     ];
 
     // Remove 'rename', 'move to trash' options if node is protected
@@ -128,9 +152,22 @@ export function useContextMenu() {
           action: () => console.log("New folder with 1 item"),
         },
         { isSeparator: true },
+        ...(node && bookmarks.value.includes(node?.id)
+          ? [
+              {
+                label: t("remove_from_bookmarks"),
+                action: () => removeFromBookmarksAction(node),
+              },
+            ]
+          : [
+              {
+                label: t("add_to_bookmarks"),
+                action: () => addToBookmarksAction(node),
+              },
+            ]),
         {
-          label: t("add_to_bookmarks"),
-          action: () => addToBookmarksAction(node),
+          label: t("open_in_terminal"),
+          action: () => openInTerminal(node),
         },
         { label: t("properties"), action: () => console.log("Properties") },
       );
@@ -139,18 +176,17 @@ export function useContextMenu() {
     return baseOptions;
   };
 
-  const getDockOptions = (node: Node | null) => {
+  const getDockOptions = (node: AppNode | null) => {
     const options = [];
 
     if (!node) {
       return [];
     }
 
-    const appNode = node as AppNode;
     const isSocialApp = node.type === "social";
 
     // Add open option if app is not open
-    if (!appNode.isOpen) {
+    if (!node.isOpen) {
       options.push(
         { isSeparator: true },
         {
@@ -174,7 +210,7 @@ export function useContextMenu() {
     }
 
     // Add quit option if app is open
-    if (appNode.isOpen) {
+    if (node.isOpen) {
       options.push(
         { isSeparator: true },
         {
@@ -186,7 +222,7 @@ export function useContextMenu() {
     return options;
   };
 
-  const getAppOptions = (node: Node | null, shortcut?: ShortcutNode) => [
+  const getAppOptions = (node: AppNode | null, shortcut?: ShortcutNode) => [
     { id: "open", label: t("open"), action: () => handleOpenApp(node) },
     ...(shortcut
       ? [
@@ -235,13 +271,13 @@ export function useContextMenu() {
       case "desktop":
         return getDesktopOptions();
       case "file":
-        return getFileOptions(actualTargetNode);
+        return getFileOptions(actualTargetNode as FileNode);
       case "folder":
-        return getFolderOptions(actualTargetNode);
+        return getFolderOptions(actualTargetNode as FolderNode);
       case "dock":
-        return getDockOptions(actualTargetNode);
+        return getDockOptions(actualTargetNode as AppNode);
       case "app":
-        return getAppOptions(actualTargetNode);
+        return getAppOptions(actualTargetNode as AppNode);
       default:
         return [];
     }
@@ -279,10 +315,17 @@ export function useContextMenu() {
     closeContextMenu();
   };
 
+  const openInTerminal = (node: FolderNode | null) => {
+    if (!node) return;
+
+    setCurrentDirectory(node);
+    openApp("terminal");
+  };
+
   const handleOpenApp = async (node: Node | null) => {
     if (!node) return;
 
-    const minimizeIfALreadyOpen = node.type === "app" ? true : false;
+    const minimizeIfAlreadyOpen = node.type === "app" ? true : false;
 
     if (!isDockPinned.value) {
       isDockVisible.value = false;
@@ -310,44 +353,55 @@ export function useContextMenu() {
       return;
     }
 
-    openApp(node.id, minimizeIfALreadyOpen);
+    openApp(node.id, minimizeIfAlreadyOpen);
     closeContextMenu();
   };
 
-  const handleCloseApp = (node: Node | null) => {
+  const handleCloseApp = (node: AppNode | null) => {
     if (!node) return;
 
     closeApp(node.id);
     closeContextMenu();
   };
 
-  const handleAppDetails = (node: Node | null) => {
+  const handleAppDetails = (node: AppNode | null) => {
     if (!node) return;
 
     console.log(`App Details: ${node.name}`);
     closeContextMenu();
   };
 
-  const openFolder = (node: Node | null) => {
+  const openFolder = (node: FolderNode | null) => {
     if (!node) return;
 
-    console.log(`Opening folder: ${node.name}`);
+    setFilesNodeId(node.id);
+    openApp("files");
     closeContextMenu();
   };
 
-  const openFile = (node: Node | null) => {
+  const openFile = (node: FileNode | null) => {
     if (!node) return;
 
-    console.log(`Opening file: ${node.name}`);
+    setKateNodeId(node.id);
+    openApp("kate");
     closeContextMenu();
   };
 
-  const addToBookmarksAction = (node: Node | null) => {
+  const addToBookmarksAction = (node: FolderNode | null) => {
     if (!node || node.type !== "folder") {
       return;
     }
 
     addToBookmarks(node.id);
+    closeContextMenu();
+  };
+
+  const removeFromBookmarksAction = (node: FolderNode | null) => {
+    if (!node || node.type !== "folder") {
+      return;
+    }
+
+    removeFromBookmarks(node.id);
     closeContextMenu();
   };
 

@@ -32,6 +32,8 @@ export const defaultBackgroundImages: BackgroundImage[] = [
 
 export const defaultFullscreenApps = ["brave", "code"];
 
+export const desktopOnlyApps = ["brave", "code", "terminal", "files", "files"]
+
 export const desktopEnvironments = [
   "gnome",
   "gnome_classic",
@@ -45,69 +47,24 @@ export const defaultNetworks: WifiNetwork[] = [
     name: "FASTWEB-7632798",
     signal: 4,
     isProtected: true,
-    isSaved: true,
-    details: {
-      linkSpeed: "103 Mb/s",
-      security: "WPA2",
-      ipv4: "423.168.999.100",
-      ipv6: "3001:xyz::1",
-      hardwareAddress: "00:1A:2B:3C:4D:5E",
-      supportedFrequencies: ["2.4 GHz", "5 GHz"],
-      defaultRoute: "423.168.999.1",
-      dns4: ["8.8.1.8", "8.8.1.4"],
-      dns6: ["2001:4860:4860::8888", "2001:4860:4860::8844"],
-    },
   },
   {
     id: 2,
     name: "VODAFONE-5G",
     signal: 4,
     isProtected: false,
-    details: {
-      linkSpeed: "150 Mb/s",
-      security: "None",
-      ipv4: "555.444.333.222",
-      ipv6: "8888:void::4",
-      hardwareAddress: "00:4D:5E:6F:7G:8H",
-      supportedFrequencies: ["2.4 GHz", "5 GHz"],
-      defaultRoute: "555.444.333.1",
-      dns4: ["444.555.666.777", "777.666.555.444"],
-      dns6: ["9999:dead::beef", "9999:dead::cafe"],
-    },
   },
   {
     id: 3,
     name: "TIM-1234567",
     signal: 3,
     isProtected: true,
-    details: {
-      linkSpeed: "72 Mb/s",
-      security: "WPA3",
-      ipv4: "892.671.445.105",
-      ipv6: "9999:invalid::2",
-      hardwareAddress: "00:2B:3C:4D:5E:6F",
-      supportedFrequencies: ["2.4 GHz"],
-      defaultRoute: "892.671.445.1",
-      dns4: ["1.1.1.1", "1.0.0.1"],
-      dns6: ["2606:4700:4700::1111", "2606:4700:4700::1001"],
-    },
   },
   {
     id: 4,
     name: "NETGEAR-GUEST",
     signal: 3,
     isProtected: true,
-    details: {
-      linkSpeed: "86 Mb/s",
-      security: "WPA2",
-      ipv4: "777.888.999.111",
-      ipv6: "5555:fake::5",
-      hardwareAddress: "00:5E:6F:7G:8H:9I",
-      supportedFrequencies: ["2.4 GHz"],
-      defaultRoute: "777.888.999.1",
-      dns4: ["333.222.111.000", "000.111.222.333"],
-      dns6: ["7777:dead::1234", "7777:dead::5678"],
-    },
   },
 
   {
@@ -115,72 +72,81 @@ export const defaultNetworks: WifiNetwork[] = [
     name: "TP-LINK_OFFICE",
     signal: 2,
     isProtected: true,
-    details: {
-      linkSpeed: "45 Mb/s",
-      security: "WPA3",
-      ipv4: "444.333.222.111",
-      ipv6: "4444:null::6",
-      hardwareAddress: "00:6F:7G:8H:9I:0J",
-      supportedFrequencies: ["2.4 GHz", "5 GHz"],
-      defaultRoute: "444.333.222.1",
-      dns4: ["111.222.333.444", "444.333.222.111"],
-      dns6: ["6666:dead::abcd", "6666:dead::dcba"],
-    },
   },
   {
     id: 6,
     name: "LINKSYS_HOME",
     signal: 2,
     isProtected: true,
-    details: {
-      linkSpeed: "35 Mb/s",
-      security: "WPA2",
-      ipv4: "666.555.444.333",
-      ipv6: "3333:void::7",
-      hardwareAddress: "00:7G:8H:9I:0J:1K",
-      supportedFrequencies: ["2.4 GHz"],
-      defaultRoute: "666.555.444.1",
-      dns4: ["555.666.777.888", "888.777.666.555"],
-      dns6: ["5555:dead::9876", "5555:dead::6789"],
-    },
   },
   {
     id: 7,
     name: "ILIAD-34781 Public",
     signal: 1,
     isProtected: false,
-    details: {
-      linkSpeed: "13 Mb/s",
-      security: "None",
-      ipv4: "999.777.666.110",
-      ipv6: "7777:bad::3",
-      hardwareAddress: "00:3C:4D:5E:6F:7G",
-      supportedFrequencies: ["2.4 GHz", "5 GHz"],
-      defaultRoute: "999.777.666.1",
-      dns4: ["208.67.222.222", "208.67.220.220"],
-      dns6: ["2620:119:35::35", "2620:119:53::53"],
-    },
   },
   {
     id: 8,
     name: "DLINK-PUBLIC",
     signal: 1,
     isProtected: false,
-    details: {
-      linkSpeed: "24 Mb/s",
-      security: "None",
-      ipv4: "888.777.666.555",
-      ipv6: "2222:bad::8",
-      hardwareAddress: "00:8H:9I:0J:1K:2L",
-      supportedFrequencies: ["2.4 GHz", "5 GHz"],
-      defaultRoute: "888.777.666.1",
-      dns4: ["999.888.777.666", "666.777.888.999"],
-      dns6: ["4444:dead::5555", "4444:dead::6666"],
-    },
   },
 ];
 
 /* File system */
+
+export const defaultFolders = [
+  {
+    id: "home",
+    name: "Home",
+    icon: "gnome:home",
+  },
+  {
+    id: "desktop",
+    name: "Desktop",
+    icon: "gnome:desktop",
+  },
+  {
+    id: "applications",
+    name: "Applications",
+    icon: "gnome:applications",
+  },
+  {
+    id: "downloads",
+    name: "Downloads",
+    icon: "gnome:downloads",
+  },
+  {
+    id: "documents",
+    name: "Documents",
+    icon: "gnome:documents",
+  },
+  {
+    id: "music",
+    name: "Music",
+    icon: "gnome:music",
+  },
+  {
+    id: "pictures",
+    name: "Pictures",
+    icon: "gnome:pictures",
+  },
+  {
+    id: "videos",
+    name: "Videos",
+    icon: "gnome:videos",
+  },
+  {
+    id: "trash",
+    name: "Trash",
+    icon: "gnome:trash",
+  },
+  {
+    id: "root",
+    name: "Manjaro Linux",
+    icon: "gnome:hdd-2",
+  },
+];
 
 export const defaultFilePermissions = {
   owner: { read: true, write: true, execute: false },
@@ -244,6 +210,12 @@ export const defaultApps: AppNode[] = [
     icon: "app:vscode",
   },
   {
+    id: "kate",
+    name: "Kate",
+    type: "app",
+    icon: "app:kate",
+  },
+  {
     id: "github",
     name: "github_profile",
     type: "social",
@@ -273,11 +245,13 @@ export const defaultApps: AppNode[] = [
   },
 ].map((app) => ({
   ...app,
+  title: "",
   isOpen: false,
   isActive: false,
   isMinimized: false,
   isFullscreen: false,
-  isModalOpen: false,
+  isDropdownOpen: false,
+  isNewlyOpened: false,
   width: 0,
   height: 0,
   x: 0,
@@ -313,13 +287,33 @@ export const defaultFileSystem = (username: string): Node =>
               icon: "folder:folder",
               children: [
                 {
+                  id: "desktop",
+                  name: "Desktop",
+                  type: "folder",
+                  icon: "folder:desktop",
+                  isProtected: true,
+                  children: [
+                    {
+                      id: "trash-shortcut",
+                      name: "Trash",
+                      type: "shortcut",
+                      icon: "app:trash",
+                      isShortcut: true,
+                      targetId: "trash",
+                      children: [],
+                      isProtected: true,
+                      permissions: defaultShortcutPermissions,
+                    },
+                  ],
+                },
+                {
                   id: "applications",
                   name: "Applications",
                   type: "folder",
                   icon: "folder:applications",
                   isProtected: true,
                   children: [
-                    ...defaultApps.slice(0, -4).map((app) => ({
+                    ...defaultApps.map((app) => ({
                       ...app,
                       name: `${app.name.replaceAll(" ", "")}.AppImage`,
                     })),
@@ -329,7 +323,7 @@ export const defaultFileSystem = (username: string): Node =>
                   id: "downloads",
                   name: "Downloads",
                   type: "folder",
-                  icon: "folder:donwloads",
+                  icon: "folder:downloads",
                   children: [],
                 },
                 {
@@ -359,26 +353,6 @@ export const defaultFileSystem = (username: string): Node =>
                   type: "folder",
                   icon: "folder:videos",
                   children: [],
-                },
-                {
-                  id: "desktop",
-                  name: "Desktop",
-                  type: "folder",
-                  icon: "folder:desktop",
-                  isProtected: true,
-                  children: [
-                    {
-                      id: "trash-shortcut",
-                      name: "Trash",
-                      type: "shortcut",
-                      icon: "app:trash",
-                      isShortcut: true,
-                      targetId: "trash",
-                      children: [],
-                      isProtected: true,
-                      permissions: defaultShortcutPermissions,
-                    },
-                  ],
                 },
                 {
                   name: ".local",
@@ -1517,3 +1491,556 @@ export const powerOffSystemLogs: SystemLog[] = [
     message: "System Power Off.",
   },
 ];
+
+export const monacoEditorLanguageMap: { [extension: string]: string } = {
+  // ABAP
+  abap: "abap",
+  // Apex
+  cls: "apex",
+  // Azure CLI
+  azcli: "azcli",
+  // Batch
+  bat: "bat",
+  cmd: "bat",
+  // Bicep
+  bicep: "bicep",
+  // Cameligo
+  mligo: "cameligo",
+  // Clojure
+  clj: "clojure",
+  cljs: "clojure",
+  cljc: "clojure",
+  edn: "clojure",
+  // CoffeeScript
+  coffee: "coffeescript",
+  litcoffee: "coffeescript",
+  // C/C++
+  c: "cpp",
+  h: "cpp",
+  cpp: "cpp",
+  hh: "cpp",
+  hpp: "cpp",
+  cc: "cpp",
+  // C#
+  cs: "csharp",
+  csx: "csharp",
+  // CSP
+  csp: "csp",
+  // CSS
+  css: "css",
+  // Cypher
+  cql: "cypher",
+  // Dart
+  dart: "dart",
+  // Dockerfile
+  dockerfile: "dockerfile",
+  Dockerfile: "dockerfile",
+  // ECL
+  ecl: "ecl",
+  // Elixir
+  ex: "elixir",
+  exs: "elixir",
+  // Flow9
+  flow: "flow9",
+  // F#
+  fs: "fsharp",
+  fsi: "fsharp",
+  fsx: "fsharp",
+  // Freemarker2
+  ftl: "freemarker2",
+  // Go
+  go: "go",
+  // GraphQL
+  graphql: "graphql",
+  gql: "graphql",
+  // Handlebars
+  hbs: "handlebars",
+  // HCL
+  hcl: "hcl",
+  tf: "hcl",
+  // HTML
+  html: "html",
+  htm: "html",
+  // INI
+  ini: "ini",
+  cfg: "ini",
+  // Java
+  java: "java",
+  // JavaScript
+  js: "javascript",
+  cjs: "javascript",
+  mjs: "javascript",
+  // Julia
+  jl: "julia",
+  // Kotlin
+  kt: "kotlin",
+  kts: "kotlin",
+  // Less
+  less: "less",
+  // Lexon
+  lex: "lexon",
+  // Lua
+  lua: "lua",
+  // Liquid
+  liquid: "liquid",
+  // M3
+  m3: "m3",
+  // Markdown
+  md: "markdown",
+  markdown: "markdown",
+  // MDX
+  mdx: "mdx",
+  // MIPS
+  s: "mips",
+  asm: "mips",
+  // MS DAX
+  dax: "msdax",
+  // Pascal
+  pas: "pascal",
+  pp: "pascal",
+  // Pascaligo
+  ligolang: "pascaligo",
+  // Perl
+  pl: "perl",
+  pm: "perl",
+  // PostgreSQL
+  psql: "pgsql",
+  // PHP
+  php: "php",
+  // PLA
+  pla: "pla",
+  // Postiats
+  dats: "postiats",
+  sats: "postiats",
+  hats: "postiats",
+  // Power Query
+  pq: "powerquery",
+  m: "powerquery",
+  // PowerShell
+  ps1: "powershell",
+  psm1: "powershell",
+  psd1: "powershell",
+  // Protobuf
+  proto: "protobuf",
+  // Pug
+  pug: "pug",
+  jade: "pug",
+  // Python
+  py: "python",
+  pyw: "python",
+  // Q#
+  qs: "qsharp",
+  // R
+  r: "r",
+  // Razor
+  cshtml: "razor",
+  // Redis
+  redis: "redis",
+  // Redshift
+  redshift: "redshift",
+  // reStructuredText
+  rst: "restructuredtext",
+  // Ruby
+  rb: "ruby",
+  // Rust
+  rs: "rust",
+  // SB
+  sb: "sb",
+  // Scala
+  scala: "scala",
+  sc: "scala",
+  // Scheme
+  scm: "scheme",
+  // SCSS
+  scss: "scss",
+  // Shell
+  sh: "shell",
+  bash: "shell",
+  zsh: "shell",
+  // Solidity
+  sol: "solidity",
+  // Sophia
+  aes: "sophia",
+  // Sparql
+  rq: "sparql",
+  // SQL
+  sql: "sql",
+  // ST
+  st: "st",
+  // Swift
+  swift: "swift",
+  // SystemVerilog
+  sv: "systemverilog",
+  svh: "systemverilog",
+  // Tcl
+  tcl: "tcl",
+  // Twig
+  twig: "twig",
+  // TypeScript
+  ts: "typescript",
+  // TypeSpec
+  cadl: "typespec",
+  // Visual Basic
+  vb: "vb",
+  // WGSL
+  wgsl: "wgsl",
+  // XML
+  xml: "xml",
+  xsd: "xml",
+  svg: "xml",
+  // YAML
+  yaml: "yaml",
+  yml: "yaml",
+  // Plain Text (fallback)
+  txt: "plaintext",
+  text: "plaintext",
+  log: "plaintext",
+};
+
+export const monacoTheme = {
+  base: "vs-dark",
+  inherit: true,
+  rules: [
+    {
+      background: "24292e",
+      token: "",
+    },
+    {
+      foreground: "959da5",
+      token: "comment",
+    },
+    {
+      foreground: "959da5",
+      token: "punctuation.definition.comment",
+    },
+    {
+      foreground: "959da5",
+      token: "string.comment",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "constant",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "entity.name.constant",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "variable.other.constant",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "variable.language",
+    },
+    {
+      foreground: "b392f0",
+      token: "entity",
+    },
+    {
+      foreground: "b392f0",
+      token: "entity.name",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "variable.parameter.function",
+    },
+    {
+      foreground: "7bcc72",
+      token: "entity.name.tag",
+    },
+    {
+      foreground: "ea4a5a",
+      token: "keyword",
+    },
+    {
+      foreground: "ea4a5a",
+      token: "storage",
+    },
+    {
+      foreground: "ea4a5a",
+      token: "storage.type",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "storage.modifier.package",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "storage.modifier.import",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "storage.type.java",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string",
+    },
+    {
+      foreground: "79b8ff",
+      token: "punctuation.definition.string",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string punctuation.section.embedded source",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "support",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "meta.property-name",
+    },
+    {
+      foreground: "fb8532",
+      token: "variable",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "variable.other",
+    },
+    {
+      foreground: "d73a49",
+      fontStyle: "bold italic underline",
+      token: "invalid.broken",
+    },
+    {
+      foreground: "d73a49",
+      fontStyle: "bold italic underline",
+      token: "invalid.deprecated",
+    },
+    {
+      foreground: "fafbfc",
+      background: "d73a49",
+      fontStyle: "italic underline",
+      token: "invalid.illegal",
+    },
+    {
+      foreground: "fafbfc",
+      background: "d73a49",
+      fontStyle: "italic underline",
+      token: "carriage-return",
+    },
+    {
+      foreground: "d73a49",
+      fontStyle: "bold italic underline",
+      token: "invalid.unimplemented",
+    },
+    {
+      foreground: "d73a49",
+      token: "message.error",
+    },
+    {
+      foreground: "f6f8fa",
+      token: "string source",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "string variable",
+    },
+    {
+      foreground: "79b8ff",
+      token: "source.regexp",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string.regexp",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string.regexp.character-class",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string.regexp constant.character.escape",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string.regexp source.ruby.embedded",
+    },
+    {
+      foreground: "79b8ff",
+      token: "string.regexp string.regexp.arbitrary-repitition",
+    },
+    {
+      foreground: "7bcc72",
+      fontStyle: "bold",
+      token: "string.regexp constant.character.escape",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "support.constant",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "support.variable",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "meta.module-reference",
+    },
+    {
+      foreground: "fb8532",
+      token: "markup.list",
+    },
+    {
+      foreground: "0366d6",
+      fontStyle: "bold",
+      token: "markup.heading",
+    },
+    {
+      foreground: "0366d6",
+      fontStyle: "bold",
+      token: "markup.heading entity.name",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "markup.quote",
+    },
+    {
+      foreground: "f6f8fa",
+      fontStyle: "italic",
+      token: "markup.italic",
+    },
+    {
+      foreground: "f6f8fa",
+      fontStyle: "bold",
+      token: "markup.bold",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "markup.raw",
+    },
+    {
+      foreground: "b31d28",
+      background: "ffeef0",
+      token: "markup.deleted",
+    },
+    {
+      foreground: "b31d28",
+      background: "ffeef0",
+      token: "meta.diff.header.from-file",
+    },
+    {
+      foreground: "b31d28",
+      background: "ffeef0",
+      token: "punctuation.definition.deleted",
+    },
+    {
+      foreground: "176f2c",
+      background: "f0fff4",
+      token: "markup.inserted",
+    },
+    {
+      foreground: "176f2c",
+      background: "f0fff4",
+      token: "meta.diff.header.to-file",
+    },
+    {
+      foreground: "176f2c",
+      background: "f0fff4",
+      token: "punctuation.definition.inserted",
+    },
+    {
+      foreground: "b08800",
+      background: "fffdef",
+      token: "markup.changed",
+    },
+    {
+      foreground: "b08800",
+      background: "fffdef",
+      token: "punctuation.definition.changed",
+    },
+    {
+      foreground: "2f363d",
+      background: "959da5",
+      token: "markup.ignored",
+    },
+    {
+      foreground: "2f363d",
+      background: "959da5",
+      token: "markup.untracked",
+    },
+    {
+      foreground: "b392f0",
+      fontStyle: "bold",
+      token: "meta.diff.range",
+    },
+    {
+      foreground: "c8e1ff",
+      token: "meta.diff.header",
+    },
+    {
+      foreground: "0366d6",
+      fontStyle: "bold",
+      token: "meta.separator",
+    },
+    {
+      foreground: "0366d6",
+      token: "meta.output",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.tag",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.curly",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.round",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.square",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.angle",
+    },
+    {
+      foreground: "ffeef0",
+      token: "brackethighlighter.quote",
+    },
+    {
+      foreground: "d73a49",
+      token: "brackethighlighter.unmatched",
+    },
+    {
+      foreground: "d73a49",
+      token: "sublimelinter.mark.error",
+    },
+    {
+      foreground: "fb8532",
+      token: "sublimelinter.mark.warning",
+    },
+    {
+      foreground: "6a737d",
+      token: "sublimelinter.gutter-mark",
+    },
+    {
+      foreground: "79b8ff",
+      fontStyle: "underline",
+      token: "constant.other.reference.link",
+    },
+    {
+      foreground: "79b8ff",
+      fontStyle: "underline",
+      token: "string.other.link",
+    },
+  ],
+  colors: {
+    "editor.foreground": "#f6f8fa",
+    "editor.background": "#24292e",
+    "editor.inactiveSelectionBackground": "#444d56",
+    "editor.lineHighlightBackground": "#444d56",
+    "editorCursor.foreground": "#ffffff",
+    "editorWhitespace.foreground": "#6a737d",
+    "editorIndentGuide.background": "#6a737d",
+    "editorIndentGuide.activeBackground": "#f6f8fa",
+    "editor.selectionHighlightBorder": "#444d56",
+  },
+};

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { AppNode } from "@/types";
 import { useMagicKeys } from "@vueuse/core";
+import { defaultApps } from "@/constants";
 
-const { apps, isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
-const { handleOpenApp: openApp } = useContextMenu();
+const { isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
+const { openApp } = useDesktopStore();
 
 const query = ref("");
-const appIdsToRemove = ["github", "linkedin", "reddit", "show-apps"];
 
 const { escape } = useMagicKeys();
 
@@ -18,16 +18,19 @@ watch(escape, (v) => {
 });
 
 const filteredApps = computed(() => {
-  return apps.value.filter(
-    (app) =>
-      !appIdsToRemove.includes(app.id) &&
-      app.name.toLowerCase().includes(query.value),
-  );
+  return defaultApps
+    .slice(0, -1)
+    .filter(
+      (app) =>
+        app.id !== "kate" &&
+        app.type !== "social" &&
+        app.name.toLowerCase().includes(query.value),
+    );
 });
 
 function handleOpenApp(app: AppNode) {
   closeOverlay();
-  openApp(app);
+  openApp(app.id);
 }
 
 function closeOverlay() {

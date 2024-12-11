@@ -307,7 +307,7 @@ export const defaultFileSystem = (username: string): Node =>
                   icon: "folder:applications",
                   isProtected: true,
                   children: [
-                    ...defaultApps.map((app) => ({
+                    ...defaultApps.slice(0, 5).map((app) => ({
                       ...app,
                       name: `${app.name.replaceAll(" ", "")}.AppImage`,
                     })),

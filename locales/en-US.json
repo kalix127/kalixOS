@@ -18,6 +18,7 @@
   "size": "Size",
   "modified": "Created at",
   "items": "items",
+  "empty_trash": "Empty Trash",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Lock",

@@ -18,6 +18,7 @@
   "size": "Dimensione",
   "modified": "Creato il",
   "items": "elementi",
+  "empty_trash": "Svuota Cestino",
 
   "-----------------TOPBAR-LOGIN----------------": "",
   "lock": "Blocca",

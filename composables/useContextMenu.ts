@@ -344,13 +344,6 @@ export function useContextMenu() {
     closeContextMenu();
   };
 
-  const handleAppDetails = (node: AppNode | null) => {
-    if (!node) return;
-
-    console.log(`App Details: ${node.name}`);
-    closeContextMenu();
-  };
-
   const openFolder = (node: FolderNode | null) => {
     if (!node) return;
 

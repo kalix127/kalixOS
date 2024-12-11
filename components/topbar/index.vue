@@ -63,7 +63,7 @@ const route = useRoute();
       <TransitionGroup name="fade">
         <DesktopNotification
           v-for="notification in notifications"
-          :key="notification.title"
+          :key="notification.id"
           :notification="notification"
           :class="isLocked ? 'hidden' : ''"
         />

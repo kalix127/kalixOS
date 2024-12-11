@@ -88,6 +88,10 @@ export function useContextMenu() {
         action: () => renameNode(shortcut || node),
       },
       {
+        label: t("new_folder_with_1_item"),
+        action: () => newFolderWithItem(node),
+      },
+      {
         label: t("move_to_trash"),
         action: () => moveToTrash(shortcut || node),
       },
@@ -139,7 +143,7 @@ export function useContextMenu() {
         { isSeparator: true },
         {
           label: t("new_folder_with_1_item"),
-          action: () => console.log("New folder with 1 item"),
+          action: () => newFolderWithItem(node),
         },
         { isSeparator: true },
         ...(node && bookmarks.value.includes(node?.id)
@@ -371,6 +375,25 @@ export function useContextMenu() {
     }
 
     removeFromBookmarks(node.id);
+    closeContextMenu();
+  };
+
+  const newFolderWithItem = (node: Node | null) => {
+    if (!node || !node.parentId) {
+      return;
+    }
+
+    const newFolder = createNode(
+      node.parentId,
+      {
+        name: t("new_folder"),
+        type: "folder",
+        isRenaming: true,
+        isNewlyCreated: true,
+      },
+      true,
+    );
+    moveNode(node.id, newFolder!.id);
     closeContextMenu();
   };
 

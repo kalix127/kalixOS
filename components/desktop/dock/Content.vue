@@ -39,7 +39,7 @@ const handleOpenApp = (app: AppNode) => {
     return;
   }
 
-  openApp(app.id);
+  openApp(app.id, true);
 };
 
 onBeforeMount(async () => {

@@ -23,8 +23,6 @@ const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
 const { minWindowSizes } = useWindowSizes();
 const { width, height } = useViewportSize();
 
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
-
 const {
   handleActive,
   handleDragStop,
@@ -53,9 +51,10 @@ watch([width, height], ([newWidth, newHeight]) => {
 // Make sure the modal is closed by default
 onBeforeMount(() => {
   app.value.isDropdownOpen = false;
+});
 
-  // If on mobile or brave, set the app to fullscreen
-  if (isMobile.value || defaultFullscreenApps.includes(app.value.id)) {
+onMounted(() => {
+  if (defaultFullscreenApps.includes(app.value.id)) {
     handleFullscreen(true);
   }
 });
@@ -119,7 +118,7 @@ const getAppComponent = (appId: string): Component => {
         :is="getAppComponent(app.id)"
         :app="app"
         @minimize="() => toggleMinimizeApp(app.id)"
-        @fullscreen="() => handleFullscreen()"
+        @fullscreen="() => handleFullscreen(!app.isFullscreen)"
         @close="() => closeApp(app.id)"
       />
     </div>

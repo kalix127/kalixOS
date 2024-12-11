@@ -138,10 +138,6 @@ export function useContextMenu() {
       baseOptions.push(
         { isSeparator: true },
         {
-          label: t("show_x_in_files", { target: t("folder") }),
-          action: () => console.log("Show in Files"),
-        },
-        {
           label: t("new_folder_with_1_item"),
           action: () => console.log("New folder with 1 item"),
         },

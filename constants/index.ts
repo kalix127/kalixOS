@@ -198,12 +198,6 @@ export const defaultApps: AppNode[] = [
     icon: "app:brave",
   },
   {
-    id: "thunderbird",
-    name: "Thunderbird",
-    type: "app",
-    icon: "app:thunderbird",
-  },
-  {
     id: "code",
     name: "Visual Studio Code",
     type: "app",

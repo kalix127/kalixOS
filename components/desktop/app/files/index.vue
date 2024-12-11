@@ -24,6 +24,8 @@ const { nodeMap } = storeToRefs(desktopStore);
 const { moveNode } = desktopStore;
 
 const filesGridRef = ref<HTMLElement | null>(null);
+const filesListRef = ref<HTMLElement | null>(null);
+
 const filteredItems = computed({
   get: () =>
     openedNode.value?.children.filter((node) => {
@@ -36,11 +38,9 @@ const draggedNodeId = ref<string | null>(null);
 const targetNodeId = ref<string | null>(null);
 
 function handleDrop() {
-  if (!draggedNodeId.value || !targetNodeId.value) {
-    return;
-  }
+  if (!draggedNodeId.value || !targetNodeId.value) return;
 
-  // If target is a shortcut, check if it points to a folder and move item there
+ // If target is a shortcut, check if it points to a folder and move item there
   const targetNode = nodeMap.value.get(targetNodeId.value);
   if (targetNode?.type === "shortcut") {
     const targetFolder = nodeMap.value.get(targetNode.targetId);
@@ -53,31 +53,29 @@ function handleDrop() {
   moveNode(draggedNodeId.value, targetNodeId.value);
 }
 
-onMounted(async () => {
-  await until(filesGridRef).toBeTruthy();
-  if (!filesGridRef.value) return;
-
-  // Initialize drag-and-drop
+function initDragAndDrop(parent: HTMLElement) {
   dragAndDrop({
-    parent: filesGridRef.value,
+    parent,
     values: filteredItems,
     sortable: false,
-
-    // Assign dragged and target node ids on desktop
     handleNodeDragover(data, state) {
-      if (!state.currentTargetValue) {
-        return;
-      }
+      if (!state.currentTargetValue) return;
 
       draggedNodeId.value = state.currentTargetValue.id;
       targetNodeId.value = data.targetData.node.data.value.id;
     },
-
-    // Handle drop node for desktop
     handleNodeDrop(data, state) {
       handleDrop();
     },
   });
+}
+
+onMounted(async () => {
+  await until(filesGridRef).toBeTruthy();
+  await until(filesListRef).toBeTruthy();
+
+  if (filesGridRef.value) initDragAndDrop(filesGridRef.value);
+  if (filesListRef.value) initDragAndDrop(filesListRef.value);
 });
 </script>
 
@@ -116,7 +114,7 @@ onMounted(async () => {
       }"
       @contextmenu.prevent=""
     >
-      <div v-if="isGridLayout" ref="filesGridRef" class="grid-wrapper">
+      <div v-show="isGridLayout" ref="filesGridRef" class="grid-wrapper">
         <DesktopNode
           v-for="item in filteredItems"
           :key="item.id"
@@ -126,7 +124,7 @@ onMounted(async () => {
         />
       </div>
 
-      <Table v-else>
+      <Table v-show="!isGridLayout">
         <TableHeader>
           <TableRow class="*:h-2 *:pl-2">
             <TableHead class="w-4/6 py-1.5"> {{ $t("name") }} </TableHead>
@@ -134,7 +132,7 @@ onMounted(async () => {
             <TableHead class="w-1/6 py-1.5">{{ $t("modified") }}</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody ref="filesListRef">
           <DesktopNode
             v-for="item in filteredItems"
             :key="item.id"

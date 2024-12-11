@@ -82,7 +82,7 @@ export function useContextMenu() {
 
   const getFileOptions = (node: FileNode | null, shortcut?: ShortcutNode) => {
     const options = [
-      { label: "Open", action: () => openFile(node) },
+      { label: t("open"), action: () => openFile(node) },
       {
         label: shortcut ? t("rename_shortcut") : t("rename"),
         action: () => renameNode(shortcut || node),

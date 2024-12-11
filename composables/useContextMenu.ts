@@ -91,8 +91,6 @@ export function useContextMenu() {
         label: t("move_to_trash"),
         action: () => moveToTrash(shortcut || node),
       },
-      { isSeparator: true },
-      { label: t("properties"), action: () => console.log("Properties") },
     ];
 
     // Remove 'rename' and 'move to trash' options if node is protected
@@ -144,10 +142,6 @@ export function useContextMenu() {
           action: () => console.log("Show in Files"),
         },
         {
-          label: t("compress_folder"),
-          action: () => console.log("Compress 1 folder"),
-        },
-        {
           label: t("new_folder_with_1_item"),
           action: () => console.log("New folder with 1 item"),
         },
@@ -169,7 +163,6 @@ export function useContextMenu() {
           label: t("open_in_terminal"),
           action: () => openInTerminal(node),
         },
-        { label: t("properties"), action: () => console.log("Properties") },
       );
     }
 
@@ -183,8 +176,6 @@ export function useContextMenu() {
       return [];
     }
 
-    const isSocialApp = node.type === "social";
-
     // Add open option if app is not open
     if (!node.isOpen) {
       options.push(
@@ -194,17 +185,6 @@ export function useContextMenu() {
           action: () => {
             handleOpenApp(node);
           },
-        },
-      );
-    }
-
-    // Add app details for non-social apps
-    if (!isSocialApp) {
-      options.push(
-        { isSeparator: true },
-        {
-          label: t("app_details"),
-          action: () => handleAppDetails(node),
         },
       );
     }

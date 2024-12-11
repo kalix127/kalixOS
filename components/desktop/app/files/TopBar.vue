@@ -63,11 +63,8 @@ const generalActions = computed(() => [
   { label: t("new_folder"), action: () => createNewFolder() },
   { label: t("new_document"), action: () => createNewDocument() },
   { isSeparator: true },
-
   { label: t("open_in_terminal"), action: () => openInTerminal() },
-  { isSeparator: true },
   { label: t("copy_location"), action: () => copyLocation() },
-  { label: t("properties"), action: () => console.log("Properties") },
 ]);
 
 const fullPath = computed(() => {

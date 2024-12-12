@@ -158,6 +158,10 @@ const handleItemClick = (id: string) => {
   isSearchActive.value = false;
 };
 
+const toggleSearch = () => {
+  isSearchActive.value = !isSearchActive.value;
+  searchTerm.value = "";
+};
 </script>
 
 <template>
@@ -174,10 +178,10 @@ const handleItemClick = (id: string) => {
     <div class="hidden sm:block">
       <div class="flex h-10 items-center justify-between">
         <button
-          @click="isSearchActive = !isSearchActive"
+          @click="() => toggleSearch()"
           class="grid place-content-center rounded-md p-2 transition-colors duration-300 hover:bg-popover"
           :class="{
-            'bg-popover' : isSearchActive
+            'bg-popover': isSearchActive,
           }"
         >
           <Icon name="gnome:search" size="16" />

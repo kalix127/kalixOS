@@ -312,7 +312,7 @@ export function useContextMenu() {
     }
 
     if (node.type === "social") {
-      const { linkedin, github, reddit } = useRuntimeConfig().public.socialUrl;
+      const { linkedin, github } = useRuntimeConfig().public.socialUrl;
       let url = "";
 
       switch (node.id) {
@@ -321,9 +321,6 @@ export function useContextMenu() {
           break;
         case "github":
           url = github;
-          break;
-        case "reddit":
-          url = reddit;
           break;
       }
 

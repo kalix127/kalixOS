@@ -217,13 +217,6 @@ export const defaultApps: AppNode[] = [
     isTranslated: true,
   },
   {
-    id: "reddit",
-    name: "reddit_profile",
-    type: "social",
-    icon: "app:reddit",
-    isTranslated: true,
-  },
-  {
     id: "linkedin",
     name: "linkedin_profile",
     type: "social",

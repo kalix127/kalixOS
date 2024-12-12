@@ -17,7 +17,6 @@ export default defineNuxtConfig({
       socialUrl: {
         linkedin: process.env.SOCIAL_LINKEDIN_URL,
         github: process.env.SOCIAL_GITHUB_URL,
-        reddit: process.env.SOCIAL_REDDIT_URL,
       },
     },
     mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,

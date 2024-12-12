@@ -29,7 +29,7 @@ useIntervalFn(
 <template>
   <div
     class="hidden select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-extrabold transition-colors duration-100 ease-in-out hover:bg-secondary lg:flex"
-    :class="!hasAppsAtTop ? 'hover:bg-secondary/50' : ''"
+    :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
   >
     <span>CPU: {{ cpuUsage }}</span>
     <span>Mem: {{ memoryUsage }}</span>

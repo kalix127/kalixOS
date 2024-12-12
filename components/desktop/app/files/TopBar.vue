@@ -130,12 +130,12 @@ const copyLocation = () => {
 
 <template>
   <div
-    :class="[
+    :class="
       cn(
         'flex h-12 items-center justify-between gap-2 p-2 transition-colors duration-300',
         $props.class,
-      ),
-    ]"
+      )
+    "
     @dblclick="$emit('fullscreen')"
   >
     <div
@@ -149,10 +149,10 @@ const copyLocation = () => {
           variant="ghost"
           size="icon"
           :disabled="!canMoveBack"
-          :class="[
-            'size-8 duration-300 hover:bg-popover',
-            !canMoveBack ? 'text-muted-foreground' : '',
-          ]"
+          class="size-8 duration-300 hover:bg-popover"
+          :class="{
+            'text-muted-foreground': !canMoveBack,
+          }"
           @click="moveBack"
         >
           <Icon name="gnome:arrow-long-left" size="18" />
@@ -161,10 +161,10 @@ const copyLocation = () => {
           variant="ghost"
           size="icon"
           :disabled="!canMoveForward"
-          :class="[
-            'size-8 duration-300 hover:bg-popover',
-            !canMoveForward ? 'text-muted-foreground' : '',
-          ]"
+          class="size-8 duration-300 hover:bg-popover"
+          :class="{
+            'text-muted-foreground': !canMoveBack,
+          }"
           @click="moveForward"
         >
           <Icon name="gnome:arrow-long-right" size="18" />
@@ -186,7 +186,8 @@ const copyLocation = () => {
         @click="toggleSearch"
         variant="ghost"
         size="icon"
-        :class="['h-8 hover:bg-popover', isSearching ? 'bg-popover' : '']"
+        class="h-8 hover:bg-popover"
+        :class="{ 'bg-popover': isSearching }"
       >
         <Icon name="gnome:folder-search" size="20" class="" />
       </Button>
@@ -201,8 +202,8 @@ const copyLocation = () => {
           class="size-8 duration-300 hover:bg-popover"
           @click.stop="toggleGridView"
         >
-        <Icon v-show="isGridLayout" name="gnome:view-list" size="18" />
-        <Icon v-show="!isGridLayout" name="gnome:view-grid" size="18" />
+          <Icon v-show="isGridLayout" name="gnome:view-list" size="18" />
+          <Icon v-show="!isGridLayout" name="gnome:view-grid" size="18" />
         </Button>
         <div class="h-6 w-px bg-gray-500/50 group-hover:bg-gray-500/20"></div>
 

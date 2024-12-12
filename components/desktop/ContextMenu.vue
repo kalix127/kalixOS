@@ -40,7 +40,7 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
               @click="option.action"
               :inset="targetType !== 'dock'"
               class="duration-0"
-              :class="[targetType === 'dock' ? 'min-h-9' : '']"
+              :class="{ 'min-h-9': targetType === 'dock' }"
             >
               {{ option.label }}
             </DropdownMenuItem>

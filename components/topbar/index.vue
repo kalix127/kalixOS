@@ -23,15 +23,15 @@ const route = useRoute();
 <template>
   <header
     @contextmenu.prevent=""
-    :class="[
+    :class="
       cn(
         'relative z-[50000] flex h-9 select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
+        route.name === 'login' ? '!bg-transparent' : '',
+        isShowAppsOverlayVisible ? '!bg-transparent' : '',
+        hasAppsAtTop ? '!bg-opacity-100' : '',
         props.class,
-      ),
-      route.name === 'login' ? '!bg-transparent' : '',
-      isShowAppsOverlayVisible ? '!bg-transparent' : '',
-      hasAppsAtTop ? '!bg-opacity-100' : '',
-    ]"
+      )
+    "
   >
     <!-- Left Section -->
     <div class="hidden flex-1 items-center sm:flex">
@@ -45,7 +45,7 @@ const route = useRoute();
 
         <!-- Loading Skeleton -->
         <template #fallback>
-          <Skeleton class="h-7 w-40 bg-secondary/60 rounded-full" />
+          <Skeleton class="h-7 w-40 rounded-full bg-secondary/60" />
         </template>
       </ClientOnly>
     </div>
@@ -65,7 +65,7 @@ const route = useRoute();
           v-for="notification in notifications"
           :key="notification.id"
           :notification="notification"
-          :class="isLocked ? 'hidden' : ''"
+          :class="{ hidden: isLocked }"
         />
       </TransitionGroup>
     </div>

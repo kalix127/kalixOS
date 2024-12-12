@@ -28,14 +28,14 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
 </script>
 
 <template>
-  <div :class="!isOptionGroup ? 'space-y-3' : ''">
+  <div :class="{ 'space-y-3': !isOptionGroup }">
     <div
       v-if="!isOptionGroup && title"
       class="text-sm font-extrabold tracking-wide"
     >
       {{ title }}
     </div>
-    
+
     <slot name="title" />
 
     <div
@@ -43,7 +43,7 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
       :class="
         cn(
           'flex min-h-12 items-center bg-popover p-3 text-sm transition-colors hover:bg-secondary/80',
-          isCenter ? 'justify-center h-fit' : 'justify-between',
+          isCenter ? 'h-fit justify-center' : 'justify-between',
           isDisabled ? 'text-muted-foreground' : '',
           !isOptionGroup ? 'rounded-xl shadow-md' : '',
           isFirst ? 'rounded-t-xl' : '',

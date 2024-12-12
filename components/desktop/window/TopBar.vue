@@ -42,7 +42,7 @@ const actions = computed(() => [
     :class="[
       cn(
         'grid h-10 grid-cols-3 p-2 transition-all duration-300 app-topbar bg-popover',
-        app.isFullscreen ? '' : 'rounded-t-xl',
+        !app.isFullscreen ? 'rounded-t-xl' : '',
         !app.isActive ? 'brightness-[0.75]' : '',
         $props.class,
       ),

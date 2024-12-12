@@ -176,9 +176,9 @@ const handleItemClick = (id: string) => {
         <button
           @click="isSearchActive = !isSearchActive"
           class="grid place-content-center rounded-md p-2 transition-colors duration-300 hover:bg-popover"
-          :class="[
-            isSearchActive ? 'bg-popover' : ''
-          ]"
+          :class="{
+            'bg-popover' : isSearchActive
+          }"
         >
           <Icon name="gnome:search" size="16" />
         </button>

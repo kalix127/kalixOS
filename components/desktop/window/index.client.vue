@@ -107,7 +107,7 @@ const getAppComponent = (appId: string): Component => {
     :style="{ zIndex: app.isActive ? 10000 : 5000 }"
     class="absolute left-0 top-0 !border-none duration-300"
     :class="[
-      app.isFullscreen ? '' : 'rounded-t-xl',
+      !app.isFullscreen ? 'rounded-t-xl' : '',
       app.isActive
         ? 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]'
         : 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)]',

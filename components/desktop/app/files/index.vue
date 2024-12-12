@@ -40,7 +40,7 @@ const targetNodeId = ref<string | null>(null);
 function handleDrop() {
   if (!draggedNodeId.value || !targetNodeId.value) return;
 
- // If target is a shortcut, check if it points to a folder and move item there
+  // If target is a shortcut, check if it points to a folder and move item there
   const targetNode = nodeMap.value.get(targetNodeId.value);
   if (targetNode?.type === "shortcut") {
     const targetFolder = nodeMap.value.get(targetNode.targetId);
@@ -81,20 +81,19 @@ onMounted(async () => {
 
 <template>
   <div
-    :class="[
-      'grid grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr]',
-      'h-full w-full bg-background transition-all duration-300',
-      app.isFullscreen ? '' : 'rounded-t-xl',
-      !app.isActive ? 'brightness-[0.75]' : '',
-    ]"
+    class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
+    :class="{
+      'rounded-t-xl': !app.isFullscreen,
+      'brightness-[0.75]': !app.isActive,
+    }"
   >
     <!-- Sidebar -->
     <FilesSidebar
       :style="{ height: `${app.height}px` }"
-      :class="[
-        'col-start-1 row-span-2 row-start-1 bg-muted',
-        app.isFullscreen ? '' : 'rounded-tl-xl',
-      ]"
+      class="col-start-1 row-span-2 row-start-1 bg-muted"
+      :class="{
+        'rounded-tl-xl': !app.isFullscreen,
+      }"
     />
 
     <!-- Topbar -->

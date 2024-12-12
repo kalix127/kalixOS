@@ -72,7 +72,7 @@ onBeforeMount(async () => {
         :app="app"
         @openApp="handleOpenApp"
         @context="handleContextMenu"
-        :class="[app.id === 'kate' ? 'hidden' : '']"
+        :class="{ hidden: app.id === 'kate' }"
       />
     </div>
   </div>

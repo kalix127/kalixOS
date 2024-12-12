@@ -28,29 +28,20 @@ onUnmounted(() => {
 
 <template>
   <div
-    :class="[
-      'grid h-full w-full bg-background transition-all duration-300',
-      // Mobile grid: single column
-      'grid-cols-1 grid-rows-[auto_1fr_1fr]',
-      // Desktop grid: two columns, two rows
-      'md:grid-cols-[minmax(max-content,25%)_1fr] md:grid-rows-[auto_1fr]',
-      app.isFullscreen ? '' : 'rounded-t-xl',
-      !app.isActive ? 'brightness-[0.75]' : '',
-    ]"
+    class="grid h-full w-full grid-cols-1 grid-rows-[auto_1fr_1fr] bg-background transition-all duration-300 md:grid-cols-[minmax(max-content,25%)_1fr] md:grid-rows-[auto_1fr]"
+    :class="{
+      'rounded-t-xl': !app.isFullscreen,
+      'brightness-[0.75]': !app.isActive,
+    }"
   >
     <!-- Sidebar -->
     <SettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
       :style="{ height: `${app.height}px` }"
-      :class="[
-        'bg-muted',
-        // Mobile: sidebar in row 2
-        'col-span-1 row-start-2',
-        // Desktop: sidebar spans rows 1-2 in column 1
-        'md:col-start-1 md:row-span-2 md:row-start-1',
-
-        app.isFullscreen ? '' : 'rounded-tl-xl',
-      ]"
+      class="col-span-1 row-start-2 bg-muted md:col-start-1 md:row-span-2 md:row-start-1"
+      :class="{
+        'rounded-tl-xl': !app.isFullscreen,
+      }"
     />
 
     <!-- Topbar -->
@@ -59,25 +50,13 @@ onUnmounted(() => {
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
       :app="app"
-      :class="[
-        'app-topbar',
-        // Mobile: topbar in row 1
-        'col-span-1 row-start-1',
-        // Desktop: topbar in column 2, row 1
-        'md:col-start-2 md:row-start-1',
-      ]"
+      class="app-topbar col-span-1 row-start-1 md:col-start-2 md:row-start-1"
     />
 
     <!-- Content -->
     <div
       v-if="!isMobile || currentSettingsTab"
-      :class="[
-        'flex flex-col items-center justify-start',
-        // Mobile: content in row 3
-        'col-span-1 row-start-3',
-        // Desktop: content in column 2, row 2
-        'md:col-start-2 md:row-start-2',
-      ]"
+      class="col-span-1 row-start-3 flex flex-col items-center justify-start md:col-start-2 md:row-start-2"
       :style="{ height: `${app.height - 40}px` }"
     >
       <Transition mode="out-in">

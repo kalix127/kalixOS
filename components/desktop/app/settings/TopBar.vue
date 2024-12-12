@@ -42,12 +42,12 @@ const actions = computed(() => [
 
 <template>
   <div
-    :class="[
+    :class="
       cn(
         'grid h-10 grid-cols-3 p-2 transition-colors duration-300',
         $props.class,
-      ),
-    ]"
+      )
+    "
     @dblclick="$emit('fullscreen')"
   >
     <!-- Empty div -->

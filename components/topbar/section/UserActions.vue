@@ -61,7 +61,7 @@ function handleBatteryMenu() {
 <template>
   <div
     class="topbar-menu-transition flex justify-between gap-4"
-    :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+    :class="{ 'brightness-75': isAnyTopbarMenuOpen }"
   >
     <div class="flex items-center gap-2 sm:gap-4">
       <!-- Battery item -->

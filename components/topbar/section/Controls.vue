@@ -15,7 +15,7 @@ function handleOpenSettings() {
 <template>
   <div
     class="topbar-menu-transition mb-4 mt-2 space-y-2"
-    :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+    :class="{ 'brightness-75': isAnyTopbarMenuOpen }"
   >
     <!-- Volume slider -->
     <div class="flex min-h-8 items-center gap-4">

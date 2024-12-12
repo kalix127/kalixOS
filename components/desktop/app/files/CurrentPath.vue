@@ -62,11 +62,11 @@ function handleClickSegment(id: string) {
       >
         <button
           @click="() => handleClickSegment(segment.id)"
-          :class="[
-            'duration-300',
-            index < displaySegments.length - 1 ? 'text-muted-foreground' : '',
-            segment.id ? 'hover:text-foreground' : 'cursor-default',
-          ]"
+          class="duration-300"
+          :class="{
+            'text-muted-foreground': index < displaySegments.length - 1,
+            'hover:text-foreground': segment.id,
+          }"
         >
           {{ segment.name }}
         </button>

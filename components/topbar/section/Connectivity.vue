@@ -96,7 +96,7 @@ const items = computed(() => [
 <template>
   <div
     class="topbar-menu-transition grid grid-cols-1 gap-3 sm:grid-cols-2"
-    :class="[isAnyTopbarMenuOpen ? 'brightness-75' : '']"
+    :class="{ 'brightness-75': isAnyTopbarMenuOpen }"
   >
     <div
       v-for="item in items"

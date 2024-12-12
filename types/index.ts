@@ -1,4 +1,3 @@
-#!/bin/bash
 export interface WifiNetwork {
   id: number;
   name: string;

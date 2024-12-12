@@ -29,7 +29,7 @@ const { app } = toRefs(props);
 
     <!-- VsCode -->
     <iframe
-      src="https://github1s.com/GianlucaIavicoli/GianlucaIavicoli"
+      src="https://github1s.com/kalix127/kalix127"
       :class="cn('h-full w-full bg-background', $props.class)"
       sandbox="allow-scripts allow-same-origin allow-forms"
       referrerpolicy="no-referrer"

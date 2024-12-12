@@ -963,10 +963,7 @@ export function handleNeofetch(term: Terminal, username: string): void {
   const memoryUsed = Math.round((memoryUsedPercentage.value / 100) * 15406);
 
   // Links
-  const authorLink = generateLink(
-    "https://github.com/GianlucaIavicoli",
-    "@GianlucaIavicoli",
-  );
+  const authorLink = generateLink("https://github.com/kalix127", "@kalix127");
   const themeLink = generateLink(
     "https://github.com/lassekongo83/adw-gtk3",
     "adw-gtk3 [GTK2/3]",

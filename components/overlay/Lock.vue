@@ -21,14 +21,8 @@ const onSubmit = async (
 <template>
   <div
     @contextmenu.prevent=""
-    class="absolute z-[90000] h-[100svh] w-[100vw] bg-black"
+    class="absolute z-[90000] h-[100svh] w-[100svw] backdrop-blur-xl"
   >
-    <!-- Background -->
-    <NuxtImg
-      src="/img/bg-desktop.jpg"
-      class="h-[100svh] w-[100vw] select-none object-cover blur-2xl"
-      style="-webkit-user-drag: none"
-    />
 
     <!-- Login Form -->
     <div

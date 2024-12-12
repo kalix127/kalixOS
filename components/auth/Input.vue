@@ -34,6 +34,7 @@ const type = computed(() => {
             :placeholder="placeholder"
             :type="type"
             :disabled="disabled"
+            autocomplete="one-time-code"
             v-focus
             v-bind="componentField"
           />

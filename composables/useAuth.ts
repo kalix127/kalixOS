@@ -29,7 +29,6 @@ export function useAuth() {
   };
 
   const handleLogout = async () => {
-    // TODO: When implementing the desktop, make sure to reset the desktop store
     setIsAuthenticated(false);
     isLogoutModalOpen.value = false;
 

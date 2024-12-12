@@ -460,7 +460,6 @@ export const useDesktopStore = defineStore({
      * This should handle reordering or moving items as needed.
      * @param newItems The updated list of Nodes.
      */
-    // TODO: Implement this better
     updateDesktopItems(newItems: Node[]) {
       // Clear the current children
       if (this.desktopNode) {

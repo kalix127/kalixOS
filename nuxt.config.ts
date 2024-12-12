@@ -52,7 +52,6 @@ export default defineNuxtConfig({
     ],
   },
   i18n: {
-    // TODO: Add baseUrl for prod
     defaultLocale: "en-US",
     lazy: true,
     langDir: "locales",

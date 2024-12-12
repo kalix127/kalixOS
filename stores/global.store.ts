@@ -151,7 +151,6 @@ export const useGlobalStore = defineStore({
         this.isSuspended = false;
         this.isAboutToSuspend = false;
         this.suspendedPercentage = 0;
-        // TODO: Fake the wifi that re-connect to the previous wifi (if already connected)
       });
     },
     // Auth

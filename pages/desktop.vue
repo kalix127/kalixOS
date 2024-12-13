@@ -118,7 +118,11 @@ onUnmounted(() => {
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
-    <DesktopGrid @context="handleContextMenu" ref="desktopGridRef">
+    <DesktopGrid
+      :aria-label="$t('seo.aria.desktop_grid')"
+      @context="handleContextMenu"
+      ref="desktopGridRef"
+    >
       <DesktopNode
         v-for="item in desktopItems"
         :key="item.id"

@@ -4,6 +4,22 @@
     "en": "English",
     "it": "Italian"
   },
+  "seo": {
+    "aria": {
+      "desktop_grid": "Desktop grid",
+      "open_app": "Open {app}",
+      "rename_item": "Rename {item}",
+      "dockbar": "Dockbar",
+      "dockbar_trigger": "Dockbar trigger",
+      "dockbar_list": "Dockbar list",
+      "places_menu": "Places menu",
+      "calendar": "Calendar",
+      "system_menu": "System menu",
+      "minimize_window": "Minimize window",
+      "maximize_window": "Maximize window",
+      "restore_window": "Restore window"
+    }
+  },
   "close": "Close",
   "off": "Off",
   "output": "Output",

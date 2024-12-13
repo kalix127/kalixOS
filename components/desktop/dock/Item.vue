@@ -27,6 +27,7 @@ function handleClick() {
     :is-translated="app.isTranslated"
   >
     <Button
+      :aria-label="$t('seo.aria.open_app', { app: app.name })"
       @contextmenu.prevent="(event) => $emit('context', event, app)"
       @click="handleClick"
       variant="ghost"

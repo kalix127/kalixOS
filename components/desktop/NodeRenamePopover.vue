@@ -13,7 +13,9 @@ const name = defineModel<string>({ required: true });
 
 <template>
   <Popover :open="item.isRenaming">
-    <PopoverTrigger></PopoverTrigger>
+    <PopoverTrigger
+      :aria-label="$t('seo.aria.rename_item', { item: item.name })"
+    ></PopoverTrigger>
     <PopoverContent class="z-[50000] w-72 border-none bg-secondary p-3">
       <div
         v-on-click-outside="() => $emit('outside')"

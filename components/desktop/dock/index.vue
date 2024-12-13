@@ -53,6 +53,7 @@ onMounted(() => {
     <Tooltip :open="isDockVisible" :default-open="isDockVisible">
       <div class="relative">
         <TooltipTrigger
+          :aria-label="$t('seo.aria.dockbar_trigger')"
           ref="dockTriggerRef"
           class="absolute bottom-0 left-0 z-[50000] h-10 w-full cursor-default sm:h-6"
           @mouseenter="() => setVisibility(true)"
@@ -60,6 +61,7 @@ onMounted(() => {
         >
         </TooltipTrigger>
         <TooltipContent
+          :aria-label="$t('seo.aria.dockbar')"
           :side-offset="-12"
           class="depth-shadow z-[50000] rounded-3xl p-0"
           @mouseenter="() => setVisibility(true)"

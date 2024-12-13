@@ -4,6 +4,22 @@
     "en": "Inglese",
     "it": "Italiano"
   },
+  "seo": {
+    "aria": {
+      "desktop_grid": "Griglia scrivania",
+      "open_app": "Apri {app}",
+      "rename_item": "Rinomina {item}",
+      "dockbar": "Dockbar",
+      "dockbar_trigger": "Trigger dockbar",
+      "dockbar_list": "Lista dockbar",
+      "places_menu": "Menu posizioni",
+      "calendar": "Calendario",
+      "system_menu": "Menu sistema",
+      "minimize_window": "Minimizza finestra",
+      "maximize_window": "Massimizza finestra",
+      "restore_window": "Ripristina finestra"
+    }
+  },
   "close": "Chiudi",
   "off": "Spento",
   "output": "Uscita",

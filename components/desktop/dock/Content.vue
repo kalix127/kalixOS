@@ -64,6 +64,7 @@ onBeforeMount(async () => {
   >
     <div
       ref="dockRef"
+      :aria-label="$t('seo.aria.dockbar_list')"
       class="grid grid-cols-4 place-items-center gap-1 sm:flex"
     >
       <DesktopDockItem

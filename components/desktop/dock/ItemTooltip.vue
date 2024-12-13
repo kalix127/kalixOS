@@ -12,7 +12,7 @@ defineEmits<{
 <template>
   <TooltipProvider :delay-duration="0">
     <Tooltip :default-open="false">
-      <TooltipTrigger @click="$emit('click')" as-child>
+      <TooltipTrigger :aria-label="appName" @click="$emit('click')" as-child>
         <slot />
       </TooltipTrigger>
       <TooltipContent

@@ -20,19 +20,23 @@ const actions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
+    ariaLabel: "seo.aria.minimize_window",
   },
   app.value.isFullscreen
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
+        ariaLabel: "seo.aria.restore_window",
       }
     : {
         icon: "gnome:expand",
         emit: "fullscreen",
+        ariaLabel: "seo.aria.maximize_window",
       },
   {
     icon: "gnome:close",
     emit: "close",
+    ariaLabel: "close",
   },
 ]);
 </script>
@@ -41,7 +45,7 @@ const actions = computed(() => [
   <div
     :class="[
       cn(
-        'grid h-10 grid-cols-3 p-2 transition-all duration-300 app-topbar bg-popover',
+        'app-topbar grid h-10 grid-cols-3 bg-popover p-2 transition-all duration-300',
         !app.isFullscreen ? 'rounded-t-xl' : '',
         !app.isActive ? 'brightness-[0.75]' : '',
         $props.class,
@@ -62,11 +66,12 @@ const actions = computed(() => [
     <!-- Actions -->
     <div class="flex items-center justify-end gap-2">
       <Button
-        variant="ghost"
-        size="icon"
-        class="size-6 bg-secondary rounded-full duration-300 hover:bg-secondary-hover"
         v-for="action in actions"
         :key="action.icon"
+        :aria-label="action.ariaLabel"
+        variant="ghost"
+        size="icon"
+        class="size-6 rounded-full bg-secondary duration-300 hover:bg-secondary-hover"
       >
         <Icon :name="action.icon" size="18" @click="$emit(action.emit)" />
       </Button>

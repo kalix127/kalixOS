@@ -109,6 +109,7 @@ function handleStopRenaming() {
     :is="isGridLayout ? 'div' : TableRow"
     @contextmenu.prevent.stop="handleContextMenu"
     @dblclick="handleDoubleClick"
+    :aria-label="item.name"
     :class="
       isGridLayout
         ? cn(
@@ -121,7 +122,7 @@ function handleStopRenaming() {
     <!-- Grid Layout -->
     <template v-if="isGridLayout">
       <div class="rounded-md p-0.5 group-hover:bg-accent/50">
-        <Icon :name="item?.icon" size="56" />
+        <Icon :name="item.icon" size="56" />
       </div>
       <span
         class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50"

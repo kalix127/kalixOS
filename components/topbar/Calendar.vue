@@ -53,7 +53,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
 
 <template>
   <Popover>
-    <PopoverTrigger>
+    <PopoverTrigger :aria-label="$t('seo.aria.calendar')">
       <div
         class="flex select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
         :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"

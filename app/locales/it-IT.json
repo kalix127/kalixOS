@@ -8,7 +8,7 @@
     "title": {
       "login": "Login - Gianluca's Linux",
       "desktop": "Scrivania - Gianluca's Linux", 
-      "boot": "Sistema in fase di avvio/spegnimento...",
+      "booting": "Sistema in fase di avvio/spegnimento...",
       "poweroff": "Spegnimento in corso...",
       "index": "Il sistema è spento."
     },

@@ -8,7 +8,7 @@
     "title": {
       "login": "Login - Gianluca's Linux",
       "desktop": "Desktop - Gianluca's Linux",
-      "boot": "System is booting/shutting down...",
+      "booting": "System is booting/shutting down...",
       "poweroff": "Shutting Down...", 
       "index": "System is powered off."
     },

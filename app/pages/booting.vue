@@ -7,8 +7,8 @@ definePageMeta({
 
 const { t } = useI18n();
 useHead({
-  title: computed(() => t("seo.title.boot")),
-  meta: [{ name: "description", content: t("seo.description.boot") }],
+  title: computed(() => t("seo.title.booting")),
+  meta: [{ name: "description", content: t("seo.description.booting") }],
 });
 
 const areSystemLogsVisible = ref(false);

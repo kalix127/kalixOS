@@ -82,21 +82,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         >
           <template #action>
             <div class="flex flex-grow items-center gap-4">
-              <Icon
-                v-show="inputVolume[0] > 50"
-                name="gnome:microphone-2"
-                size="20"
-              />
-              <Icon
-                v-show="inputVolume[0] <= 50 && inputVolume[0] > 0"
-                name="gnome:microphone-1"
-                size="20"
-              />
-              <Icon
-                v-show="inputVolume[0] === 0"
-                name="gnome:microphone-off"
-                size="20"
-              />
+              <IconMicrophone :value="inputVolume[0]" :size="20" />
               <Slider
                 v-model="inputVolume"
                 :default-value="inputVolume"

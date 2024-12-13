@@ -22,13 +22,6 @@ export default defineNuxtConfig({
         github: process.env.SOCIAL_GITHUB_URL,
       },
     },
-    mailtrapEndpoint: process.env.MAILTRAP_ENDPOINT,
-    mailtrapSender: process.env.MAILTRAP_SENDER,
-    mailtrapPassword: process.env.MAILTRAP_PASSWORD,
-    mailtrapTemplateUuidResetPassword:
-      process.env.MAILTRAP_TEMPLATE_UUID_RESET_PASSWORD,
-    mailtrapTemplateUuidVerifyEmail:
-      process.env.MAILTRAP_TEMPLATE_UUID_VERIFY_EMAIL,
   },
   modules: [
     "nuxt-zod-i18n",

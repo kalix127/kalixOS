@@ -1,6 +1,8 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
+  future: {
+    compatibilityVersion: 4,
+  },
   app: {
     head: {
       htmlAttrs: {
@@ -79,27 +81,27 @@ export default defineNuxtConfig({
   icon: {
     customCollections: [
       {
-        dir: "./icons/app",
+        dir: "./app/icons/app",
         prefix: "app",
       },
       {
-        dir: "./icons/file",
+        dir: "./app/icons/file",
         prefix: "file",
       },
       {
-        dir: "./icons/folder",
+        dir: "./app/icons/folder",
         prefix: "folder",
       },
       {
-        dir: "./icons/logo",
+        dir: "./app/icons/logo",
         prefix: "logo",
       },
       {
-        dir: "./icons/gnome",
+        dir: "./app/icons/gnome",
         prefix: "gnome",
       },
       {
-        dir: "./icons/extra",
+        dir: "./app/icons/extra",
         prefix: "extra",
       },
     ],
@@ -112,7 +114,7 @@ export default defineNuxtConfig({
   },
   shadcn: {
     prefix: "",
-    componentDir: "./components/ui",
+    componentDir: "./app/components/ui",
   },
   fonts: {
     families: [
@@ -127,7 +129,7 @@ export default defineNuxtConfig({
     ],
   },
   pinia: {
-    storesDirs: ["./stores/**"],
+    storesDirs: ["./app/stores/**"],
   },
   image: {
     format: ["webp"],

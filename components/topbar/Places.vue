@@ -24,7 +24,7 @@ function openFolder(id: string) {
         <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></div>
       </div>
     </PopoverTrigger>
-    <PopoverContent
+    <LazyPopoverContent
       class="depth-shadow z-[50000] ml-1.5 mt-1.5 w-52 rounded-2xl p-2"
     >
       <Button
@@ -37,7 +37,7 @@ function openFolder(id: string) {
         <Icon :name="item.icon" size="16" />
         <span class="text-sm">{{ item.name }}</span>
       </Button>
-    </PopoverContent>
+    </LazyPopoverContent>
   </Popover>
 </template>
 

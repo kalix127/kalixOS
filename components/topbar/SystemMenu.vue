@@ -60,7 +60,7 @@ const {
       </div>
     </PopoverTrigger>
 
-    <PopoverContent
+    <LazyPopoverContent
       class="z-[60000] mr-1.5 mt-1.5 rounded-3xl p-0 sm:w-[400px]"
     >
       <div
@@ -85,6 +85,6 @@ const {
         <TopbarMenuWifi />
         <TopbarMenuBluetooth />
       </div>
-    </PopoverContent>
+    </LazyPopoverContent>
   </Popover>
 </template>

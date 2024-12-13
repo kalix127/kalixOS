@@ -9,14 +9,14 @@ const { backgroundImage, isShowAppsOverlayVisible } =
 <template>
   <div class="wrapper-desktop relative">
     <!-- Overlays -->
-    <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
+    <LazyOverlaySuspended v-if="isAboutToSuspend || isSuspended" />
 
     <Transition name="lock">
-      <OverlayLock v-if="isLocked" />
+      <LazyOverlayLock v-if="isLocked" />
     </Transition>
 
     <Transition>
-      <OverlayAppsList v-if="isShowAppsOverlayVisible" />
+      <LazyOverlayAppsList v-if="isShowAppsOverlayVisible" />
     </Transition>
 
     <!-- Desktop -->
@@ -38,7 +38,7 @@ const { backgroundImage, isShowAppsOverlayVisible } =
     </div>
     <ClientOnly>
       <!-- Context menu -->
-      <DesktopContextMenu />
+      <LazyDesktopContextMenu />
 
       <!-- Dockbar -->
       <DesktopDock v-if="!isLocked" />

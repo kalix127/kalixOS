@@ -129,7 +129,7 @@ function handleStopRenaming() {
       >
         {{ item.name }}
       </span>
-      <DesktopNodeRenamePopover
+      <LazyDesktopNodeRenamePopover
         v-model="item.name"
         :item="item"
         @submit="handleStopRenaming"
@@ -145,7 +145,7 @@ function handleStopRenaming() {
         <span>
           {{ item.name }}
         </span>
-        <DesktopNodeRenamePopover
+        <LazyDesktopNodeRenamePopover
           v-model="item.name"
           :item="item"
           @submit="handleStopRenaming"

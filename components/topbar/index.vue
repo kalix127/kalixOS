@@ -35,7 +35,7 @@ const route = useRoute();
   >
     <!-- Left Section -->
     <div class="hidden flex-1 items-center sm:flex">
-      <TopbarPlaces v-if="route.name === 'desktop'" />
+      <LazyTopbarPlaces v-if="route.name === 'desktop'" />
     </div>
 
     <!-- Center Section -->
@@ -52,7 +52,7 @@ const route = useRoute();
 
     <!-- Right Section -->
     <div class="flex flex-1 items-center justify-end gap-2">
-      <TopbarResources v-if="route.name === 'desktop'" />
+      <LazyTopbarResources v-if="route.name === 'desktop'" />
       <TopbarSystemMenu v-if="!isLocked" />
     </div>
 
@@ -61,7 +61,7 @@ const route = useRoute();
       class="absolute left-1/2 top-12 z-[50000] flex -translate-x-1/2 flex-col gap-4"
     >
       <TransitionGroup name="fade">
-        <DesktopNotification
+        <LazyDesktopNotification
           v-for="notification in notifications"
           :key="notification.id"
           :notification="notification"
@@ -71,7 +71,7 @@ const route = useRoute();
     </div>
 
     <!-- Power off modals -->
-    <TopbarPowerOffModal
+    <LazyTopbarPowerOffModal
       :title="$t('power_off')"
       :label="$t('power_off')"
       :description="$t('power_off_modal', { seconds: 60 })"
@@ -80,7 +80,7 @@ const route = useRoute();
       @closeModal="isPowerOffModalOpen = false"
       @action="handlePoweroff"
     />
-    <TopbarPowerOffModal
+    <LazyTopbarPowerOffModal
       :title="$t('restart')"
       :label="$t('restart')"
       :description="$t('restart_modal', { seconds: 50 })"
@@ -89,7 +89,7 @@ const route = useRoute();
       @closeModal="isRestartModalOpen = false"
       @action="handleRestart"
     />
-    <TopbarPowerOffModal
+    <LazyTopbarPowerOffModal
       :title="`${$t('logout')} ${username}`"
       :label="$t('logout')"
       :description="$t('logout_modal', { username, seconds: 60 })"

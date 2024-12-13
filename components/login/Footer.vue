@@ -62,7 +62,7 @@ const socialLinks = [
     </div>
 
     <!-- Desktop Environment Options -->
-    <Popover v-if="loginView === 'enterPassword'">
+    <LazyPopover v-if="loginView === 'enterPassword'">
       <PopoverTrigger
         class="absolute bottom-4 right-4 grid place-items-center rounded-full bg-secondary p-3 sm:right-8"
       >
@@ -82,7 +82,7 @@ const socialLinks = [
           </div>
         </RadioGroup>
       </PopoverContent>
-    </Popover>
+    </LazyPopover>
   </div>
 </template>
 

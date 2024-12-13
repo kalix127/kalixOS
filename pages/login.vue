@@ -19,10 +19,10 @@ onBeforeMount(() => {
       <LoginSelectUser v-if="loginView === 'selectUser'" />
 
       <!-- Add user -->
-      <LoginAddUser v-else-if="loginView === 'addUser'" />
+      <LazyLoginAddUser v-else-if="loginView === 'addUser'" />
 
       <!-- Form -->
-      <LoginForm v-else-if="loginView === 'enterPassword'" />
+      <LazyLoginForm v-else-if="loginView === 'enterPassword'" />
     </Transition>
   </div>
 </template>

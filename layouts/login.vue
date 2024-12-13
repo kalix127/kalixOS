@@ -4,7 +4,7 @@ const { isAboutToSuspend, isSuspended } = storeToRefs(useGlobalStore());
 
 <template>
   <div class="wrapper-login">
-    <OverlaySuspended v-if="isAboutToSuspend || isSuspended" />
+    <LazyOverlaySuspended v-if="isAboutToSuspend || isSuspended" />
     <Topbar />
     <main class="grid h-full grid-rows-[1fr_75px]">
       <slot />

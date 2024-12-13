@@ -11,7 +11,6 @@ const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 const currentDate = ref(new Date());
 
-// Hydration Logic
 useHydration(
   "currentDate",
   () => currentDate.value.toISOString(),
@@ -63,7 +62,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         </span>
       </div>
     </PopoverTrigger>
-    <PopoverContent
+    <LazyPopoverContent
       class="depth-shadow z-[50000] ml-1.5 mt-1.5 rounded-3xl xs:w-80"
     >
       <div class="flex select-none flex-col items-center">
@@ -79,7 +78,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
         </span>
         <Calendar v-model="calendarDate" />
       </div>
-    </PopoverContent>
+    </LazyPopoverContent>
   </Popover>
 </template>
 

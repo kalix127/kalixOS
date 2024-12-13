@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: {
         class: "overflow-hidden",
+        lang: "en",
       },
     },
     pageTransition: { name: "page", mode: "out-in" },

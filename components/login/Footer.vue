@@ -37,6 +37,7 @@ const socialLinks = [
               <NuxtLink
                 :to="social.url"
                 :external="true"
+                :title="social.name"
                 target="_blank"
                 class="grid place-content-center"
               >

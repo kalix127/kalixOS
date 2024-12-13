@@ -46,7 +46,7 @@ function closeMenu() {
         class="flex w-full cursor-pointer justify-start gap-2 rounded-xl font-medium transition-colors duration-200 hover:bg-accent"
         @click="() => connectToWifi(network)"
       >
-        <WifiIcon :network="network" :size="18" />
+        <IconWifi :network="network" :size="18" />
         <span>{{ network.name }}</span>
 
         <Icon

@@ -19,10 +19,10 @@ const {
       class="flex items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
       :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
     >
-      <Icon
+      <IconWifi
         v-show="connectedWifiNetwork"
-        :name="`gnome:wifi-${connectedWifiNetwork?.signal || 1}`"
-        class="size-[16px] sm:size-[18px]"
+        :network="connectedWifiNetwork"
+        :size="18"
       />
       <Icon
         v-show="isWiredEnabled"

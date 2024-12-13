@@ -103,7 +103,7 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
           >
             <template #label>
               <div class="flex items-center gap-4">
-                <WifiIcon :network="network" :size="18" />
+                <IconWifi :network="network" :size="18" />
                 <span>{{ network.name }}</span>
                 <Icon
                   v-if="idConnectingNetwork === network.id"

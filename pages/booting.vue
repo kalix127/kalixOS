@@ -5,6 +5,12 @@ definePageMeta({
   pageTransition: false,
 });
 
+const { t } = useI18n();
+useHead({
+  title: computed(() => t("seo.title.boot")),
+  meta: [{ name: "description", content: t("seo.description.boot") }],
+});
+
 const areSystemLogsVisible = ref(false);
 
 const { escape } = useMagicKeys();

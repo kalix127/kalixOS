@@ -2,6 +2,13 @@
 definePageMeta({
   pageTransition: false,
 });
+
+const { t } = useI18n();
+useHead({
+  title: computed(() => t("seo.title.poweroff")),
+  meta: [{ name: "description", content: t("seo.description.poweroff") }],
+});
+
 const { handlePowerUp } = useBootStore();
 </script>
 

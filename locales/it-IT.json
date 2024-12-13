@@ -5,6 +5,20 @@
     "it": "Italiano"
   },
   "seo": {
+    "title": {
+      "login": "Login - Gianluca's Linux",
+      "desktop": "Scrivania - Gianluca's Linux", 
+      "boot": "Sistema in fase di avvio/spegnimento...",
+      "poweroff": "Spegnimento in corso...",
+      "index": "Il sistema è spento."
+    },
+    "description": {
+      "login": "Benvenuto nell'ambiente desktop Linux di Gianluca. Accedi per esplorare un'esperienza web unica ispirata a Linux.",
+      "desktop": "Esplora uno spazio di lavoro interattivo ispirato a Linux con applicazioni, un filesystem completo e un terminale funzionante.",
+      "booting": "Sistema in fase di avvio/spegnimento...",
+      "poweroff": "Spegnimento in corso...", 
+      "index": "Il sistema è spento."
+    },
     "aria": {
       "desktop_grid": "Griglia scrivania",
       "open_app": "Apri {app}",

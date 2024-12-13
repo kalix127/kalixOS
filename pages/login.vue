@@ -4,6 +4,12 @@ definePageMeta({
   middleware: "desktop",
 });
 
+const { t } = useI18n();
+useHead({
+  title: computed(() => t("seo.title.login")),
+  meta: [{ name: "description", content: t("seo.description.login") }],
+});
+
 const globalStore = useGlobalStore();
 const { loginView } = storeToRefs(globalStore);
 

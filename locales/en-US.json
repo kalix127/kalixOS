@@ -5,6 +5,20 @@
     "it": "Italian"
   },
   "seo": {
+    "title": {
+      "login": "Login - Gianluca's Linux",
+      "desktop": "Desktop - Gianluca's Linux",
+      "boot": "System is booting/shutting down...",
+      "poweroff": "Shutting Down...", 
+      "index": "System is powered off."
+    },
+    "description": {
+      "login": "Welcome to Gianluca's Linux desktop environment. Sign in to explore a unique Linux-inspired web experience.",
+      "desktop": "Explore an interactive Linux-inspired workspace with applications, a complete filesystem, and a functional terminal..",
+      "booting": "System is booting/shutting down...",
+      "poweroff": "Shutting down...",
+      "index": "System is powered off."
+    },
     "aria": {
       "desktop_grid": "Desktop grid",
       "open_app": "Open {app}",

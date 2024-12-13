@@ -8,6 +8,12 @@ definePageMeta({
   middleware: "login",
 });
 
+const { t } = useI18n();
+useHead({
+  title: computed(() => t("seo.title.desktop")),
+  meta: [{ name: "description", content: t("seo.description.desktop") }],
+});
+
 const desktopStore = useDesktopStore();
 const { desktopItems, openApps, desktopRef, nodeMap } =
   storeToRefs(desktopStore);

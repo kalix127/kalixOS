@@ -16,7 +16,7 @@ const {
   <Popover>
     <PopoverTrigger
       :aria-label="$t('seo.aria.system_menu')"
-      class="flex items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
+      class="flex h-7 items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
       :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
     >
       <IconWifi

@@ -45,6 +45,7 @@ const onSubmit = async (
             defaultValue="password"
             inputClasses="h-9 border-2 border-accent-hover bg-secondary/70 pr-10 focus:!ring-0"
             :disabled="isLoading"
+            :isLoading="isLoading"
           />
         </template>
       </AuthForm>

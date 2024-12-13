@@ -48,8 +48,6 @@ const submitHandler = handleSubmit((values) =>
         <slot name="fields" />
       </div>
     </form>
-
-    <Icon v-if="isLoading" name="extra:loading-resize" size="20" />
   </div>
 </template>
 

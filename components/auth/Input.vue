@@ -5,9 +5,10 @@ const props = defineProps<{
   placeholder: string;
   disabled?: boolean;
   inputClasses?: string;
+  isLoading?: boolean;
 }>();
 
-const { name, placeholder, disabled, inputClasses } = toRefs(props);
+const { name, placeholder, disabled, inputClasses, isLoading } = toRefs(props);
 
 const initialType = ref(props.type);
 const isPasswordVisible = ref(false);
@@ -57,6 +58,12 @@ const type = computed(() => {
               />
             </button>
           </template>
+          <Icon
+            v-if="isLoading"
+            class="absolute -end-8"
+            name="extra:loading-resize"
+            size="20"
+          />
         </div>
       </FormControl>
       <FormMessage class="absolute text-center text-sm text-foreground" />

@@ -7,7 +7,7 @@ import type {
   FolderNode,
   FileNode,
 } from "@/types";
-import { findNodeByIdRecursive } from "~/helpers";
+import { findNodeByIdRecursive } from "@/helpers";
 import { useEventListener } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";

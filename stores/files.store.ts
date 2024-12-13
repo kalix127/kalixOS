@@ -1,4 +1,4 @@
-import type { FolderNode } from "~/types";
+import type { FolderNode } from "@/types";
 
 export const useFilesStore = defineStore("files", {
   state: (): FilesState => ({

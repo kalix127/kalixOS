@@ -1,4 +1,4 @@
-import type { FolderNode, Node, PermissionsNode, Process } from "~/types";
+import type { FolderNode, Node, PermissionsNode, Process } from "@/types";
 import {
   defaultFilePermissions,
   defaultFolderPermissions,
@@ -201,7 +201,10 @@ export const findNodeByAbsolutePath = (
  * @param root The root Node to traverse up to.
  * @param node The Node to get the path and nodes for.
  */
-export const getNodeFullPath = (root: Node, node: Node): { absolutePath: string; nodes: Node[] } => {
+export const getNodeFullPath = (
+  root: Node,
+  node: Node,
+): { absolutePath: string; nodes: Node[] } => {
   const pathParts: string[] = [];
   const nodes: Node[] = [];
   let current: Node | null = node;
@@ -321,7 +324,6 @@ export const getNextPid = (processes: Process[]): number => {
   return highestPid + randomIncrement;
 };
 
-
 /**
  * Formats a number of bytes into a human-readable string with units.
  * @param chars The length of the file in characters (bytes).
@@ -338,5 +340,7 @@ export function formatNodeSize(chars: number, decimals: number = 1): string {
   const i = Math.floor(Math.log(chars) / Math.log(k));
   const index = i < sizes.length ? i : sizes.length - 1;
 
-  return parseFloat((chars / Math.pow(k, index)).toFixed(dm)) + " " + sizes[index];
+  return (
+    parseFloat((chars / Math.pow(k, index)).toFixed(dm)) + " " + sizes[index]
+  );
 }

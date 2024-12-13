@@ -1,6 +1,5 @@
 import { monacoEditorLanguageMap } from "@/constants";
-import type { FileNode } from "~/types";
-
+import type { FileNode } from "@/types";
 
 export const useKateStore = defineStore("kate", {
   state: (): KateStore => ({

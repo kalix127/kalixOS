@@ -24,7 +24,7 @@ import {
 } from "@/helpers/terminal";
 import { findNodeByPath, resolvePath } from "@/helpers";
 import { commandSpecs } from "@/constants";
-import { helpMessages } from "~/constants/helpMessages";
+import { helpMessages } from "@/constants/helpMessages";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -192,7 +192,7 @@ export function useTerminal(terminalElement: HTMLElement) {
             command.value = commandHistory.value[commandHistoryIndex.value];
             cursorPosition.value = command.value.length;
 
-            deleteAndPrintNewLine()
+            deleteAndPrintNewLine();
           }
         }
         break;

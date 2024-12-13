@@ -8,7 +8,7 @@ import type {
   CommandSpec,
   Node,
 } from "@/types";
-import { assignDefaultProperties } from "~/helpers";
+import { assignDefaultProperties } from "@/helpers";
 import { zshContent } from "./files";
 
 /* General */
@@ -32,7 +32,7 @@ export const defaultBackgroundImages: BackgroundImage[] = [
 
 export const defaultFullscreenApps = ["brave", "code"];
 
-export const desktopOnlyApps = ["brave", "code", "terminal", "files", "files"]
+export const desktopOnlyApps = ["brave", "code", "terminal", "files", "files"];
 
 export const desktopEnvironments = [
   "gnome",

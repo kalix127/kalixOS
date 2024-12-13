@@ -15,7 +15,7 @@ import type {
   FolderNode,
   ShortcutNode,
   Notification,
-} from "~/types";
+} from "@/types";
 import { getNextPid, getNodeIcon } from "@/helpers";
 import {
   useIdle,
@@ -536,7 +536,7 @@ export const useDesktopStore = defineStore({
         useBreakpoints(breakpointsTailwind).smaller("lg").value;
       if (desktopOnlyApps.includes(app.id) && isMobileOrTablet) {
         const { t } = useNuxtApp().$i18n;
-        
+
         this.addNotification(
           {
             id: `app-not-available-${app.id}`,
@@ -632,7 +632,7 @@ export const useDesktopStore = defineStore({
      * @param nodeId The ID of the node to remove from bookmarks.
      */
     removeFromBookmarks(nodeId: string) {
-      this.bookmarks = this.bookmarks.filter(id => id !== nodeId);
+      this.bookmarks = this.bookmarks.filter((id) => id !== nodeId);
     },
 
     /**
@@ -687,10 +687,10 @@ export const useDesktopStore = defineStore({
     /* Notifications */
     addNotification(notification: Notification, timeout = 5000) {
       // Check if notification already exists
-      if (this.notifications.some((n) => n.id === notification.id)) return
+      if (this.notifications.some((n) => n.id === notification.id)) return;
 
       this.notifications.push(notification);
-      
+
       // Delete notification after timeout
       useTimeoutFn(() => {
         this.deleteNotification(notification.id);

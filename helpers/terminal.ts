@@ -14,8 +14,8 @@ import {
   findNodeByIdRecursive,
 } from "@/helpers";
 import { useWindowSize, useTimestamp } from "@vueuse/core";
-import { helpMessages } from "~/constants/helpMessages";
-import { defaultFilePermissions, defaultFolderPermissions } from "~/constants";
+import { helpMessages } from "@/constants/helpMessages";
+import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 
 const { editNode, createNode, moveNode, deleteNode, createNodeShortcut } =
   useDesktopStore();

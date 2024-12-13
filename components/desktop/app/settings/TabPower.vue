@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
-import { defaultDimScreenThreshold } from "~/constants";
+import { defaultDimScreenThreshold } from "@/constants";
 
 const props = defineProps<{
   app: AppNode;

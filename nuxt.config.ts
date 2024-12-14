@@ -16,7 +16,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
-      serverName: process.env.SERVER_NAME,
       socialUrl: {
         linkedin: process.env.SOCIAL_LINKEDIN_URL,
         github: process.env.SOCIAL_GITHUB_URL,

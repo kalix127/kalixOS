@@ -2,7 +2,6 @@
 import { defaultFolders } from "@/constants";
 
 const desktopStore = useDesktopStore();
-const { hasAppsAtTop } = storeToRefs(desktopStore);
 const { openApp } = desktopStore;
 
 const { setFilesNodeId } = useFilesStore();
@@ -17,8 +16,7 @@ function openFolder(id: string) {
   <Popover>
     <PopoverTrigger :aria-label="$t('seo.aria.places_menu')">
       <div
-        class="flex min-h-7 select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
-        :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
+        class="flex min-h-7 select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
       >
         <div class="h-2 w-7 rounded-full bg-white"></div>
         <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></div>

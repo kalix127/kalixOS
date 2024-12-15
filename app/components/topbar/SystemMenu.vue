@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const globalStore = useGlobalStore();
-const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 const {
   volume,
@@ -16,8 +15,7 @@ const {
   <Popover>
     <PopoverTrigger
       :aria-label="$t('seo.aria.system_menu')"
-      class="flex h-7 items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
-      :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
+      class="flex h-7 items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
     >
       <IconWifi
         v-show="connectedWifiNetwork"

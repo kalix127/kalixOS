@@ -79,9 +79,6 @@ export const useDesktopStore = defineStore({
       return state.apps.filter((app) => app.isOpen && !app.isMinimized);
     },
 
-    hasAppsAtTop(state): boolean {
-      return this.openApps.some((app) => app.y === 0);
-    },
 
     hasAppFullscreen(state): boolean {
       return this.openApps.some((app) => app.isFullscreen);

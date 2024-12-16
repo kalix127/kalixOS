@@ -9,6 +9,7 @@ defineProps<{
 
 const { t } = useI18n();
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const globalStore = useGlobalStore();
 const { currentSettingsTab } = storeToRefs(globalStore);
@@ -175,7 +176,11 @@ const toggleSearch = () => {
     "
   >
     <!-- Top-Sidebar -->
-    <div class="hidden sm:block">
+    <div
+      class="hidden sm:block"
+      @mouseenter.stop="() => setDraggable(true)"
+      @mouseleave.stop="() => setDraggable(false)"
+    >
       <div class="flex h-10 items-center justify-between">
         <button
           @click="() => toggleSearch()"

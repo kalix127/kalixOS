@@ -11,12 +11,12 @@ defineEmits<{
   (e: "close"): void;
   (e: "minimize"): void;
   (e: "fullscreen"): void;
-  (e: "toggleDrag", value: boolean): void;
 }>();
 
-const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
-const isActive = computed(() => inject<boolean>("isActive")).value;
-const localHeight = computed(() => inject<number>("localHeight")).value;
+const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
+const isActive = computed(() => inject("isActive") as boolean).value;
+const localHeight = computed(() => inject("localHeight") as number).value;
+const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
@@ -45,8 +45,6 @@ onUnmounted(() => {
       :class="{
         'rounded-tl-xl': !isFullscreen && !isMobile,
       }"
-      @mousedown.stop="() => $emit('toggleDrag', false)"
-      @mouseup.stop="() => $emit('toggleDrag', true)"
     />
 
     <!-- Topbar -->
@@ -55,17 +53,17 @@ onUnmounted(() => {
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
       class="col-span-1 row-start-1 md:col-start-2 md:row-start-1"
+      @mouseenter.stop="() => setDraggable(true)"
+      @mouseleave.stop="() => setDraggable(false)"
     />
 
     <!-- Content -->
     <div
       v-if="!isMobile || currentSettingsTab"
       :style="{
-        height: `${(localHeight || 0) - 40}px`,
+        height: `${localHeight - 40}px`,
       }"
       class="col-span-1 row-start-3 flex flex-col items-center justify-start overflow-hidden md:col-start-2 md:row-start-2"
-      @mousedown.stop="() => $emit('toggleDrag', false)"
-      @mouseup.stop="() => $emit('toggleDrag', true)"
     >
       <Transition mode="out-in">
         <!-- Wifi -->

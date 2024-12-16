@@ -15,7 +15,7 @@ defineProps<{
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
-const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
+const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
 
 const actions = computed(() => [
   {

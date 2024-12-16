@@ -12,10 +12,11 @@ defineProps<{
   class?: HTMLAttributes["class"];
 }>();
 
-const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
-const isActive = computed(() => inject<boolean>("isActive")).value;
-const appName = computed(() => inject<string>("appName")).value;
-const appTitle = computed(() => inject<string>("appTitle")).value;
+const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
+const isActive = computed(() => inject("isActive") as boolean).value;
+const appName = computed(() => inject("appName") as string).value;
+const appTitle = computed(() => inject("appTitle") as string).value;
+const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const actions = computed(() => [
   {
@@ -53,6 +54,8 @@ const actions = computed(() => [
       ),
     ]"
     @dblclick="$emit('fullscreen')"
+    @mouseenter.stop="() => setDraggable(true)"
+    @mouseleave.stop="() => setDraggable(false)"
   >
     <!-- Empty div -->
     <div></div>

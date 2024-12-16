@@ -11,7 +11,10 @@ const { initialWidth, initialHeight } = useWindowSizes();
 const desktopStore = useDesktopStore();
 const { closeApp, toggleMinimizeApp } = desktopStore;
 
-const isDragDisabled = ref(false);
+const isDraggable = ref(false);
+const setDraggable = (value: boolean) => {
+  isDraggable.value = value;
+};
 
 const {
   localWidth,
@@ -34,6 +37,7 @@ provide("isActive", isActive);
 provide("isMinimized", app.value.isMinimized);
 provide("appName", app.value.name);
 provide("appTitle", app.value.title);
+provide("setDraggable", setDraggable);
 </script>
 
 <template>
@@ -52,7 +56,7 @@ provide("appTitle", app.value.title);
     @deactivated="() => handleActive(false)"
     @click="() => handleActive(true)"
     :resizable="!isFullscreen"
-    :draggable="!isFullscreen && isDragDisabled"
+    :draggable="!isFullscreen && isDraggable"
     :style="{ zIndex: isActive ? 10000 : 5000 }"
     classNameHandle="handle"
     classNameDragging="app-dragging"
@@ -71,7 +75,6 @@ provide("appTitle", app.value.title);
         @minimize="() => toggleMinimizeApp(app.id)"
         @fullscreen="() => handleFullscreen(!isFullscreen)"
         @close="() => closeApp(app.id)"
-        @toggleDrag="(value) => (isDragDisabled = value)"
       />
     </div>
   </Vue3DraggableResizable>

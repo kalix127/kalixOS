@@ -36,9 +36,9 @@
     "uuid": "^10.0.0",
     "vee-validate": "^4.13.2",
     "vue": "latest",
-    "vue-draggable-resizable": "^3.0.0",
     "vue-router": "latest",
     "vue-sonner": "^1.2.1",
+    "vue3-draggable-resizable": "^1.6.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {

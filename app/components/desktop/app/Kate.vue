@@ -2,12 +2,12 @@
 import "@/assets/js/monacoWorker";
 import * as monaco from "monaco-editor";
 import type { HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
 import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
+import { watchThrottled } from "@vueuse/core";
+import { type AppNode } from "@/types";
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
 defineEmits<{
@@ -16,7 +16,9 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const { app } = toRefs(props);
+const app = inject("app") as Ref<AppNode>;
+const localHeight = inject("localHeight") as Ref<number>;
+const localWidth = inject("localWidth") as Ref<number>;
 
 const textEditorStore = useKateStore();
 const { openedNode } = storeToRefs(textEditorStore);
@@ -54,16 +56,17 @@ onMounted(() => {
   });
 
   // Update the size of monaco
-  watch(
-    app,
-    (newApp) => {
+  watchThrottled(
+    [localHeight, localWidth],
+    ([newHeight, newWidth]: [number, number]) => {
       if (!editorObj) return;
+
       editorObj.layout({
-        width: newApp.width,
-        height: newApp.height - 40, // 40px the height of the topbar
+        width: newWidth,
+        height: newHeight - 40, // 40px the height of the topbar
       });
     },
-    { deep: true, immediate: true },
+    { throttle: 10, deep: true, immediate: true },
   );
 
   // Update the language based on node's extension
@@ -97,10 +100,9 @@ onUnmounted(() => {
   <div class="grid h-full w-full grid-rows-[40px_1fr]">
     <!-- Top bar -->
     <DesktopWindowTopBar
-      @minimize="$emit('minimize')"
-      @fullscreen="$emit('fullscreen')"
-      @close="$emit('close')"
-      :app="app"
+      @minimize="() => $emit('minimize')"
+      @fullscreen="() => $emit('fullscreen')"
+      @close="() => $emit('close')"
     />
 
     <!-- Kate -->

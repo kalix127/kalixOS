@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
 import { watchDebounced } from "@vueuse/core";
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
 defineEmits<{
@@ -14,22 +12,27 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const { app } = toRefs(props);
+const localWidth = computed(() => inject("localWidth") as number);
+const localHeight = computed(() => inject("localHeight") as number);
 
 const terminalElement = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-  if (!terminalElement.value) return;
+  if (!terminalElement.value || !localWidth.value || !localHeight.value) return;
   const { term } = useTerminal(terminalElement.value);
 
   // Necessary to make it responsive
   watchDebounced(
-    app,
-    () => {
+    [localHeight, localWidth],
+    (newVal) => {
+      // @ts-ignore
+      const height = newVal[0].value;
+      // @ts-ignore
+      const width = newVal[1].value;
       // 40px is the height of the app's topbar
       // 17px is the height of a terminal row
-      const rows = Math.floor((app.value.height - 40) / 17);
-      const cols = Math.floor(app.value.width / 8) + 3;
+      const rows = Math.floor((height - 40) / 17);
+      const cols = Math.floor(width / 8) + 3;
       term.resize(cols, rows);
     },
     { debounce: 100, deep: true, immediate: true },
@@ -41,10 +44,9 @@ onMounted(() => {
   <div class="grid h-full w-full grid-rows-[40px_1fr]">
     <!-- Top bar -->
     <DesktopWindowTopBar
-      @minimize="$emit('minimize')"
-      @fullscreen="$emit('fullscreen')"
-      @close="$emit('close')"
-      :app="app"
+      @minimize="() => $emit('minimize')"
+      @fullscreen="() => $emit('fullscreen')"
+      @close="() => $emit('close')"
     />
 
     <!-- Terminal -->

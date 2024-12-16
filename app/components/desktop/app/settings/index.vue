@@ -30,8 +30,8 @@ onUnmounted(() => {
   <div
     class="grid h-full w-full grid-cols-1 grid-rows-[auto_1fr_1fr] bg-background transition-all duration-300 md:grid-cols-[minmax(min-content,25%)_1fr] md:grid-rows-[auto_1fr]"
     :class="{
-      'rounded-t-xl': !app.isFullscreen,
-      'brightness-[0.75]': !app.isActive,
+      'rounded-t-xl': !isFullscreen,
+      'brightness-[0.85]': !isActive,
     }"
   >
     <!-- Sidebar -->

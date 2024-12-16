@@ -84,7 +84,7 @@ onMounted(async () => {
     class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
     :class="{
       'rounded-t-xl': !app.isFullscreen,
-      'brightness-[0.75]': !app.isActive,
+      'brightness-[0.85]': !app.isActive,
     }"
   >
     <!-- Sidebar -->

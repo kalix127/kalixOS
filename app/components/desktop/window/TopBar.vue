@@ -53,7 +53,7 @@ const actions = computed(() => [
         $props.class,
       ),
     ]"
-    @dblclick="$emit('fullscreen')"
+    @dblclick="() => $emit('fullscreen')"
     @mouseenter.stop="() => setDraggable(true)"
     @mouseleave.stop="() => setDraggable(false)"
   >

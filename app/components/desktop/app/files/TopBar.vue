@@ -136,7 +136,7 @@ const copyLocation = () => {
         $props.class,
       )
     "
-    @dblclick="$emit('fullscreen')"
+    @dblclick="() => $emit('fullscreen')"
   >
     <div
       v-on-click-outside="() => (isSearching = false)"

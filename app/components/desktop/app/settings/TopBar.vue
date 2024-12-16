@@ -46,7 +46,7 @@ const actions = computed(() => [
         $props.class,
       )
     "
-    @dblclick="$emit('fullscreen')"
+    @dblclick="() => $emit('fullscreen')"
   >
     <!-- Empty div -->
     <div></div>

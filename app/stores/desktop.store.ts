@@ -76,9 +76,8 @@ export const useDesktopStore = defineStore({
     },
 
     openApps(state): AppNode[] {
-      return state.apps.filter((app) => app.isOpen && !app.isMinimized);
+      return state.apps.filter((app) => app.isOpen);
     },
-
 
     hasAppFullscreen(state): boolean {
       return this.openApps.some((app) => app.isFullscreen);
@@ -555,16 +554,12 @@ export const useDesktopStore = defineStore({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
-          isActive: app.id === appId ? true : app.isActive,
-          isNewlyOpened: true,
         }));
 
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
         return;
       }
-
-      this.updateApp(appId, { isActive: true });
 
       if (toggleMinimize) {
         this.toggleMinimizeApp(appId);
@@ -579,13 +574,7 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map((app) => ({
         ...app,
         isOpen: app.id === appId ? false : app.isOpen,
-        isActive: app.id === appId ? false : app.isActive,
         isMinimized: app.id === appId ? false : app.isMinimized,
-        isFullscreen: app.id === appId ? false : app.isFullscreen,
-        width: app.id === appId ? 0 : app.width,
-        height: app.id === appId ? 0 : app.height,
-        x: app.id === appId ? 0 : app.x,
-        y: app.id === appId ? 0 : app.y,
       }));
 
       // Close the process

@@ -41,16 +41,9 @@ export interface AppNode extends BaseNode {
   type: "app" | "social";
   title: string;
   isOpen: boolean;
-  isActive: boolean;
   isMinimized: boolean;
   isFullscreen: boolean;
   isDropdownOpen: boolean;
-  isNewlyOpened: boolean;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  prev: { width: number; height: number; x: number; y: number };
 }
 
 export interface ShortcutNode extends BaseNode {

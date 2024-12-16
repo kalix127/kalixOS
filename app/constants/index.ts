@@ -32,7 +32,14 @@ export const defaultBackgroundImages: BackgroundImage[] = [
 
 export const defaultFullscreenApps = ["brave", "code"];
 
-export const desktopOnlyApps = ["brave", "code", "terminal", "files", "files"];
+export const desktopOnlyApps = [
+  "settings",
+  "files",
+  "terminal",
+  "brave",
+  "code",
+  "kate",
+];
 
 export const desktopEnvironments = [
   "gnome",
@@ -234,21 +241,9 @@ export const defaultApps: AppNode[] = [
   ...app,
   title: "",
   isOpen: false,
-  isActive: false,
   isMinimized: false,
   isFullscreen: false,
   isDropdownOpen: false,
-  isNewlyOpened: false,
-  width: 0,
-  height: 0,
-  x: 0,
-  y: 1,
-  prev: {
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0,
-  },
 }));
 
 export const defaultFileSystem = (username: string): Node =>

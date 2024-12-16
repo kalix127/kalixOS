@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
 import { useWindowSize } from "@vueuse/core";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
 const { width, height } = useWindowSize();
 </script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <SettingsOptionGroup>
         <!-- Displays -->

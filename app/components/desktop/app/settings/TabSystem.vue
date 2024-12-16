@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
 const { username } = storeToRefs(useGlobalStore());
 
 const deviceName = computed(() => {
@@ -15,7 +7,7 @@ const deviceName = computed(() => {
 </script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Device Name -->
       <SettingsOption>

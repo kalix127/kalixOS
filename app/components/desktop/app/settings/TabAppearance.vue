@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
 const desktopStore = useDesktopStore();
 const { backgroundImages, backgroundImage } = storeToRefs(desktopStore);
 const { setBackgroundImage, deleteBackgroundImage } = desktopStore;
@@ -38,7 +30,7 @@ const handleBackgroundChange = (event: Event) => {
 </script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Dim screen -->
       <SettingsOption class="hover:bg-popover" is-first>

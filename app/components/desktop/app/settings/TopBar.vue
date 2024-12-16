@@ -2,7 +2,6 @@
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -10,12 +9,10 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
-const { app } = toRefs(props);
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 

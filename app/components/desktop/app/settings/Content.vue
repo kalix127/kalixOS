@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
-
 const { setSettingsTab } = useGlobalStore();
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
 </script>
 
 <template>

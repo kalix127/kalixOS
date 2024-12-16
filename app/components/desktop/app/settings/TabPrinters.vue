@@ -1,15 +1,7 @@
-<script setup lang="ts">
-import type { AppNode } from "@/types";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <div class="flex flex-col items-center gap-4 text-center">
         <Icon name="gnome:printers" size="120" class="text-muted-foreground" />

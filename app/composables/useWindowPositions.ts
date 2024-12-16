@@ -1,28 +1,26 @@
-import { useWindowSize } from "@vueuse/core";
+import { useWindowSize as useViewportSize } from "@vueuse/core";
 
 export function useWindowPositions() {
   const desktopStore = useDesktopStore();
   const { desktopRef } = storeToRefs(desktopStore);
-  const { width: windowWidth, height: windowHeight } = useWindowSize();
-  const { initialWindowSizes } = useWindowSizes();
 
-  const initialWindowPositions = computed(() => {
-    const desktopWidth = desktopRef.value?.offsetWidth || windowWidth.value;
-    const desktopHeight = desktopRef.value?.offsetHeight || windowHeight.value;
+  const { width: viewportWidth, height: viewportHeight } = useViewportSize();
+  const { initialWidth, initialHeight } = useWindowSizes();
 
-    const x = Math.max(
-      0,
-      Math.floor((desktopWidth - initialWindowSizes.value.width) / 2),
-    );
-    const y = Math.max(
-      0,
-      Math.floor((desktopHeight - initialWindowSizes.value.height) / 2),
-    );
+  const initialX = computed(() => {
+    const desktopWidth = desktopRef.value?.offsetWidth || viewportWidth.value;
+    const x = Math.max(0, Math.floor(desktopWidth - initialWidth.value) / 2);
+    return Math.round(x);
+  });
 
-    return { x: Math.round(x), y: Math.round(y) };
+  const initialY = computed(() => {
+    const desktopHeight = desktopRef.value?.offsetHeight || viewportHeight.value;
+    const y = Math.max(0, Math.floor(desktopHeight - initialHeight.value) / 2);
+    return Math.round(y);
   });
 
   return {
-    initialWindowPositions,
+    initialX,
+    initialY,
   };
 }

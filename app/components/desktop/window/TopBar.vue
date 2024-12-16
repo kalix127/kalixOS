@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -9,12 +8,14 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
-const { app } = toRefs(props);
+const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
+const isActive = computed(() => inject<boolean>("isActive")).value;
+const appName = computed(() => inject<string>("appName")).value;
+const appTitle = computed(() => inject<string>("appTitle")).value;
 
 const actions = computed(() => [
   {
@@ -22,7 +23,7 @@ const actions = computed(() => [
     emit: "minimize",
     ariaLabel: "seo.aria.minimize_window",
   },
-  app.value.isFullscreen
+  isFullscreen
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -46,8 +47,8 @@ const actions = computed(() => [
     :class="[
       cn(
         'app-topbar grid h-10 grid-cols-3 bg-popover p-2 transition-all duration-300',
-        !app.isFullscreen ? 'rounded-t-xl' : '',
-        !app.isActive ? 'brightness-[0.75]' : '',
+        !isFullscreen ? 'rounded-t-xl' : '',
+        !isActive ? 'brightness-[0.85]' : '',
         $props.class,
       ),
     ]"
@@ -60,7 +61,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ app.title ? `${app.name} - ${app.title}` : app.name }}
+      {{ appTitle ? `${appName} - ${appTitle}` : appName }}
     </div>
 
     <!-- Actions -->
@@ -68,7 +69,7 @@ const actions = computed(() => [
       <Button
         v-for="action in actions"
         :key="action.icon"
-        :aria-label="action.ariaLabel"
+        :aria-label="$t(action.ariaLabel)"
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-secondary duration-300 hover:bg-secondary-hover"

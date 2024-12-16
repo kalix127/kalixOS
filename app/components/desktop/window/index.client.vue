@@ -1,114 +1,66 @@
 <script setup lang="ts">
-import type { Component } from "vue";
 import type { AppNode } from "@/types";
-import VueDraggableResizable from "vue-draggable-resizable";
-import {
-  breakpointsTailwind,
-  useBreakpoints,
-  useWindowSize as useViewportSize,
-} from "@vueuse/core";
-import { defaultFullscreenApps } from "@/constants";
+import Vue3DraggableResizable from "vue3-draggable-resizable";
+
+const props = defineProps<{ app: AppNode }>();
+const { app } = toRefs(props);
+
+const { minWidth, minHeight } = useWindowSizes();
+const { initialWidth, initialHeight } = useWindowSizes();
 
 const desktopStore = useDesktopStore();
 const { closeApp, toggleMinimizeApp } = desktopStore;
 
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
-const appRef = ref<InstanceType<typeof VueDraggableResizable>>();
-
-const { minWindowSizes } = useWindowSizes();
-const { width, height } = useViewportSize();
+const isDragDisabled = ref(false);
 
 const {
-  handleActive,
-  handleDragStop,
-  handleDragging,
-  handleResizeStop,
+  localWidth,
+  localHeight,
+  localX,
+  localY,
+  isFullscreen,
+  isActive,
+  getAppComponent,
   handleFullscreen,
-} = useWindowHandlers(app, appRef);
+  handleActive,
+} = useWindow(app);
 
-watch([width, height], ([newWidth, newHeight]) => {
-  // If the app is fullscreen, make sure the app's sizes are locked
-  if (app.value.isFullscreen) {
-    app.value.width = newWidth;
-    app.value.height = newHeight;
-    return;
-  }
-
-  // Check if the app's sizes are bigger than the viewport size, if they arent update the app's sizes do the max value in the viewport
-  if (app.value.width > newWidth) {
-    app.value.width = newWidth;
-  }
-  if (app.value.height > newHeight) {
-    app.value.height = newHeight;
-  }
-});
-
-// Make sure the modal is closed by default
-onBeforeMount(() => {
-  app.value.isDropdownOpen = false;
-});
-
-onMounted(() => {
-  if (defaultFullscreenApps.includes(app.value.id)) {
-    handleFullscreen(true);
-  }
-});
-
-import Settings from "@/components/desktop/app/settings/index.vue";
-import DesktopAppVSCode from "@/components/desktop/app/VSCode.vue";
-import DesktopAppBrave from "@/components/desktop/app/Brave.vue";
-import DesktopAppTerminal from "@/components/desktop/app/Terminal.vue";
-import DesktopAppKate from "@/components/desktop/app/Kate.vue";
-import DesktopAppFiles from "@/components/desktop/app/files/index.vue";
-
-const appComponents: { [appId: string]: Component } = {
-  settings: Settings,
-  code: DesktopAppVSCode,
-  brave: DesktopAppBrave,
-  terminal: DesktopAppTerminal,
-  kate: DesktopAppKate,
-  files: DesktopAppFiles,
-};
-
-const getAppComponent = (appId: string): Component => {
-  return appComponents[appId] || null;
-};
+provide("localWidth", localWidth);
+provide("localHeight", localHeight);
+provide("localX", localX);
+provide("localY", localY);
+provide("isFullscreen", isFullscreen);
+provide("isActive", isActive);
+provide("isMinimized", app.value.isMinimized);
+provide("appName", app.value.name);
+provide("appTitle", app.value.title);
 </script>
 
 <template>
-  <vue-draggable-resizable
-    ref="appRef"
-    :min-width="minWindowSizes.minWidth"
-    :min-height="minWindowSizes.minHeight"
-    :w="app.width"
-    :h="app.height"
-    :x="app.x"
-    :y="app.y"
-    :active="app.isActive"
-    :resizable="!app.isFullscreen"
-    :draggable="!app.isFullscreen"
+  <Vue3DraggableResizable
     :parent="true"
-    @dragging="handleDragging"
-    @dragStop="handleDragStop"
-    @resizing="handleResizeStop"
-    @resizeStop="handleResizeStop"
+    :init-w="initialWidth"
+    :init-h="initialHeight"
+    :min-w="minWidth"
+    :min-h="minHeight"
+    v-model:w="localWidth"
+    v-model:h="localHeight"
+    v-model:x="localX"
+    v-model:y="localY"
+    v-model:active="isActive"
     @activated="() => handleActive(true)"
     @deactivated="() => handleActive(false)"
     @click="() => handleActive(true)"
-    dragHandle=".app-topbar"
+    :resizable="!isFullscreen"
+    :draggable="!isFullscreen && isDragDisabled"
+    :style="{ zIndex: isActive ? 10000 : 5000 }"
     classNameHandle="handle"
     classNameDragging="app-dragging"
     classNameResizing="app-resizing"
-    :style="{ zIndex: app.isActive ? 10000 : 5000 }"
-    class="absolute left-0 top-0 !border-none duration-300"
+    class="absolute !border-none duration-300"
     :class="[
-      !app.isFullscreen ? 'rounded-t-xl' : '',
-      app.isActive
+      !isFullscreen ? 'rounded-t-xl' : '',
+      isActive
         ? 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]'
         : 'shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)]',
     ]"
@@ -116,17 +68,17 @@ const getAppComponent = (appId: string): Component => {
     <div :id="app.id" class="relative h-full w-full">
       <component
         :is="getAppComponent(app.id)"
-        :app="app"
         @minimize="() => toggleMinimizeApp(app.id)"
-        @fullscreen="() => handleFullscreen(!app.isFullscreen)"
+        @fullscreen="() => handleFullscreen(!isFullscreen)"
         @close="() => closeApp(app.id)"
+        @toggleDrag="(value) => (isDragDisabled = value)"
       />
     </div>
-  </vue-draggable-resizable>
+  </Vue3DraggableResizable>
 </template>
 
 <style>
-@import "vue-draggable-resizable/style.css";
+@import "@/assets/css/vue-draggable-resizable.css";
 
 .app-dragging {
   @apply duration-0;
@@ -141,7 +93,7 @@ const getAppComponent = (appId: string): Component => {
 }
 
 .handle-tl {
-  @apply left-1 top-1;
+  @apply left-0.5 top-0.5;
 }
 
 .handle-tm {
@@ -149,7 +101,7 @@ const getAppComponent = (appId: string): Component => {
 }
 
 .handle-tr {
-  @apply right-1 top-1;
+  @apply right-0.5 top-0.5;
 }
 
 .handle-ml {

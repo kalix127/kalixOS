@@ -120,7 +120,9 @@ onUnmounted(() => {
   <main ref="desktopRef" class="relative select-none">
     <!-- Apps -->
     <TransitionGroup name="apps">
-      <LazyDesktopWindow v-for="app in openApps" :key="app.id" :app="app" />
+      <template v-for="app in openApps" :key="app.id">
+        <LazyDesktopWindow v-show="!app.isMinimized" :app="app" />
+      </template>
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->

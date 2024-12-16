@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { AppNode } from "@/types";
 import Vue3DraggableResizable from "vue3-draggable-resizable";
+import { useThrottleFn } from '@vueuse/core'
 
 const props = defineProps<{ app: AppNode }>();
 const { app } = toRefs(props);
@@ -12,9 +13,9 @@ const desktopStore = useDesktopStore();
 const { closeApp, toggleMinimizeApp } = desktopStore;
 
 const isDraggable = ref(false);
-const setDraggable = (value: boolean) => {
+const setDraggable = useThrottleFn((value: boolean) => {
   isDraggable.value = value;
-};
+}, 10);
 
 const {
   localWidth,

@@ -11,9 +11,12 @@ defineEmits<{
   (e: "close"): void;
   (e: "minimize"): void;
   (e: "fullscreen"): void;
+  (e: "toggleDrag", value: boolean): void;
 }>();
 
-
+const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
+const isActive = computed(() => inject<boolean>("isActive")).value;
+const localHeight = computed(() => inject<number>("localHeight")).value;
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
@@ -35,11 +38,15 @@ onUnmounted(() => {
     <!-- Sidebar -->
     <SettingsSidebar
       v-if="!isMobile || !currentSettingsTab"
-      :style="{ height: `${app.height}px` }"
+      :style="{
+        height: `${localHeight}px`,
+      }"
       class="col-span-1 row-start-2 bg-muted md:col-start-1 md:row-span-2 md:row-start-1"
       :class="{
-        'rounded-tl-xl': !app.isFullscreen,
+        'rounded-tl-xl': !isFullscreen && !isMobile,
       }"
+      @mousedown.stop="() => $emit('toggleDrag', false)"
+      @mouseup.stop="() => $emit('toggleDrag', true)"
     />
 
     <!-- Topbar -->
@@ -47,15 +54,18 @@ onUnmounted(() => {
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
-      
-      class="app-topbar col-span-1 row-start-1 md:col-start-2 md:row-start-1"
+      class="col-span-1 row-start-1 md:col-start-2 md:row-start-1"
     />
 
     <!-- Content -->
     <div
       v-if="!isMobile || currentSettingsTab"
-      class="col-span-1 row-start-3 flex flex-col items-center justify-start md:col-start-2 md:row-start-2"
-      :style="{ height: `${app.height - 40}px` }"
+      :style="{
+        height: `${(localHeight || 0) - 40}px`,
+      }"
+      class="col-span-1 row-start-3 flex flex-col items-center justify-start overflow-hidden md:col-start-2 md:row-start-2"
+      @mousedown.stop="() => $emit('toggleDrag', false)"
+      @mouseup.stop="() => $emit('toggleDrag', true)"
     >
       <Transition mode="out-in">
         <!-- Wifi -->

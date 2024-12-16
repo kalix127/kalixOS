@@ -15,13 +15,14 @@ defineProps<{
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+const isFullscreen = computed(() => inject<boolean>("isFullscreen")).value;
 
 const actions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
   },
-  app.value.isFullscreen
+  isFullscreen
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -52,7 +53,7 @@ const actions = computed(() => [
 
     <!-- Title -->
     <div
-      class="text truncatetext-center grid min-w-fit select-none place-content-center text-sm font-extrabold"
+      class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
       <template v-if="isMobile">
         {{ $t("settings") }}
@@ -71,7 +72,11 @@ const actions = computed(() => [
         v-for="action in actions"
         :key="action.icon"
       >
-        <Icon :name="action.icon" size="18" @click="() => $emit(action.emit)" />
+        <Icon
+          :name="action.icon"
+          size="18"
+          @click.stop="() => $emit(action.emit)"
+        />
       </Button>
     </div>
   </div>

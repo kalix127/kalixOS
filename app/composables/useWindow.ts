@@ -1,5 +1,6 @@
 import type { Component } from "vue";
 import type { AppNode } from "@/types";
+import { defaultFullscreenApps } from "@/constants";
 
 import Settings from "@/components/desktop/app/settings/index.vue";
 import DesktopAppVSCode from "@/components/desktop/app/VSCode.vue";
@@ -81,7 +82,7 @@ export function useWindow(app: Ref<AppNode>) {
   };
 
   onMounted(() => {
-    if (isFullscreen.value) {
+    if (defaultFullscreenApps.includes(app.value.id)) {
       handleFullscreen(true);
     }
   });

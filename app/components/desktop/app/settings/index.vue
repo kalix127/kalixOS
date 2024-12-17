@@ -3,6 +3,17 @@ import type { HTMLAttributes } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 
+import SettingsTabWifi from "./TabWifi.vue";
+import SettingsTabNetwork from "./TabNetwork.vue";
+import SettingsTabBluetooth from "./TabBluetooth.vue";
+import SettingsTabDisplays from "./TabDisplays.vue";
+import SettingsTabSound from "./TabSound.vue";
+import SettingsTabPower from "./TabPower.vue";
+import SettingsTabAppearance from "./TabAppearance.vue";
+import SettingsTabSystem from "./TabSystem.vue";
+import SettingsTabDefault from "./TabDefault.vue";
+import SettingsTabPrinters from "./TabPrinters.vue";
+
 defineProps<{
   class?: HTMLAttributes["class"];
 }>();
@@ -21,6 +32,22 @@ const setDraggable = inject("setDraggable") as (value: boolean) => void;
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+
+const settingsTabsMap = {
+  wifi: SettingsTabWifi,
+  network: SettingsTabNetwork,
+  bluetooth: SettingsTabBluetooth,
+  displays: SettingsTabDisplays,
+  sound: SettingsTabSound,
+  power: SettingsTabPower,
+  appearance: SettingsTabAppearance,
+  system: SettingsTabSystem,
+  printers: SettingsTabPrinters,
+};
+
+const currentComponent = computed(() => 
+  settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap] ?? SettingsTabDefault
+);
 
 onUnmounted(() => {
   currentSettingsTab.value = null;
@@ -66,43 +93,16 @@ onUnmounted(() => {
       class="col-span-1 row-start-3 flex flex-col items-center justify-start overflow-hidden md:col-start-2 md:row-start-2"
     >
       <Transition mode="out-in">
-        <!-- Wifi -->
-        <SettingsTabWifi v-if="currentSettingsTab === 'wifi'" />
-
-        <!-- Network -->
-        <SettingsTabNetwork v-else-if="currentSettingsTab === 'network'" />
-
-        <!-- Bluetooth -->
-        <SettingsTabBluetooth
-          v-else-if="currentSettingsTab === 'bluetooth'"
-          class="grid h-full place-content-center"
+        <component
+          :is="currentComponent"
+          :class="{
+            'grid h-full place-content-center': [
+              'bluetooth',
+              'printers',
+              'default',
+            ].includes(currentSettingsTab?.toLowerCase() ?? 'default'),
+          }"
         />
-
-        <!-- Displays -->
-        <SettingsTabDisplays v-else-if="currentSettingsTab === 'displays'" />
-
-        <!-- Sound -->
-        <SettingsTabSound v-else-if="currentSettingsTab === 'sound'" />
-
-        <!-- Power -->
-        <SettingsTabPower v-else-if="currentSettingsTab === 'power'" />
-
-        <!-- Appearance -->
-        <SettingsTabAppearance
-          v-else-if="currentSettingsTab === 'appearance'"
-        />
-
-        <!-- Printers -->
-        <SettingsTabPrinters
-          v-else-if="currentSettingsTab === 'printers'"
-          class="grid h-full place-content-center"
-        />
-
-        <!-- System -->
-        <SettingsTabSystem v-else-if="currentSettingsTab === 'system'" />
-
-        <!-- Default -->
-        <SettingsTabDefault v-else class="grid h-full place-content-center" />
       </Transition>
     </div>
   </div>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 import { defaultFolders } from "@/constants";
@@ -9,7 +8,6 @@ defineProps<{
 }>();
 
 const setDraggable = inject("setDraggable") as (draggable: boolean) => void;
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 const { bookmarksNodes } = storeToRefs(useDesktopStore());
 
 const { setFilesNodeId } = useFilesStore();
@@ -38,8 +36,7 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
   <ScrollArea
     :class="
       cn(
-        'p-2 transition-colors duration-300',
-        isMobile ? '' : 'border-r border-r-black/30',
+        'border-r border-r-black/30 p-2 transition-colors duration-300',
         $props.class,
       )
     "

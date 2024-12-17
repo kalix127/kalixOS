@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
 
@@ -14,7 +13,6 @@ defineProps<{
 }>();
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 const isFullscreen = inject("isFullscreen") as Ref<boolean>;
 
 const actions = computed(() => [
@@ -55,12 +53,9 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      <template v-if="isMobile">
-        {{ $t("settings") }}
-      </template>
-      <template v-else>
+      <span>
         {{ currentSettingsTab ? $t(currentSettingsTab) : "" }}
-      </template>
+      </span>
     </div>
 
     <!-- Actions -->

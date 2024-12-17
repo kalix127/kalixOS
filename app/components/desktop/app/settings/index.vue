@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 
 import SettingsTabWifi from "./TabWifi.vue";
@@ -31,8 +30,6 @@ const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
-
 const settingsTabsMap = {
   wifi: SettingsTabWifi,
   network: SettingsTabNetwork,
@@ -45,8 +42,10 @@ const settingsTabsMap = {
   printers: SettingsTabPrinters,
 };
 
-const currentComponent = computed(() => 
-  settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap] ?? SettingsTabDefault
+const currentComponent = computed(
+  () =>
+    settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap] ??
+    SettingsTabDefault,
 );
 
 onUnmounted(() => {
@@ -56,7 +55,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="grid h-full w-full grid-cols-1 grid-rows-[auto_1fr_1fr] bg-background transition-all duration-300 md:grid-cols-[minmax(min-content,25%)_1fr] md:grid-rows-[auto_1fr]"
+    class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
     :class="{
       'rounded-t-xl': !isFullscreen,
       'brightness-[0.85]': !isActive,
@@ -64,13 +63,12 @@ onUnmounted(() => {
   >
     <!-- Sidebar -->
     <SettingsSidebar
-      v-if="!isMobile || !currentSettingsTab"
       :style="{
         height: `${localHeight}px`,
       }"
-      class="col-span-1 row-start-2 bg-muted md:col-start-1 md:row-span-2 md:row-start-1"
+      class="col-start-1 row-span-2 row-start-1 bg-muted"
       :class="{
-        'rounded-tl-xl': !isFullscreen && !isMobile,
+        'rounded-tl-xl': !isFullscreen,
       }"
     />
 
@@ -79,18 +77,17 @@ onUnmounted(() => {
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
-      class="col-span-1 row-start-1 md:col-start-2 md:row-start-1"
+      class="col-start-2 row-start-1"
       @mouseenter.stop="() => setDraggable(true)"
       @mouseleave.stop="() => setDraggable(false)"
     />
 
     <!-- Content -->
     <div
-      v-if="!isMobile || currentSettingsTab"
       :style="{
         height: `${localHeight - 40}px`,
       }"
-      class="col-span-1 row-start-3 flex flex-col items-center justify-start overflow-hidden md:col-start-2 md:row-start-2"
+      class="col-start-2 row-start-2 flex flex-col items-center justify-start overflow-hidden"
     >
       <Transition mode="out-in">
         <component

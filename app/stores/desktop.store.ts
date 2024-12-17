@@ -4,7 +4,6 @@ import {
   defaultBackgroundImage,
   defaultBackgroundImages,
   defaultApps,
-  desktopOnlyApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -527,12 +526,11 @@ export const useDesktopStore = defineStore({
         return;
       }
 
-      // Check if the app can be open on mobile
+      // Avoid opening any app on mobile / tablet
       const isMobileOrTablet =
         useBreakpoints(breakpointsTailwind).smaller("lg").value;
-      if (desktopOnlyApps.includes(app.id) && isMobileOrTablet) {
+      if (isMobileOrTablet) {
         const { t } = useNuxtApp().$i18n;
-
         this.addNotification(
           {
             id: `app-not-available-${app.id}`,

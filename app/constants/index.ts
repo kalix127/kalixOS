@@ -32,15 +32,6 @@ export const defaultBackgroundImages: BackgroundImage[] = [
 
 export const defaultFullscreenApps = ["brave", "code"];
 
-export const desktopOnlyApps = [
-  "settings",
-  "files",
-  "terminal",
-  "brave",
-  "code",
-  "kate",
-];
-
 export const desktopEnvironments = [
   "gnome",
   "gnome_classic",

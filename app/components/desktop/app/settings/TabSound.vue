@@ -29,7 +29,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         <SettingsOption class="gap-6" :label="$t('output_volume')" is-last>
           <template #action>
             <div class="flex flex-grow items-center gap-4">
-              <IconVolume :volume="volume[0]" :size="20" />
+              <IconVolume :volume="volume[0] ?? 0" :size="20" />
               <Slider
                 v-model="volume"
                 :default-value="volume"
@@ -66,7 +66,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         <SettingsOption class="gap-6" :label="$t('input_volume')" is-last>
           <template #action>
             <div class="flex flex-grow items-center gap-4">
-              <IconMicrophone :value="inputVolume[0]" :size="20" />
+              <IconMicrophone :inputVolume="inputVolume[0] ?? 0" :size="20" />
               <Slider
                 v-model="inputVolume"
                 :default-value="inputVolume"

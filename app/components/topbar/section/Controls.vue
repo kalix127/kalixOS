@@ -19,7 +19,7 @@ function handleOpenSettings() {
   >
     <!-- Volume slider -->
     <div class="flex min-h-8 items-center gap-4">
-      <IconVolume :volume="volume[0]" :size="20" />
+      <IconVolume :volume="volume[0] ?? 0" :size="20" />
       <Slider
         v-model="volume"
         :disabled="isAnyTopbarMenuOpen"
@@ -40,7 +40,7 @@ function handleOpenSettings() {
 
     <!-- Microphone slider -->
     <div class="flex min-h-8 items-center gap-4">
-      <IconMicrophone :value="inputVolume[0]" :size="20" />
+      <IconMicrophone :inputVolume="inputVolume[0] ?? 0" :size="20" />
       <Slider
         v-model="inputVolume"
         :disabled="isAnyTopbarMenuOpen"

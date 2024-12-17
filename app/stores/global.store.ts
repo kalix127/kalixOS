@@ -16,7 +16,7 @@ export const useGlobalStore = defineStore({
       maxAge: 365 * 24 * 60 * 60 * 10,
       default: () => true,
     }).value,
-    desktopEnvironment: desktopEnvironments[0],
+    desktopEnvironment: desktopEnvironments[0] as string,
     isWiredEnabled: true,
     isWifiEnabled: false,
     isBluetoothEnabled: false,
@@ -110,7 +110,10 @@ export const useGlobalStore = defineStore({
           this.availableWifiNetworks = [];
           return;
         }
-        await this.addNetworkWithDelay(defaultNetworks[i], randomDelays[i]);
+        await this.addNetworkWithDelay(
+          defaultNetworks[i] as WifiNetwork,
+          randomDelays[i] as number,
+        );
       }
       this.isSearchingWifiNetworks = false;
     },

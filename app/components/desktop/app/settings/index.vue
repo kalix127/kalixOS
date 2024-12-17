@@ -13,9 +13,9 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
-const isActive = computed(() => inject("isActive") as boolean).value;
-const localHeight = computed(() => inject("localHeight") as number).value;
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+const isActive = inject("isActive") as Ref<boolean>;
+const localHeight = inject("localHeight") as Ref<number>;
 const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import { watchDebounced } from "@vueuse/core";
+import { watchThrottled } from "@vueuse/core";
 
 defineProps<{
   class?: HTMLAttributes["class"];
@@ -12,8 +12,8 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const localWidth = computed(() => inject("localWidth") as number);
-const localHeight = computed(() => inject("localHeight") as number);
+const localWidth = inject("localWidth") as Ref<number>;
+const localHeight = inject("localHeight") as Ref<number>;
 
 const terminalElement = ref<HTMLElement | null>(null);
 
@@ -22,20 +22,16 @@ onMounted(() => {
   const { term } = useTerminal(terminalElement.value);
 
   // Necessary to make it responsive
-  watchDebounced(
+  watchThrottled(
     [localHeight, localWidth],
-    (newVal) => {
-      // @ts-ignore
-      const height = newVal[0].value;
-      // @ts-ignore
-      const width = newVal[1].value;
+    ([newHeight, newWidth]: [number, number]) => {
       // 40px is the height of the app's topbar
       // 17px is the height of a terminal row
-      const rows = Math.floor((height - 40) / 17);
-      const cols = Math.floor(width / 8) + 3;
+      const rows = Math.floor((newHeight - 40) / 17);
+      const cols = Math.floor(newWidth / 8) + 3;
       term.resize(cols, rows);
     },
-    { debounce: 100, deep: true, immediate: true },
+    { throttle: 10, deep: true, immediate: true },
   );
 });
 </script>

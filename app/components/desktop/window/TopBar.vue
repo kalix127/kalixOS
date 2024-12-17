@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
+import { type AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -12,11 +13,11 @@ defineProps<{
   class?: HTMLAttributes["class"];
 }>();
 
-const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
-const isActive = computed(() => inject("isActive") as boolean).value;
-const appName = computed(() => inject("appName") as string).value;
-const appTitle = computed(() => inject("appTitle") as string).value;
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+const isActive = inject("isActive") as Ref<boolean>;
 const setDraggable = inject("setDraggable") as (value: boolean) => void;
+
+const app = inject("app") as AppNode;
 
 const actions = computed(() => [
   {
@@ -24,7 +25,7 @@ const actions = computed(() => [
     emit: "minimize",
     ariaLabel: "seo.aria.minimize_window",
   },
-  isFullscreen
+  isFullscreen.value
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -64,7 +65,7 @@ const actions = computed(() => [
     <div
       class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      {{ appTitle ? `${appName} - ${appTitle}` : appName }}
+      {{ app.title ? `${app.name} - ${app.title}` : app.name }}
     </div>
 
     <!-- Actions -->

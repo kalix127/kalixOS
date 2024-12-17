@@ -15,14 +15,14 @@ defineProps<{
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
-const isFullscreen = computed(() => inject("isFullscreen") as boolean).value;
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
 
 const actions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
   },
-  isFullscreen
+  isFullscreen.value
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",

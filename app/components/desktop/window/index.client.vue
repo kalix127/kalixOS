@@ -35,10 +35,8 @@ provide("localX", localX);
 provide("localY", localY);
 provide("isFullscreen", isFullscreen);
 provide("isActive", isActive);
-provide("isMinimized", app.value.isMinimized);
-provide("appName", app.value.name);
-provide("appTitle", app.value.title);
 provide("setDraggable", setDraggable);
+provide("app", app);
 </script>
 
 <template>
@@ -48,7 +46,7 @@ provide("setDraggable", setDraggable);
     :init-h="initialHeight"
     :min-w="minWidth"
     :min-h="minHeight"
-    v-model:w="localWidth"
+    v-model:w="localWidth" 
     v-model:h="localHeight"
     v-model:x="localX"
     v-model:y="localY"

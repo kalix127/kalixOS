@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 
-const props = defineProps<{
+import SettingsTabWifi from "./TabWifi.vue";
+import SettingsTabNetwork from "./TabNetwork.vue";
+import SettingsTabBluetooth from "./TabBluetooth.vue";
+import SettingsTabDisplays from "./TabDisplays.vue";
+import SettingsTabSound from "./TabSound.vue";
+import SettingsTabPower from "./TabPower.vue";
+import SettingsTabAppearance from "./TabAppearance.vue";
+import SettingsTabSystem from "./TabSystem.vue";
+import SettingsTabDefault from "./TabDefault.vue";
+import SettingsTabPrinters from "./TabPrinters.vue";
+
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
 defineEmits<{
@@ -15,11 +23,30 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const { app } = toRefs(props);
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+const isActive = inject("isActive") as Ref<boolean>;
+const localHeight = inject("localHeight") as Ref<number>;
+const setDraggable = inject("setDraggable") as (value: boolean) => void;
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
 
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+const settingsTabsMap = {
+  wifi: SettingsTabWifi,
+  network: SettingsTabNetwork,
+  bluetooth: SettingsTabBluetooth,
+  displays: SettingsTabDisplays,
+  sound: SettingsTabSound,
+  power: SettingsTabPower,
+  appearance: SettingsTabAppearance,
+  system: SettingsTabSystem,
+  printers: SettingsTabPrinters,
+};
+
+const currentComponent = computed(
+  () =>
+    settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap] ??
+    SettingsTabDefault,
+);
 
 onUnmounted(() => {
   currentSettingsTab.value = null;
@@ -28,19 +55,20 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="grid h-full w-full grid-cols-1 grid-rows-[auto_1fr_1fr] bg-background transition-all duration-300 md:grid-cols-[minmax(min-content,25%)_1fr] md:grid-rows-[auto_1fr]"
+    class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
     :class="{
-      'rounded-t-xl': !app.isFullscreen,
-      'brightness-[0.75]': !app.isActive,
+      'rounded-t-xl': !isFullscreen,
+      'brightness-[0.85]': !isActive,
     }"
   >
     <!-- Sidebar -->
     <SettingsSidebar
-      v-if="!isMobile || !currentSettingsTab"
-      :style="{ height: `${app.height}px` }"
-      class="col-span-1 row-start-2 bg-muted md:col-start-1 md:row-span-2 md:row-start-1"
+      :style="{
+        height: `${localHeight}px`,
+      }"
+      class="col-start-1 row-span-2 row-start-1 bg-muted"
       :class="{
-        'rounded-tl-xl': !app.isFullscreen,
+        'rounded-tl-xl': !isFullscreen,
       }"
     />
 
@@ -49,75 +77,28 @@ onUnmounted(() => {
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
-      :app="app"
-      class="app-topbar col-span-1 row-start-1 md:col-start-2 md:row-start-1"
+      class="col-start-2 row-start-1"
+      @mouseenter.stop="() => setDraggable(true)"
+      @mouseleave.stop="() => setDraggable(false)"
     />
 
     <!-- Content -->
     <div
-      v-if="!isMobile || currentSettingsTab"
-      class="col-span-1 row-start-3 flex flex-col items-center justify-start md:col-start-2 md:row-start-2"
-      :style="{ height: `${app.height - 40}px` }"
+      :style="{
+        height: `${localHeight - 40}px`,
+      }"
+      class="col-start-2 row-start-2 flex flex-col items-center justify-start overflow-hidden"
     >
       <Transition mode="out-in">
-        <!-- Wifi -->
-        <SettingsTabWifi :app="app" v-if="currentSettingsTab === 'wifi'" />
-
-        <!-- Network -->
-        <SettingsTabNetwork
-          :app="app"
-          v-else-if="currentSettingsTab === 'network'"
-        />
-
-        <!-- Bluetooth -->
-        <SettingsTabBluetooth
-          :app="app"
-          v-else-if="currentSettingsTab === 'bluetooth'"
-          class="grid h-full place-content-center"
-        />
-
-        <!-- Displays -->
-        <SettingsTabDisplays
-          :app="app"
-          v-else-if="currentSettingsTab === 'displays'"
-        />
-
-        <!-- Sound -->
-        <SettingsTabSound
-          :app="app"
-          v-else-if="currentSettingsTab === 'sound'"
-        />
-
-        <!-- Power -->
-        <SettingsTabPower
-          :app="app"
-          v-else-if="currentSettingsTab === 'power'"
-        />
-
-        <!-- Appearance -->
-        <SettingsTabAppearance
-          :app="app"
-          v-else-if="currentSettingsTab === 'appearance'"
-        />
-
-        <!-- Printers -->
-        <SettingsTabPrinters
-          :app="app"
-          v-else-if="currentSettingsTab === 'printers'"
-          class="grid h-full place-content-center"
-        />
-
-        <!-- System -->
-        <SettingsTabSystem
-          :app="app"
-          v-else-if="currentSettingsTab === 'system'"
-        />
-
-        <!-- Default -->
-        <SettingsTabDefault
-          :app="app"
-          v-else
-          class="grid h-full place-content-center"
+        <component
+          :is="currentComponent"
+          :class="{
+            'grid h-full place-content-center': [
+              'bluetooth',
+              'printers',
+              'default',
+            ].includes(currentSettingsTab?.toLowerCase() ?? 'default'),
+          }"
         />
       </Transition>
     </div>

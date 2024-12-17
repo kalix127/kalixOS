@@ -7,7 +7,6 @@ import {
 import { useIntervalFn } from "@vueuse/core";
 
 const { locale } = useI18n();
-const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 const currentDate = ref(new Date());
 
@@ -54,8 +53,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
   <Popover>
     <PopoverTrigger :aria-label="$t('seo.aria.calendar')">
       <div
-        class="flex select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
-        :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
+        class="flex select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
       >
         <span class="text-nowrap text-xs font-extrabold sm:text-sm">
           {{ formattedDateTime }}

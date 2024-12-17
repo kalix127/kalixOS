@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
+import { type AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -9,12 +9,15 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
-const { app } = toRefs(props);
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+const isActive = inject("isActive") as Ref<boolean>;
+const setDraggable = inject("setDraggable") as (value: boolean) => void;
+
+const app = inject("app") as AppNode;
 
 const actions = computed(() => [
   {
@@ -22,7 +25,7 @@ const actions = computed(() => [
     emit: "minimize",
     ariaLabel: "seo.aria.minimize_window",
   },
-  app.value.isFullscreen
+  isFullscreen.value
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -46,12 +49,14 @@ const actions = computed(() => [
     :class="[
       cn(
         'app-topbar grid h-10 grid-cols-3 bg-popover p-2 transition-all duration-300',
-        !app.isFullscreen ? 'rounded-t-xl' : '',
-        !app.isActive ? 'brightness-[0.75]' : '',
+        !isFullscreen ? 'rounded-t-xl' : '',
+        !isActive ? 'brightness-[0.85]' : '',
         $props.class,
       ),
     ]"
-    @dblclick="$emit('fullscreen')"
+    @dblclick="() => $emit('fullscreen')"
+    @mouseenter.stop="() => setDraggable(true)"
+    @mouseleave.stop="() => setDraggable(false)"
   >
     <!-- Empty div -->
     <div></div>
@@ -68,12 +73,14 @@ const actions = computed(() => [
       <Button
         v-for="action in actions"
         :key="action.icon"
-        :aria-label="action.ariaLabel"
+        :aria-label="$t(action.ariaLabel)"
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-secondary duration-300 hover:bg-secondary-hover"
+        @click.stop="() => $emit(action.emit)"
+        @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" @click="$emit(action.emit)" />
+        <Icon :name="action.icon" size="18" />
       </Button>
     </div>
   </div>

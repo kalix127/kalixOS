@@ -29,7 +29,7 @@ const { backgroundImage, isShowAppsOverlayVisible } =
           :key="backgroundImage.name"
           :src="backgroundImage.url"
           class="absolute -z-[1] h-full w-full object-cover"
-          sizes="sm:1000px md:1200px lg:1500px"
+          sizes="sm:1000px md:1200px lg:1400px xl:1800px"
           style="-webkit-user-drag: none"
           format="webp"
         />

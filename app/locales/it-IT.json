@@ -7,7 +7,7 @@
   "seo": {
     "title": {
       "login": "Login - Gianluca's Linux",
-      "desktop": "Scrivania - Gianluca's Linux", 
+      "desktop": "Scrivania - Gianluca's Linux",
       "booting": "Sistema in fase di avvio/spegnimento...",
       "poweroff": "Spegnimento in corso...",
       "index": "Il sistema è spento."
@@ -16,7 +16,7 @@
       "login": "Benvenuto nell'ambiente desktop Linux di Gianluca. Accedi per esplorare un'esperienza web unica ispirata a Linux.",
       "desktop": "Esplora uno spazio di lavoro interattivo ispirato a Linux con applicazioni, un filesystem completo e un terminale funzionante.",
       "booting": "Sistema in fase di avvio/spegnimento...",
-      "poweroff": "Spegnimento in corso...", 
+      "poweroff": "Spegnimento in corso...",
       "index": "Il sistema è spento."
     },
     "aria": {
@@ -105,6 +105,7 @@
   "terminal_not_available_on_mobile": "Non è possibile aprire il Terminale da telefono, riprova da desktop.",
   "kate_not_available_on_mobile": "Non è possibile aprire Kate da telefono, riprova da desktop.",
   "files_not_available_on_mobile": "Impossibile aprire Files da telefono, riprova da desktop.",
+  "settings_not_available_on_mobile": "Impossibile aprire Impostazioni da telefono, riprova da desktop.",
   "show_apps": "Mostra Applicazioni",
   "wifi_connected_title": "Connesso al Wi-Fi",
   "wifi_connected_description": "Connessione riuscita a {network}",

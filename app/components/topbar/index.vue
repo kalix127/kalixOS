@@ -14,7 +14,7 @@ const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
 const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
-const { hasAppsAtTop, isShowAppsOverlayVisible, notifications } =
+const { isShowAppsOverlayVisible, notifications } =
   storeToRefs(useDesktopStore());
 
 const route = useRoute();
@@ -26,9 +26,8 @@ const route = useRoute();
     :class="
       cn(
         'relative z-[50000] flex h-9 select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
-        route.name === 'login' ? '!bg-transparent' : '',
+        route.name === 'login' ? '!bg-transparent' : ' !bg-opacity-90',
         isShowAppsOverlayVisible ? '!bg-transparent' : '',
-        hasAppsAtTop ? '!bg-opacity-100' : '',
         props.class,
       )
     "

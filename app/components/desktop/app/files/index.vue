@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import type { AppNode, Node } from "@/types";
+import type { Node } from "@/types";
 import { storeToRefs } from "pinia";
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { until } from "@vueuse/core";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
 defineEmits<{
@@ -16,7 +15,10 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const { app } = toRefs(props);
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+const isActive = inject("isActive") as Ref<boolean>;
+const localHeight = inject("localHeight") as Ref<number>;
+const setDraggable = inject("setDraggable") as (draggable: boolean) => void;
 
 const { openedNode, searchQuery, isGridLayout } = storeToRefs(useFilesStore());
 const desktopStore = useDesktopStore();
@@ -83,16 +85,16 @@ onMounted(async () => {
   <div
     class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
     :class="{
-      'rounded-t-xl': !app.isFullscreen,
-      'brightness-[0.75]': !app.isActive,
+      'rounded-t-xl': !isFullscreen,
+      'brightness-[0.85]': !isActive,
     }"
   >
     <!-- Sidebar -->
     <FilesSidebar
-      :style="{ height: `${app.height}px` }"
+      :style="{ height: `${localHeight}px` }"
       class="col-start-1 row-span-2 row-start-1 bg-muted"
       :class="{
-        'rounded-tl-xl': !app.isFullscreen,
+        'rounded-tl-xl': !isFullscreen,
       }"
     />
 
@@ -101,7 +103,8 @@ onMounted(async () => {
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
-      :app="app"
+      @mouseenter.stop="() => setDraggable(true)"
+      @mouseleave.stop="() => setDraggable(false)"
       class="app-topbar'col-start-2 row-start-1"
     />
 
@@ -109,7 +112,7 @@ onMounted(async () => {
     <ScrollArea
       class="col-start-2 row-start-2 p-2"
       :style="{
-        height: `${app.height - 48}px`,
+        height: `${localHeight - 48}px`,
       }"
       @contextmenu.prevent=""
     >
@@ -147,7 +150,7 @@ onMounted(async () => {
         v-if="filteredItems?.length === 0 && searchQuery"
         class="grid place-content-center"
         :style="{
-          height: `${app.height - 48}px`,
+          height: `${localHeight - 48}px`,
         }"
       >
         <div class="flex flex-col items-center gap-4">

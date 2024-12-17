@@ -5,40 +5,58 @@ import {
 } from "@vueuse/core";
 
 export function useWindowSizes() {
-  const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
+  const breakpoints = useBreakpoints(breakpointsTailwind);
+  const { width: windowWidth} = useWindowSize();
 
-  const { width: windowWidth, height: windowHeight } = useWindowSize();
+  const getBreakpointSize = () => {
+    if (breakpoints.greater('lg').value) return 'lg';
+    return 'default';
+  };
 
-  const initialWindowSizes = computed(() => {
-    if (isMobileOrTablet.value) {
-      // Mobile or Tablet
-      const width = Math.min(300, windowWidth.value * 0.9);
-      const height = (width * 16) / 9;
-      return { width: Math.round(width), height: Math.round(height) };
+  const initialWidth = computed(() => {
+    const size = getBreakpointSize();
+    switch (size) {
+      case 'lg':
+        return Math.round(windowWidth.value * 0.8);
+      default:
+        return 0;
     }
-
-    // Desktop
-    const width = windowWidth.value * 0.8;
-    const height = (width * 9) / 16;
-    return { width: Math.round(width), height: Math.round(height) };
   });
 
-  const minWindowSizes = computed(() => {
-    if (isMobileOrTablet.value) {
-      // Mobile or Tablet
-      const minWidth = 250;
-      const minHeight = (minWidth * 16) / 9;
-      return { minWidth, minHeight };
+  const initialHeight = computed(() => {
+    const size = getBreakpointSize();
+    switch (size) {
+      case 'lg':
+        return Math.round((initialWidth.value * 9) / 16);
+      default:
+        return 0;
     }
+  });
 
-    // Desktop
-    const minWidth = 900;
-    const minHeight = (minWidth * 9) / 16;
-    return { minWidth, minHeight };
+  const minWidth = computed(() => {
+    const size = getBreakpointSize();
+    switch (size) {
+      case 'lg':
+        return 900;
+      default:
+        return 0;
+    }
+  });
+
+  const minHeight = computed(() => {
+    const size = getBreakpointSize();
+    switch (size) {
+      case 'lg':
+        return Math.round((minWidth.value * 9) / 16);
+      default:
+        return 0;
+    }
   });
 
   return {
-    initialWindowSizes,
-    minWindowSizes,
+    initialWidth,
+    initialHeight,
+    minWidth,
+    minHeight,
   };
 }

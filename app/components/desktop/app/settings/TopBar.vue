@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { cn } from "@/lib/utils";
 import { type HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
 
 defineEmits<{
   (e: "close"): void;
@@ -10,21 +8,19 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
-const { app } = toRefs(props);
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
-const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
 
 const actions = computed(() => [
   {
     icon: "gnome:minimize",
     emit: "minimize",
   },
-  app.value.isFullscreen
+  isFullscreen.value
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",
@@ -48,33 +44,32 @@ const actions = computed(() => [
         $props.class,
       )
     "
-    @dblclick="$emit('fullscreen')"
+    @dblclick="() => $emit('fullscreen')"
   >
     <!-- Empty div -->
     <div></div>
 
     <!-- Title -->
     <div
-      class="text truncatetext-center grid min-w-fit select-none place-content-center text-sm font-extrabold"
+      class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
     >
-      <template v-if="isMobile">
-        {{ $t("settings") }}
-      </template>
-      <template v-else>
+      <span>
         {{ currentSettingsTab ? $t(currentSettingsTab) : "" }}
-      </template>
+      </span>
     </div>
 
     <!-- Actions -->
     <div class="flex items-center justify-end gap-2">
       <Button
+        v-for="action in actions"
+        :key="action.icon"
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-popover duration-300 hover:bg-secondary"
-        v-for="action in actions"
-        :key="action.icon"
+        @click.stop="() => $emit(action.emit)"
+        @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" @click="() => $emit(action.emit)" />
+        <Icon :name="action.icon" size="18" />
       </Button>
     </div>
   </div>

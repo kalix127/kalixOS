@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const globalStore = useGlobalStore();
-const { hasAppsAtTop } = storeToRefs(useDesktopStore());
 
 const {
   volume,
@@ -16,8 +15,7 @@ const {
   <Popover>
     <PopoverTrigger
       :aria-label="$t('seo.aria.system_menu')"
-      class="flex h-7 items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary"
-      :class="{ 'hover:bg-secondary/50': !hasAppsAtTop }"
+      class="flex h-7 items-center justify-end gap-4 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
     >
       <IconWifi
         v-show="connectedWifiNetwork"
@@ -30,7 +28,7 @@ const {
         name="gnome:airplane-mode-on"
         :size="16"
       />
-      <IconVolume :volume="volume[0]" :size="16" />
+      <IconVolume :volume="volume[0] ?? 0" :size="16" />
       <div class="flex items-center gap-1">
         <Icon name="gnome:battery-full" :size="16" />
         <span class="text-sm" v-if="isShowBatteryPercentageEnabled">100%</span>

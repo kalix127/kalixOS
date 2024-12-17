@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import type { WifiNetwork, AppNode } from "@/types";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
+import { type WifiNetwork } from "@/types";
 const selectedWifiNetwork = ref<WifiNetwork | null>(null);
 
 const globalStore = useGlobalStore();
@@ -24,7 +17,7 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 </script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <SettingsOptionGroup>
         <!-- Toggle Wifi -->
@@ -115,13 +108,13 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Wifi Disabled -->
         <div
-          class="grid place-content-center"
+          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && !isAirplaneModeEnabled"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:wifi-not-connected"
-              size="120"
+              size="140"
               class="text-muted-foreground"
             />
             <span class="text-2xl font-extrabold">{{
@@ -135,13 +128,13 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Airplane Mode Enabled -->
         <div
-          class="grid place-content-center"
+          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && isAirplaneModeEnabled"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:airplane-mode-on"
-              size="120"
+              size="140"
               class="text-muted-foreground"
             />
             <span class="text-2xl font-extrabold">{{

@@ -4,7 +4,6 @@ import {
   defaultBackgroundImage,
   defaultBackgroundImages,
   defaultApps,
-  desktopOnlyApps,
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive } from "@/helpers";
 import type {
@@ -76,11 +75,7 @@ export const useDesktopStore = defineStore({
     },
 
     openApps(state): AppNode[] {
-      return state.apps.filter((app) => app.isOpen && !app.isMinimized);
-    },
-
-    hasAppsAtTop(state): boolean {
-      return this.openApps.some((app) => app.y === 0);
+      return state.apps.filter((app) => app.isOpen);
     },
 
     hasAppFullscreen(state): boolean {
@@ -531,12 +526,11 @@ export const useDesktopStore = defineStore({
         return;
       }
 
-      // Check if the app can be open on mobile
+      // Avoid opening any app on mobile / tablet
       const isMobileOrTablet =
         useBreakpoints(breakpointsTailwind).smaller("lg").value;
-      if (desktopOnlyApps.includes(app.id) && isMobileOrTablet) {
+      if (isMobileOrTablet) {
         const { t } = useNuxtApp().$i18n;
-
         this.addNotification(
           {
             id: `app-not-available-${app.id}`,
@@ -558,16 +552,12 @@ export const useDesktopStore = defineStore({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
-          isActive: app.id === appId ? true : app.isActive,
-          isNewlyOpened: true,
         }));
 
         // Create a process for the app
         this.createProcess(app.id, app.name.toLowerCase());
         return;
       }
-
-      this.updateApp(appId, { isActive: true });
 
       if (toggleMinimize) {
         this.toggleMinimizeApp(appId);
@@ -582,13 +572,7 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map((app) => ({
         ...app,
         isOpen: app.id === appId ? false : app.isOpen,
-        isActive: app.id === appId ? false : app.isActive,
         isMinimized: app.id === appId ? false : app.isMinimized,
-        isFullscreen: app.id === appId ? false : app.isFullscreen,
-        width: app.id === appId ? 0 : app.width,
-        height: app.id === appId ? 0 : app.height,
-        x: app.id === appId ? 0 : app.x,
-        y: app.id === appId ? 0 : app.y,
       }));
 
       // Close the process
@@ -615,6 +599,25 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map((app) =>
         app.id === appId ? { ...app, ...changes } : app,
       );
+    },
+
+    openSocialApp(appId: string) {
+      const { linkedin, github } = useRuntimeConfig().public.socialUrl;
+      let url = "";
+
+      switch (appId) {
+        case "linkedin":
+          url = linkedin;
+          break;
+        case "github":
+          url = github;
+          break;
+      }
+
+      if (url) {
+        window.open(url, "_blank");
+      }
+      return;
     },
 
     /**

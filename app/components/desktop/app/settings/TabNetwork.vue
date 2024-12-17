@@ -1,19 +1,11 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
-
-const props = defineProps<{
-  app: AppNode;
-}>();
-
-const { app } = toRefs(props);
-
 const globalStore = useGlobalStore();
 const { isWiredEnabled } = storeToRefs(globalStore);
 const { toggleWired } = globalStore;
 </script>
 
 <template>
-  <SettingsContent :app="app">
+  <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Toggle Wired -->
       <SettingsOption

@@ -8,6 +8,7 @@ defineProps<{
   class?: HTMLAttributes["class"];
 }>();
 
+const setDraggable = inject("setDraggable") as (draggable: boolean) => void;
 const isMobile = useBreakpoints(breakpointsTailwind).smaller("sm");
 const { bookmarksNodes } = storeToRefs(useDesktopStore());
 
@@ -44,7 +45,11 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
     "
   >
     <!-- Top-Sidebar -->
-    <div class="app-topbar hidden h-10 items-start justify-between sm:flex">
+    <div
+      class="app-topbar hidden h-10 items-start justify-between sm:flex"
+      @mouseenter.stop="() => setDraggable(true)"
+      @mouseleave.stop="() => setDraggable(false)"
+    >
       <div class="grid place-content-center p-2">
         <Icon name="gnome:search" size="16" />
       </div>

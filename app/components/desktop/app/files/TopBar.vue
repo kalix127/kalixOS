@@ -13,12 +13,12 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
-  app: AppNode;
 }>();
 
-const { app } = toRefs(props);
+const isFullscreen = inject("isFullscreen") as Ref<boolean>;
+
 const { t } = useI18n();
 
 const filesStore = useFilesStore();
@@ -44,7 +44,7 @@ const windowActions = computed(() => [
     icon: "gnome:minimize",
     emit: "minimize",
   },
-  app.value.isFullscreen
+  isFullscreen.value
     ? {
         icon: "gnome:collapse",
         emit: "fullscreen",

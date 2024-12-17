@@ -188,7 +188,7 @@ export function useTerminal(terminalElement: HTMLElement) {
 
           if (commandHistoryIndex.value > 0) {
             commandHistoryIndex.value--;
-            command.value = commandHistory.value[commandHistoryIndex.value];
+            command.value = commandHistory.value[commandHistoryIndex.value] || "";
             cursorPosition.value = command.value.length;
 
             deleteAndPrintNewLine();
@@ -201,7 +201,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         if (commandHistory.value.length > 0) {
           if (commandHistoryIndex.value < commandHistory.value.length - 1) {
             commandHistoryIndex.value++;
-            command.value = commandHistory.value[commandHistoryIndex.value];
+            command.value = commandHistory.value[commandHistoryIndex.value] || "";
             cursorPosition.value = command.value.length;
 
             term.write("\r\x1B[K"); // Clear current line
@@ -257,7 +257,7 @@ export function useTerminal(terminalElement: HTMLElement) {
   function handleCommand(): boolean {
     const trimmedCommand = command.value.trim();
     const args = trimmedCommand.split(" ");
-    const exec = args[0];
+    const exec = args[0] || "";
     const fileSystem = storeToRefs(useDesktopStore()).fileSystem.value;
 
     let shouldAddToHistory = false;
@@ -460,7 +460,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     const tokensLength = commandTokens.length;
     let lastToken = isTrailingSpace
       ? ""
-      : commandTokens[commandTokens.length - 1];
+      : commandTokens[commandTokens.length - 1] || "";
 
     if (tokensLength === 1 && !isTrailingSpace) {
       // autocomplete binaries
@@ -468,11 +468,11 @@ export function useTerminal(terminalElement: HTMLElement) {
       if (binNode && binNode.type === "folder") {
         const commandNodes = binNode.children || [];
         const matchingCommands = commandNodes
-          .filter((node) => node.name.startsWith(lastToken))
+          .filter((node) => node.name?.startsWith(lastToken))
           .map((node) => node.name);
         if (matchingCommands.length === 1) {
           // autocomplete the command
-          const completion = matchingCommands[0].substring(lastToken.length);
+          const completion = matchingCommands[0]?.substring(lastToken.length) || "";
           command.value += completion;
           cursorPosition.value += completion.length;
           term.write(completion);
@@ -511,7 +511,7 @@ export function useTerminal(terminalElement: HTMLElement) {
 
         if (matchingNodes.length === 1) {
           // autocomplete the path
-          const completion = matchingNodes[0].substring(incomplete.length);
+          const completion = matchingNodes[0]?.substring(incomplete.length) || "";
           // append a '/' if the node is a folder
           const matchedNode = childNodes.find(
             (node) => node.name === matchingNodes[0],

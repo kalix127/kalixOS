@@ -10,8 +10,6 @@ export function useWindowSizes() {
 
   const getBreakpointSize = () => {
     if (breakpoints.greater('lg').value) return 'lg';
-    if (breakpoints.greater('md').value) return 'md'; 
-    if (breakpoints.greater('sm').value) return 'sm';
     return 'default';
   };
 
@@ -20,12 +18,8 @@ export function useWindowSizes() {
     switch (size) {
       case 'lg':
         return Math.round(windowWidth.value * 0.8);
-      case 'md':
-        return Math.round(windowWidth.value * 0.7);
-      case 'sm':
-        return Math.round(windowWidth.value * 0.6);
       default:
-        return Math.round(Math.min(300, windowWidth.value * 0.9));
+        return 0;
     }
   });
 
@@ -34,12 +28,8 @@ export function useWindowSizes() {
     switch (size) {
       case 'lg':
         return Math.round((initialWidth.value * 9) / 16);
-      case 'md':
-        return Math.round((initialWidth.value * 10) / 16);
-      case 'sm':
-        return Math.round((initialWidth.value * 12) / 16);
       default:
-        return Math.round((initialWidth.value * 16) / 9);
+        return 0;
     }
   });
 
@@ -48,12 +38,8 @@ export function useWindowSizes() {
     switch (size) {
       case 'lg':
         return 900;
-      case 'md':
-        return 700;
-      case 'sm':
-        return 500;
       default:
-        return 280;
+        return 0;
     }
   });
 
@@ -62,12 +48,8 @@ export function useWindowSizes() {
     switch (size) {
       case 'lg':
         return Math.round((minWidth.value * 9) / 16);
-      case 'md':
-        return Math.round((minWidth.value * 10) / 16);
-      case 'sm':
-        return Math.round((minWidth.value * 12) / 16);
       default:
-        return Math.round((minWidth.value * 16) / 9);
+        return 0;
     }
   });
 

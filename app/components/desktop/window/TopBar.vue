@@ -77,8 +77,10 @@ const actions = computed(() => [
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-secondary duration-300 hover:bg-secondary-hover"
+        @click.stop="() => $emit(action.emit)"
+        @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" @click="$emit(action.emit)" />
+        <Icon :name="action.icon" size="18" />
       </Button>
     </div>
   </div>

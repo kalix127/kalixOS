@@ -246,6 +246,7 @@ const copyLocation = () => {
         v-for="action in windowActions"
         :key="action.icon"
         @click="() => $emit(action.emit)"
+        @dblclick.stop=""
       >
         <Icon :name="action.icon" size="18" />
       </Button>

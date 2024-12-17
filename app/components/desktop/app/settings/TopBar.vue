@@ -66,17 +66,15 @@ const actions = computed(() => [
     <!-- Actions -->
     <div class="flex items-center justify-end gap-2">
       <Button
+        v-for="action in actions"
+        :key="action.icon"
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-popover duration-300 hover:bg-secondary"
-        v-for="action in actions"
-        :key="action.icon"
+        @click.stop="() => $emit(action.emit)"
+        @dblclick.stop=""
       >
-        <Icon
-          :name="action.icon"
-          size="18"
-          @click.stop="() => $emit(action.emit)"
-        />
+        <Icon :name="action.icon" size="18" />
       </Button>
     </div>
   </div>

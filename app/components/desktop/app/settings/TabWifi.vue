@@ -108,13 +108,13 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Wifi Disabled -->
         <div
-          class="grid place-content-center"
+          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && !isAirplaneModeEnabled"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:wifi-not-connected"
-              size="120"
+              size="140"
               class="text-muted-foreground"
             />
             <span class="text-2xl font-extrabold">{{
@@ -128,13 +128,13 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Airplane Mode Enabled -->
         <div
-          class="grid place-content-center"
+          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && isAirplaneModeEnabled"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:airplane-mode-on"
-              size="120"
+              size="140"
               class="text-muted-foreground"
             />
             <span class="text-2xl font-extrabold">{{

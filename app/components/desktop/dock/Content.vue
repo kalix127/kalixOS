@@ -11,7 +11,7 @@ defineEmits<{
 
 const desktopStore = useDesktopStore();
 const { apps, isShowAppsOverlayVisible } = storeToRefs(desktopStore);
-const { updateDockApps } = desktopStore;
+const { updateDockApps, openSocialApp } = desktopStore;
 
 const { openContextMenu } = useContextMenuStore();
 
@@ -36,6 +36,12 @@ const handleOpenApp = (app: AppNode) => {
   // Toggle the apps list overlay
   if (app.id === "show-apps") {
     isShowAppsOverlayVisible.value = !isShowAppsOverlayVisible.value;
+    return;
+  }
+
+  // Open social app
+  if (app.type === "social") {
+    openSocialApp(app.id);
     return;
   }
 

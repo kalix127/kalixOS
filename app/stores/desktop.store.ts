@@ -601,6 +601,25 @@ export const useDesktopStore = defineStore({
       );
     },
 
+    openSocialApp(appId: string) {
+      const { linkedin, github } = useRuntimeConfig().public.socialUrl;
+      let url = "";
+
+      switch (appId) {
+        case "linkedin":
+          url = linkedin;
+          break;
+        case "github":
+          url = github;
+          break;
+      }
+
+      if (url) {
+        window.open(url, "_blank");
+      }
+      return;
+    },
+
     /**
      * Adds a node to bookmarks if not already present.
      * @param nodeId The ID of the node to add to bookmarks.

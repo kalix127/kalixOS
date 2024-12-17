@@ -33,6 +33,7 @@ export function useContextMenu() {
     removeFromBookmarks,
     openApp,
     closeApp,
+    openSocialApp,
   } = desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
@@ -312,21 +313,7 @@ export function useContextMenu() {
     }
 
     if (node.type === "social") {
-      const { linkedin, github } = useRuntimeConfig().public.socialUrl;
-      let url = "";
-
-      switch (node.id) {
-        case "linkedin":
-          url = linkedin;
-          break;
-        case "github":
-          url = github;
-          break;
-      }
-
-      if (url) {
-        window.open(url, "_blank");
-      }
+      openSocialApp(node.id);
       return;
     }
 

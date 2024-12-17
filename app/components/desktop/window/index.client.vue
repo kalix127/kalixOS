@@ -31,8 +31,6 @@ const {
 
 provide("localWidth", localWidth);
 provide("localHeight", localHeight);
-provide("localX", localX);
-provide("localY", localY);
 provide("isFullscreen", isFullscreen);
 provide("isActive", isActive);
 provide("setDraggable", setDraggable);

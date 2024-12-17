@@ -60,7 +60,6 @@ export function useTerminal(terminalElement: HTMLElement) {
     fontSize: 13,
     rightClickSelectsWord: false,
     tabStopWidth: 4,
-    fontFamily: "JetBrainsMono Nerd Font Mono",
     theme: {
       brightCyan: "#299890",
       brightBlue: "#268bd2",

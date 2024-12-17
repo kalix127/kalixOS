@@ -44,7 +44,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Noto Sans Medium", sans-serif;
+    font-family: "Noto Sans", sans-serif;
   }
 }
 

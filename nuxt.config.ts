@@ -111,10 +111,6 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: "Comfortaa",
-        provider: "google",
-      },
-      {
         name: "Noto Sans",
         provider: "google",
       },

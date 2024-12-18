@@ -31,7 +31,9 @@ watch(() => escape!.value, (v) => {
     />
 
     <div class="absolute top-2 left-2">
-      <p class="font-medium">{{ t("press_esc_to_view_system_logs") }}</p>
+      <p class="font-medium">
+        {{ t("press_esc_to_view_system_logs") }}
+      </p>
     </div>
 
     <!-- System Logs on escape -->

@@ -118,7 +118,7 @@ const items = computed(() => [
         />
 
         <!-- Only for the Wifi Button -->
-        <div class="flex flex-col items-start" v-if="item.label === 'wifi'">
+        <div v-if="item.label === 'wifi'" class="flex flex-col items-start">
           <span class="text-sm font-bold">
             {{ item.name }}
           </span>

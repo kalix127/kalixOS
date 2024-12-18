@@ -33,7 +33,9 @@ const submitHandler = handleSubmit(values =>
       />
     </div>
 
-    <h1 v-if="title" class="text-2xl font-bold">{{ title }}</h1>
+    <h1 v-if="title" class="text-2xl font-bold">
+      {{ title }}
+    </h1>
 
     <form @submit.prevent="submitHandler">
       <div class="relative flex items-center gap-4">

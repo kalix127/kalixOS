@@ -12,7 +12,7 @@ provide("isOptionGroup", true);
 
 <template>
   <div :class="{ 'space-y-3': title }">
-    <div class="flex items-center justify-start gap-2" v-if="title">
+    <div v-if="title" class="flex items-center justify-start gap-2">
       <span class="text-sm font-bold tracking-wide">{{ title }}</span>
       <slot name="title-loading-icon" />
     </div>

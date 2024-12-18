@@ -23,7 +23,9 @@ defineEmits<{
         :side-offset="15"
         class="z-[50000] rounded-full bg-black/80"
       >
-        <p class="font-medium">{{ isTranslated ? $t(appName) : appName }}</p>
+        <p class="font-medium">
+          {{ isTranslated ? $t(appName) : appName }}
+        </p>
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

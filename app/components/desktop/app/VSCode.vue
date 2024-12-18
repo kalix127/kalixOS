@@ -11,6 +11,8 @@ defineEmits<{
   (e: "minimize"): void;
   (e: "fullscreen"): void;
 }>();
+
+const { repositoryUrl } = useRuntimeConfig().public;
 </script>
 
 <template>
@@ -24,7 +26,7 @@ defineEmits<{
 
     <!-- VsCode -->
     <iframe
-      src="https://github1s.com/kalix127/kalix127"
+      :src="repositoryUrl"
       :class="cn('h-full w-full bg-background', $props.class)"
       sandbox="allow-scripts allow-same-origin allow-forms"
       referrerpolicy="no-referrer"

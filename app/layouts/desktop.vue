@@ -19,6 +19,8 @@ const { backgroundImage, isShowAppsOverlayVisible }
       <LazyOverlayAppsList v-if="isShowAppsOverlayVisible" />
     </Transition>
 
+    <DesktopProjectInfo />
+
     <!-- Desktop -->
     <div class="relative max-h-[100svh] max-w-[100svw]">
       <Topbar class="absolute left-0 top-0 w-full" />

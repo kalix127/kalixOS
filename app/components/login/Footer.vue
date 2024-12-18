@@ -4,18 +4,35 @@ import { desktopEnvironments } from "@/constants";
 const globalStore = useGlobalStore();
 const { loginView, desktopEnvironment } = storeToRefs(globalStore);
 
-const { github, linkedin } = useRuntimeConfig().public.socialUrl;
+const { t } = useI18n();
+const { githubUrl, linkedinUrl, repositoryUrl, twitterUrl, redditUrl }
+  = useRuntimeConfig().public;
 
 const socialLinks = [
   {
-    name: "Github",
-    icon: "logo:github",
-    url: github,
+    name: t("github_repository"),
+    icon: "gnome:branch",
+    url: repositoryUrl,
   },
   {
-    name: "Linkedin",
+    name: t("github_profile"),
+    icon: "logo:github",
+    url: githubUrl,
+  },
+  {
+    name: t("linkedin_profile"),
     icon: "logo:linkedin",
-    url: linkedin,
+    url: linkedinUrl,
+  },
+  {
+    name: t("twitter_profile"),
+    icon: "logo:twitter",
+    url: twitterUrl,
+  },
+  {
+    name: t("reddit_profile"),
+    icon: "logo:reddit",
+    url: redditUrl,
   },
 ];
 </script>
@@ -47,14 +64,14 @@ const socialLinks = [
                 <Icon
                   class="rounded-[calc(var(--radius)+0.5px)]"
                   :name="social.icon"
-                  size="36"
+                  size="32"
                   mode="svg"
                 />
               </NuxtLink>
             </TooltipTrigger>
             <TooltipContent
               :side-offset="6"
-              class="w-fit rounded-lg text-sm"
+              class="w-fit rounded-lg text-sm font-medium"
             >
               <p>{{ social.name }}</p>
             </TooltipContent>
@@ -63,7 +80,7 @@ const socialLinks = [
 
         <!-- Social Skeleton -->
         <template #fallback>
-          <Skeleton class="h-8 w-36 rounded-md" />
+          <Skeleton class="h-8 w-56 rounded-md" />
         </template>
       </ClientOnly>
     </div>

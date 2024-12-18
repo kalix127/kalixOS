@@ -975,8 +975,10 @@ export function handleNeofetch(term: Terminal, username: string): void {
   const { memoryUsedPercentage } = storeToRefs(useGlobalStore());
   const memoryUsed = Math.round((memoryUsedPercentage.value / 100) * 15406);
 
+  const { githubUrl } = useRuntimeConfig().public;
+
   // Links
-  const authorLink = generateLink("https://github.com/kalix127", "@kalix127");
+  const authorLink = generateLink(githubUrl, "@kalix127");
   const themeLink = generateLink(
     "https://github.com/lassekongo83/adw-gtk3",
     "adw-gtk3 [GTK2/3]",

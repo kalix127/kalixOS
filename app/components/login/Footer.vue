@@ -71,7 +71,7 @@ const socialLinks = [
             </TooltipTrigger>
             <TooltipContent
               :side-offset="6"
-              class="w-fit rounded-lg text-sm"
+              class="w-fit rounded-lg text-sm font-medium"
             >
               <p>{{ social.name }}</p>
             </TooltipContent>

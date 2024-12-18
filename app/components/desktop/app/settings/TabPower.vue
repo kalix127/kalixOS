@@ -46,7 +46,7 @@ function toggleDimScreen() {
           is-last
         >
           <template #action>
-            100 %
+            <span class="font-medium"> 100 % </span>
           </template>
         </SettingsOption>
       </SettingsOptionGroup>
@@ -79,10 +79,10 @@ function toggleDimScreen() {
                 (value) => updateApp('settings', { isDropdownOpen: value })
               "
             >
-              <SelectTrigger class="h-9 w-fit gap-2 bg-transparent ring-0">
+              <SelectTrigger class="h-9 w-fit gap-2 bg-transparent ring-0 font-medium">
                 <SelectValue :placeholder="$t('never')" />
               </SelectTrigger>
-              <SelectContent class="z-[100000]">
+              <SelectContent class="z-[100000] font-medium">
                 <SelectGroup>
                   <SelectItem value="0">
                     {{ $t("never") }}

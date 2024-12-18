@@ -17,7 +17,7 @@ function closeMenu() {
     :title="$t('bluetooth')"
     icon="gnome:bluetooth-on"
   >
-    <div
+    <span
       class="text-md grid place-content-center p-6 text-center font-bold text-muted-foreground/70 sm:text-lg"
     >
       {{
@@ -25,7 +25,7 @@ function closeMenu() {
           ? $t("bluetooth_enabled_description")
           : $t("bluetooth_disabled_description")
       }}
-    </div>
+    </span>
   </TopbarMenu>
 </template>
 

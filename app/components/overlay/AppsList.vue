@@ -73,11 +73,8 @@ function closeOverlay() {
           class="flex size-36 select-none flex-col items-center justify-center gap-2 rounded-3xl transition-colors duration-300 hover:bg-popover"
           @click.stop="() => handleOpenApp(app)"
         >
-          <Icon
-            :name="app.icon"
-            size="65"
-          />
-          <span class="text-sm">
+          <Icon :name="app.icon" size="65" />
+          <span class="text-sm font-medium">
             {{ app.isTranslated ? $t(app.name) : app.name }}
           </span>
         </div>

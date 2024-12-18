@@ -23,10 +23,10 @@ const displaySegments = computed(() => {
 
   const mappedSegments = pathSegments.map((segment, index) => {
     if (segment === "home")
-      return { name: "Home", id: nodes.value[index].id };
+      return { name: "Home", id: nodes.value[index]?.id };
     return {
       name: truncateSegment(segment, maxSegmentLength),
-      id: nodes.value[index].id,
+      id: nodes.value[index]?.id,
     };
   });
 

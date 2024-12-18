@@ -53,15 +53,9 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
       "
       @click="handleClick"
     >
-      <div
-        v-if="label"
-        class="flex flex-col gap-1"
-      >
-        <span>{{ label }}</span>
-        <span
-          v-if="description"
-          class="text-xs text-muted-foreground"
-        >{{
+      <div v-if="label" class="flex flex-col gap-1">
+        <span class="font-medium">{{ label }}</span>
+        <span v-if="description" class="text-xs text-muted-foreground">{{
           description
         }}</span>
       </div>

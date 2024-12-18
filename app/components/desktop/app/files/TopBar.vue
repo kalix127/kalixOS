@@ -250,7 +250,7 @@ function copyLocation() {
               />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent class="z-[50000] min-w-40">
+          <DropdownMenuContent class="z-[50000] min-w-40 font-medium">
             <div
               v-for="option in generalActions"
               :key="option.label"

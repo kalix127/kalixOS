@@ -45,7 +45,7 @@ const { isOpen, targetType, targetNode, contextMenuStyle, menuOptions }
             <DropdownMenuItem
               v-else
               :inset="targetType !== 'dock'"
-              class="duration-0"
+              class="duration-0 font-medium"
               :class="{ 'min-h-9': targetType === 'dock' }"
               @click="option.action"
             >

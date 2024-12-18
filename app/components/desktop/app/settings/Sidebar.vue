@@ -45,7 +45,7 @@ const items = computed(() => [
     label: t("bluetooth"),
     icon: "gnome:bluetooth-on",
     description: t("tab_bluetooth_description"),
-    translationKeys: ["bluetooth", "bluetooth_disabled", "bluetooth_enabled"],
+    translationKeys: ["bluetooth", "bluetooth_disabled"],
   },
   {
     isSeparator: true,
@@ -176,7 +176,7 @@ function toggleSearch() {
   >
     <!-- Top-Sidebar -->
     <div
-      class="hidden sm:block"
+      class="hidden sm:block pt-1"
       @mouseenter.stop="() => setDraggable(true)"
       @mouseleave.stop="() => setDraggable(false)"
     >

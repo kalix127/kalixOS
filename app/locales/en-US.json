@@ -41,6 +41,8 @@
   "3_minutes": "3 minutes",
   "4_minutes": "4 minutes",
   "5_minutes": "5 minutes",
+  "about_project": "About the project",
+  "about_project_description": "A web-based Linux desktop environment built to recreate my personal desktop setup. Created just for fun, prioritizing aesthetics and details over efficiency. It features a fully functional window management system, file explorer, terminal, and various system utilities. While not perfect, it looks pretty cool! 🚀",
   "add_picture": "Add picture",
   "add_to_bookmarks": "Add to bookmarks",
   "airplane_mode": "Airplane Mode",

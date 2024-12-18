@@ -21,7 +21,7 @@ function handleNotListed() {
       @click="handleSelectUser"
     >
       <div
-        class="flex min-h-16 min-w-72 items-center gap-4 rounded-xl bg-secondary/90 p-1.5 hover:bg-secondary group-focus-visible:ring-2 group-focus-visible:ring-primary/70"
+        class="flex min-h-16 min-w-72 items-center gap-4 rounded-xl bg-secondary/90 p-1.5 hover:bg-secondary group-hover:ring-2 group-hover:ring-primary/60"
       >
         <div class="grid place-content-center rounded-full bg-accent p-3">
           <Icon
@@ -29,7 +29,7 @@ function handleNotListed() {
             size="28"
           />
         </div>
-        <span class="font-bold"> Gianluca </span>
+        <span class="font-semibold"> Gianluca </span>
       </div>
     </button>
     <Button

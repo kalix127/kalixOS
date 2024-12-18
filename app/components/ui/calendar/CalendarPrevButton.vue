@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed } from "vue";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   CalendarPrev,
   type CalendarPrevProps,
   useForwardProps,
 } from "radix-vue";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { computed, type HTMLAttributes } from "vue";
 
 const props = defineProps<
   CalendarPrevProps & { class?: HTMLAttributes["class"] }
@@ -33,7 +33,10 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
   >
     <slot>
-      <Icon name="gnome:arrow-left" size="18" />
+      <Icon
+        name="gnome:arrow-left"
+        size="18"
+      />
     </slot>
   </CalendarPrev>
 </template>

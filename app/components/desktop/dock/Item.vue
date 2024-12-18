@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"];
+  app: AppNode;
+}>();
 
 const emit = defineEmits<{
   (e: "openApp", app: AppNode): void;
   (e: "context", event: MouseEvent, app: AppNode): void;
 }>();
 
-const props = defineProps<{
-  class?: HTMLAttributes["class"];
-  app: AppNode;
-}>();
 const { app } = toRefs(props);
 
 function handleClick() {
   emit("openApp", app.value);
-
-  if (app.value.isOpen) return;
 }
 </script>
 
@@ -28,8 +27,6 @@ function handleClick() {
   >
     <Button
       :aria-label="$t('seo.aria.open_app', { app: app.name })"
-      @contextmenu.prevent="(event) => $emit('context', event, app)"
-      @click="handleClick"
       variant="ghost"
       size="icon"
       :class="
@@ -38,8 +35,13 @@ function handleClick() {
           $props.class,
         )
       "
+      @contextmenu.prevent="(event) => $emit('context', event, app)"
+      @click="handleClick"
     >
-      <Icon :name="app.icon" class="size-9 sm:size-10" />
+      <Icon
+        :name="app.icon"
+        class="size-9 sm:size-10"
+      />
       <div
         v-if="app.isOpen"
         class="absolute bottom-0.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-white"

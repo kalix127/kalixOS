@@ -7,7 +7,7 @@ useHead({
 </script>
 
 <template>
-  <main class="bg-black h-[100svh]"></main>
+  <main class="bg-black h-[100svh]" />
 </template>
 
 <style scoped></style>

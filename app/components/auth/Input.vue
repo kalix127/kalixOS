@@ -13,9 +13,9 @@ const { name, placeholder, disabled, inputClasses, isLoading } = toRefs(props);
 const initialType = ref(props.type);
 const isPasswordVisible = ref(false);
 
-const toggleVisibility = () => {
+function toggleVisibility() {
   isPasswordVisible.value = !isPasswordVisible.value;
-};
+}
 
 const type = computed(() => {
   if (props.type === "password") {
@@ -26,17 +26,20 @@ const type = computed(() => {
 </script>
 
 <template>
-  <FormField v-slot="{ componentField }" :name="name">
+  <FormField
+    v-slot="{ componentField }"
+    :name="name"
+  >
     <FormItem class="space-y-4">
       <FormControl>
         <div class="relative flex items-center gap-4">
           <Input
+            v-focus
             :class="inputClasses"
             :placeholder="placeholder"
             :type="type"
             :disabled="disabled"
             autocomplete="one-time-code"
-            v-focus
             v-bind="componentField"
           />
           <template v-if="initialType === 'password'">
@@ -47,14 +50,14 @@ const type = computed(() => {
               @click="toggleVisibility"
             >
               <Icon
+                v-show="isPasswordVisible"
                 name="gnome:password-show-off"
                 size="20"
-                v-show="isPasswordVisible"
               />
               <Icon
+                v-show="!isPasswordVisible"
                 name="gnome:password-show-on"
                 size="20"
-                v-show="!isPasswordVisible"
               />
             </button>
           </template>

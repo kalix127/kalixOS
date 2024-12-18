@@ -8,7 +8,10 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <Transition mode="out-in">
         <!-- Bluetooth Disabled -->
-        <div class="grid place-content-center" v-if="!isBluetoothEnabled">
+        <div
+          v-if="!isBluetoothEnabled"
+          class="grid place-content-center"
+        >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:bluetooth-off"
@@ -25,7 +28,10 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
         </div>
 
         <!-- Bluetooth Enabled -->
-        <div class="grid place-content-center" v-else>
+        <div
+          v-else
+          class="grid place-content-center"
+        >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
               name="gnome:bluetooth-on"

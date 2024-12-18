@@ -18,7 +18,8 @@ const localHeight = inject("localHeight") as Ref<number>;
 const terminalElement = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-  if (!terminalElement.value || !localWidth.value || !localHeight.value) return;
+  if (!terminalElement.value || !localWidth.value || !localHeight.value)
+    return;
   const { term } = useTerminal(terminalElement.value);
 
   // Necessary to make it responsive
@@ -46,7 +47,10 @@ onMounted(() => {
     />
 
     <!-- Terminal -->
-    <div ref="terminalElement" class="bg-[#161420]"></div>
+    <div
+      ref="terminalElement"
+      class="bg-[#161420]"
+    />
   </div>
 </template>
 

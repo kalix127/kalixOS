@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import { addUserSchema, type AddUserForm } from "@/validations/auth.schema";
+import { type AddUserForm, addUserSchema } from "@/validations/auth.schema";
 
 const { isLoading, handleBack, loginView } = useAuth();
 const { setUsername } = useGlobalStore();
 
-const onSubmit = async (
-  values: AddUserForm,
-  setErrors: (errors: any) => void,
-) => {
+async function onSubmit(values: AddUserForm) {
   setUsername(values.username);
   loginView.value = "enterPassword";
-};
+}
 </script>
 
 <template>
   <AuthForm
-    :validationSchema="addUserSchema"
-    :onSubmit="onSubmit"
-    :isLoading="isLoading"
-    :showBackButton="true"
+    :validation-schema="addUserSchema"
+    :on-submit="onSubmit"
+    :is-loading="isLoading"
+    :show-back-button="true"
     @back="handleBack"
   >
     <template #fields>
@@ -26,7 +23,7 @@ const onSubmit = async (
         name="username"
         type="text"
         placeholder="Username"
-        inputClasses="h-9 bg-secondary pr-10"
+        input-classes="h-9 bg-secondary pr-10"
         :disabled="isLoading"
       />
     </template>

@@ -11,7 +11,6 @@ defineEmits<{
   (e: "minimize"): void;
   (e: "fullscreen"): void;
 }>();
-
 </script>
 
 <template>
@@ -34,7 +33,7 @@ defineEmits<{
       height="100%"
       allow="clipboard-read; clipboard-write;"
       title="Brave"
-    ></iframe>
+    />
   </div>
 </template>
 

@@ -33,7 +33,10 @@ const socialLinks = [
           :delay-duration="100"
         >
           <Tooltip>
-            <TooltipTrigger :default-open="false" as-child>
+            <TooltipTrigger
+              :default-open="false"
+              as-child
+            >
               <NuxtLink
                 :to="social.url"
                 :external="true"
@@ -49,7 +52,10 @@ const socialLinks = [
                 />
               </NuxtLink>
             </TooltipTrigger>
-            <TooltipContent :side-offset="6" class="w-fit rounded-lg text-sm">
+            <TooltipContent
+              :side-offset="6"
+              class="w-fit rounded-lg text-sm"
+            >
               <p>{{ social.name }}</p>
             </TooltipContent>
           </Tooltip>
@@ -67,7 +73,10 @@ const socialLinks = [
       <PopoverTrigger
         class="absolute bottom-4 right-4 grid place-items-center rounded-full bg-secondary p-3 sm:right-8"
       >
-        <Icon name="gnome:settings" size="16" />
+        <Icon
+          name="gnome:settings"
+          size="16"
+        />
       </PopoverTrigger>
       <PopoverContent class="mr-2 w-fit rounded-2xl">
         <RadioGroup v-model="desktopEnvironment">
@@ -76,7 +85,10 @@ const socialLinks = [
             :key="environment"
             class="flex items-center space-x-2"
           >
-            <RadioGroupItem :id="environment" :value="environment" />
+            <RadioGroupItem
+              :id="environment"
+              :value="environment"
+            />
             <Label :for="environment">{{
               $t(`desktop_environment.${environment}`)
             }}</Label>

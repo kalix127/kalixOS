@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
 
 const props = defineProps<{
   validationSchema: any;
@@ -19,7 +19,7 @@ const { handleSubmit, setErrors } = useForm({
   initialValues: props.initialValues || {},
 });
 
-const submitHandler = handleSubmit((values) =>
+const submitHandler = handleSubmit(values =>
   props.onSubmit(values, setErrors),
 );
 </script>
@@ -27,10 +27,18 @@ const submitHandler = handleSubmit((values) =>
 <template>
   <div class="flex w-72 max-w-screen-xs flex-col items-center gap-8">
     <div class="grid place-content-center rounded-full bg-secondary p-6">
-      <Icon name="gnome:avatar" size="110" />
+      <Icon
+        name="gnome:avatar"
+        size="110"
+      />
     </div>
 
-    <h1 v-if="title" class="text-2xl font-extrabold">{{ title }}</h1>
+    <h1
+      v-if="title"
+      class="text-2xl font-extrabold"
+    >
+      {{ title }}
+    </h1>
 
     <form @submit.prevent="submitHandler">
       <div class="relative flex items-center gap-4">
@@ -43,7 +51,10 @@ const submitHandler = handleSubmit((values) =>
           :disabled="isLoading"
           @click="onBack"
         >
-          <Icon name="gnome:arrow-long-left" size="18" />
+          <Icon
+            name="gnome:arrow-long-left"
+            size="18"
+          />
         </Button>
         <slot name="fields" />
       </div>

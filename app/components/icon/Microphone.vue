@@ -11,7 +11,7 @@ const microphoneIcon = computed(() => {
     case inputVolume.value > 50:
       return "gnome:microphone-2";
     case inputVolume.value > 0:
-      return "gnome:microphone-1"; 
+      return "gnome:microphone-1";
     default:
       return "gnome:microphone-off";
   }
@@ -19,7 +19,10 @@ const microphoneIcon = computed(() => {
 </script>
 
 <template>
-  <Icon :name="microphoneIcon" :size="size" />
+  <Icon
+    :name="microphoneIcon"
+    :size="size"
+  />
 </template>
 
 <style scoped></style>

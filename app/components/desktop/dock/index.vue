@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import {
-  useSwipe,
-  watchDebounced,
   breakpointsTailwind,
   useBreakpoints,
+  useSwipe,
+  watchDebounced,
 } from "@vueuse/core";
+
 const desktopStore = useDesktopStore();
-const { isDockVisible, isDockPinned, hasAppFullscreen } =
-  storeToRefs(desktopStore);
+const { isDockVisible, isDockPinned, hasAppFullscreen }
+  = storeToRefs(desktopStore);
 
 const dockTriggerRef = ref<HTMLElement | null>(null);
 const { openApp } = useDesktopStore();
@@ -22,12 +23,12 @@ watch(direction, (newVal) => {
   }
 });
 
-const setVisibility = (value: boolean) => {
+function updateDockVisibility() {
   if (hasAppFullscreen.value) {
     isDockPinned.value = false;
   }
   isDockVisible.value = true;
-};
+}
 
 // Hide the dock when an app is fullscreen, but still show on hover
 watchDebounced(
@@ -50,24 +51,26 @@ onMounted(() => {
 
 <template>
   <TooltipProvider :delay-duration="0">
-    <Tooltip :open="isDockVisible" :default-open="isDockVisible">
+    <Tooltip
+      :open="isDockVisible"
+      :default-open="isDockVisible"
+    >
       <div class="relative">
         <TooltipTrigger
-          :aria-label="$t('seo.aria.dockbar_trigger')"
           ref="dockTriggerRef"
+          :aria-label="$t('seo.aria.dockbar_trigger')"
           class="absolute bottom-0 left-0 z-[50000] h-10 w-full cursor-default sm:h-6"
-          @mouseenter="() => setVisibility(true)"
-          @mouseleave="() => setVisibility(false)"
-        >
-        </TooltipTrigger>
+          @mouseenter="updateDockVisibility"
+          @mouseleave="updateDockVisibility"
+        />
         <TooltipContent
           :aria-label="$t('seo.aria.dockbar')"
           :side-offset="-12"
           class="depth-shadow z-[50000] rounded-3xl p-0"
-          @mouseenter="() => setVisibility(true)"
-          @mouseleave="() => setVisibility(false)"
+          @mouseenter="updateDockVisibility"
+          @mouseleave="updateDockVisibility"
         >
-          <DesktopDockContent @close="() => setVisibility(false)" />
+          <DesktopDockContent @close="updateDockVisibility" />
         </TooltipContent>
       </div>
     </Tooltip>

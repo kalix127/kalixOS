@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
-import { type HTMLAttributes } from "vue";
+
+defineProps<{
+  class?: HTMLAttributes["class"];
+}>();
 
 defineEmits<{
   (e: "close"): void;
   (e: "minimize"): void;
   (e: "fullscreen"): void;
-}>();
-
-defineProps<{
-  class?: HTMLAttributes["class"];
 }>();
 
 const { currentSettingsTab } = storeToRefs(useGlobalStore());
@@ -47,7 +47,7 @@ const actions = computed(() => [
     @dblclick="() => $emit('fullscreen')"
   >
     <!-- Empty div -->
-    <div></div>
+    <div />
 
     <!-- Title -->
     <div
@@ -69,7 +69,10 @@ const actions = computed(() => [
         @click.stop="() => $emit(action.emit)"
         @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" />
+        <Icon
+          :name="action.icon"
+          size="18"
+        />
       </Button>
     </div>
   </div>

@@ -4,7 +4,6 @@ const { t } = useI18n();
 const globalStore = useGlobalStore();
 
 const {
-  volume,
   isWifiEnabled,
   isWiredEnabled,
   isBluetoothEnabled,
@@ -113,10 +112,16 @@ const items = computed(() => [
         ]"
         @click="item.handler"
       >
-        <Icon :name="item.icon" size="16" />
+        <Icon
+          :name="item.icon"
+          size="16"
+        />
 
         <!-- Only for the Wifi Button -->
-        <div class="flex flex-col items-start" v-if="item.label === 'wifi'">
+        <div
+          v-if="item.label === 'wifi'"
+          class="flex flex-col items-start"
+        >
           <span class="text-sm font-extrabold">
             {{ item.name }}
           </span>
@@ -128,7 +133,10 @@ const items = computed(() => [
           </span>
         </div>
 
-        <span v-else class="text-nowrap text-sm font-extrabold">
+        <span
+          v-else
+          class="text-nowrap text-sm font-extrabold"
+        >
           {{ item.name }}
         </span>
       </button>
@@ -145,7 +153,10 @@ const items = computed(() => [
         ]"
         @click="item.menuHandler"
       >
-        <Icon name="gnome:arrow-long-right" size="18" />
+        <Icon
+          name="gnome:arrow-long-right"
+          size="18"
+        />
       </button>
     </div>
   </div>

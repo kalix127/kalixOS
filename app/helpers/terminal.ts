@@ -1,24 +1,24 @@
-import { Terminal } from "@xterm/xterm";
 import type {
-  Node,
   CommandSpec,
+  FolderNode,
+  Node,
   ParsedArgs,
   PermissionsNode,
-  FolderNode,
   ShortcutNode,
 } from "@/types";
-import {
-  splitPath,
-  resolvePath,
-  getNextPid,
-  findNodeByIdRecursive,
-} from "@/helpers";
-import { useWindowSize, useTimestamp } from "@vueuse/core";
-import { helpMessages } from "@/constants/helpMessages";
+import type { Terminal } from "@xterm/xterm";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
+import { helpMessages } from "@/constants/helpMessages";
+import {
+  findNodeByIdRecursive,
+  getNextPid,
+  resolvePath,
+  splitPath,
+} from "@/helpers";
+import { useTimestamp, useWindowSize } from "@vueuse/core";
 
-const { editNode, createNode, moveNode, deleteNode, createNodeShortcut } =
-  useDesktopStore();
+const { editNode, createNode, moveNode, deleteNode, createNodeShortcut }
+  = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
 // Command handlers
@@ -85,21 +85,21 @@ export function handleLs(
 
   const filteredNodes = showAll
     ? nodes
-    : nodes.filter((node) => !node.name.startsWith("."));
+    : nodes.filter(node => !node.name.startsWith("."));
 
   if (longFormat) {
     const maxOwnerLength = Math.max(
-      ...filteredNodes.map((node) => node.owner.length),
+      ...filteredNodes.map(node => node.owner.length),
       5,
     );
     const maxGroupLength = Math.max(
-      ...filteredNodes.map((node) => node.group.length),
+      ...filteredNodes.map(node => node.group.length),
       5,
     );
     const maxSizeLength = Math.max(
       ...filteredNodes.map((node) => {
-        const size =
-          node.type === "file" ? `${node.content?.length ?? 0}` : "4096";
+        const size
+          = node.type === "file" ? `${node.content?.length ?? 0}` : "4096";
         return size.length;
       }),
       4,
@@ -126,7 +126,7 @@ export function handleLs(
     return true;
   }
   const output = filteredNodes
-    .map((node) => formatNodeName(node, fileSystem))
+    .map(node => formatNodeName(node, fileSystem))
     .join("  ");
   if (output.trim() !== "") {
     term.write(`\r\n${output}`);
@@ -160,8 +160,8 @@ export function handleLn(
   // Resolve link path
   const linkPathSegments = splitPath(linkPath);
   const linkName = linkPathSegments.pop()!;
-  const linkParentPath =
-    linkPathSegments.length > 0 ? linkPathSegments.join("/") : "./";
+  const linkParentPath
+    = linkPathSegments.length > 0 ? linkPathSegments.join("/") : "./";
 
   // Check if link already exists at destination
   const linkNode = resolvePath(fileSystem, currentDirectoryNode, linkPath);
@@ -219,21 +219,23 @@ export function handleTree(
           return false;
         }
         const levelArg = args[i + 1];
-        const parsedLevel = parseInt(levelArg, 10);
+        const parsedLevel = Number.parseInt(levelArg, 10);
 
         // Validate the level argument
-        if (isNaN(parsedLevel) || parsedLevel < 1) {
+        if (Number.isNaN(parsedLevel) || parsedLevel < 1) {
           term.write(`\r\ntree: invalid level: '${levelArg}'`);
           return false;
         }
 
         level = parsedLevel;
         i += 2; // Skip the flag and its value
-      } else if (arg.startsWith("-")) {
+      }
+      else if (arg.startsWith("-")) {
         // Handle unknown flags
         term.write(`\r\ntree: unknown option '${arg}'`);
         return false;
-      } else {
+      }
+      else {
         // Positional argument (path)
         targetPath = arg;
         i += 1;
@@ -260,15 +262,16 @@ export function handleTree(
     // Add the root node
     if (targetPath === "." || targetPath === "") {
       lines.push(".");
-    } else {
+    }
+    else {
       lines.push(formatNodeName(targetNode));
     }
 
     // Traverse the tree and populate the lines array
     if (
-      targetNode.type === "folder" &&
-      targetNode.children &&
-      targetNode.children.length > 0
+      targetNode.type === "folder"
+      && targetNode.children
+      && targetNode.children.length > 0
     ) {
       targetNode.children.forEach((child, index) => {
         const isLastChild = index === targetNode.children!.length - 1;
@@ -282,7 +285,8 @@ export function handleTree(
     });
 
     return true;
-  } catch (error) {
+  }
+  catch (error) {
     term.write(`\r\ntree: an unexpected error occurred.`);
     console.error("Error in handleTree:", error);
     return false;
@@ -357,10 +361,14 @@ export function handleChmod(
 
     if (!/[ugo]/.test(mode[0]) || mode.startsWith("a")) {
       targets.push("owner", "group", "others");
-    } else {
-      if (mode.includes("u")) targets.push("owner");
-      if (mode.includes("g")) targets.push("group");
-      if (mode.includes("o")) targets.push("others");
+    }
+    else {
+      if (mode.includes("u"))
+        targets.push("owner");
+      if (mode.includes("g"))
+        targets.push("group");
+      if (mode.includes("o"))
+        targets.push("others");
     }
 
     const operation = mode.match(/[+-=]/)?.[0];
@@ -395,8 +403,9 @@ export function handleChmod(
     }
 
     return true;
-  } else if (/^[0-7]{3}$/.test(mode)) {
-    const values = mode.split("").map((char) => parseInt(char, 8));
+  }
+  else if (/^[0-7]{3}$/.test(mode)) {
+    const values = mode.split("").map(char => Number.parseInt(char, 8));
     const newPermissions: PermissionsNode = {
       owner: {
         read: !!(values[0] & 4),
@@ -424,7 +433,8 @@ export function handleChmod(
     }
 
     return true;
-  } else {
+  }
+  else {
     term.write(`\r\nchmod: invalid mode: '${mode}'`);
     return false;
   }
@@ -468,7 +478,7 @@ export function handleTouch(
 
   const folderNode = targetDirectory as FolderNode;
   const existingNode = folderNode.children.find(
-    (child) => child.name === fileName,
+    child => child.name === fileName,
   );
 
   if (!existingNode) {
@@ -529,7 +539,7 @@ export function handleMkdir(
 
   const folderNode = targetDirectory as FolderNode;
   const existingNode = folderNode.children.find(
-    (child) => child.name === dirName,
+    child => child.name === dirName,
   );
 
   if (!existingNode) {
@@ -545,7 +555,8 @@ export function handleMkdir(
       );
       return false;
     }
-  } else {
+  }
+  else {
     term.write(`\r\nmkdir: cannot create directory '${dirPath}': File exists`);
     return false;
   }
@@ -725,13 +736,14 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
     .map((header, idx) => {
       if (idx === 0) {
         return header.padStart(widths[idx]);
-      } else {
+      }
+      else {
         return header.padEnd(widths[idx]);
       }
     })
     .join("  ");
 
-  const fullHeader = headerLine + "\n";
+  const fullHeader = `${headerLine}\n`;
 
   const { processes } = storeToRefs(useDesktopStore());
 
@@ -764,8 +776,8 @@ export function handleKill(term: Terminal, parsedArgs: ParsedArgs): boolean {
     return false;
   }
 
-  const pid = parseInt(positionalArgs[0]);
-  if (isNaN(pid)) {
+  const pid = Number.parseInt(positionalArgs[0]);
+  if (Number.isNaN(pid)) {
     term.write("\r\nkill: argument must be a number");
     return false;
   }
@@ -773,7 +785,7 @@ export function handleKill(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const desktopStore = useDesktopStore();
   const { processes } = storeToRefs(desktopStore);
   const { closeApp } = desktopStore;
-  const process = processes.value.find((p) => p.pid === pid);
+  const process = processes.value.find(p => p.pid === pid);
 
   if (!process) {
     term.write(`\r\nkill: (${pid}) - No such process`);
@@ -799,7 +811,7 @@ export function handlePkill(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const { processes } = storeToRefs(desktopStore);
   const { closeApp } = desktopStore;
   const process = processes.value.find(
-    (p) => p.command.toLowerCase() === command,
+    p => p.command.toLowerCase() === command,
   );
 
   if (!process) {
@@ -859,7 +871,7 @@ export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const headerLine = headers
     .map((header, idx) => header.padStart(widths[idx]))
     .join("  ");
-  const fullHeader = "       " + headerLine + "\n";
+  const fullHeader = `       ${headerLine}\n`;
 
   const memValues = [total, used, free, shared, buffCache, available];
   const swapValues = [swapTotal, swapUsed, swapFree];
@@ -867,7 +879,7 @@ export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const memLine = formatFreeRow("Mem:", memValues, humanReadable, widths);
   const swapLine = formatFreeRow("Swap:", swapValues, humanReadable, widths);
 
-  const output = fullHeader + memLine + "\n" + swapLine;
+  const output = `${fullHeader + memLine}\n${swapLine}`;
 
   term.write(`\r\n${output}`);
   return true;
@@ -893,14 +905,15 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
       if (idx === 0 || idx === headers.length - 1) {
         // Left-align 'Filesystem' and 'Mounted on'
         return header.padEnd(widths[idx]);
-      } else {
+      }
+      else {
         // Right-align numeric headers
         return header.padStart(widths[idx]);
       }
     })
     .join("  ");
 
-  const fullHeader = headerLine + "\n";
+  const fullHeader = `${headerLine}\n`;
 
   // Total size of approximately 1 TB
   const mockFilesystems = [
@@ -974,25 +987,25 @@ export function handleNeofetch(term: Terminal, username: string): void {
   );
 
   const neoFetch = `
-  \x1b[1;36m                    -'                    ${username}\x1b[1;37m@\x1b[1;36m${username}
-  \x1b[1;36m                   .o+'                   \x1b[1;37m-------------------
-  \x1b[1;36m                  'ooo/                   Author:\x1b[1;37m ${authorLink}
-  \x1b[1;36m                 '+oooo:                  OS:\x1b[1;37m Manjaro Linux x86_64 
-  \x1b[1;36m                '+oooooo:                 Host:\x1b[1;37m Laptop A6
-  \x1b[1;36m                -+oooooo+:                Kernel:\x1b[1;37m 6.10.13-3-MANJARO
-  \x1b[1;36m              '/:-:++oooo+:               Uptime:\x1b[1;37m ${readableUptime}
-  \x1b[1;36m             '/++++/+++++++:              Packages:\x1b[1;37m 782 (pacman)
-  \x1b[1;36m            '/++++++++++++++:             Shell:\x1b[1;37m zsh
-  \x1b[1;36m           '/+++ooooooooooooo/'           Resolution:\x1b[1;37m ${resolution} 
-  \x1b[1;36m          ./ooosssso++osssssso+'          DE:\x1b[1;37m GNOME
-  \x1b[1;36m         .oossssso-''''/ossssss+'         VM:\x1b[1;37m Mutter
-  \x1b[1;36m        -osssssso.      :ssssssso.        Theme:\x1b[1;37m ${themeLink}
-  \x1b[1;36m       :osssssss/        osssso+++.       Icons:\x1b[1;37m ${iconLink}
-  \x1b[1;36m      /ossssssss/        +ssssooo/-       Terminal:\x1b[1;37m gnome-terminal
-  \x1b[1;36m    '/ossssso+/:-        -:/+osssso+-     CPU:\x1b[1;37m AMD Ryzen™ 9 5900X 
-  \x1b[1;36m   '+sso+:-'                 '.-/+oso:    GPU:\x1b[1;37m NVIDIA GeForce RTX 4060 Mobile
-  \x1b[1;36m  '++:.                           '-/+/   Memory:\x1b[1;37m ${memoryUsed}MiB / 15406MiB
-  \x1b[1;36m  .'                                 '/   
+  \x1B[1;36m                    -'                    ${username}\x1B[1;37m@\x1B[1;36m${username}
+  \x1B[1;36m                   .o+'                   \x1B[1;37m-------------------
+  \x1B[1;36m                  'ooo/                   Author:\x1B[1;37m ${authorLink}
+  \x1B[1;36m                 '+oooo:                  OS:\x1B[1;37m Manjaro Linux x86_64 
+  \x1B[1;36m                '+oooooo:                 Host:\x1B[1;37m Laptop A6
+  \x1B[1;36m                -+oooooo+:                Kernel:\x1B[1;37m 6.10.13-3-MANJARO
+  \x1B[1;36m              '/:-:++oooo+:               Uptime:\x1B[1;37m ${readableUptime}
+  \x1B[1;36m             '/++++/+++++++:              Packages:\x1B[1;37m 782 (pacman)
+  \x1B[1;36m            '/++++++++++++++:             Shell:\x1B[1;37m zsh
+  \x1B[1;36m           '/+++ooooooooooooo/'           Resolution:\x1B[1;37m ${resolution} 
+  \x1B[1;36m          ./ooosssso++osssssso+'          DE:\x1B[1;37m GNOME
+  \x1B[1;36m         .oossssso-''''/ossssss+'         VM:\x1B[1;37m Mutter
+  \x1B[1;36m        -osssssso.      :ssssssso.        Theme:\x1B[1;37m ${themeLink}
+  \x1B[1;36m       :osssssss/        osssso+++.       Icons:\x1B[1;37m ${iconLink}
+  \x1B[1;36m      /ossssssss/        +ssssooo/-       Terminal:\x1B[1;37m gnome-terminal
+  \x1B[1;36m    '/ossssso+/:-        -:/+osssso+-     CPU:\x1B[1;37m AMD Ryzen™ 9 5900X 
+  \x1B[1;36m   '+sso+:-'                 '.-/+oso:    GPU:\x1B[1;37m NVIDIA GeForce RTX 4060 Mobile
+  \x1B[1;36m  '++:.                           '-/+/   Memory:\x1B[1;37m ${memoryUsed}MiB / 15406MiB
+  \x1B[1;36m  .'                                 '/   
 
 `;
   term.clear();
@@ -1000,7 +1013,7 @@ export function handleNeofetch(term: Terminal, username: string): void {
 }
 
 export function handleHelp(term: Terminal): boolean {
-  const generalHelp = helpMessages["help"];
+  const generalHelp = helpMessages.help;
   term.write(`\r\n${generalHelp}`);
   return true;
 }
@@ -1030,13 +1043,16 @@ export function parseArguments(
               throw new Error(`Option '${arg}' requires a value`);
             }
             flagValues[alias] = value;
-          } else {
+          }
+          else {
             flags.push(alias);
           }
-        } else {
+        }
+        else {
           throw new Error(`Unknown option '${arg}'`);
         }
-      } else {
+      }
+      else {
         const chars = arg.slice(1).split("");
         let consumedValue = false;
         for (let j = 0; j < chars.length; j++) {
@@ -1047,7 +1063,8 @@ export function parseArguments(
               let value = "";
               if (j < chars.length - 1) {
                 value = chars.slice(j + 1).join("");
-              } else {
+              }
+              else {
                 value = args[++i];
               }
               if (!value) {
@@ -1056,10 +1073,12 @@ export function parseArguments(
               flagValues[flag] = value;
               consumedValue = true;
               break;
-            } else {
+            }
+            else {
               flags.push(flag);
             }
-          } else {
+          }
+          else {
             throw new Error(`Unknown option '-${char}'`);
           }
         }
@@ -1067,7 +1086,8 @@ export function parseArguments(
           break;
         }
       }
-    } else {
+    }
+    else {
       positionalArgs.push(arg);
     }
 
@@ -1084,8 +1104,8 @@ export function parseArguments(
     return { flags, flagValues, positionalArgs };
   }
 
-  const requiredArgs =
-    commandSpec.positionalArgs?.filter((arg) => arg.required) || [];
+  const requiredArgs
+    = commandSpec.positionalArgs?.filter(arg => arg.required) || [];
   if (positionalArgs.length < requiredArgs.length) {
     throw new Error(
       `${requiredArgs[positionalArgs.length].name}: missing required argument`,
@@ -1102,7 +1122,7 @@ export function formatUptime(uptime: number): string {
 }
 
 export function generateLink(url: string, label: string): string {
-  return `\x1b]8;;${url}\x07${label}\x1b]8;;\x07`;
+  return `\x1B]8;;${url}\x07${label}\x1B]8;;\x07`;
 }
 
 export function formatNodeName(
@@ -1119,16 +1139,16 @@ export function formatNodeName(
     );
     if (targetNode) {
       // shortcut name in cyan
-      displayName = `\x1b[1;36m${displayName}\x1b[0m`;
+      displayName = `\x1B[1;36m${displayName}\x1B[0m`;
       // Add arrow
       displayName += ` -> `;
       // target color based on its type
       switch (targetNode.type) {
         case "folder":
-          displayName += `\x1b[1;34m${targetNode.name}\x1b[0m`;
+          displayName += `\x1B[1;34m${targetNode.name}\x1B[0m`;
           break;
         case "shortcut":
-          displayName += `\x1b[1;36m${targetNode.name}\x1b[0m`;
+          displayName += `\x1B[1;36m${targetNode.name}\x1B[0m`;
           break;
         default:
           displayName += targetNode.name;
@@ -1139,11 +1159,11 @@ export function formatNodeName(
 
   switch (node.type) {
     case "folder":
-      return `\x1b[1;34m${displayName}\x1b[0m`;
+      return `\x1B[1;34m${displayName}\x1B[0m`;
     case "shortcut":
-      return `\x1b[1;36m${displayName}\x1b[0m`;
+      return `\x1B[1;36m${displayName}\x1B[0m`;
     case "app":
-      return `\x1b[0m\x1b[32m${displayName}\x1b[0m`;
+      return `\x1B[0m\x1B[32m${displayName}\x1B[0m`;
     default:
       return node.name;
   }
@@ -1173,13 +1193,13 @@ function formatPsTime(timestamp: number): string {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-export const formatLsDate = (date: Date): string => {
+export function formatLsDate(date: Date): string {
   const month = date.toLocaleString("en-US", { month: "short" });
   const day = date.getDate();
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${month} ${day} ${hours}:${minutes}`;
-};
+}
 
 /**
  * Generates a random integer between min and max (inclusive).
@@ -1198,7 +1218,8 @@ function getRandomInt(min: number, max: number): number {
  * @returns The formatted string (e.g., "15GiB").
  */
 function formatBytes(kilobytes: number, decimals: number = 1): string {
-  if (kilobytes === 0) return "0B";
+  if (kilobytes === 0)
+    return "0B";
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -1212,13 +1233,13 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
   // Ensure index does not exceed the sizes array
   const index = i < sizes.length ? i : sizes.length - 1;
 
-  return parseFloat((bytes / Math.pow(k, index)).toFixed(dm)) + sizes[index];
+  return Number.parseFloat((bytes / k ** index).toFixed(dm)) + sizes[index];
 }
 
 /**
  * Recursively traverses the file system and builds the tree structure.
  * @param node The current Node.
- * @param prefix The string prefix for the current level (e.g., "│   ", "    ").
+ * @param prefix The string prefix for the current level (e.g., "│   ", "    ").
  * @param isLast Indicates if the current node is the last child of its parent.
  * @param depth The maximum depth to traverse.
  * @param currentDepth The current depth in the traversal.
@@ -1232,7 +1253,8 @@ function traverseTree(
   currentDepth: number,
   lines: string[],
 ): void {
-  if (currentDepth > depth) return;
+  if (currentDepth > depth)
+    return;
 
   // Determine the connector based on whether it's the last child
   const connector = isLast ? "└── " : "├── ";
@@ -1281,9 +1303,9 @@ function formatPermissions(type: string, permissions: PermissionsNode): string {
   }
 
   return (
-    `${typeChar}${permissionString(permissions.owner)}` +
-    `${permissionString(permissions.group)}` +
-    `${permissionString(permissions.others)}`
+    `${typeChar}${permissionString(permissions.owner)}`
+    + `${permissionString(permissions.group)}`
+    + `${permissionString(permissions.others)}`
   );
 }
 
@@ -1307,7 +1329,8 @@ function formatFreeRow(
     .map((val, idx) => {
       if (humanReadable) {
         return formatBytes(val, 1).padStart(widths[idx]);
-      } else {
+      }
+      else {
         return val.toString().padStart(widths[idx]);
       }
     })
@@ -1344,13 +1367,13 @@ function formatDfRow(
 
   // Right-align numeric columns
   const sizeFormatted = humanReadable
-    ? formatBytes(parseInt(size) * 1024)
+    ? formatBytes(Number.parseInt(size) * 1024)
     : size.padStart(widths[1]);
   const usedFormatted = humanReadable
-    ? formatBytes(parseInt(used) * 1024)
+    ? formatBytes(Number.parseInt(used) * 1024)
     : used.padStart(widths[2]);
   const availFormatted = humanReadable
-    ? formatBytes(parseInt(avail) * 1024)
+    ? formatBytes(Number.parseInt(avail) * 1024)
     : avail.padStart(widths[3]);
   const usePercentFormatted = usePercent.padStart(widths[4]);
 

@@ -13,10 +13,10 @@ function stopSearching() {
   >
     <Input
       v-model="searchQuery"
+      v-focus
       :placeholder="$t('search_in_folder')"
       class="h-8 bg-popover pl-8 pr-14 outline-none ring-2 ring-ring/70 ring-offset-0 focus-visible:ring-ring/70 focus-visible:ring-offset-0"
       type="text"
-      v-focus
     />
 
     <!-- Search icon -->

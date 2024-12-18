@@ -18,22 +18,27 @@ function checkBackgroundImage(file: File): boolean {
   return true;
 }
 
-const handleBackgroundChange = (event: Event) => {
+function handleBackgroundChange(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
 
-  if (!file) return;
-  if (!checkBackgroundImage(file)) return;
+  if (!file)
+    return;
+  if (!checkBackgroundImage(file))
+    return;
 
   const imageUrl = URL.createObjectURL(file);
   setBackgroundImage({ url: imageUrl, name: file.name });
-};
+}
 </script>
 
 <template>
   <SettingsContent>
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <!-- Dim screen -->
-      <SettingsOption class="hover:bg-popover" is-first>
+      <SettingsOption
+        class="hover:bg-popover"
+        is-first
+      >
         <template #title>
           <div class="mb-1 flex items-center justify-between gap-2">
             <span class="text-sm font-extrabold tracking-wide">{{
@@ -42,14 +47,17 @@ const handleBackgroundChange = (event: Event) => {
             <label
               class="flex items-center gap-1 rounded-md p-2 text-sm font-extrabold transition-colors duration-100 hover:bg-popover/60"
             >
-              <Icon name="gnome:add" size="20" />
+              <Icon
+                name="gnome:add"
+                size="20"
+              />
               <span> {{ $t("add_picture") }}... </span>
               <input
                 type="file"
                 accept="image/*"
                 class="hidden"
                 @input="handleBackgroundChange"
-              />
+              >
             </label>
           </div>
         </template>
@@ -71,19 +79,25 @@ const handleBackgroundChange = (event: Event) => {
 
                 <!-- Delete button -->
                 <button
+                  v-if="index !== 0"
                   class="absolute right-2 top-2 grid place-content-center rounded-full bg-black/70 p-0.5"
                   @click.stop="() => deleteBackgroundImage(image.url)"
-                  v-if="index !== 0"
                 >
-                  <Icon name="gnome:close" size="14" />
+                  <Icon
+                    name="gnome:close"
+                    size="14"
+                  />
                 </button>
 
                 <!-- Selected indicator -->
                 <div
-                  class="absolute bottom-2 right-2 grid place-content-center rounded-full bg-primary p-0.5"
                   v-if="image.url === backgroundImage.url"
+                  class="absolute bottom-2 right-2 grid place-content-center rounded-full bg-primary p-0.5"
                 >
-                  <Icon name="gnome:checkmark" size="14" />
+                  <Icon
+                    name="gnome:checkmark"
+                    size="14"
+                  />
                 </div>
               </div>
             </TransitionGroup>

@@ -26,7 +26,10 @@ const deviceName = computed(() => {
       <!-- System Details -->
       <SettingsOptionGroup>
         <!-- Operating System -->
-        <SettingsOption :label="$t('operating_system')" is-first>
+        <SettingsOption
+          :label="$t('operating_system')"
+          is-first
+        >
           <template #action>
             <span class="text-muted-foreground"> Manjaro Linux </span>
           </template>
@@ -58,7 +61,10 @@ const deviceName = computed(() => {
         </SettingsOption>
 
         <!-- Windowing System -->
-        <SettingsOption :label="$t('windowing_system')" is-last>
+        <SettingsOption
+          :label="$t('windowing_system')"
+          is-last
+        >
           <template #action>
             <span class="text-muted-foreground"> Wayland </span>
           </template>

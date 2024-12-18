@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import type { Node } from "@/types";
-import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { dragAndDrop } from "@formkit/drag-and-drop/vue";
+import { breakpointsTailwind, until, useBreakpoints } from "@vueuse/core";
 
 definePageMeta({
   layout: "desktop",
@@ -15,8 +15,8 @@ useHead({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, nodeMap } =
-  storeToRefs(desktopStore);
+const { desktopItems, openApps, desktopRef, nodeMap }
+  = storeToRefs(desktopStore);
 const { init, moveNode, updateDesktopItems } = desktopStore;
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
@@ -33,9 +33,9 @@ const draggableItems = computed({
 });
 
 // Context menu handler
-const handleContextMenu = (event: MouseEvent) => {
+function handleContextMenu(event: MouseEvent) {
   openContextMenu(event.clientX, event.clientY, "desktop", null, true);
-};
+}
 
 const draggedNodeId = ref<string | null>(null);
 const targetNodeId = ref<string | null>(null);
@@ -63,7 +63,8 @@ onMounted(async () => {
   init();
 
   await until(desktopGridRef).toBeTruthy();
-  if (!desktopGridRef.value) return;
+  if (!desktopGridRef.value)
+    return;
 
   // Initialize drag-and-drop
   dragAndDrop({
@@ -73,7 +74,7 @@ onMounted(async () => {
     disabled: isMobileOrTablet.value,
 
     // Assign dragged and target node ids on mobile
-    handleNodePointerover(data, state) {
+    handleNodePointerover(data) {
       if (!data.detail.state?.currentTargetValue) {
         return;
       }
@@ -93,12 +94,12 @@ onMounted(async () => {
     },
 
     // Handle drop node for desktop
-    handleNodeDrop(data, state) {
+    handleNodeDrop() {
       handleDrop();
     },
 
     // Handle drop node for mobile
-    handleNodePointerup(data, state) {
+    handleNodePointerup() {
       handleDrop();
     },
   });
@@ -110,33 +111,39 @@ onUnmounted(() => {
   const filesStore = useFilesStore();
   useFilesStore().$dispose();
   // Delete the store state
-  delete useNuxtApp().$pinia.state.value[desktopStore.$id];
-  delete useNuxtApp().$pinia.state.value[contextMenuStore.$id];
-  delete useNuxtApp().$pinia.state.value[filesStore.$id];
+  desktopStore.$reset();
+  contextMenuStore.$reset();
+  filesStore.$reset();
 });
 </script>
 
 <template>
-  <main ref="desktopRef" class="relative select-none">
+  <main
+    ref="desktopRef"
+    class="relative select-none"
+  >
     <!-- Apps -->
     <TransitionGroup name="apps">
-      <template v-for="app in openApps" :key="app.id">
-        <LazyDesktopWindow v-show="!app.isMinimized" :app="app" />
-      </template>
+      <LazyDesktopWindow
+        v-for="app in openApps"
+        v-show="!app.isMinimized"
+        :key="app.id"
+        :app="app"
+      />
     </TransitionGroup>
 
     <!-- Desktop grid wrapper -->
     <DesktopGrid
+      ref="desktopGridRef"
       :aria-label="$t('seo.aria.desktop_grid')"
       @context="handleContextMenu"
-      ref="desktopGridRef"
     >
       <DesktopNode
         v-for="item in desktopItems"
         :key="item.id"
         :item="item"
-        :isDesktop="true"
-        :isGridLayout="true"
+        :is-desktop="true"
+        :is-grid-layout="true"
       />
     </DesktopGrid>
   </main>

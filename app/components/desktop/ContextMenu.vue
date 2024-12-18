@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
-  useContextMenu();
+const { isOpen, targetType, targetNode, contextMenuStyle, menuOptions }
+  = useContextMenu();
 </script>
+
 <template>
   <Teleport to="body">
     <DropdownMenu :open="isOpen">
@@ -11,7 +12,10 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
         :style="contextMenuStyle"
         as-child
       >
-        <div class="space-y-2" @contextmenu.prevent="">
+        <div
+          class="space-y-2"
+          @contextmenu.prevent=""
+        >
           <!-- Target name -->
           <div
             v-if="targetType === 'dock'"
@@ -26,21 +30,24 @@ const { isOpen, x, y, targetType, targetNode, contextMenuStyle, menuOptions } =
                   : targetNode?.name
               }}
             </span>
-            <div class="h-px w-full bg-muted-foreground/15"></div>
+            <div class="h-px w-full bg-muted-foreground/15" />
           </div>
 
           <!-- Options  -->
-          <div v-for="(option, index) in menuOptions" :key="option.label">
+          <div
+            v-for="(option, index) in menuOptions"
+            :key="option.label"
+          >
             <DropdownMenuSeparator
               v-if="'isSeparator' in option && option.isSeparator"
               :class="[index === 0 ? 'hidden' : '']"
             />
             <DropdownMenuItem
               v-else
-              @click="option.action"
               :inset="targetType !== 'dock'"
               class="duration-0"
               :class="{ 'min-h-9': targetType === 'dock' }"
+              @click="option.action"
             >
               {{ option.label }}
             </DropdownMenuItem>

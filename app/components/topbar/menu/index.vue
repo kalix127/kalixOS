@@ -16,7 +16,10 @@ defineProps<{
             class="grid place-content-center rounded-full p-2"
             :class="[isEnabled ? 'bg-primary' : 'bg-accent']"
           >
-            <Icon :name="icon" size="24" />
+            <Icon
+              :name="icon"
+              size="24"
+            />
           </div>
           <span class="sm:text-xl text-lg font-extrabold">
             {{ title }}

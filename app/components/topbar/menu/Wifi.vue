@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { useTimeoutFn } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
-import type { WifiNetwork } from "@/types";
 
-const { isWifiMenuOpen, isWifiEnabled, isAirplaneModeEnabled } =
-  storeToRefs(useGlobalStore());
+const { isWifiMenuOpen, isWifiEnabled }
+  = storeToRefs(useGlobalStore());
 
 const {
-  isConnectingToWifi,
   availableWifiNetworks,
   connectedWifiNetwork,
   isSearchingWifiNetworks,
@@ -23,11 +20,10 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    :isOpen="isWifiMenuOpen"
-    :isEnabled="isWifiEnabled"
+    :is-open="isWifiMenuOpen"
+    :is-enabled="isWifiEnabled"
     :title="$t('wifi')"
     icon="gnome:wifi-4"
-    ref="wifiMenuRef"
   >
     <template #loading-icon>
       <Icon
@@ -46,19 +42,22 @@ function closeMenu() {
         class="flex w-full cursor-pointer justify-start gap-2 rounded-xl font-medium transition-colors duration-200 hover:bg-accent"
         @click="() => connectToWifi(network)"
       >
-        <IconWifi :network="network" :size="18" />
+        <IconWifi
+          :network="network"
+          :size="18"
+        />
         <span>{{ network.name }}</span>
 
         <Icon
+          v-if="connectedWifiNetwork?.id === network.id"
           name="gnome:checkmark"
           size="18"
-          v-if="connectedWifiNetwork?.id === network.id"
         />
         <Icon
+          v-if="idConnectingNetwork === network.id"
           name="extra:loading"
           class="animate-spin"
           size="18"
-          v-if="idConnectingNetwork === network.id"
         />
       </Button>
     </ScrollArea>

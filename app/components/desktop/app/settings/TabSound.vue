@@ -17,7 +17,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
             <div
               class="flex h-8 flex-grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
             >
-              <Icon name="gnome:headphones" size="18" />
+              <Icon
+                name="gnome:headphones"
+                size="18"
+              />
               <span class="text-xs sm:text-sm">
                 {{ $t("headphones") }}
               </span>
@@ -26,10 +29,17 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         </SettingsOption>
 
         <!-- Volume -->
-        <SettingsOption class="gap-6" :label="$t('output_volume')" is-last>
+        <SettingsOption
+          class="gap-6"
+          :label="$t('output_volume')"
+          is-last
+        >
           <template #action>
             <div class="flex flex-grow items-center gap-4">
-              <IconVolume :volume="volume[0] ?? 0" :size="20" />
+              <IconVolume
+                :volume="volume[0] ?? 0"
+                :size="20"
+              />
               <Slider
                 v-model="volume"
                 :default-value="volume"
@@ -54,7 +64,10 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
             <div
               class="flex h-8 flex-grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
             >
-              <Icon name="gnome:microphone-2" size="18" />
+              <Icon
+                name="gnome:microphone-2"
+                size="18"
+              />
               <span class="text-xs sm:text-sm">
                 {{ $t("microphone") }}
               </span>
@@ -63,10 +76,17 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         </SettingsOption>
 
         <!-- Volume -->
-        <SettingsOption class="gap-6" :label="$t('input_volume')" is-last>
+        <SettingsOption
+          class="gap-6"
+          :label="$t('input_volume')"
+          is-last
+        >
           <template #action>
             <div class="flex flex-grow items-center gap-4">
-              <IconMicrophone :inputVolume="inputVolume[0] ?? 0" :size="20" />
+              <IconMicrophone
+                :input-volume="inputVolume[0] ?? 0"
+                :size="20"
+              />
               <Slider
                 v-model="inputVolume"
                 :default-value="inputVolume"
@@ -82,18 +102,32 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
       <!-- Sound -->
       <SettingsOptionGroup :title="$t('sounds')">
         <!-- Volume levels -->
-        <SettingsOption :label="$t('volume_levels')" is-disabled is-first>
+        <SettingsOption
+          :label="$t('volume_levels')"
+          is-disabled
+          is-first
+        >
           <template #action>
-            <Icon name="gnome:arrow-long-right" size="18" />
+            <Icon
+              name="gnome:arrow-long-right"
+              size="18"
+            />
           </template>
         </SettingsOption>
 
         <!-- Alert sounds -->
-        <SettingsOption :label="$t('alert_sound')" is-disabled is-last>
+        <SettingsOption
+          :label="$t('alert_sound')"
+          is-disabled
+          is-last
+        >
           <template #action>
             <div class="flex items-center gap-2">
               <span>Click</span>
-              <Icon name="gnome:arrow-long-right" size="18" />
+              <Icon
+                name="gnome:arrow-long-right"
+                size="18"
+              />
             </div>
           </template>
         </SettingsOption>

@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async () => {
   const { isAuthenticated } = storeToRefs(useGlobalStore());
 
   // If the user is not authenticated, redirect to the login page
@@ -6,5 +6,3 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/login");
   }
 });
-
-

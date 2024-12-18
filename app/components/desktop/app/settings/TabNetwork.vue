@@ -19,13 +19,23 @@ const { toggleWired } = globalStore;
       </SettingsOption>
 
       <!-- VPN -->
-      <SettingsOption title="VPN" :label="$t('not_set_up')" is-disabled>
-      </SettingsOption>
+      <SettingsOption
+        title="VPN"
+        :label="$t('not_set_up')"
+        is-disabled
+      />
 
       <!-- Proxy -->
-      <SettingsOption title="Proxy" label="Proxy" is-disabled>
+      <SettingsOption
+        title="Proxy"
+        label="Proxy"
+        is-disabled
+      >
         <template #action>
-          <Icon name="gnome:arrow-long-right" size="18" />
+          <Icon
+            name="gnome:arrow-long-right"
+            size="18"
+          />
         </template>
       </SettingsOption>
     </div>

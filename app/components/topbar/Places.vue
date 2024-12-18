@@ -18,8 +18,8 @@ function openFolder(id: string) {
       <div
         class="flex min-h-7 select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
       >
-        <div class="h-2 w-7 rounded-full bg-white"></div>
-        <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></div>
+        <div class="h-2 w-7 rounded-full bg-white" />
+        <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
       </div>
     </PopoverTrigger>
     <LazyPopoverContent
@@ -32,7 +32,10 @@ function openFolder(id: string) {
         class="flex w-full justify-start gap-2 rounded-xl duration-0 hover:bg-secondary"
         @click="() => openFolder(item.id)"
       >
-        <Icon :name="item.icon" size="16" />
+        <Icon
+          :name="item.icon"
+          size="16"
+        />
         <span class="text-sm">{{ item.name }}</span>
       </Button>
     </LazyPopoverContent>

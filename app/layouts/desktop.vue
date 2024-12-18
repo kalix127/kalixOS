@@ -2,8 +2,8 @@
 const globalStore = useGlobalStore();
 const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
 
-const { backgroundImage, isShowAppsOverlayVisible } =
-  storeToRefs(useDesktopStore());
+const { backgroundImage, isShowAppsOverlayVisible }
+  = storeToRefs(useDesktopStore());
 </script>
 
 <template>
@@ -25,8 +25,8 @@ const { backgroundImage, isShowAppsOverlayVisible } =
       <!-- Background image -->
       <Transition name="background">
         <NuxtImg
-          :alt="backgroundImage.name"
           :key="backgroundImage.name"
+          :alt="backgroundImage.name"
           :src="backgroundImage.url"
           class="absolute -z-[1] h-full w-full object-cover"
           sizes="sm:1000px md:1200px lg:1400px xl:1800px"

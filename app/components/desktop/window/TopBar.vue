@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import type { AppNode } from "@/types";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
-import { type HTMLAttributes } from "vue";
-import { type AppNode } from "@/types";
+
+defineProps<{
+  class?: HTMLAttributes["class"];
+}>();
 
 defineEmits<{
   (e: "close"): void;
   (e: "minimize"): void;
   (e: "fullscreen"): void;
-}>();
-
-defineProps<{
-  class?: HTMLAttributes["class"];
 }>();
 
 const isFullscreen = inject("isFullscreen") as Ref<boolean>;
@@ -59,7 +59,7 @@ const actions = computed(() => [
     @mouseleave.stop="() => setDraggable(false)"
   >
     <!-- Empty div -->
-    <div></div>
+    <div />
 
     <!-- Title -->
     <div
@@ -80,7 +80,10 @@ const actions = computed(() => [
         @click.stop="() => $emit(action.emit)"
         @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" />
+        <Icon
+          :name="action.icon"
+          size="18"
+        />
       </Button>
     </div>
   </div>

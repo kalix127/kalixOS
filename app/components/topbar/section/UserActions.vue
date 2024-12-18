@@ -71,7 +71,10 @@ function handleBatteryMenu() {
         :disabled="isAnyTopbarMenuOpen"
         @click="handleBatteryMenu"
       >
-        <Icon name="gnome:battery-full" class="size-[14px] sm:size-4" />
+        <Icon
+          name="gnome:battery-full"
+          class="size-[14px] sm:size-4"
+        />
         <span class="text-xs font-semibold sm:text-sm">100%</span>
       </Button>
     </div>
@@ -87,7 +90,10 @@ function handleBatteryMenu() {
         class="size-fit rounded-full bg-secondary p-2.5 duration-0 hover:bg-secondary-hover sm:p-3"
         @click="item.handler"
       >
-        <Icon :name="item.icon" class="size-[14px] sm:size-4" />
+        <Icon
+          :name="item.icon"
+          class="size-[14px] sm:size-4"
+        />
       </Button>
     </div>
   </div>

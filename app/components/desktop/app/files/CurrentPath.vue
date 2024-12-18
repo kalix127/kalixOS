@@ -10,7 +10,8 @@ const { setFilesNodeId } = useFilesStore();
 const maxSegments = 3;
 const maxSegmentLength = 12;
 function truncateSegment(segment: string, maxLength: number): string {
-  if (segment.length <= maxLength) return segment;
+  if (segment.length <= maxLength)
+    return segment;
   const start = segment.slice(0, 4);
   const end = segment.slice(-4);
   // Example: ThisIsALongSegment -> This...ment
@@ -21,7 +22,8 @@ const displaySegments = computed(() => {
   const pathSegments = absolutePath.value.split("/").filter(Boolean);
 
   const mappedSegments = pathSegments.map((segment, index) => {
-    if (segment === "home") return { name: "Home", id: nodes.value[index].id };
+    if (segment === "home")
+      return { name: "Home", id: nodes.value[index].id };
     return {
       name: truncateSegment(segment, maxSegmentLength),
       id: nodes.value[index].id,
@@ -44,7 +46,8 @@ const pathIcon = computed(() => {
 });
 
 function handleClickSegment(id: string) {
-  if (!id) return;
+  if (!id)
+    return;
   setFilesNodeId(id);
 }
 </script>
@@ -53,7 +56,12 @@ function handleClickSegment(id: string) {
   <div
     class="app-topbar flex h-8 w-full items-center overflow-hidden whitespace-nowrap rounded-md bg-popover pl-2"
   >
-    <Icon v-if="pathIcon" :name="pathIcon" size="16" class="mr-2" />
+    <Icon
+      v-if="pathIcon"
+      :name="pathIcon"
+      size="16"
+      class="mr-2"
+    />
     <div class="flex items-center overflow-hidden text-sm font-extrabold">
       <div
         v-for="(segment, index) in displaySegments"
@@ -61,12 +69,12 @@ function handleClickSegment(id: string) {
         class="max-w-[10rem] flex-shrink-0 truncate"
       >
         <button
-          @click="() => handleClickSegment(segment.id)"
           class="duration-300"
           :class="{
             'text-muted-foreground': index < displaySegments.length - 1,
             'hover:text-foreground': segment.id,
           }"
+          @click="() => handleClickSegment(segment.id)"
         >
           {{ segment.name }}
         </button>

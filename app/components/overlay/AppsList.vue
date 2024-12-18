@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { AppNode } from "@/types";
-import { useMagicKeys } from "@vueuse/core";
 import { defaultApps } from "@/constants";
+import { useMagicKeys } from "@vueuse/core";
 
 const { isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
 const { openApp } = useDesktopStore();
@@ -21,10 +21,10 @@ const filteredApps = computed(() => {
   return defaultApps
     .slice(0, -1)
     .filter(
-      (app) =>
-        app.id !== "kate" &&
-        app.type !== "social" &&
-        app.name.toLowerCase().includes(query.value),
+      app =>
+        app.id !== "kate"
+        && app.type !== "social"
+        && app.name.toLowerCase().includes(query.value),
     );
 });
 
@@ -44,26 +44,39 @@ function closeOverlay() {
     @click="closeOverlay"
   >
     <!-- Filter apps  -->
-    <div class="relative flex items-center gap-4" @click.stop="">
+    <div
+      class="relative flex items-center gap-4"
+      @click.stop=""
+    >
       <div class="absolute inset-y-0 start-0 grid place-content-center px-3">
-        <Icon name="gnome:search" size="20" class="text-[#b3b2b2]" />
+        <Icon
+          name="gnome:search"
+          size="20"
+          class="text-[#b3b2b2]"
+        />
       </div>
       <Input
-        class="min-w-72 rounded-full bg-secondary pl-10 focus-visible:ring-0"
         v-model="query"
+        class="min-w-72 rounded-full bg-secondary pl-10 focus-visible:ring-0"
       />
     </div>
 
     <!-- Apps list -->
-    <div class="flex flex-wrap justify-center gap-4" @contextmenu.prevent="">
+    <div
+      class="flex flex-wrap justify-center gap-4"
+      @contextmenu.prevent=""
+    >
       <TransitionGroup name="apps">
         <div
-          class="flex size-36 select-none flex-col items-center justify-center gap-2 rounded-3xl transition-colors duration-300 hover:bg-popover"
           v-for="app in filteredApps"
           :key="app.id"
+          class="flex size-36 select-none flex-col items-center justify-center gap-2 rounded-3xl transition-colors duration-300 hover:bg-popover"
           @click.stop="() => handleOpenApp(app)"
         >
-          <Icon :name="app.icon" size="65" />
+          <Icon
+            :name="app.icon"
+            size="65"
+          />
           <span class="text-sm">
             {{ app.isTranslated ? $t(app.name) : app.name }}
           </span>

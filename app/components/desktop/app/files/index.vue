@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue";
 import type { Node } from "@/types";
-import { storeToRefs } from "pinia";
+import type { HTMLAttributes } from "vue";
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { until } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 
-const props = defineProps<{
+defineProps<{
   class?: HTMLAttributes["class"];
 }>();
 
@@ -40,7 +40,8 @@ const draggedNodeId = ref<string | null>(null);
 const targetNodeId = ref<string | null>(null);
 
 function handleDrop() {
-  if (!draggedNodeId.value || !targetNodeId.value) return;
+  if (!draggedNodeId.value || !targetNodeId.value)
+    return;
 
   // If target is a shortcut, check if it points to a folder and move item there
   const targetNode = nodeMap.value.get(targetNodeId.value);
@@ -61,12 +62,13 @@ function initDragAndDrop(parent: HTMLElement) {
     values: filteredItems,
     sortable: false,
     handleNodeDragover(data, state) {
-      if (!state.currentTargetValue) return;
+      if (!state.currentTargetValue)
+        return;
 
       draggedNodeId.value = state.currentTargetValue.id;
       targetNodeId.value = data.targetData.node.data.value.id;
     },
-    handleNodeDrop(data, state) {
+    handleNodeDrop() {
       handleDrop();
     },
   });
@@ -76,8 +78,10 @@ onMounted(async () => {
   await until(filesGridRef).toBeTruthy();
   await until(filesListRef).toBeTruthy();
 
-  if (filesGridRef.value) initDragAndDrop(filesGridRef.value);
-  if (filesListRef.value) initDragAndDrop(filesListRef.value);
+  if (filesGridRef.value)
+    initDragAndDrop(filesGridRef.value);
+  if (filesListRef.value)
+    initDragAndDrop(filesListRef.value);
 });
 </script>
 
@@ -100,12 +104,12 @@ onMounted(async () => {
 
     <!-- Topbar -->
     <FilesTopBar
+      class="app-topbar'col-start-2 row-start-1"
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
       @mouseenter.stop="() => setDraggable(true)"
       @mouseleave.stop="() => setDraggable(false)"
-      class="app-topbar'col-start-2 row-start-1"
     />
 
     <!-- Content -->
@@ -116,22 +120,32 @@ onMounted(async () => {
       }"
       @contextmenu.prevent=""
     >
-      <div v-show="isGridLayout" ref="filesGridRef" class="grid-wrapper">
+      <div
+        v-show="isGridLayout"
+        ref="filesGridRef"
+        class="grid-wrapper"
+      >
         <DesktopNode
           v-for="item in filteredItems"
           :key="item.id"
           :item="item"
-          :isDesktop="false"
-          :isGridLayout="isGridLayout"
+          :is-desktop="false"
+          :is-grid-layout="isGridLayout"
         />
       </div>
 
       <Table v-show="!isGridLayout">
         <TableHeader>
           <TableRow class="*:h-2 *:pl-2">
-            <TableHead class="w-4/6 py-1.5"> {{ $t("name") }} </TableHead>
-            <TableHead class="w-1/6 py-1.5">{{ $t("size") }}</TableHead>
-            <TableHead class="w-1/6 py-1.5">{{ $t("modified") }}</TableHead>
+            <TableHead class="w-4/6 py-1.5">
+              {{ $t("name") }}
+            </TableHead>
+            <TableHead class="w-1/6 py-1.5">
+              {{ $t("size") }}
+            </TableHead>
+            <TableHead class="w-1/6 py-1.5">
+              {{ $t("modified") }}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody ref="filesListRef">
@@ -139,8 +153,8 @@ onMounted(async () => {
             v-for="item in filteredItems"
             :key="item.id"
             :item="item"
-            :isDesktop="false"
-            :isGridLayout="isGridLayout"
+            :is-desktop="false"
+            :is-grid-layout="isGridLayout"
           />
         </TableBody>
       </Table>
@@ -154,8 +168,13 @@ onMounted(async () => {
         }"
       >
         <div class="flex flex-col items-center gap-4">
-          <Icon name="gnome:folder-search" size="160" />
-          <h2 class="text-2xl font-extrabold">{{ $t("no_results_found") }}</h2>
+          <Icon
+            name="gnome:folder-search"
+            size="160"
+          />
+          <h2 class="text-2xl font-extrabold">
+            {{ $t("no_results_found") }}
+          </h2>
           <p class="text-muted-foreground">
             {{ $t("no_match_in_x", { folderName: openedNode?.name }) }}
           </p>

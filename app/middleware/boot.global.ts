@@ -5,6 +5,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Prevent the user from going into the booting pages if the system is not booting
   if (bootingPages.includes(to.path) && !isBooting.value) {
-    return navigateTo("/login");
+    return navigateTo("/login", { redirectCode: 302 });
   }
 });

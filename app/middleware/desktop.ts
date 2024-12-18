@@ -3,6 +3,6 @@ export default defineNuxtRouteMiddleware(async () => {
 
   // If the user is authenticated, redirect to the desktop page
   if (isAuthenticated.value) {
-    return navigateTo("/desktop");
+    return navigateTo("/desktop", { redirectCode: 302 });
   }
 });

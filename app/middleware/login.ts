@@ -3,6 +3,6 @@ export default defineNuxtRouteMiddleware(async () => {
 
   // If the user is not authenticated, redirect to the login page
   if (!isAuthenticated.value) {
-    return navigateTo("/login");
+    return navigateTo("/login", { redirectCode: 302 });
   }
 });

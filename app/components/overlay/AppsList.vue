@@ -56,6 +56,7 @@ function closeOverlay() {
         />
       </div>
       <Input
+        id="search-apps"
         v-model="query"
         class="min-w-72 rounded-full bg-secondary pl-10 focus-visible:ring-0"
       />

@@ -16,7 +16,7 @@ const areSystemLogsVisible = ref(false);
 const { escape } = useMagicKeys();
 
 // Toggle the plymouth logs on ESC's key
-watch(escape, (v) => {
+watch(() => escape!.value, (v) => {
   if (v) {
     areSystemLogsVisible.value = !areSystemLogsVisible.value;
   }
@@ -29,6 +29,10 @@ watch(escape, (v) => {
       name="extra:loading-dots"
       size="80"
     />
+
+    <div class="absolute top-2 left-2">
+      <p class="font-medium">{{ t("press_esc_to_view_system_logs") }}</p>
+    </div>
 
     <!-- System Logs on escape -->
     <OverlaySystemLogs v-show="areSystemLogsVisible" />

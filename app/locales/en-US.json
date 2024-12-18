@@ -34,6 +34,7 @@
       "restore_window": "Restore window"
     }
   },
+  "press_esc_to_view_system_logs": "Press ESC to view the System Logs.",
   "close": "Close",
   "off": "Off",
   "output": "Output",

@@ -34,6 +34,7 @@
       "restore_window": "Ripristina finestra"
     }
   },
+  "press_esc_to_view_system_logs": "Premi ESC per visualizzare i log di sistema.",
   "close": "Chiudi",
   "off": "Spento",
   "output": "Uscita",

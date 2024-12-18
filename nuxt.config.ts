@@ -36,10 +36,11 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
     public: {
-      socialUrl: {
-        linkedin: process.env.SOCIAL_LINKEDIN_URL,
-        github: process.env.SOCIAL_GITHUB_URL,
-      },
+      repositoryUrl: process.env.SOCIAL_REPOSITORY_URL,
+      githubUrl: process.env.SOCIAL_GITHUB_URL,
+      linkedinUrl: process.env.SOCIAL_LINKEDIN_URL,
+      twitterUrl: process.env.SOCIAL_TWITTER_URL,
+      redditUrl: process.env.SOCIAL_REDDIT_URL,
     },
   },
   future: {

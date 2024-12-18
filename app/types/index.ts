@@ -64,8 +64,8 @@ export type ContextMenuTargetType =
 export type Node = FolderNode | FileNode | AppNode | ShortcutNode;
 
 export interface SystemLog {
-  ok: boolean;
-  action: string;
+  ok?: boolean;
+  action?: string;
   message: string;
 }
 

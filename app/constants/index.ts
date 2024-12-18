@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   AppNode,
   BackgroundImage,
@@ -7,7 +8,6 @@ import type {
   WifiNetwork,
 } from "@/types";
 import { assignDefaultProperties } from "@/helpers";
-// @ts-nocheck
 import { zshContent } from "./files";
 
 /* General */

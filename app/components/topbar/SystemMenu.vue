@@ -43,7 +43,7 @@ const {
         />
         <span
           v-if="isShowBatteryPercentageEnabled"
-          class="text-sm"
+          class="text-sm font-semibold"
         >100%</span>
       </div>
     </PopoverTrigger>

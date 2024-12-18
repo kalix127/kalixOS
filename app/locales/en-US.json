@@ -136,7 +136,7 @@
   "not_set_up": "Not set up",
   "bluetooth_disabled": "Bluetooth Turned Off",
   "bluetooth_disabled_description": "Turn on to connect and receive file transfers",
-  "bluetooth_enabled": "Bluetooth",
+  "bluetooth_enabled": "Bluetooth On",
   "bluetooth_enabled_description": "Bluetooth not available or connected device",
   "primary_display": "Primary Display",
   "primary_display_description": "Contains top bar and Activities",

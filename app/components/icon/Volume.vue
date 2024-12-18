@@ -21,7 +21,10 @@ const volumeIcon = computed(() => {
 </script>
 
 <template>
-  <Icon :name="volumeIcon" :size="size" />
+  <Icon
+    :name="volumeIcon"
+    :size="size"
+  />
 </template>
 
 <style scoped></style>

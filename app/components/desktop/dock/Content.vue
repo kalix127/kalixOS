@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { dragAndDrop } from "@formkit/drag-and-drop/vue";
-import { animations } from "@formkit/drag-and-drop";
 import type { AppNode } from "@/types";
-import { until, breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { animations } from "@formkit/drag-and-drop";
+import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { vOnClickOutside } from "@vueuse/components";
+import { breakpointsTailwind, until, useBreakpoints } from "@vueuse/core";
 
 defineEmits<{
   (e: "close"): void;
@@ -27,12 +27,13 @@ const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 
 const { openApp } = useDesktopStore();
 
-const handleContextMenu = (event: MouseEvent, app: AppNode) => {
-  if (app.id === "show-apps") return;
+function handleContextMenu(event: MouseEvent, app: AppNode) {
+  if (app.id === "show-apps")
+    return;
   openContextMenu(event.clientX, event.clientY, "dock", app, false);
-};
+}
 
-const handleOpenApp = (app: AppNode) => {
+function handleOpenApp(app: AppNode) {
   // Toggle the apps list overlay
   if (app.id === "show-apps") {
     isShowAppsOverlayVisible.value = !isShowAppsOverlayVisible.value;
@@ -46,12 +47,13 @@ const handleOpenApp = (app: AppNode) => {
   }
 
   openApp(app.id, true);
-};
+}
 
 onBeforeMount(async () => {
   await until(dockRef).toBeTruthy();
 
-  if (!dockRef.value) return;
+  if (!dockRef.value)
+    return;
 
   dragAndDrop({
     parent: dockRef.value,
@@ -77,9 +79,9 @@ onBeforeMount(async () => {
         v-for="app in apps"
         :key="app.id"
         :app="app"
-        @openApp="handleOpenApp"
-        @context="handleContextMenu"
         :class="{ hidden: app.id === 'kate' }"
+        @open-app="handleOpenApp"
+        @context="handleContextMenu"
       />
     </div>
   </div>

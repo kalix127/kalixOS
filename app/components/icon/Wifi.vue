@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type WifiNetwork } from "@/types";
+import type { WifiNetwork } from "@/types";
 
 const props = defineProps<{
   network: WifiNetwork | null;
@@ -17,7 +17,10 @@ const wifiIcon = computed(() => {
 </script>
 
 <template>
-  <Icon :name="wifiIcon" :size="$props.size" />
+  <Icon
+    :name="wifiIcon"
+    :size="$props.size"
+  />
 </template>
 
 <style scoped></style>

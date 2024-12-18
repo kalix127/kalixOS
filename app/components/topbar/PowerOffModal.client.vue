@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { useTimeoutFn } from "@vueuse/core";
 
-const globalStore = useGlobalStore();
-const { isPowerOffMenuOpen } = storeToRefs(globalStore);
-
 const props = defineProps<{
   title: string;
   label: string;
@@ -11,15 +8,16 @@ const props = defineProps<{
   seconds: number;
   isOpen: boolean;
 }>();
-
 const emit = defineEmits<{
   (e: "closeModal"): void;
   (e: "action"): void;
 }>();
+const globalStore = useGlobalStore();
+const { isPowerOffMenuOpen } = storeToRefs(globalStore);
 
-const timeoutCallback = () => {
+function timeoutCallback() {
   emit("action");
-};
+}
 
 const { start, stop } = useTimeoutFn(
   timeoutCallback,
@@ -40,7 +38,8 @@ watch(
 
       // Start the countdown
       start();
-    } else {
+    }
+    else {
       // Stop the countdown if the modal is closed
       stop();
     }
@@ -65,8 +64,12 @@ onBeforeUnmount(() => {
       </AlertDialogHeader>
 
       <div class="flex flex-col items-center gap-4 p-4 pt-6 text-center">
-        <h1 class="text-xl font-extrabold">{{ title }}</h1>
-        <p class="text-sm">{{ description }}</p>
+        <h1 class="text-xl font-extrabold">
+          {{ title }}
+        </h1>
+        <p class="text-sm">
+          {{ description }}
+        </p>
       </div>
 
       <div class="flex w-full gap-[1px]">

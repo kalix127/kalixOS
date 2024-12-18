@@ -7,13 +7,10 @@ const cpuUsage = ref("0.00%");
 const memoryUsage = ref("0.00%");
 
 // Function to generate random CPU and memory usage with decimals
-const getRandomValue = (
-  min: number,
-  max: number,
-): { value: string; percentage: number } => {
+function getRandomValue(min: number, max: number): { value: string; percentage: number } {
   const value = (Math.random() * (max - min) + min).toFixed(2);
   return { value: `${value}%`, percentage: Math.round(Number(value)) };
-};
+}
 
 useIntervalFn(
   () => {

@@ -1,13 +1,13 @@
-import type { Component } from "vue";
 import type { AppNode } from "@/types";
-import { defaultFullscreenApps } from "@/constants";
-
-import Settings from "@/components/desktop/app/settings/index.vue";
-import DesktopAppVSCode from "@/components/desktop/app/VSCode.vue";
+import type { Component } from "vue";
 import DesktopAppBrave from "@/components/desktop/app/Brave.vue";
-import DesktopAppTerminal from "@/components/desktop/app/Terminal.vue";
-import DesktopAppKate from "@/components/desktop/app/Kate.vue";
+
 import DesktopAppFiles from "@/components/desktop/app/files/index.vue";
+import DesktopAppKate from "@/components/desktop/app/Kate.vue";
+import Settings from "@/components/desktop/app/settings/index.vue";
+import DesktopAppTerminal from "@/components/desktop/app/Terminal.vue";
+import DesktopAppVSCode from "@/components/desktop/app/VSCode.vue";
+import { defaultFullscreenApps } from "@/constants";
 
 const appComponents: Record<string, Component> = {
   settings: Settings,
@@ -67,7 +67,7 @@ export function useWindow(app: Ref<AppNode>) {
 
   const handleActive = (value: boolean) => {
     if (app.value.isDropdownOpen && !value) {
-      isActive.value = true
+      isActive.value = true;
       return;
     }
     isActive.value = value;

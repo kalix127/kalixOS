@@ -1,8 +1,8 @@
 import type { SystemLog } from "@/types";
 import {
+  defaultBootDuration,
   powerOffSystemLogs,
   powerUpSystemLogs,
-  defaultBootDuration,
 } from "@/constants";
 import { generateRandomDelays } from "@/lib/utils";
 
@@ -34,7 +34,7 @@ export const useBootStore = defineStore({
       this.isLogoutModalOpen = false;
 
       await navigateTo("/booting");
-      await new Promise((resolve) => setTimeout(resolve, defaultBootDuration));
+      await new Promise(resolve => setTimeout(resolve, defaultBootDuration));
     },
 
     async handlePoweroff() {
@@ -54,7 +54,7 @@ export const useBootStore = defineStore({
       await navigateTo("/"); // Navigate to a blank or home page
       this.systemLogs = []; // Clear existing logs
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       await Promise.all([this.addSystemLogs("powerup"), this.boot()]);
       await navigateTo("/login");

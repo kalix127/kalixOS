@@ -9,7 +9,8 @@ const { y } = useScroll(systemLogsRef);
 watch(
   systemLogs,
   async () => {
-    if (!systemLogsRef.value) return;
+    if (!systemLogsRef.value)
+      return;
     await nextTick();
 
     y.value = systemLogsRef.value?.offsetHeight + 100;
@@ -25,9 +26,9 @@ watch(
   >
     <div class="flex flex-col items-start justify-end p-2">
       <div
-        class="flex items-center justify-center gap-2 text-xs"
         v-for="log in systemLogs"
         :key="log.message"
+        class="flex items-center justify-center gap-2 text-xs"
       >
         <!-- Type -->
         <template v-if="log.action">

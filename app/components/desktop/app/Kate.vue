@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import "@/assets/js/monacoWorker";
-import * as monaco from "monaco-editor";
+import type { AppNode } from "@/types";
 import type { HTMLAttributes } from "vue";
 import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
 import { watchThrottled } from "@vueuse/core";
-import { type AppNode } from "@/types";
+import * as monaco from "monaco-editor";
+import "@/assets/js/monacoWorker";
 
 defineProps<{
   class?: HTMLAttributes["class"];
@@ -26,31 +26,33 @@ const { updateApp } = useDesktopStore();
 
 let editorObj: monaco.editor.IEditor | undefined;
 
-const getLanguage = (name: string | undefined): string => {
-  if (!name) return "plaintext";
+function getLanguage(name: string | undefined): string {
+  if (!name)
+    return "plaintext";
   const extension = name.split(".").pop();
   const language = monacoEditorLanguageMap[extension ?? ""] || "plaintext";
   return language;
-};
+}
 
 onMounted(() => {
   // @ts-ignore
   monaco.editor.defineTheme("github-custom", monacoTheme);
 
   editorObj = monaco.editor.create(document.getElementById("editor")!, {
-    value: openedNode.value?.content || "",
-    language: getLanguage(openedNode.value?.name),
-    theme: "github-custom",
-    automaticLayout: false,
+    "value": openedNode.value?.content || "",
+    "language": getLanguage(openedNode.value?.name),
+    "theme": "github-custom",
+    "automaticLayout": false,
     "semanticHighlighting.enabled": true,
-    tabSize: 2,
-    wordWrap: "on",
+    "tabSize": 2,
+    "wordWrap": "on",
   });
 
   // Update the content
   const model = editorObj.getModel() as monaco.editor.ITextModel;
-  model.onDidChangeContent((e: any) => {
-    if (!openedNode.value) return;
+  model.onDidChangeContent(() => {
+    if (!openedNode.value)
+      return;
     const content = model.getValue();
     openedNode.value.content = content;
   });
@@ -59,7 +61,8 @@ onMounted(() => {
   watchThrottled(
     [localHeight, localWidth],
     ([newHeight, newWidth]: [number, number]) => {
-      if (!editorObj) return;
+      if (!editorObj)
+        return;
 
       editorObj.layout({
         width: newWidth,

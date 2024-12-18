@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue";
 import type { Notification } from "@/types";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -20,7 +20,10 @@ const { title, description, isTranslated, icon } = toRefs(props.notification);
     "
   >
     <div class="flex items-center gap-4">
-      <Icon :name="icon" :size="28" />
+      <Icon
+        :name="icon"
+        :size="28"
+      />
       <div class="space-y-2">
         <AlertTitle class="font-extrabold tracking-normal">
           {{ isTranslated ? $t(title) : title }}

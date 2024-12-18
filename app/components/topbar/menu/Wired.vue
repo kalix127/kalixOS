@@ -17,8 +17,8 @@ function handleDisconnect() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    :isOpen="isWiredMenuOpen"
-    :isEnabled="isWiredEnabled"
+    :is-open="isWiredMenuOpen"
+    :is-enabled="isWiredEnabled"
     :title="$t('wired_connection')"
     icon="gnome:wired-on"
   >
@@ -28,7 +28,10 @@ function handleDisconnect() {
       @click="handleDisconnect"
     >
       <div class="flex items-center gap-2">
-        <Icon name="gnome:wired-on" size="18" />
+        <Icon
+          name="gnome:wired-on"
+          size="18"
+        />
         <span>{{ $t("wired") }}</span>
       </div>
       <span class="text-muted-foreground"> {{ $t("disconnect") }} </span>

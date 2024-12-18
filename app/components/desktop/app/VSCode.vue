@@ -32,7 +32,7 @@ defineEmits<{
       height="100%"
       loading="lazy"
       title="VS Code"
-    ></iframe>
+    />
   </div>
 </template>
 

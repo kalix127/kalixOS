@@ -1,14 +1,13 @@
-// @ts-nocheck
 import type {
-  WifiNetwork,
-  SystemLog,
   AppNode,
   BackgroundImage,
-  NodePermissions,
   CommandSpec,
   Node,
+  SystemLog,
+  WifiNetwork,
 } from "@/types";
 import { assignDefaultProperties } from "@/helpers";
+// @ts-nocheck
 import { zshContent } from "./files";
 
 /* General */
@@ -228,7 +227,7 @@ export const defaultApps: AppNode[] = [
     icon: "gnome:grid",
     isTranslated: true,
   },
-].map((app) => ({
+].map(app => ({
   ...app,
   title: "",
   isOpen: false,
@@ -237,8 +236,8 @@ export const defaultApps: AppNode[] = [
   isDropdownOpen: false,
 }));
 
-export const defaultFileSystem = (username: string): Node =>
-  assignDefaultProperties(
+export function defaultFileSystem(username: string): Node {
+  return assignDefaultProperties(
     {
       id: "root",
       name: "/",
@@ -286,7 +285,7 @@ export const defaultFileSystem = (username: string): Node =>
                   icon: "folder:applications",
                   isProtected: true,
                   children: [
-                    ...defaultApps.slice(0, 6).map((app) => ({
+                    ...defaultApps.slice(0, 6).map(app => ({
                       ...app,
                       name: `${app.name.replaceAll(" ", "")}.AppImage`,
                     })),
@@ -550,6 +549,7 @@ export const defaultFileSystem = (username: string): Node =>
     },
     username,
   );
+}
 
 /* Terminal */
 

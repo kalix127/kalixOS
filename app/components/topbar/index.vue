@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type HTMLAttributes } from "vue";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();
@@ -7,22 +7,21 @@ const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 const globalStore = useGlobalStore();
 const bootStore = useBootStore();
 
-const { username, isAboutToSuspend, isLocked } = storeToRefs(globalStore);
+const { username, isLocked } = storeToRefs(globalStore);
 
-const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
-  storeToRefs(bootStore);
-const { handlePowerUp, handleRestart, handlePoweroff } = bootStore;
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen }
+  = storeToRefs(bootStore);
+const { handleRestart, handlePoweroff } = bootStore;
 const { handleLogout } = useAuth();
 
-const { isShowAppsOverlayVisible, notifications } =
-  storeToRefs(useDesktopStore());
+const { isShowAppsOverlayVisible, notifications }
+  = storeToRefs(useDesktopStore());
 
 const route = useRoute();
 </script>
 
 <template>
   <header
-    @contextmenu.prevent=""
     :class="
       cn(
         'relative z-[50000] flex h-9 select-none items-center bg-[#080404] bg-opacity-20 p-1 transition-all duration-500',
@@ -31,6 +30,7 @@ const route = useRoute();
         props.class,
       )
     "
+    @contextmenu.prevent=""
   >
     <!-- Left Section -->
     <div class="hidden flex-1 items-center sm:flex">
@@ -75,8 +75,8 @@ const route = useRoute();
       :label="$t('power_off')"
       :description="$t('power_off_modal', { seconds: 60 })"
       :seconds="60"
-      :isOpen="isPowerOffModalOpen"
-      @closeModal="isPowerOffModalOpen = false"
+      :is-open="isPowerOffModalOpen"
+      @close-modal="isPowerOffModalOpen = false"
       @action="handlePoweroff"
     />
     <LazyTopbarPowerOffModal
@@ -84,8 +84,8 @@ const route = useRoute();
       :label="$t('restart')"
       :description="$t('restart_modal', { seconds: 50 })"
       :seconds="50"
-      :isOpen="isRestartModalOpen"
-      @closeModal="isRestartModalOpen = false"
+      :is-open="isRestartModalOpen"
+      @close-modal="isRestartModalOpen = false"
       @action="handleRestart"
     />
     <LazyTopbarPowerOffModal
@@ -93,8 +93,8 @@ const route = useRoute();
       :label="$t('logout')"
       :description="$t('logout_modal', { username, seconds: 60 })"
       :seconds="60"
-      :isOpen="isLogoutModalOpen"
-      @closeModal="isLogoutModalOpen = false"
+      :is-open="isLogoutModalOpen"
+      @close-modal="isLogoutModalOpen = false"
       @action="handleLogout"
     />
   </header>

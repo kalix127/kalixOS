@@ -14,7 +14,7 @@ export function useAuth() {
   const handleLogin = async (password: string): Promise<boolean> => {
     isLoading.value = true;
     // Fake delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (password === "password") {
       setIsAuthenticated(true);
@@ -22,7 +22,8 @@ export function useAuth() {
       await navigateTo("/desktop");
       isLoading.value = false;
       return true;
-    } else {
+    }
+    else {
       isLoading.value = false;
       return false;
     }
@@ -38,13 +39,14 @@ export function useAuth() {
   const handleUnlock = async (password: string): Promise<boolean> => {
     isLoading.value = true;
     // Fake delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (password === "password") {
       isLocked.value = false;
       isLoading.value = false;
       return true;
-    } else {
+    }
+    else {
       isLoading.value = false;
       return false;
     }

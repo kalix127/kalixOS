@@ -1,20 +1,19 @@
 <script setup lang="ts">
+import type { HTMLAttributes } from "vue";
+
 import { getNodeFullPath } from "@/helpers";
 import { cn } from "@/lib/utils";
 import { vOnClickOutside } from "@vueuse/components";
 import { useClipboard } from "@vueuse/core";
 
-import type { HTMLAttributes } from "vue";
-import type { AppNode } from "@/types";
+defineProps<{
+  class?: HTMLAttributes["class"];
+}>();
 
 defineEmits<{
   (e: "close"): void;
   (e: "minimize"): void;
   (e: "fullscreen"): void;
-}>();
-
-defineProps<{
-  class?: HTMLAttributes["class"];
 }>();
 
 const isFullscreen = inject("isFullscreen") as Ref<boolean>;
@@ -68,7 +67,8 @@ const generalActions = computed(() => [
 ]);
 
 const fullPath = computed(() => {
-  if (!openedNode.value) return { absolutePath: "", nodes: [] };
+  if (!openedNode.value)
+    return { absolutePath: "", nodes: [] };
   return getNodeFullPath(fileSystem.value, openedNode.value);
 });
 
@@ -76,7 +76,7 @@ function toggleSearch() {
   isSearching.value = !isSearching.value;
 }
 
-const createNewFolder = () => {
+function createNewFolder() {
   if (openedNode.value) {
     createNode(
       openedNode.value.id,
@@ -89,9 +89,9 @@ const createNewFolder = () => {
       true,
     );
   }
-};
+}
 
-const createNewDocument = () => {
+function createNewDocument() {
   if (openedNode.value) {
     createNode(
       openedNode.value.id,
@@ -104,15 +104,16 @@ const createNewDocument = () => {
       true,
     );
   }
-};
+}
 
-const openInTerminal = () => {
-  if (!openedNode.value) return;
+function openInTerminal() {
+  if (!openedNode.value)
+    return;
   setCurrentDirectory(openedNode.value);
   openApp("terminal");
-};
+}
 
-const copyLocation = () => {
+function copyLocation() {
   if (!isSupported.value) {
     addNotification({
       id: "clipboard-not-supported",
@@ -125,7 +126,7 @@ const copyLocation = () => {
   }
 
   copy(fullPath.value.absolutePath);
-};
+}
 </script>
 
 <template>
@@ -155,7 +156,10 @@ const copyLocation = () => {
           }"
           @click="moveBack"
         >
-          <Icon name="gnome:arrow-long-left" size="18" />
+          <Icon
+            name="gnome:arrow-long-left"
+            size="18"
+          />
         </Button>
         <Button
           variant="ghost"
@@ -167,34 +171,47 @@ const copyLocation = () => {
           }"
           @click="moveForward"
         >
-          <Icon name="gnome:arrow-long-right" size="18" />
+          <Icon
+            name="gnome:arrow-long-right"
+            size="18"
+          />
         </Button>
       </div>
 
-      <!-- Path / input-->
-      <Transition name="search-input" mode="out-in">
+      <!-- Path / input -->
+      <Transition
+        name="search-input"
+        mode="out-in"
+      >
         <FilesSearchInput v-if="isSearching || searchQuery" />
         <FilesCurrentPath
           v-else
-          :absolutePath="fullPath.absolutePath"
+          :absolute-path="fullPath.absolutePath"
           :nodes="fullPath.nodes"
         />
       </Transition>
 
       <!-- Search in folder -->
       <Button
-        @click="toggleSearch"
         variant="ghost"
         size="icon"
         class="h-8 hover:bg-popover"
         :class="{ 'bg-popover': isSearching }"
+        @click="toggleSearch"
       >
-        <Icon name="gnome:folder-search" size="20" class="" />
+        <Icon
+          name="gnome:folder-search"
+          size="20"
+          class=""
+        />
       </Button>
     </div>
 
     <div class="flex items-center justify-end gap-2">
-      <div class="group flex items-center gap-px" @dblclick.stop="">
+      <div
+        class="group flex items-center gap-px"
+        @dblclick.stop=""
+      >
         <!-- Change view / -->
         <Button
           variant="ghost"
@@ -202,10 +219,18 @@ const copyLocation = () => {
           class="size-8 duration-300 hover:bg-popover"
           @click.stop="toggleGridView"
         >
-          <Icon v-show="isGridLayout" name="gnome:view-list" size="18" />
-          <Icon v-show="!isGridLayout" name="gnome:view-grid" size="18" />
+          <Icon
+            v-show="isGridLayout"
+            name="gnome:view-list"
+            size="18"
+          />
+          <Icon
+            v-show="!isGridLayout"
+            name="gnome:view-grid"
+            size="18"
+          />
         </Button>
-        <div class="h-6 w-px bg-gray-500/50 group-hover:bg-gray-500/20"></div>
+        <div class="h-6 w-px bg-gray-500/50 group-hover:bg-gray-500/20" />
 
         <!-- General actions  -->
         <DropdownMenu
@@ -219,7 +244,10 @@ const copyLocation = () => {
               size="icon"
               class="size-8 duration-300 hover:bg-popover"
             >
-              <Icon name="gnome:pan-down" size="18" />
+              <Icon
+                name="gnome:pan-down"
+                size="18"
+              />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent class="z-[50000] min-w-40">
@@ -230,7 +258,10 @@ const copyLocation = () => {
             >
               <DropdownMenuSeparator v-if="option.isSeparator" />
 
-              <DropdownMenuItem v-else @click="option.action">
+              <DropdownMenuItem
+                v-else
+                @click="option.action"
+              >
                 {{ option.label }}
               </DropdownMenuItem>
             </div>
@@ -240,15 +271,18 @@ const copyLocation = () => {
 
       <!-- Window actions -->
       <Button
+        v-for="action in windowActions"
+        :key="action.icon"
         variant="ghost"
         size="icon"
         class="size-6 rounded-full bg-popover duration-300 hover:bg-secondary"
-        v-for="action in windowActions"
-        :key="action.icon"
         @click="() => $emit(action.emit)"
         @dblclick.stop=""
       >
-        <Icon :name="action.icon" size="18" />
+        <Icon
+          :name="action.icon"
+          size="18"
+        />
       </Button>
     </div>
   </div>

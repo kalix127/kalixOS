@@ -1,5 +1,5 @@
-import { monacoEditorLanguageMap } from "@/constants";
 import type { FileNode } from "@/types";
+import { monacoEditorLanguageMap } from "@/constants";
 
 export const useKateStore = defineStore("kate", {
   state: (): KateStore => ({
@@ -7,11 +7,12 @@ export const useKateStore = defineStore("kate", {
   }),
   getters: {
     openedNode(state) {
-      if (!state.openedNodeId) return null;
+      if (!state.openedNodeId)
+        return null;
       const { nodeMap } = storeToRefs(useDesktopStore());
       return nodeMap.value.get(state.openedNodeId) as FileNode;
     },
-    editorLanguage(state): string {
+    editorLanguage(): string {
       if (this.openedNode && this.openedNode.type === "file") {
         const fileName = this.openedNode.name;
         const extension = fileName.split(".").pop()?.toLowerCase() || "";

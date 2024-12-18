@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes } from "vue";
-import { cn } from "@/lib/utils";
+import type { HTMLAttributes } from "vue";
 import { defaultFolders } from "@/constants";
+import { cn } from "@/lib/utils";
 
 defineProps<{
   class?: HTMLAttributes["class"];
@@ -16,14 +16,14 @@ function handleItemClick(id: string) {
   setFilesNodeId(id);
 }
 
-type SidebarItem = { id: string; name: string; icon: string };
+interface SidebarItem { id: string; name: string; icon: string }
 
 const defaultItems = computed<SidebarItem[]>(() => {
   return [...defaultFolders];
 });
 
 const bookmarkItems = computed<SidebarItem[]>(() => {
-  return bookmarksNodes.value.map((node) => ({
+  return bookmarksNodes.value.map(node => ({
     ...node,
     icon: "gnome:symbolic-folder",
   }));
@@ -48,13 +48,19 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
       @mouseleave.stop="() => setDraggable(false)"
     >
       <div class="grid place-content-center p-2">
-        <Icon name="gnome:search" size="16" />
+        <Icon
+          name="gnome:search"
+          size="16"
+        />
       </div>
       <div class="pt-2 text-sm font-extrabold">
         {{ $t("files") }}
       </div>
       <div class="grid place-content-center p-2">
-        <Icon name="gnome:three-dots-vertical" size="18" />
+        <Icon
+          name="gnome:three-dots-vertical"
+          size="18"
+        />
       </div>
     </div>
 
@@ -68,7 +74,10 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
         @click="() => handleItemClick(item.id)"
       >
         <div class="grid place-content-center">
-          <Icon :name="item.icon" size="16" />
+          <Icon
+            :name="item.icon"
+            size="16"
+          />
         </div>
         <div class="flex flex-col items-start gap-1">
           <span class="max-w-32 truncate text-sm font-medium">{{
@@ -78,7 +87,10 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
       </button>
 
       <!-- Separator -->
-      <div v-if="hasBookmarks" class="h-px w-full bg-gray-500/25"></div>
+      <div
+        v-if="hasBookmarks"
+        class="h-px w-full bg-gray-500/25"
+      />
 
       <!-- Bookmark Items -->
       <button
@@ -88,7 +100,10 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
         @click="() => handleItemClick(item.id)"
       >
         <div class="grid place-content-center">
-          <Icon :name="item.icon" size="16" />
+          <Icon
+            :name="item.icon"
+            size="16"
+          />
         </div>
         <div class="flex flex-col items-start gap-1">
           <span class="max-w-32 truncate text-sm font-medium">{{

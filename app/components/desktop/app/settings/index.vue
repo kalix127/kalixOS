@@ -2,16 +2,16 @@
 import type { HTMLAttributes } from "vue";
 import { storeToRefs } from "pinia";
 
-import SettingsTabWifi from "./TabWifi.vue";
-import SettingsTabNetwork from "./TabNetwork.vue";
-import SettingsTabBluetooth from "./TabBluetooth.vue";
-import SettingsTabDisplays from "./TabDisplays.vue";
-import SettingsTabSound from "./TabSound.vue";
-import SettingsTabPower from "./TabPower.vue";
 import SettingsTabAppearance from "./TabAppearance.vue";
-import SettingsTabSystem from "./TabSystem.vue";
+import SettingsTabBluetooth from "./TabBluetooth.vue";
 import SettingsTabDefault from "./TabDefault.vue";
+import SettingsTabDisplays from "./TabDisplays.vue";
+import SettingsTabNetwork from "./TabNetwork.vue";
+import SettingsTabPower from "./TabPower.vue";
 import SettingsTabPrinters from "./TabPrinters.vue";
+import SettingsTabSound from "./TabSound.vue";
+import SettingsTabSystem from "./TabSystem.vue";
+import SettingsTabWifi from "./TabWifi.vue";
 
 defineProps<{
   class?: HTMLAttributes["class"];
@@ -44,8 +44,8 @@ const settingsTabsMap = {
 
 const currentComponent = computed(
   () =>
-    settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap] ??
-    SettingsTabDefault,
+    settingsTabsMap[currentSettingsTab.value as keyof typeof settingsTabsMap]
+    ?? SettingsTabDefault,
 );
 
 onUnmounted(() => {
@@ -74,10 +74,10 @@ onUnmounted(() => {
 
     <!-- Topbar -->
     <SettingsTopBar
+      class="col-start-2 row-start-1"
       @minimize="$emit('minimize')"
       @fullscreen="$emit('fullscreen')"
       @close="$emit('close')"
-      class="col-start-2 row-start-1"
       @mouseenter.stop="() => setDraggable(true)"
       @mouseleave.stop="() => setDraggable(false)"
     />

@@ -1,5 +1,5 @@
-import { useTimeoutFn } from "@vueuse/core";
 import type { WifiNetwork } from "@/types";
+import { useTimeoutFn } from "@vueuse/core";
 
 export function useWifi() {
   const globalStore = useGlobalStore();
@@ -21,7 +21,8 @@ export function useWifi() {
    * This function is called after the timeout expires.
    */
   function handleConnectionCompletion() {
-    if (!currentNetwork.value) return;
+    if (!currentNetwork.value)
+      return;
 
     // Check if WiFi is still enabled and airplane mode is not active
     if (!isWifiEnabled.value || isAirplaneModeEnabled.value) {

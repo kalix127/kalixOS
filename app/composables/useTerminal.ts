@@ -1,30 +1,30 @@
-import { Terminal } from "@xterm/xterm";
-import { WebLinksAddon } from "@xterm/addon-web-links";
-import {
-  handleCd,
-  handleLs,
-  handleLn,
-  handleChown,
-  handleChmod,
-  handleNeofetch,
-  handleTree,
-  handleFree,
-  handleDf,
-  handleCat,
-  handleTouch,
-  handleMkdir,
-  handleMv,
-  handleRm,
-  handlePs,
-  handleKill,
-  handlePkill,
-  parseArguments,
-  handleHelp,
-  formatNodeName,
-} from "@/helpers/terminal";
-import { findNodeByPath, resolvePath } from "@/helpers";
 import { commandSpecs } from "@/constants";
 import { helpMessages } from "@/constants/helpMessages";
+import { findNodeByPath, resolvePath } from "@/helpers";
+import {
+  formatNodeName,
+  handleCat,
+  handleCd,
+  handleChmod,
+  handleChown,
+  handleDf,
+  handleFree,
+  handleHelp,
+  handleKill,
+  handleLn,
+  handleLs,
+  handleMkdir,
+  handleMv,
+  handleNeofetch,
+  handlePkill,
+  handlePs,
+  handleRm,
+  handleTouch,
+  handleTree,
+  parseArguments,
+} from "@/helpers/terminal";
+import { WebLinksAddon } from "@xterm/addon-web-links";
+import { Terminal } from "@xterm/xterm";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();
@@ -71,23 +71,25 @@ export function useTerminal(terminalElement: HTMLElement) {
   });
   term.open(terminalElement);
   term.loadAddon(webLinksAddon);
-  term.onKey((data) => onKey(data));
+  term.onKey(data => onKey(data));
 
   // Default new line in the format -> <user>@<user>: <current-directory> $
   const newLine = computed(() => {
-    let textLine = `\x1b[1;32m${username}@${username}\x1b[1;37m`;
+    let textLine = `\x1B[1;32m${username}@${username}\x1B[1;37m`;
     textLine += ":";
 
     // If the current directory is the home directory, show '~/' instead of the full path
     if (currentDirectory.value === `/home/${username}`) {
-      textLine += `\x1b[1;34m ~ \x1b[1;37m$ `;
-    } else if (currentDirectory.value.startsWith(`/home/${username}/`)) {
+      textLine += `\x1B[1;34m ~ \x1B[1;37m$ `;
+    }
+    else if (currentDirectory.value.startsWith(`/home/${username}/`)) {
       const relativePath = currentDirectory.value.substring(
         `/home/${username}/`.length,
       );
-      textLine += ` \x1b[1;34m~/${relativePath}\x1b[1;37m $ `;
-    } else {
-      textLine += ` \x1b[1;34m${currentDirectory.value}\x1b[1;37m $ `;
+      textLine += ` \x1B[1;34m~/${relativePath}\x1B[1;37m $ `;
+    }
+    else {
+      textLine += ` \x1B[1;34m${currentDirectory.value}\x1B[1;37m $ `;
     }
 
     return textLine;
@@ -119,7 +121,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     const { key, domEvent } = data;
 
     // Reset the command history index if the key is not the arrow up or down
-    if (key !== "\u001b[A" && key !== "\u001b[B") {
+    if (key !== "\u001B[A" && key !== "\u001B[B") {
       commandHistoryIndex.value = 0;
     }
 
@@ -134,7 +136,8 @@ export function useTerminal(terminalElement: HTMLElement) {
         }
 
         showNewLine();
-        if (!shouldAddToHistory) resetCommandAndCursor();
+        if (!shouldAddToHistory)
+          resetCommandAndCursor();
         break;
 
       // Backspace/Delete
@@ -179,7 +182,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       // Arrow Up
-      case "\u001b[A":
+      case "\u001B[A":
         if (commandHistory.value.length > 0) {
           // If at start, begin from end of history
           if (commandHistoryIndex.value === 0) {
@@ -197,7 +200,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       // Arrow Down
-      case "\u001b[B":
+      case "\u001B[B":
         if (commandHistory.value.length > 0) {
           if (commandHistoryIndex.value < commandHistory.value.length - 1) {
             commandHistoryIndex.value++;
@@ -210,8 +213,8 @@ export function useTerminal(terminalElement: HTMLElement) {
           }
           // Clear command when reaching end of history
           else if (
-            commandHistoryIndex.value ===
-            commandHistory.value.length - 1
+            commandHistoryIndex.value
+            === commandHistory.value.length - 1
           ) {
             commandHistoryIndex.value++;
             command.value = "";
@@ -231,13 +234,20 @@ export function useTerminal(terminalElement: HTMLElement) {
       // Any Other Key
       default:
         // Invalidate specific keys and combinations
-        if (key === "\u001b[D") break; // Arrow left
-        if (key === "\u001b[C") break; // Arrow right
-        if (key === "\u001b[1;5A") break; // Ctrl + Arrow up
-        if (key === "\u001b[1;5B") break; // Ctrl + Arrow down
-        if (key === "\u001b[1;5D") break; // Ctrl + Arrow left
-        if (key === "\u001b[1;5C") break; // Ctrl + Arrow right
-        if (domEvent.ctrlKey && domEvent.key === "Backspace") break; // Ctrl + Backspace
+        if (key === "\u001B[D")
+          break; // Arrow left
+        if (key === "\u001B[C")
+          break; // Arrow right
+        if (key === "\u001B[1;5A")
+          break; // Ctrl + Arrow up
+        if (key === "\u001B[1;5B")
+          break; // Ctrl + Arrow down
+        if (key === "\u001B[1;5D")
+          break; // Ctrl + Arrow left
+        if (key === "\u001B[1;5C")
+          break; // Ctrl + Arrow right
+        if (domEvent.ctrlKey && domEvent.key === "Backspace")
+          break; // Ctrl + Backspace
 
         term.write(key);
         command.value += key;
@@ -279,7 +289,8 @@ export function useTerminal(terminalElement: HTMLElement) {
     let parsedArgs;
     try {
       parsedArgs = parseArguments(exec, args.slice(1), commandSpec);
-    } catch (error: any) {
+    }
+    catch (error: any) {
       term.write(`\r\n${error.message}`);
       return false;
     }
@@ -291,8 +302,8 @@ export function useTerminal(terminalElement: HTMLElement) {
     }
 
     if (
-      (parsedArgs.flags.includes("-h") && exec !== "df" && exec !== "free") ||
-      parsedArgs.flags.includes("--help")
+      (parsedArgs.flags.includes("-h") && exec !== "df" && exec !== "free")
+      || parsedArgs.flags.includes("--help")
     ) {
       term.write(`\r\n${helpMessages[exec]}`);
       shouldAddToHistory = true;
@@ -458,7 +469,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     const isTrailingSpace = trimmedCommand.endsWith(" ");
     const commandTokens = trimmedCommand.trim().split(/\s+/);
     const tokensLength = commandTokens.length;
-    let lastToken = isTrailingSpace
+    const lastToken = isTrailingSpace
       ? ""
       : commandTokens[commandTokens.length - 1] || "";
 
@@ -468,20 +479,21 @@ export function useTerminal(terminalElement: HTMLElement) {
       if (binNode && binNode.type === "folder") {
         const commandNodes = binNode.children || [];
         const matchingCommands = commandNodes
-          .filter((node) => node.name?.startsWith(lastToken))
-          .map((node) => node.name);
+          .filter(node => node.name?.startsWith(lastToken))
+          .map(node => node.name);
         if (matchingCommands.length === 1) {
           // autocomplete the command
           const completion = matchingCommands[0]?.substring(lastToken.length) || "";
           command.value += completion;
           cursorPosition.value += completion.length;
           term.write(completion);
-        } else if (matchingCommands.length > 1) {
+        }
+        else if (matchingCommands.length > 1) {
           // show completions
           term.write("\r\n");
           const output = matchingCommands
             .map((cmd) => {
-              const cmdNode = commandNodes.find((node) => node.name === cmd);
+              const cmdNode = commandNodes.find(node => node.name === cmd);
               return cmdNode ? formatNodeName(cmdNode) : cmd;
             })
             .join("  ");
@@ -490,7 +502,8 @@ export function useTerminal(terminalElement: HTMLElement) {
           term.write(`\r\n${newLine.value}${command.value}`);
         }
       }
-    } else {
+    }
+    else {
       // autocomplete file paths
       let pathToComplete = lastToken;
       if (!pathToComplete) {
@@ -506,15 +519,15 @@ export function useTerminal(terminalElement: HTMLElement) {
       if (targetDirNode && targetDirNode.type === "folder") {
         const childNodes = targetDirNode.children || [];
         const matchingNodes = childNodes
-          .filter((node) => node.name.startsWith(incomplete))
-          .map((node) => node.name);
+          .filter(node => node.name.startsWith(incomplete))
+          .map(node => node.name);
 
         if (matchingNodes.length === 1) {
           // autocomplete the path
           const completion = matchingNodes[0]?.substring(incomplete.length) || "";
           // append a '/' if the node is a folder
           const matchedNode = childNodes.find(
-            (node) => node.name === matchingNodes[0],
+            node => node.name === matchingNodes[0],
           );
           if (matchedNode) {
             const isDir = matchedNode.type === "folder";
@@ -524,12 +537,13 @@ export function useTerminal(terminalElement: HTMLElement) {
             cursorPosition.value += completion.length + appendChar.length;
             term.write(completion + appendChar);
           }
-        } else if (matchingNodes.length > 1) {
+        }
+        else if (matchingNodes.length > 1) {
           // show completions
           term.write("\r\n");
           const output = matchingNodes
             .map((name) => {
-              const node = childNodes.find((n) => n.name === name);
+              const node = childNodes.find(n => n.name === name);
               return node ? formatNodeName(node) : name;
             })
             .join("  ");
@@ -551,7 +565,8 @@ export function useTerminal(terminalElement: HTMLElement) {
         dir: "",
         incomplete: path,
       };
-    } else {
+    }
+    else {
       const dir = path.substring(0, lastSlashIndex + 1);
       const incomplete = path.substring(lastSlashIndex + 1);
       return {

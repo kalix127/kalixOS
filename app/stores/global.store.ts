@@ -1,12 +1,12 @@
 import type { WifiNetwork } from "@/types";
-import { generateRandomDelays } from "@/lib/utils";
 import {
-  defaultNetworks,
-  desktopEnvironments,
   defaultDimScreenThreshold,
+  defaultNetworks,
+  defaultUsername,
+  desktopEnvironments,
 } from "@/constants";
+import { generateRandomDelays } from "@/lib/utils";
 import { useIdle, watchOnce } from "@vueuse/core";
-import { defaultUsername } from "@/constants";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",
@@ -123,7 +123,7 @@ export const useGlobalStore = defineStore({
         setTimeout(() => {
           // Check if the network is already present in the available list
           const isNetworkAlreadyAdded = this.availableWifiNetworks.some(
-            (n) => n.id === network.id,
+            n => n.id === network.id,
           );
 
           // If the network is not already added, add it to the list
@@ -147,7 +147,7 @@ export const useGlobalStore = defineStore({
       this.isPowerOffMenuOpen = false;
 
       const { idle } = useIdle(0);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Start watching after 1 seconds
       watchOnce(idle, () => {
@@ -194,19 +194,24 @@ export const useGlobalStore = defineStore({
   getters: {
     isAnyTopbarMenuOpen(state) {
       return (
-        state.isPowerOffMenuOpen ||
-        state.isWifiMenuOpen ||
-        state.isBluetoothMenuOpen ||
-        state.isWiredMenuOpen ||
-        state.isLanguageMenuOpen
+        state.isPowerOffMenuOpen
+        || state.isWifiMenuOpen
+        || state.isBluetoothMenuOpen
+        || state.isWiredMenuOpen
+        || state.isLanguageMenuOpen
       );
     },
     getTopbarMenuOpen(state) {
-      if (state.isPowerOffMenuOpen) return "poweroff";
-      if (state.isWifiMenuOpen) return "wifi";
-      if (state.isBluetoothMenuOpen) return "bluetooth";
-      if (state.isWiredMenuOpen) return "wired";
-      if (state.isLanguageMenuOpen) return "language";
+      if (state.isPowerOffMenuOpen)
+        return "poweroff";
+      if (state.isWifiMenuOpen)
+        return "wifi";
+      if (state.isBluetoothMenuOpen)
+        return "bluetooth";
+      if (state.isWiredMenuOpen)
+        return "wired";
+      if (state.isLanguageMenuOpen)
+        return "language";
       return "";
     },
   },

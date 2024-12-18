@@ -25,8 +25,8 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    :isOpen="isLanguageMenuOpen"
-    :isEnabled="true"
+    :is-open="isLanguageMenuOpen"
+    :is-enabled="true"
     :title="$t('language.switch')"
     icon="gnome:languages"
   >

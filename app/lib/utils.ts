@@ -12,5 +12,5 @@ export function generateRandomDelays(
   const randomNumbers = Array.from({ length: count }, () => Math.random());
   const sumOfRandoms = randomNumbers.reduce((acc, num) => acc + num, 0);
   // Normalize the random numbers so that their sum equals totalTime
-  return randomNumbers.map((random) => (random / sumOfRandoms) * totalTime);
+  return randomNumbers.map(random => (random / sumOfRandoms) * totalTime);
 }

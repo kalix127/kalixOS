@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes } from "vue";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
@@ -13,16 +13,17 @@ const props = defineProps<{
   isCenter?: boolean;
 }>();
 
-const { label, title, description, isDisabled } = toRefs(props);
-
 const emit = defineEmits<{
   (e: "click"): void;
 }>();
 
-const handleClick = () => {
-  if (isDisabled.value) return;
+const { label, title, description, isDisabled } = toRefs(props);
+
+function handleClick() {
+  if (isDisabled.value)
+    return;
   emit("click");
-};
+}
 
 const isOptionGroup = inject<boolean>("isOptionGroup", false);
 </script>
@@ -39,7 +40,6 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
     <slot name="title" />
 
     <div
-      @click="handleClick"
       :class="
         cn(
           'flex min-h-12 items-center bg-popover p-3 text-sm transition-colors hover:bg-secondary/80',
@@ -51,14 +51,24 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
           $props.class,
         )
       "
+      @click="handleClick"
     >
-      <div v-if="label" class="flex flex-col gap-1">
+      <div
+        v-if="label"
+        class="flex flex-col gap-1"
+      >
         <span>{{ label }}</span>
-        <span v-if="description" class="text-xs text-muted-foreground">{{
+        <span
+          v-if="description"
+          class="text-xs text-muted-foreground"
+        >{{
           description
         }}</span>
       </div>
-      <slot v-else name="label" />
+      <slot
+        v-else
+        name="label"
+      />
       <slot name="center" />
       <slot name="action" />
     </div>

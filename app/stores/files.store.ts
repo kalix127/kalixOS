@@ -11,7 +11,8 @@ export const useFilesStore = defineStore("files", {
   }),
   getters: {
     openedNode(state) {
-      if (!state.openedNodeId) return null;
+      if (!state.openedNodeId)
+        return null;
       const { nodeMap } = storeToRefs(useDesktopStore());
       return nodeMap.value.get(state.openedNodeId) as FolderNode;
     },
@@ -24,7 +25,8 @@ export const useFilesStore = defineStore("files", {
   },
   actions: {
     setFilesNodeId(id: string) {
-      if (id === this.openedNodeId) return;
+      if (id === this.openedNodeId)
+        return;
       const index = this.history.indexOf(id);
       if (index !== -1) {
         this.history.splice(index, 1);

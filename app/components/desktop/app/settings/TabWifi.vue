@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { type WifiNetwork } from "@/types";
-const selectedWifiNetwork = ref<WifiNetwork | null>(null);
-
 const globalStore = useGlobalStore();
 const {
   isWifiEnabled,
@@ -9,7 +6,6 @@ const {
   isSearchingWifiNetworks,
   availableWifiNetworks,
   connectedWifiNetwork,
-  isConnectingToWifi,
 } = storeToRefs(globalStore);
 const { toggleWifi, toggleAirplaneMode } = globalStore;
 
@@ -21,30 +17,53 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
     <div class="h-full space-y-6 px-6 py-8 sm:px-12">
       <SettingsOptionGroup>
         <!-- Toggle Wifi -->
-        <SettingsOption :label="$t('wifi')" is-first @click="toggleWifi">
+        <SettingsOption
+          :label="$t('wifi')"
+          is-first
+          @click="toggleWifi"
+        >
           <template #action>
             <Switch :checked="isWifiEnabled" />
           </template>
         </SettingsOption>
 
         <!-- Saved Networks -->
-        <SettingsOption :label="$t('saved_networks')" is-disabled>
+        <SettingsOption
+          :label="$t('saved_networks')"
+          is-disabled
+        >
           <template #action>
-            <Icon name="gnome:arrow-long-right" size="18" />
+            <Icon
+              name="gnome:arrow-long-right"
+              size="18"
+            />
           </template>
         </SettingsOption>
 
         <!-- Connect to Hidden Network -->
-        <SettingsOption :label="$t('connect_to_hidden_network')" is-disabled>
+        <SettingsOption
+          :label="$t('connect_to_hidden_network')"
+          is-disabled
+        >
           <template #action>
-            <Icon name="gnome:arrow-long-right" size="18" />
+            <Icon
+              name="gnome:arrow-long-right"
+              size="18"
+            />
           </template>
         </SettingsOption>
 
         <!-- Wifi Hotspot -->
-        <SettingsOption :label="$t('turn_wifi_hotspot_on')" is-disabled is-last>
+        <SettingsOption
+          :label="$t('turn_wifi_hotspot_on')"
+          is-disabled
+          is-last
+        >
           <template #action>
-            <Icon name="gnome:arrow-long-right" size="18" />
+            <Icon
+              name="gnome:arrow-long-right"
+              size="18"
+            />
           </template>
         </SettingsOption>
       </SettingsOptionGroup>
@@ -64,8 +83,8 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
       <Transition mode="out-in">
         <!-- Network List -->
         <SettingsOptionGroup
-          :title="$t('visible_networks')"
           v-if="isWifiEnabled"
+          :title="$t('visible_networks')"
         >
           <template #title-loading-icon>
             <Icon
@@ -84,7 +103,10 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
           >
             <template #label>
               <div class="flex items-center gap-4">
-                <IconWifi :network="network" :size="18" />
+                <IconWifi
+                  :network="network"
+                  :size="18"
+                />
                 <span>{{ network.name }}</span>
                 <Icon
                   v-if="idConnectingNetwork === network.id"
@@ -99,8 +121,7 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
                 <span
                   v-if="connectedWifiNetwork?.id === network.id"
                   class="text-muted-foreground"
-                  >{{ $t("connected") }}</span
-                >
+                >{{ $t("connected") }}</span>
               </div>
             </template>
           </SettingsOption>
@@ -108,8 +129,8 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Wifi Disabled -->
         <div
-          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && !isAirplaneModeEnabled"
+          class="!mt-10 grid place-content-center"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon
@@ -128,8 +149,8 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
 
         <!-- Airplane Mode Enabled -->
         <div
-          class="!mt-10 grid place-content-center"
           v-else-if="!isWifiEnabled && isAirplaneModeEnabled"
+          class="!mt-10 grid place-content-center"
         >
           <div class="flex flex-col items-center gap-4 text-center">
             <Icon

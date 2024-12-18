@@ -1,16 +1,16 @@
-import { computed } from "vue";
 import type {
+  AppNode,
+  ContextMenuTargetType,
+  FileNode,
+  FolderNode,
   Node,
   ShortcutNode,
-  ContextMenuTargetType,
-  AppNode,
-  FolderNode,
-  FileNode,
 } from "@/types";
 import { findNodeByIdRecursive } from "@/helpers";
 import { useEventListener } from "@vueuse/core";
-import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 export function useContextMenu() {
   const { t } = useI18n();
@@ -18,12 +18,12 @@ export function useContextMenu() {
   const contextMenuStore = useContextMenuStore();
   const desktopStore = useDesktopStore();
 
-  const { isOpen, x, y, targetType, targetNode } =
-    storeToRefs(contextMenuStore);
+  const { isOpen, x, y, targetType, targetNode }
+    = storeToRefs(contextMenuStore);
   const { closeContextMenu } = contextMenuStore;
 
-  const { desktopNode, isDockPinned, isDockVisible, bookmarks } =
-    storeToRefs(desktopStore);
+  const { desktopNode, isDockPinned, isDockVisible, bookmarks }
+    = storeToRefs(desktopStore);
   const {
     createNode,
     editNode,
@@ -57,6 +57,146 @@ export function useContextMenu() {
     top: `${y.value}px`,
     left: `${x.value}px`,
   }));
+
+  // Handlers
+
+  const createNewFolder = () => {
+    if (desktopNode.value) {
+      createNode(
+        desktopNode.value.id,
+        {
+          name: t("new_folder"),
+          type: "folder",
+          isRenaming: true,
+          isNewlyCreated: true,
+        },
+        true,
+      );
+    }
+    closeContextMenu();
+  };
+
+  const createNewDocument = () => {
+    if (desktopNode.value) {
+      createNode(
+        desktopNode.value.id,
+        {
+          name: t("new_document"),
+          type: "file",
+          isRenaming: true,
+          isNewlyCreated: true,
+        },
+        true,
+      );
+    }
+    closeContextMenu();
+  };
+
+  const openInTerminal = (node: FolderNode | null) => {
+    if (!node)
+      return;
+
+    setCurrentDirectory(node);
+    openApp("terminal");
+  };
+
+  const handleOpenApp = async (node: Node | null) => {
+    if (!node)
+      return;
+
+    const minimizeIfAlreadyOpen = node.type === "app";
+
+    if (!isDockPinned.value) {
+      isDockVisible.value = false;
+    }
+
+    if (node.type === "social") {
+      openSocialApp(node.id);
+      return;
+    }
+
+    openApp(node.id, minimizeIfAlreadyOpen);
+    closeContextMenu();
+  };
+
+  const handleCloseApp = (node: AppNode | null) => {
+    if (!node)
+      return;
+
+    closeApp(node.id);
+    closeContextMenu();
+  };
+
+  const openFolder = (node: FolderNode | null) => {
+    if (!node)
+      return;
+
+    setFilesNodeId(node.id);
+    openApp("files");
+    closeContextMenu();
+  };
+
+  const openFile = (node: FileNode | null) => {
+    if (!node)
+      return;
+
+    setKateNodeId(node.id);
+    openApp("kate");
+    closeContextMenu();
+  };
+
+  const addToBookmarksAction = (node: FolderNode | null) => {
+    if (!node || node.type !== "folder") {
+      return;
+    }
+
+    addToBookmarks(node.id);
+    closeContextMenu();
+  };
+
+  const removeFromBookmarksAction = (node: FolderNode | null) => {
+    if (!node || node.type !== "folder") {
+      return;
+    }
+
+    removeFromBookmarks(node.id);
+    closeContextMenu();
+  };
+
+  const newFolderWithItem = (node: Node | null) => {
+    if (!node || !node.parentId) {
+      return;
+    }
+
+    const newFolder = createNode(
+      node.parentId,
+      {
+        name: t("new_folder"),
+        type: "folder",
+        isRenaming: true,
+        isNewlyCreated: true,
+      },
+      true,
+    );
+    moveNode(node.id, newFolder!.id);
+    closeContextMenu();
+  };
+
+  const renameNode = (node: Node | null) => {
+    if (!node)
+      return;
+
+    editNode(node.id, { isRenaming: true });
+    closeContextMenu();
+  };
+
+  const moveToTrash = (node: Node | null) => {
+    if (!node)
+      return;
+
+    moveNode(node.id, "trash");
+    closeContextMenu();
+  };
 
   /* Menu options based on type */
   const getDesktopOptions = () => [
@@ -220,13 +360,13 @@ export function useContextMenu() {
   ];
 
   const menuOptions = computed(() => {
-    let actualTargetType: ContextMenuTargetType | null = targetType.value;
-    let actualTargetNode: Node | null = targetNode.value;
+    const actualTargetType: ContextMenuTargetType | null = targetType.value;
+    const actualTargetNode: Node | null = targetNode.value;
 
     // Handle shortcuts
     if (
-      targetType.value === "shortcut" &&
-      (targetNode.value as ShortcutNode).targetId
+      targetType.value === "shortcut"
+      && (targetNode.value as ShortcutNode).targetId
     ) {
       const shortcut = targetNode.value as ShortcutNode;
       const target = findNodeByIdRecursive(
@@ -263,137 +403,6 @@ export function useContextMenu() {
         return [];
     }
   });
-
-  const createNewFolder = () => {
-    if (desktopNode.value) {
-      createNode(
-        desktopNode.value.id,
-        {
-          name: t("new_folder"),
-          type: "folder",
-          isRenaming: true,
-          isNewlyCreated: true,
-        },
-        true,
-      );
-    }
-    closeContextMenu();
-  };
-
-  const createNewDocument = () => {
-    if (desktopNode.value) {
-      createNode(
-        desktopNode.value.id,
-        {
-          name: t("new_document"),
-          type: "file",
-          isRenaming: true,
-          isNewlyCreated: true,
-        },
-        true,
-      );
-    }
-    closeContextMenu();
-  };
-
-  const openInTerminal = (node: FolderNode | null) => {
-    if (!node) return;
-
-    setCurrentDirectory(node);
-    openApp("terminal");
-  };
-
-  const handleOpenApp = async (node: Node | null) => {
-    if (!node) return;
-
-    const minimizeIfAlreadyOpen = node.type === "app" ? true : false;
-
-    if (!isDockPinned.value) {
-      isDockVisible.value = false;
-    }
-
-    if (node.type === "social") {
-      openSocialApp(node.id);
-      return;
-    }
-
-    openApp(node.id, minimizeIfAlreadyOpen);
-    closeContextMenu();
-  };
-
-  const handleCloseApp = (node: AppNode | null) => {
-    if (!node) return;
-
-    closeApp(node.id);
-    closeContextMenu();
-  };
-
-  const openFolder = (node: FolderNode | null) => {
-    if (!node) return;
-
-    setFilesNodeId(node.id);
-    openApp("files");
-    closeContextMenu();
-  };
-
-  const openFile = (node: FileNode | null) => {
-    if (!node) return;
-
-    setKateNodeId(node.id);
-    openApp("kate");
-    closeContextMenu();
-  };
-
-  const addToBookmarksAction = (node: FolderNode | null) => {
-    if (!node || node.type !== "folder") {
-      return;
-    }
-
-    addToBookmarks(node.id);
-    closeContextMenu();
-  };
-
-  const removeFromBookmarksAction = (node: FolderNode | null) => {
-    if (!node || node.type !== "folder") {
-      return;
-    }
-
-    removeFromBookmarks(node.id);
-    closeContextMenu();
-  };
-
-  const newFolderWithItem = (node: Node | null) => {
-    if (!node || !node.parentId) {
-      return;
-    }
-
-    const newFolder = createNode(
-      node.parentId,
-      {
-        name: t("new_folder"),
-        type: "folder",
-        isRenaming: true,
-        isNewlyCreated: true,
-      },
-      true,
-    );
-    moveNode(node.id, newFolder!.id);
-    closeContextMenu();
-  };
-
-  const renameNode = (node: Node | null) => {
-    if (!node) return;
-
-    editNode(node.id, { isRenaming: true });
-    closeContextMenu();
-  };
-
-  const moveToTrash = (node: Node | null) => {
-    if (!node) return;
-
-    moveNode(node.id, "trash");
-    closeContextMenu();
-  };
 
   return {
     isOpen,

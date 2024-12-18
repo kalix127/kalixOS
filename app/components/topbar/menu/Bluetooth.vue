@@ -12,8 +12,8 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    :isOpen="isBluetoothMenuOpen"
-    :isEnabled="isBluetoothEnabled"
+    :is-open="isBluetoothMenuOpen"
+    :is-enabled="isBluetoothEnabled"
     :title="$t('bluetooth')"
     icon="gnome:bluetooth-on"
   >

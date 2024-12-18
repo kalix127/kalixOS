@@ -25,7 +25,10 @@ watch(escape, (v) => {
 
 <template>
   <div class="relative grid min-h-[100svh] place-content-center bg-black">
-    <Icon name="extra:loading-dots" size="80" />
+    <Icon
+      name="extra:loading-dots"
+      size="80"
+    />
 
     <!-- System Logs on escape -->
     <OverlaySystemLogs v-show="areSystemLogsVisible" />

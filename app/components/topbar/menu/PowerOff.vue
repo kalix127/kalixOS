@@ -6,8 +6,8 @@ const { t } = useI18n();
 const globalStore = useGlobalStore();
 const { isPowerOffMenuOpen, isAuthenticated } = storeToRefs(globalStore);
 
-const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen } =
-  storeToRefs(useBootStore());
+const { isRestartModalOpen, isPowerOffModalOpen, isLogoutModalOpen }
+  = storeToRefs(useBootStore());
 
 const { handleSuspend } = globalStore;
 
@@ -42,26 +42,28 @@ function closeMenu() {
 <template>
   <TopbarMenu
     v-on-click-outside="closeMenu"
-    :isOpen="isPowerOffMenuOpen"
+    :is-open="isPowerOffMenuOpen"
     :title="$t('power_off')"
     icon="gnome:poweroff"
   >
     <Button
       v-for="option in options"
       :key="option.name"
-      @click="option.handler"
       variant="ghost"
       class="w-full justify-start rounded-xl font-medium duration-0 hover:bg-accent"
-      >{{ option.name }}</Button
+      @click="option.handler"
     >
+      {{ option.name }}
+    </Button>
     <template v-if="isAuthenticated">
       <!-- Separator -->
-      <div class="h-1 border-t border-gray-500/40 px-2"></div>
+      <div class="h-1 border-t border-gray-500/40 px-2" />
       <Button
-        @click="handleLogout"
         variant="ghost"
         class="w-full justify-start rounded-xl font-medium duration-0 hover:bg-accent"
-        >{{ $t("logout") }}...
+        @click="handleLogout"
+      >
+        {{ $t("logout") }}...
       </Button>
     </template>
   </TopbarMenu>

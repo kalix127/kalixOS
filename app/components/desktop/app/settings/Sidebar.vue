@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes } from "vue";
+import type { HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 
 defineProps<{
@@ -130,14 +130,15 @@ const filteredItems = computed(() => {
   }
   const term = searchTerm.value.toLowerCase();
   return items.value.filter((item) => {
-    if (item.isSeparator) return false;
+    if (item.isSeparator)
+      return false;
 
     const labelMatch = item.label?.toLowerCase().includes(term) ?? false;
-    const descriptionMatch =
-      item.description?.toLowerCase().includes(term) ?? false;
+    const descriptionMatch
+      = item.description?.toLowerCase().includes(term) ?? false;
 
-    const translationsMatch =
-      item.translationKeys?.some((key) => {
+    const translationsMatch
+      = item.translationKeys?.some((key) => {
         const translatedText = t(key)?.toLowerCase() ?? "";
         return translatedText.includes(term);
       }) ?? false;
@@ -150,17 +151,18 @@ const displayItems = computed(() => {
   return searchTerm.value.trim() ? filteredItems.value : items.value;
 });
 
-const handleItemClick = (id: string) => {
-  if (!id) return;
+function handleItemClick(id: string) {
+  if (!id)
+    return;
   setSettingsTab(id);
   searchTerm.value = "";
   isSearchActive.value = false;
-};
+}
 
-const toggleSearch = () => {
+function toggleSearch() {
   isSearchActive.value = !isSearchActive.value;
   searchTerm.value = "";
-};
+}
 </script>
 
 <template>
@@ -180,19 +182,25 @@ const toggleSearch = () => {
     >
       <div class="flex h-10 items-center justify-between">
         <button
-          @click="() => toggleSearch()"
           class="grid place-content-center rounded-md p-2 transition-colors duration-300 hover:bg-popover"
           :class="{
             'bg-popover': isSearchActive,
           }"
+          @click="() => toggleSearch()"
         >
-          <Icon name="gnome:search" size="16" />
+          <Icon
+            name="gnome:search"
+            size="16"
+          />
         </button>
         <div class="text-sm font-extrabold">
           {{ $t("settings") }}
         </div>
         <div class="grid place-content-center p-2">
-          <Icon name="gnome:three-dots-vertical" size="18" />
+          <Icon
+            name="gnome:three-dots-vertical"
+            size="18"
+          />
         </div>
       </div>
 
@@ -202,10 +210,10 @@ const toggleSearch = () => {
           <div class="relative mb-2 flex items-center gap-4 p-1">
             <Input
               v-model="searchTerm"
+              v-focus
               :placeholder="$t('search_settings')"
               class="h-8 bg-popover pl-8 outline-none ring-2 ring-ring/70 ring-offset-0 focus-visible:ring-ring/70 focus-visible:ring-offset-0"
               type="text"
-              v-focus
             />
 
             <!-- Search icon -->
@@ -244,10 +252,10 @@ const toggleSearch = () => {
       <template v-for="(item, index) in displayItems">
         <!-- Separator -->
         <div
-          :key="item.label"
           v-if="item.isSeparator"
+          :key="item.label"
           class="h-px w-full bg-gray-500/25"
-        ></div>
+        />
 
         <!-- Item -->
         <button
@@ -262,8 +270,14 @@ const toggleSearch = () => {
           ]"
           @click="() => handleItemClick(item.id ?? '')"
         >
-          <div v-if="item.icon" class="grid place-content-center">
-            <Icon :name="item.icon" size="16" />
+          <div
+            v-if="item.icon"
+            class="grid place-content-center"
+          >
+            <Icon
+              :name="item.icon"
+              size="16"
+            />
           </div>
           <div class="flex flex-col items-start gap-1">
             <span class="text-sm font-medium">{{ item.label }}</span>

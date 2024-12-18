@@ -1,27 +1,4 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
-  future: {
-    compatibilityVersion: 4,
-  },
-  app: {
-    head: {
-      htmlAttrs: {
-        class: "overflow-hidden",
-        lang: "en",
-      },
-    },
-    pageTransition: { name: "page", mode: "out-in" },
-    layoutTransition: { name: "layout", mode: "out-in" },
-  },
-  devtools: { enabled: true },
-  runtimeConfig: {
-    public: {
-      socialUrl: {
-        linkedin: process.env.SOCIAL_LINKEDIN_URL,
-        github: process.env.SOCIAL_GITHUB_URL,
-      },
-    },
-  },
   modules: [
     "nuxt-zod-i18n",
     "@nuxtjs/tailwindcss",
@@ -45,6 +22,38 @@ export default defineNuxtConfig({
       "~/components",
     ],
   },
+  devtools: { enabled: true },
+  app: {
+    head: {
+      htmlAttrs: {
+        class: "overflow-hidden",
+        lang: "en",
+      },
+    },
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
+  },
+  css: ["~/assets/css/main.css"],
+  runtimeConfig: {
+    public: {
+      socialUrl: {
+        linkedin: process.env.SOCIAL_LINKEDIN_URL,
+        github: process.env.SOCIAL_GITHUB_URL,
+      },
+    },
+  },
+  future: {
+    compatibilityVersion: 4,
+  },
+  compatibilityDate: "2024-04-03",
+  fonts: {
+    families: [
+      {
+        name: "Noto Sans",
+        provider: "google",
+      },
+    ],
+  },
   i18n: {
     defaultLocale: "en-US",
     lazy: true,
@@ -66,10 +75,6 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
   },
-  zodI18n: {
-    useModuleLocale: false,
-  },
-  css: ["~/assets/css/main.css"],
   icon: {
     customCollections: [
       {
@@ -104,22 +109,18 @@ export default defineNuxtConfig({
       sizeLimitKb: 256,
     },
   },
-  shadcn: {
-    prefix: "",
-    componentDir: "./app/components/ui",
-  },
-  fonts: {
-    families: [
-      {
-        name: "Noto Sans",
-        provider: "google",
-      },
-    ],
+  image: {
+    format: ["webp"],
   },
   pinia: {
     storesDirs: ["./app/stores/**"],
   },
-  image: {
-    format: ["webp"],
+
+  shadcn: {
+    prefix: "",
+    componentDir: "./app/components/ui",
+  },
+  zodI18n: {
+    useModuleLocale: false,
   },
 });

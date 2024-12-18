@@ -33,7 +33,6 @@ export function useContextMenu() {
     removeFromBookmarks,
     openApp,
     closeApp,
-    openSocialApp,
   } = desktopStore;
 
   const { currentSettingsTab } = storeToRefs(useGlobalStore());
@@ -108,11 +107,6 @@ export function useContextMenu() {
 
     if (!isDockPinned.value) {
       isDockVisible.value = false;
-    }
-
-    if (node.type === "social") {
-      openSocialApp(node.id);
-      return;
     }
 
     openApp(node.id, minimizeIfAlreadyOpen);

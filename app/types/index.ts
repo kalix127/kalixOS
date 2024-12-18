@@ -38,7 +38,7 @@ export interface FileNode extends BaseNode {
 }
 
 export interface AppNode extends BaseNode {
-  type: "app" | "social";
+  type: "app";
   title: string;
   isOpen: boolean;
   isMinimized: boolean;
@@ -54,7 +54,6 @@ export interface ShortcutNode extends BaseNode {
 
 export type ContextMenuTargetType =
   | "desktop"
-  | "social"
   | "dock"
   | "folder"
   | "file"

@@ -40,7 +40,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
       }
 
       if (targetType === "dock") {
-        const contextMenuHeight = targetNode?.type === "social" ? 76 : 129;
+        const contextMenuHeight = 76;
         const currentBottomOffset = height.value - y;
 
         if (currentBottomOffset < contextMenuHeight) {

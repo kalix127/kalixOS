@@ -23,7 +23,6 @@ const filteredApps = computed(() => {
     .filter(
       app =>
         app.id !== "kate"
-        && app.type !== "social"
         && app.name.toLowerCase().includes(query.value),
     );
 });

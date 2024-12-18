@@ -25,7 +25,7 @@ const submitHandler = handleSubmit(values =>
 </script>
 
 <template>
-  <div class="flex w-72 max-w-screen-xs flex-col items-center gap-8">
+  <div class="flex w-72 max-w-screen-xs flex-col items-center gap-6">
     <div class="grid place-content-center rounded-full bg-secondary p-6">
       <Icon
         name="gnome:avatar"

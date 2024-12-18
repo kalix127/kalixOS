@@ -11,7 +11,7 @@ const query = ref("");
 const { escape } = useMagicKeys();
 
 // Close the overlay on 'ESC' key
-watch(escape, (v) => {
+watch(() => escape!.value, (v: boolean) => {
   if (v) {
     closeOverlay();
   }

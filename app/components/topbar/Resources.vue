@@ -27,7 +27,7 @@ useIntervalFn(
 
 <template>
   <div
-    class="hidden select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-extrabold transition-colors duration-100 ease-in-out hover:bg-secondary/50 lg:flex"
+    class="hidden select-none items-center gap-4 text-nowrap rounded-full px-3 py-1 text-sm font-bold transition-colors duration-100 ease-in-out hover:bg-secondary/50 lg:flex"
   >
     <span>CPU: {{ cpuUsage }}</span>
     <span>Mem: {{ memoryUsage }}</span>

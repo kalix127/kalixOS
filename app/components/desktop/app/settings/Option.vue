@@ -32,7 +32,7 @@ const isOptionGroup = inject<boolean>("isOptionGroup", false);
   <div :class="{ 'space-y-3': !isOptionGroup }">
     <div
       v-if="!isOptionGroup && title"
-      class="text-sm font-extrabold tracking-wide"
+      class="text-sm font-bold tracking-wide"
     >
       {{ title }}
     </div>

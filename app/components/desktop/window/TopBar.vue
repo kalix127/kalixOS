@@ -63,7 +63,7 @@ const actions = computed(() => [
 
     <!-- Title -->
     <div
-      class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-extrabold"
+      class="text grid min-w-fit select-none place-content-center truncate text-center text-sm font-bold"
     >
       {{ app.title ? `${app.name} - ${app.title}` : app.name }}
     </div>

@@ -18,7 +18,7 @@ function closeMenu() {
     icon="gnome:bluetooth-on"
   >
     <div
-      class="text-md grid place-content-center p-6 text-center font-extrabold text-muted-foreground/70 sm:text-lg"
+      class="text-md grid place-content-center p-6 text-center font-bold text-muted-foreground/70 sm:text-lg"
     >
       {{
         isBluetoothEnabled

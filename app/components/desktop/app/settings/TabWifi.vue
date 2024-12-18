@@ -138,7 +138,7 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
               size="140"
               class="text-muted-foreground"
             />
-            <span class="text-2xl font-extrabold">{{
+            <span class="text-2xl font-bold">{{
               $t("wifi_no_adapter_found")
             }}</span>
             <p class="text-sm text-muted-foreground">
@@ -158,7 +158,7 @@ const { connectToWifi, idConnectingNetwork } = useWifi();
               size="140"
               class="text-muted-foreground"
             />
-            <span class="text-2xl font-extrabold">{{
+            <span class="text-2xl font-bold">{{
               $t("airplane_mode_enabled")
             }}</span>
             <p class="text-sm text-muted-foreground">

@@ -22,7 +22,7 @@ const { isOpen, targetType, targetNode, contextMenuStyle, menuOptions }
             class="flex items-center gap-4 px-1"
           >
             <span
-              class="select-none text-nowrap text-xs font-extrabold text-muted-foreground"
+              class="select-none text-nowrap text-xs font-bold text-muted-foreground"
             >
               {{
                 targetNode?.isTranslated

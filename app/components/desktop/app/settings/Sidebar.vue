@@ -193,7 +193,7 @@ function toggleSearch() {
             size="16"
           />
         </button>
-        <div class="text-sm font-extrabold">
+        <div class="text-sm font-bold">
           {{ $t("settings") }}
         </div>
         <div class="grid place-content-center p-2">

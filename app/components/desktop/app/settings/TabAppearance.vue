@@ -41,11 +41,11 @@ function handleBackgroundChange(event: Event) {
       >
         <template #title>
           <div class="mb-1 flex items-center justify-between gap-2">
-            <span class="text-sm font-extrabold tracking-wide">{{
+            <span class="text-sm font-bold tracking-wide">{{
               $t("background")
             }}</span>
             <label
-              class="flex items-center gap-1 rounded-md p-2 text-sm font-extrabold transition-colors duration-100 hover:bg-popover/60"
+              class="flex items-center gap-1 rounded-md p-2 text-sm font-bold transition-colors duration-100 hover:bg-popover/60"
             >
               <Icon
                 name="gnome:add"

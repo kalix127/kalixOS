@@ -56,13 +56,8 @@ function handleClickSegment(id: string) {
   <div
     class="app-topbar flex h-8 w-full items-center overflow-hidden whitespace-nowrap rounded-md bg-popover pl-2"
   >
-    <Icon
-      v-if="pathIcon"
-      :name="pathIcon"
-      size="16"
-      class="mr-2"
-    />
-    <div class="flex items-center overflow-hidden text-sm font-extrabold">
+    <Icon v-if="pathIcon" :name="pathIcon" size="16" class="mr-2" />
+    <div class="flex items-center overflow-hidden text-sm font-bold">
       <div
         v-for="(segment, index) in displaySegments"
         :key="index"

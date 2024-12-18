@@ -53,7 +53,7 @@ const hasBookmarks = computed(() => bookmarkItems.value.length > 0);
           size="16"
         />
       </div>
-      <div class="pt-2 text-sm font-extrabold">
+      <div class="pt-2 text-sm font-bold">
         {{ $t("files") }}
       </div>
       <div class="grid place-content-center p-2">

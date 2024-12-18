@@ -118,11 +118,8 @@ const items = computed(() => [
         />
 
         <!-- Only for the Wifi Button -->
-        <div
-          v-if="item.label === 'wifi'"
-          class="flex flex-col items-start"
-        >
-          <span class="text-sm font-extrabold">
+        <div class="flex flex-col items-start" v-if="item.label === 'wifi'">
+          <span class="text-sm font-bold">
             {{ item.name }}
           </span>
           <span
@@ -133,10 +130,7 @@ const items = computed(() => [
           </span>
         </div>
 
-        <span
-          v-else
-          class="text-nowrap text-sm font-extrabold"
-        >
+        <span v-else class="text-nowrap text-sm font-bold">
           {{ item.name }}
         </span>
       </button>

@@ -43,7 +43,7 @@ const name = defineModel<string>({ required: true });
           />
           <Button
             size="sm"
-            class="w-fit font-extrabold"
+            class="w-fit font-bold"
             @click="() => $emit('submit')"
           >
             OK

@@ -168,13 +168,8 @@ onMounted(async () => {
         }"
       >
         <div class="flex flex-col items-center gap-4">
-          <Icon
-            name="gnome:folder-search"
-            size="160"
-          />
-          <h2 class="text-2xl font-extrabold">
-            {{ $t("no_results_found") }}
-          </h2>
+          <Icon name="gnome:folder-search" size="160" />
+          <h2 class="text-2xl font-bold">{{ $t("no_results_found") }}</h2>
           <p class="text-muted-foreground">
             {{ $t("no_match_in_x", { folderName: openedNode?.name }) }}
           </p>

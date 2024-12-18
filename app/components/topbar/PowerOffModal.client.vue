@@ -64,12 +64,8 @@ onBeforeUnmount(() => {
       </AlertDialogHeader>
 
       <div class="flex flex-col items-center gap-4 p-4 pt-6 text-center">
-        <h1 class="text-xl font-extrabold">
-          {{ title }}
-        </h1>
-        <p class="text-sm">
-          {{ description }}
-        </p>
+        <h1 class="text-xl font-bold">{{ title }}</h1>
+        <p class="text-sm">{{ description }}</p>
       </div>
 
       <div class="flex w-full gap-[1px]">

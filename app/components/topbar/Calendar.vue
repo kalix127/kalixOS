@@ -55,7 +55,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
       <div
         class="flex select-none justify-center rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
       >
-        <span class="text-nowrap text-xs font-extrabold sm:text-sm">
+        <span class="text-nowrap text-xs font-bold sm:text-sm">
           {{ formattedDateTime }}
         </span>
       </div>
@@ -70,7 +70,7 @@ const calendarDate = ref(today(getLocalTimeZone())) as Ref<DateValue>;
           {{ weekDay }}
         </span>
         <span
-          class="mb-2 w-full text-left text-xl font-extrabold text-muted-foreground xs:pl-4"
+          class="mb-2 w-full text-left text-xl font-bold text-muted-foreground xs:pl-4"
         >
           {{ formattedDate }}
         </span>

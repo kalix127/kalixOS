@@ -25,7 +25,7 @@ const { title, description, isTranslated, icon } = toRefs(props.notification);
         :size="28"
       />
       <div class="space-y-2">
-        <AlertTitle class="font-extrabold tracking-normal">
+        <AlertTitle class="font-bold tracking-normal">
           {{ isTranslated ? $t(title) : title }}
         </AlertTitle>
         <AlertDescription class="text-xs">

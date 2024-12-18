@@ -18,7 +18,7 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
               size="120"
               class="text-muted-foreground"
             />
-            <span class="text-2xl font-extrabold">{{
+            <span class="text-2xl font-bold">{{
               $t("bluetooth_disabled")
             }}</span>
             <p class="text-sm text-muted-foreground">
@@ -38,7 +38,7 @@ const { isBluetoothEnabled } = storeToRefs(globalStore);
               size="120"
               class="text-muted-foreground"
             />
-            <span class="text-2xl font-extrabold">{{
+            <span class="text-2xl font-bold">{{
               $t("bluetooth_enabled")
             }}</span>
             <p class="text-sm text-muted-foreground">

@@ -67,10 +67,10 @@ const socialLinks = [
 </script>
 
 <template>
-  <div ref="el" :style="style" class="fixed z-[100000] cursor-move select-none rounded-full p-1 size-16 grid place-items-center">
+  <div ref="el" :style="style" class="fixed z-[100000] cursor-move select-none rounded-full size-[60px] grid place-items-center">
     <!-- Trigger -->
     <template v-if="!isExpanded">
-      <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="border-background border rounded-full" alt="Gianluca Iavicoli" />
+      <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="border-background border rounded-full" alt="Gianluca Iavicoli" width="60" height="60" />
 
       <button class="absolute top-0 right-0 animate-bounce z-10" @click="handleOpen">
         👋

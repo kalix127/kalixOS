@@ -19,7 +19,6 @@ interface BaseNode {
   isProtected?: boolean;
   isRenaming?: boolean;
   isTranslated?: boolean;
-  isNewlyCreated?: boolean;
 }
 
 export interface PermissionsNode {

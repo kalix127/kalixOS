@@ -103,7 +103,7 @@ export default defineNuxtConfig({
         prefix: "extra",
       },
     ],
-    serverBundle: false,
+    serverBundle: "local",
     clientBundle: {
       scan: true,
       includeCustomCollections: true,

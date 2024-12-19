@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { ContextMenuTargetType, Node } from "@/types";
+import type { ContextMenuTargetType, FileNode, FolderNode, Node } from "@/types";
 import type { HTMLAttributes } from "vue";
 import TableRow from "@/components/ui/table/TableRow.vue";
 import { formatNodeSize } from "@/helpers";
 import { cn } from "@/lib/utils";
+import { useElementBounding } from "@vueuse/core";
 import { toRefs } from "vue";
 
 const props = defineProps<{
@@ -18,10 +19,29 @@ const { item, isDesktop, isGridLayout } = toRefs(props);
 const { openContextMenu } = useContextMenuStore();
 const desktopStore = useDesktopStore();
 const { nodeMap } = storeToRefs(desktopStore);
-const { editNode, openApp, updateApp } = desktopStore;
+const { openApp, updateApp } = desktopStore;
 const { setKateNodeId } = useKateStore();
 const { setFilesNodeId } = useFilesStore();
 const { t, locale } = useI18n();
+
+const nodeRef = ref(null);
+const { x, y, width, height } = useElementBounding(nodeRef);
+
+const popoverPosition = computed(() => {
+  const popoverWidth = 288;
+
+  let centerX = x.value + (width.value / 2) - (popoverWidth / 2);
+  const popoverY = y.value + height.value;
+
+  if (!isGridLayout.value) {
+    centerX = x.value + 10;
+  }
+
+  return {
+    x: centerX,
+    y: popoverY,
+  };
+});
 
 const itemSize = computed(() => {
   switch (item.value.type) {
@@ -59,6 +79,7 @@ function handleContextMenu(event: MouseEvent) {
     item.value.type as ContextMenuTargetType,
     item.value,
     isDesktop.value,
+    { x: popoverPosition.value.x, y: popoverPosition.value.y, node: item.value as FileNode | FolderNode },
   );
 
   // If this component is rendered inside the 'files' app
@@ -103,17 +124,12 @@ function handleDoubleClick() {
       break;
   }
 }
-
-function handleStopRenaming() {
-  if (!item.value.isRenaming)
-    return;
-  editNode(item.value.id, { isRenaming: false, isNewlyCreated: false });
-}
 </script>
 
 <template>
   <component
     :is="isGridLayout ? 'div' : TableRow"
+    ref="nodeRef"
     :aria-label="item.name"
     :class="
       isGridLayout
@@ -140,13 +156,6 @@ function handleStopRenaming() {
       >
         {{ item.name }}
       </span>
-
-      <LazyDesktopNodeRenamePopover
-        v-model="item.name"
-        :item="item"
-        @submit="handleStopRenaming"
-        @outside="handleStopRenaming"
-      />
       <DesktopNodeIcons
         class="*:absolute *:right-0 *:top-0"
         :item="item"
@@ -163,12 +172,6 @@ function handleStopRenaming() {
         <span>
           {{ item.name }}
         </span>
-        <LazyDesktopNodeRenamePopover
-          v-model="item.name"
-          :item="item"
-          @submit="handleStopRenaming"
-          @outside="handleStopRenaming"
-        />
         <DesktopNodeIcons :item="item" />
       </TableCell>
       <TableCell class="p-2 text-muted-foreground">

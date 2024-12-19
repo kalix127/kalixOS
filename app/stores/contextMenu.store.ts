@@ -8,6 +8,13 @@ export interface ContextMenuState {
   targetType: ContextMenuTargetType | null;
   targetNode: Node | null;
   isForDesktop: boolean | null; // Indicate if the context menu should be t
+  renamePopoverPosition: RenamePopoverPosition | null;
+}
+
+interface RenamePopoverPosition {
+  x: number;
+  y: number;
+  node: Node | null;
 }
 
 export const useContextMenuStore = defineStore("contextMenu", {
@@ -18,6 +25,11 @@ export const useContextMenuStore = defineStore("contextMenu", {
     targetType: null,
     targetNode: null,
     isForDesktop: null,
+    renamePopoverPosition: {
+      x: 0,
+      y: 0,
+      node: null,
+    },
   }),
   actions: {
     openContextMenu(
@@ -26,6 +38,7 @@ export const useContextMenuStore = defineStore("contextMenu", {
       targetType: ContextMenuTargetType,
       targetNode: Node | null = null,
       isForDesktop: boolean,
+      renamePopoverPosition?: RenamePopoverPosition,
     ) {
       const { width, height } = useWindowSize();
       const isOutside = x + 288 > width.value;
@@ -54,6 +67,19 @@ export const useContextMenuStore = defineStore("contextMenu", {
       this.targetType = targetType;
       this.targetNode = targetNode;
       this.isForDesktop = isForDesktop;
+
+      if (renamePopoverPosition) {
+        this.renamePopoverPosition = {
+          x: Math.round(renamePopoverPosition.x),
+          y: Math.round(renamePopoverPosition.y),
+          node: renamePopoverPosition.node,
+        };
+
+        if (targetNode?.isRenaming) {
+          const { editNode } = useDesktopStore();
+          editNode(targetNode.id, { isRenaming: false });
+        }
+      }
     },
     closeContextMenu() {
       this.isOpen = false;
@@ -68,6 +94,14 @@ export const useContextMenuStore = defineStore("contextMenu", {
         const { updateApp } = useDesktopStore();
         updateApp("files", { isDropdownOpen: false });
       }
+    },
+
+    closeRenamePopover() {
+      this.renamePopoverPosition = {
+        x: 0,
+        y: 0,
+        node: null,
+      };
     },
   },
 });

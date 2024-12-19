@@ -4,6 +4,8 @@ const { isLocked, isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
 
 const { backgroundImage, isShowAppsOverlayVisible }
   = storeToRefs(useDesktopStore());
+
+const { renamePopoverPosition } = storeToRefs(useContextMenuStore());
 </script>
 
 <template>
@@ -44,6 +46,11 @@ const { backgroundImage, isShowAppsOverlayVisible }
 
       <!-- Dockbar -->
       <DesktopDock v-if="!isLocked" />
+
+      <!-- Rename popover -->
+      <Transition>
+        <DesktopNodeRenamePopover v-if="renamePopoverPosition && renamePopoverPosition?.node?.isRenaming" />
+      </Transition>
     </ClientOnly>
   </div>
 </template>

@@ -1,55 +1,75 @@
 <script setup lang="ts">
-import type { Node } from "@/types";
 import { vOnClickOutside } from "@vueuse/components";
 
-const props = defineProps<{
-  item: Node;
-}>();
+const { t } = useI18n();
+const desktopStore = useDesktopStore();
+const { editNode } = desktopStore;
 
-defineEmits<{
-  (e: "submit"): void;
-  (e: "outside"): void;
-}>();
+const contextMenuStore = useContextMenuStore();
+const { closeRenamePopover } = contextMenuStore;
+const { renamePopoverPosition } = storeToRefs(contextMenuStore);
 
-const { item } = toRefs(props);
-const name = defineModel<string>({ required: true });
+const name = ref(renamePopoverPosition.value?.node?.name);
+
+const title = computed(() => {
+  return renamePopoverPosition.value?.node?.type === "file"
+    ? t("rename_file_title")
+    : t("rename_folder_title");
+});
+
+function handleStopRenaming() {
+  if (!renamePopoverPosition.value?.node)
+    return;
+  editNode(renamePopoverPosition.value.node.id, { isRenaming: false });
+  closeRenamePopover();
+}
+
+function handleSubmit() {
+  if (!renamePopoverPosition.value?.node)
+    return;
+  editNode(renamePopoverPosition.value.node.id, {
+    isRenaming: false,
+    name: name.value,
+  });
+  closeRenamePopover();
+}
 </script>
 
 <template>
-  <Popover :open="item.isRenaming">
-    <PopoverTrigger
-      :aria-label="$t('seo.aria.rename_item', { item: item.name })"
-    />
-    <PopoverContent class="z-[50000] w-72 border-none bg-secondary p-3">
-      <div
-        v-on-click-outside="() => $emit('outside')"
-        class="flex flex-col gap-2"
+  <div
+    :style="{
+      left: `${renamePopoverPosition?.x}px`,
+      top: `${renamePopoverPosition?.y}px`,
+    }"
+    class="absolute z-[50000] w-72 border-none bg-secondary p-3 rounded-lg"
+  >
+    <div
+      v-on-click-outside="handleStopRenaming"
+      class="flex flex-col gap-2"
+    >
+      <span class="text-sm font-medium">{{ title }}</span>
+      <form
+        class="flex items-center gap-2"
+        spellcheck="false"
+        @submit.prevent="handleSubmit"
+        @key.enter.prevent="handleSubmit"
       >
-        <span class="text-sm font-medium">{{
-          item.type === "file"
-            ? $t("rename_file_title")
-            : $t("rename_folder_title")
-        }}</span>
-        <form
-          class="flex items-center gap-2"
-          spellcheck="false"
-          @submit.prevent="() => $emit('submit')"
+        <Input
+          id="rename-input"
+          v-model="name"
+          v-focus
+          type="text"
+          class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
+          maxlength="20"
+        />
+        <Button
+          size="sm"
+          class="w-fit font-bold"
+          @click.prevent="handleSubmit"
         >
-          <Input
-            v-model="name"
-            type="text"
-            class="h-9 w-full border-0 bg-accent/60 selection:bg-primary/30 focus-visible:ring-primary/80"
-            maxlength="20"
-          />
-          <Button
-            size="sm"
-            class="w-fit font-bold"
-            @click="() => $emit('submit')"
-          >
-            OK
-          </Button>
-        </form>
-      </div>
-    </PopoverContent>
-  </Popover>
+          OK
+        </Button>
+      </form>
+    </div>
+  </div>
 </template>

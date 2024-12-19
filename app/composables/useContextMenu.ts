@@ -66,8 +66,6 @@ export function useContextMenu() {
         {
           name: t("new_folder"),
           type: "folder",
-          isRenaming: true,
-          isNewlyCreated: true,
         },
         true,
       );
@@ -82,8 +80,6 @@ export function useContextMenu() {
         {
           name: t("new_document"),
           type: "file",
-          isRenaming: true,
-          isNewlyCreated: true,
         },
         true,
       );
@@ -167,8 +163,6 @@ export function useContextMenu() {
       {
         name: t("new_folder"),
         type: "folder",
-        isRenaming: true,
-        isNewlyCreated: true,
       },
       true,
     );

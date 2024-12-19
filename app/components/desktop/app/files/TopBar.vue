@@ -83,8 +83,6 @@ function createNewFolder() {
       {
         name: t("new_folder"),
         type: "folder",
-        isRenaming: true,
-        isNewlyCreated: true,
       },
       true,
     );
@@ -98,8 +96,6 @@ function createNewDocument() {
       {
         name: t("new_document"),
         type: "file",
-        isRenaming: true,
-        isNewlyCreated: true,
       },
       true,
     );

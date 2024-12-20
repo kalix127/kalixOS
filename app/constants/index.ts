@@ -8,7 +8,6 @@ import type {
   WifiNetwork,
 } from "@/types";
 import { assignDefaultProperties } from "@/helpers";
-import { zshContent } from "./files";
 
 /* General */
 
@@ -340,7 +339,6 @@ export function defaultFileSystem(username: string): Node {
                   name: ".zshrc",
                   type: "file",
                   icon: "file:file",
-                  content: zshContent,
                 },
               ],
             },

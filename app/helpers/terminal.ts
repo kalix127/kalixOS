@@ -442,7 +442,11 @@ export function handleChmod(
   // Matches octal mode format - exactly 3 digits between 0-7
   // Example: "644" - rw-r--r-- (owner: rw-, group: r--, others: r--)
   else if (/^[0-7]{3}$/.test(mode)) {
+    // Split the octal mode string into array of numbers and convert each to base-8 integer
     const values = mode.split("").map(char => Number.parseInt(char, 8));
+
+    // Each octal digit represents read (4), write (2), and execute (1) permissions
+    // Using bitwise AND (&) to check if each permission bit is set
     const newPermissions: PermissionsNode = {
       owner: {
         read: Boolean((values[0] ?? 0) & 4),

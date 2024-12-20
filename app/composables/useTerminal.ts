@@ -46,8 +46,8 @@ export function useTerminal(terminalElement: HTMLElement) {
   }
 
   // Set the user first time avoiding the terminal to start on the next Boot
-  const { setUserFirstTime } = useGlobalStore();
-  setUserFirstTime(false);
+  const { setUserDesktopFirstTime } = useGlobalStore();
+  setUserDesktopFirstTime(false);
 
   // Init terminal and addons
   const webLinksAddon = new WebLinksAddon();

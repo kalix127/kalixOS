@@ -15,22 +15,22 @@ const socialLinks = [
     url: repositoryUrl,
   },
   {
-    name: t("github_profile"),
+    name: t("my_github_profile"),
     icon: "logo:github",
     url: githubUrl,
   },
   {
-    name: t("linkedin_profile"),
+    name: t("my_linkedin_profile"),
     icon: "logo:linkedin",
     url: linkedinUrl,
   },
   {
-    name: t("twitter_profile"),
+    name: t("my_twitter_profile"),
     icon: "logo:twitter",
     url: twitterUrl,
   },
   {
-    name: t("reddit_profile"),
+    name: t("my_reddit_profile"),
     icon: "logo:reddit",
     url: redditUrl,
   },

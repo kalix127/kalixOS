@@ -8,8 +8,8 @@
       "index": "System is powered off."
     },
     "description": {
-      "login": "Welcome to Gianluca's Linux desktop environment. Sign in to explore a unique Linux-inspired web experience.",
-      "desktop": "Explore an interactive Linux-inspired workspace with applications, a complete filesystem, and a functional terminal..",
+      "login": "Welcome to my Linux-inspired web desktop! I built this as a fun project to recreate my personal desktop setup in the browser (i use arch btw). It features a complete window system, file explorer, terminal and more - all designed with attention to detail and aesthetics.",
+      "desktop": "Welcome to my Linux-inspired web desktop! I built this as a fun project to recreate my personal desktop setup in the browser (i use arch btw). It features a complete window system, file explorer, terminal and more - all designed with attention to detail and aesthetics.",
       "booting": "System is booting/shutting down...",
       "poweroff": "Shutting down...",
       "index": "System is powered off."
@@ -42,7 +42,7 @@
   "4_minutes": "4 minutes",
   "5_minutes": "5 minutes",
   "welcome_title": "👋 Hi! I'm Gianluca",
-  "welcome_description": "Welcome to my Linux-inspired web desktop! I built this as a fun project to recreate my personal desktop setup in the browser. It features a complete window system, file explorer, terminal and more - all designed with attention to detail and aesthetics.",
+  "welcome_description": "Welcome to my Linux-inspired web desktop! I built this as a fun project to recreate my personal desktop setup in the browser (i use arch btw). It features a complete window system, file explorer, terminal and more - all designed with attention to detail and aesthetics.",
   "welcome_description_source_code": "Here you can check the source code:",
   "welcome_warning_mobile": "Mobile device detected. Some features will be limited. For the best experience, please visit from desktop.",
   "add_picture": "Add picture",

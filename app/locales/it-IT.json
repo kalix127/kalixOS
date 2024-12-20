@@ -8,8 +8,8 @@
       "index": "Il sistema è spento."
     },
     "description": {
-      "login": "Benvenuto nell'ambiente desktop Linux di Gianluca. Accedi per esplorare un'esperienza web unica ispirata a Linux.",
-      "desktop": "Esplora uno spazio di lavoro interattivo ispirato a Linux con applicazioni, un filesystem completo e un terminale funzionante.",
+      "login": "Benvenuto nel mio desktop web ispirato a Linux! L'ho creato come progetto divertente per ricreare il mio setup desktop personale. Presenta un sistema completo di finestre, file explorer, terminale e altro - tutto progettato con attenzione ai dettagli ed estetica.",
+      "desktop": "Benvenuto nel mio desktop web ispirato a Linux! L'ho creato come progetto divertente per ricreare il mio setup desktop personale. Presenta un sistema completo di finestre, file explorer, terminale e altro - tutto progettato con attenzione ai dettagli ed estetica.",
       "booting": "Sistema in fase di avvio/spegnimento...",
       "poweroff": "Spegnimento in corso...",
       "index": "Il sistema è spento."

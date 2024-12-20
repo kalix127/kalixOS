@@ -30,6 +30,9 @@ onBeforeMount(() => {
       <!-- Form -->
       <LazyLoginForm v-else-if="loginView === 'enterPassword'" />
     </Transition>
+
+    <!-- Welcome -->
+    <LoginWelcome />
   </div>
 </template>
 

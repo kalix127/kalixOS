@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { vOnClickOutside } from "@vueuse/components";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const globalStore = useGlobalStore();
 const { isUserFirstTime } = storeToRefs(globalStore);
 const { setUserFirstTime } = globalStore;
 const { repositoryUrl } = useRuntimeConfig().public;
 
+const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
 const isOpen = ref(isUserFirstTime.value);
 
 function handleClose() {
@@ -34,6 +36,9 @@ function handleClose() {
               >
                 {{ $t("github_repository") }}
               </NuxtLink>
+            </p>
+            <p class="mt-2" v-if="isMobileOrTablet">
+              &#x26A0;  {{ $t("welcome_warning_mobile") }}
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>

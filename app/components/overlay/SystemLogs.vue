@@ -22,7 +22,7 @@ watch(
 <template>
   <div
     ref="systemLogsRef"
-    class="hide-scrollbar absolute inset-0 hidden h-[100svh] w-[100vw] overflow-y-scroll bg-black sm:block"
+    class="hide-scrollbar absolute inset-0 hidden h-svh w-screen overflow-y-scroll bg-black sm:block"
   >
     <div class="flex flex-col items-start justify-end p-2">
       <div

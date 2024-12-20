@@ -44,7 +44,7 @@ function handleClick() {
       />
       <div
         v-if="app.isOpen"
-        class="absolute bottom-0.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-white"
+        class="absolute bottom-0.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-white"
       />
     </Button>
   </DesktopDockItemTooltip>

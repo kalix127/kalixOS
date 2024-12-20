@@ -15,7 +15,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         >
           <template #action>
             <div
-              class="flex h-8 flex-grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
+              class="flex h-8 grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
             >
               <Icon
                 name="gnome:headphones"
@@ -35,7 +35,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
           is-last
         >
           <template #action>
-            <div class="flex flex-grow items-center gap-4">
+            <div class="flex grow items-center gap-4">
               <IconVolume
                 :volume="volume[0] ?? 0"
                 :size="20"
@@ -62,7 +62,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
         >
           <template #action>
             <div
-              class="flex h-8 flex-grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
+              class="flex h-8 grow items-center gap-4 rounded-md bg-secondary px-2 transition-colors group-hover:bg-secondary-hover"
             >
               <Icon
                 name="gnome:microphone-2"
@@ -82,7 +82,7 @@ const { volume, inputVolume } = storeToRefs(useGlobalStore());
           is-last
         >
           <template #action>
-            <div class="flex flex-grow items-center gap-4">
+            <div class="flex grow items-center gap-4">
               <IconMicrophone
                 :input-volume="inputVolume[0] ?? 0"
                 :size="20"

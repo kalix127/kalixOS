@@ -39,7 +39,7 @@ function closeOverlay() {
 
 <template>
   <div
-    class="absolute left-0 top-0 z-[40000] flex h-[100svh] w-[100svw] flex-col items-center gap-10 bg-muted py-14 transition-opacity duration-500 lg:px-20 lg:py-20"
+    class="absolute left-0 top-0 z-[40000] flex h-svh w-svw flex-col items-center gap-10 bg-muted py-14 transition-opacity duration-500 lg:p-20"
     @click="closeOverlay"
   >
     <!-- Filter apps  -->

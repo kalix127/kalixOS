@@ -55,7 +55,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="grid h-full w-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
+    class="grid size-full grid-cols-[minmax(max-content,25%)_1fr] grid-rows-[auto_1fr] bg-background transition-all duration-300"
     :class="{
       'rounded-t-xl': !isFullscreen,
       'brightness-[0.85]': !isActive,

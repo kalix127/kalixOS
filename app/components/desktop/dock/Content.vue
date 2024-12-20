@@ -62,7 +62,7 @@ onBeforeMount(async () => {
 <template>
   <div
     v-on-click-outside="() => $emit('close')"
-    class="z-[50000] flex h-full w-full flex-col items-center gap-2 rounded-3xl px-3 py-2 sm:flex-row"
+    class="z-[50000] flex size-full flex-col items-center gap-2 rounded-3xl px-3 py-2 sm:flex-row"
   >
     <div
       ref="dockRef"

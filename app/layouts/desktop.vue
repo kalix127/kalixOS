@@ -24,7 +24,7 @@ const { renamePopoverPosition } = storeToRefs(useContextMenuStore());
     <DesktopProjectInfo />
 
     <!-- Desktop -->
-    <div class="relative max-h-[100svh] max-w-[100svw]">
+    <div class="relative max-h-svh max-w-[100svw]">
       <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->
       <Transition name="background">
@@ -32,7 +32,7 @@ const { renamePopoverPosition } = storeToRefs(useContextMenuStore());
           :key="backgroundImage.name"
           :alt="backgroundImage.name"
           :src="backgroundImage.url"
-          class="absolute -z-[1] h-full w-full object-cover"
+          class="absolute size-full object-cover"
           sizes="sm:1000px md:1200px lg:1400px xl:1800px"
           style="-webkit-user-drag: none"
           format="webp"

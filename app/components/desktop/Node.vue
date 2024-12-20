@@ -152,7 +152,7 @@ function handleDoubleClick() {
       </div>
 
       <span
-        class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm group-hover:bg-accent/50 font-medium"
+        class="max-w-full select-none break-all rounded-md p-0.5 px-1 text-sm font-medium group-hover:bg-accent/50"
       >
         {{ item.name }}
       </span>

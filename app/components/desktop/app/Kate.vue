@@ -100,7 +100,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="grid h-full w-full grid-rows-[40px_1fr]">
+  <div class="grid size-full grid-rows-[40px_1fr]">
     <!-- Top bar -->
     <DesktopWindowTopBar
       @minimize="() => $emit('minimize')"

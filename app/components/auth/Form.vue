@@ -43,7 +43,7 @@ const submitHandler = handleSubmit(values =>
           v-if="showBackButton"
           variant="ghost"
           size="icon"
-          class="grid h-9 w-9 cursor-pointer place-content-center rounded-full bg-secondary p-2"
+          class="grid size-9 cursor-pointer place-content-center rounded-full bg-secondary p-2"
           type="button"
           :disabled="isLoading"
           @click="onBack"

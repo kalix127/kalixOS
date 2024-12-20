@@ -176,7 +176,7 @@ function toggleSearch() {
   >
     <!-- Top-Sidebar -->
     <div
-      class="hidden sm:block pt-1"
+      class="hidden pt-1 sm:block"
       @mouseenter.stop="() => setDraggable(true)"
       @mouseleave.stop="() => setDraggable(false)"
     >

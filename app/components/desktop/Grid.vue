@@ -4,7 +4,7 @@ defineEmits(["context"]);
 
 <template>
   <div
-    class="desktop-grid-wrapper hide-scrollbar z-[2] w-full overflow-y-scroll py-6 mt-[36px]"
+    class="desktop-grid-wrapper hide-scrollbar z-[2] mt-[36px] w-full overflow-y-scroll py-6"
     :style="{
       height: `calc(100svh - 36px)`,
     }"

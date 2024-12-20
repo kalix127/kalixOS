@@ -79,7 +79,7 @@ function toggleDimScreen() {
                 (value) => updateApp('settings', { isDropdownOpen: value })
               "
             >
-              <SelectTrigger class="h-9 w-fit gap-2 bg-transparent ring-0 font-medium">
+              <SelectTrigger class="h-9 w-fit gap-2 bg-transparent font-medium ring-0">
                 <SelectValue :placeholder="$t('never')" />
               </SelectTrigger>
               <SelectContent class="z-[100000] font-medium">

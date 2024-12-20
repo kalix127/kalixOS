@@ -61,7 +61,7 @@ function handleClickSegment(id: string) {
       <div
         v-for="(segment, index) in displaySegments"
         :key="index"
-        class="max-w-[10rem] flex-shrink-0 truncate"
+        class="max-w-40 shrink-0 truncate"
       >
         <button
           class="duration-300"

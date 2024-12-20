@@ -68,7 +68,7 @@ provide("app", app);
   >
     <div
       :id="app.id"
-      class="relative h-full w-full"
+      class="relative size-full"
     >
       <component
         :is="getAppComponent(app.id)"

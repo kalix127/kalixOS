@@ -24,13 +24,13 @@ watch(() => escape!.value, (v) => {
 </script>
 
 <template>
-  <div class="relative grid min-h-[100svh] place-content-center bg-black">
+  <div class="relative grid min-h-svh place-content-center bg-black">
     <Icon
       name="extra:loading-dots"
       size="80"
     />
 
-    <div class="absolute top-2 left-2">
+    <div class="absolute left-2 top-2">
       <p class="font-medium">
         {{ t("press_esc_to_view_system_logs") }}
       </p>

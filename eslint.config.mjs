@@ -1,4 +1,7 @@
 import antfu from "@antfu/eslint-config";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat();
 
 export default antfu({
   stylistic: {
@@ -21,4 +24,9 @@ export default antfu({
     "node/prefer-global/process": "off",
     "symbol-description": "off",
   },
-});
+}, ...compat.config({
+  extends: ["plugin:tailwindcss/recommended"],
+  rules: {
+    "tailwindcss/no-custom-classname": "off",
+  },
+}));

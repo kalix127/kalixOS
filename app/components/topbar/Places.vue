@@ -19,7 +19,7 @@ function openFolder(id: string) {
         class="flex min-h-7 select-none items-center gap-1.5 rounded-full px-3 py-1 transition-colors duration-100 ease-in-out hover:bg-secondary/50"
       >
         <div class="h-2 w-7 rounded-full bg-white" />
-        <div class="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
+        <div class="size-1.5 rounded-full bg-muted-foreground" />
       </div>
     </PopoverTrigger>
     <LazyPopoverContent

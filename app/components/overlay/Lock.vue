@@ -17,7 +17,7 @@ async function onSubmit(values: LoginForm, setErrors: (errors: any) => void) {
 
 <template>
   <div
-    class="absolute z-[90000] h-[100svh] w-[100svw] backdrop-blur-xl"
+    class="absolute z-[90000] h-svh w-svw backdrop-blur-xl"
     @contextmenu.prevent=""
   >
     <!-- Login Form -->

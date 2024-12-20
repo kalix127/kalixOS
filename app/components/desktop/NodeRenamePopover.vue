@@ -41,7 +41,7 @@ function handleSubmit() {
       left: `${renamePopoverPosition?.x}px`,
       top: `${renamePopoverPosition?.y}px`,
     }"
-    class="absolute z-[50000] w-72 border-none bg-secondary p-3 rounded-lg"
+    class="absolute z-[50000] w-72 rounded-lg border-none bg-secondary p-3"
   >
     <div
       v-on-click-outside="handleStopRenaming"

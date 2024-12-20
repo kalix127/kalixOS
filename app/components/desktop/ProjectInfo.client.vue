@@ -67,12 +67,12 @@ const socialLinks = [
 </script>
 
 <template>
-  <div ref="el" :style="style" class="fixed z-[100000] cursor-move select-none rounded-full size-[60px] grid place-items-center">
+  <div ref="el" :style="style" class="fixed z-[100000] grid size-[60px] cursor-move select-none place-items-center rounded-full">
     <!-- Trigger -->
     <template v-if="!isExpanded">
-      <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="border-background border rounded-full" alt="Gianluca Iavicoli" width="60" height="60" />
+      <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="rounded-full border border-background" alt="Gianluca Iavicoli" width="60" height="60" />
 
-      <button class="absolute top-0 right-0 animate-bounce z-10" @click="handleOpen">
+      <button class="absolute right-0 top-0 z-10 animate-bounce" @click="handleOpen">
         👋
       </button>
     </template>
@@ -82,21 +82,21 @@ const socialLinks = [
       <div
         v-if="isExpanded"
         v-on-click-outside="handleClose"
-        class="absolute top-0 bg-background cursor-auto rounded-lg p-3 flex flex-col justify-between gap-4 z-10"
+        class="absolute top-0 z-10 flex cursor-auto flex-col justify-between gap-4 rounded-lg bg-background p-3"
         :class="[
           expandDirection === 'left' ? 'left-0 origin-top-left' : 'right-0 origin-top-right',
-          isExpanded ? 'w-[290px] h-fit' : 'w-0 h-0 opacity-0',
+          isExpanded ? 'h-fit w-[290px]' : 'size-0 opacity-0',
         ]"
       >
         <!-- Close button -->
-        <button class="absolute top-2 right-2" @click="handleClose">
-          <Icon name="gnome:close" size="22" class="hover:text-muted-foreground transition-colors duration-200" />
+        <button class="absolute right-2 top-2" @click="handleClose">
+          <Icon name="gnome:close" size="22" class="transition-colors duration-200 hover:text-muted-foreground" />
         </button>
 
         <!--  -->
         <div class="flex flex-col gap-2">
           <span class="font-bold">{{ t("about_project") }}:</span>
-          <p class="text-sm text-muted-foreground font-medium">
+          <p class="text-sm font-medium text-muted-foreground">
             {{ t("about_project_description") }}
           </p>
         </div>
@@ -130,7 +130,7 @@ const socialLinks = [
               </TooltipTrigger>
               <TooltipContent
                 :side-offset="6"
-                class="w-fit rounded-lg text-sm z-[100000] font-medium"
+                class="z-[100000] w-fit rounded-lg text-sm font-medium"
               >
                 <p>{{ social.name }}</p>
               </TooltipContent>

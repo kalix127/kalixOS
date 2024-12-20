@@ -12,7 +12,7 @@ import { zshContent } from "./files";
 
 /* General */
 
-export const defaultUsername = "Gianluca";
+export const defaultUsername = "kalix";
 
 export const defaultBootDuration = 5000;
 

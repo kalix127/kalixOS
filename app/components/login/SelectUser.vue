@@ -1,10 +1,8 @@
 <script setup lang="ts">
 const globalStore = useGlobalStore();
-const { loginView } = storeToRefs(globalStore);
-const { setUsername } = globalStore;
+const { loginView, username } = storeToRefs(globalStore);
 
 function handleSelectUser() {
-  setUsername("Gianluca");
   loginView.value = "enterPassword";
 }
 
@@ -29,7 +27,7 @@ function handleNotListed() {
             size="28"
           />
         </div>
-        <span class="font-semibold"> Gianluca </span>
+        <span class="font-semibold"> {{ username }} </span>
       </div>
     </button>
     <Button

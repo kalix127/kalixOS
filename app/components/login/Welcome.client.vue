@@ -42,7 +42,7 @@ function handleClose() {
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <Button class="ml-auto flex items-center gap-2 text-base" @click="handleClose">
+        <Button variant="outline" class="ml-auto flex items-center gap-2 text-base hover:bg-primary" @click="handleClose">
           {{ $t("get_started") }}
           <Icon name="gnome:arrow-long-right" size="16" />
         </Button>

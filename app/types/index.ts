@@ -43,6 +43,7 @@ export interface AppNode extends BaseNode {
   isMinimized: boolean;
   isFullscreen: boolean;
   isDropdownOpen: boolean;
+  isActive: boolean;
 }
 
 export interface ShortcutNode extends BaseNode {

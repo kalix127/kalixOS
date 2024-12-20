@@ -28,7 +28,11 @@ export function useWindow(app: Ref<AppNode>) {
   const localWidth = ref(initialWidth.value);
   const localHeight = ref(initialHeight.value);
   const isFullscreen = ref(app.value.isFullscreen || false);
-  const isActive = ref(true);
+
+  const isActive = computed({
+    get: () => app.value.isActive,
+    set: value => app.value.isActive = value,
+  });
 
   const prevState = reactive({
     width: 0,

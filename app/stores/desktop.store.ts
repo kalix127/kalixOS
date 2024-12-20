@@ -576,6 +576,7 @@ export const useDesktopStore = defineStore({
           ...app,
           isOpen: app.id === appId ? true : app.isOpen,
           isMinimized: app.id === appId ? false : app.isMinimized,
+          isActive: app.id === appId ? true : app.isActive,
         }));
 
         // Create a process for the app
@@ -586,6 +587,10 @@ export const useDesktopStore = defineStore({
       if (toggleMinimize) {
         this.toggleMinimizeApp(appId);
       }
+
+      this.updateApp(appId, {
+        isActive: true,
+      });
     },
 
     /**
@@ -597,6 +602,7 @@ export const useDesktopStore = defineStore({
         ...app,
         isOpen: app.id === appId ? false : app.isOpen,
         isMinimized: app.id === appId ? false : app.isMinimized,
+        isActive: app.id === appId ? false : app.isActive,
       }));
 
       // Close the process
@@ -611,6 +617,7 @@ export const useDesktopStore = defineStore({
       this.apps = this.apps.map(app => ({
         ...app,
         isMinimized: app.id === appId ? !app.isMinimized : app.isMinimized,
+        isActive: app.id === appId ? false : app.isActive,
       }));
     },
 

@@ -37,7 +37,7 @@ function handleClose() {
                 {{ $t("github_repository") }}
               </NuxtLink>
             </p>
-            <p class="mt-2" v-if="isMobileOrTablet">
+            <p v-if="isMobileOrTablet" class="mt-2">
               &#x26A0;  {{ $t("welcome_warning_mobile") }}
             </p>
           </AlertDialogDescription>

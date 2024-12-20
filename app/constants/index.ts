@@ -344,6 +344,69 @@ export function defaultFileSystem(username: string): Node {
                 },
               ],
             },
+            {
+              name: ".profile",
+              type: "file",
+              icon: "file:file",
+            },
+            {
+              name: ".gitconfig",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: ".ssh",
+              type: "folder",
+              icon: "folder:folder",
+              isProtected: true,
+              children: [
+                {
+                  name: "id_rsa",
+                  type: "file",
+                  icon: "file:key",
+                  isProtected: true,
+                },
+                {
+                  name: "id_rsa.pub",
+                  type: "file",
+                  icon: "file:key",
+                  isProtected: true,
+                },
+                {
+                  name: "known_hosts",
+                  type: "file",
+                  icon: "file:text",
+                  isProtected: true,
+                },
+              ],
+            },
+            {
+              name: ".config",
+              type: "folder",
+              icon: "folder:folder",
+              isProtected: true,
+              children: [
+                {
+                  name: "nvim",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [
+                    {
+                      name: "init.vim",
+                      type: "file",
+                      icon: "file:vim",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: ".cache",
+              type: "folder",
+              icon: "folder:folder",
+              isProtected: true,
+              children: [],
+            },
           ],
         },
         {
@@ -483,13 +546,120 @@ export function defaultFileSystem(username: string): Node {
           name: "etc",
           type: "folder",
           icon: "folder:folder",
-          children: [],
+          children: [
+            {
+              name: "passwd",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "group",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "hostname",
+              type: "file",
+              icon: "file:text",
+              content: "kalix-laptop",
+            },
+            {
+              name: "hosts",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "resolv.conf",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "nginx",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "zsh",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "sudoers",
+              type: "file",
+              icon: "file:text",
+              isProtected: true,
+            },
+            {
+              name: "sudoers.d",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "ssh",
+              type: "folder",
+              icon: "folder:folder",
+              isProtected: true,
+              children: [],
+            },
+            {
+              name: "fonts",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "NetworkManager",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "pacman.conf",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "pacman.d",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "pacman-mirrors.conf",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "pacman.conf-pacnew",
+              type: "file",
+              icon: "file:text",
+            },
+          ],
         },
         {
           name: "proc",
           type: "folder",
           icon: "folder:folder",
-          children: [],
+          children: [
+            {
+              name: "cpuinfo",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "meminfo",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "uptime",
+              type: "file",
+              icon: "file:text",
+            },
+          ],
         },
         {
           name: "run",
@@ -498,16 +668,135 @@ export function defaultFileSystem(username: string): Node {
           children: [],
         },
         {
-          name: "var",
+          name: "snap",
           type: "folder",
           icon: "folder:folder",
           children: [],
+        },
+        {
+          name: "lib",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "opt",
+          type: "folder",
+          icon: "folder:folder",
+          children: [],
+        },
+        {
+          name: "var",
+          type: "folder",
+          icon: "folder:folder",
+          children: [
+            {
+              name: "log",
+              type: "folder",
+              icon: "folder:folder",
+              children: [
+                {
+                  name: "syslog",
+                  type: "file",
+                  icon: "file:text",
+                },
+                {
+                  name: "auth.log",
+                  type: "file",
+                  icon: "file:text",
+                },
+              ],
+            },
+            {
+              name: "tmp",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "www",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+          ],
         },
         {
           name: "tmp",
           type: "folder",
           icon: "folder:folder",
           children: [],
+        },
+        {
+          name: "boot",
+          type: "folder",
+          icon: "folder:folder",
+          isProtected: true,
+          children: [
+            {
+              name: "efi",
+              type: "folder",
+              icon: "folder:folder",
+              isProtected: true,
+              children: [],
+            },
+            {
+              name: "grub",
+              type: "folder",
+              icon: "folder:folder",
+              children: [
+                {
+                  name: "fonts",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  name: "grub.cfg",
+                  type: "file",
+                  icon: "file:text",
+                },
+                {
+                  name: "grubenv",
+                  type: "file",
+                  icon: "file:text",
+                },
+                {
+                  name: "locale",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  name: "themes",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+                {
+                  name: "x86_64-efi",
+                  type: "folder",
+                  icon: "folder:folder",
+                  children: [],
+                },
+              ],
+            },
+            {
+              name: "initramfs-6.10.13-3-x86_64-fallback.img",
+              type: "file",
+              icon: "file:binary",
+            },
+            {
+              name: "initramfs-6.10.13-3-x86_64.img",
+              type: "file",
+              icon: "file:binary",
+            },
+            {
+              name: "vmlinuz-6.10.13-3-x86_64",
+              type: "file",
+              icon: "file:binary",
+            },
+          ],
         },
       ],
     },

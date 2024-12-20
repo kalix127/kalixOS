@@ -381,6 +381,8 @@ export function handleChmod(
     return false;
   }
 
+  // Matches symbolic mode format like "u+rwx", "g-w", "o=x", "a+r"
+  // Example: "u+rwx" - adds read, write, execute permissions for user
   if (/^[ugoa]*[+-=][rwx]+$/.test(mode)) {
     const permissions = { ...targetNode.permissions };
     const targets: Array<"owner" | "group" | "others"> = [];
@@ -396,7 +398,10 @@ export function handleChmod(
         targets.push("others");
     }
 
+    // Matches the operation symbol (+, -, =)
     const operation = mode.match(/[+-=]/)?.[0];
+    // Matches the permission flags after the operation
+    // Example: In "u+rwx", matches and splits "rwx" into ["r", "w", "x"]
     const permissionTypes = mode.match(/[rwx]+/)?.[0]?.split("") ?? [];
 
     if (!operation) {
@@ -434,6 +439,8 @@ export function handleChmod(
 
     return true;
   }
+  // Matches octal mode format - exactly 3 digits between 0-7
+  // Example: "644" - rw-r--r-- (owner: rw-, group: r--, others: r--)
   else if (/^[0-7]{3}$/.test(mode)) {
     const values = mode.split("").map(char => Number.parseInt(char, 8));
     const newPermissions: PermissionsNode = {

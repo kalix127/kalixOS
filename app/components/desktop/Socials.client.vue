@@ -44,22 +44,22 @@ const socialLinks = [
     url: repositoryUrl,
   },
   {
-    name: t("github_profile"),
+    name: t("my_github_profile"),
     icon: "logo:github",
     url: githubUrl,
   },
   {
-    name: t("linkedin_profile"),
+    name: t("my_linkedin_profile"),
     icon: "logo:linkedin",
     url: linkedinUrl,
   },
   {
-    name: t("twitter_profile"),
+    name: t("my_twitter_profile"),
     icon: "logo:twitter",
     url: twitterUrl,
   },
   {
-    name: t("reddit_profile"),
+    name: t("my_reddit_profile"),
     icon: "logo:reddit",
     url: redditUrl,
   },
@@ -67,13 +67,17 @@ const socialLinks = [
 </script>
 
 <template>
-  <div ref="el" :style="style" class="fixed z-[100000] grid size-[60px] cursor-move select-none place-items-center rounded-full">
+  <div ref="el" :style="style" class="fixed z-[100000] grid size-[50px] cursor-move select-none place-items-center rounded-full">
     <!-- Trigger -->
     <template v-if="!isExpanded">
       <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="rounded-full border border-background" alt="Gianluca Iavicoli" width="60" height="60" />
 
-      <button class="absolute right-0 top-0 z-10 animate-bounce" @click="handleOpen">
-        👋
+      <button class="share-button absolute -bottom-2 -right-1 z-10 grid place-items-center rounded-full bg-background p-1 hover:ring-2 hover:ring-primary/75" @click="handleOpen">
+        <Icon
+          name="gnome:share"
+          size="20"
+          class="text-foreground"
+        />
       </button>
     </template>
 
@@ -85,24 +89,15 @@ const socialLinks = [
         class="absolute top-0 z-10 flex cursor-auto flex-col justify-between gap-4 rounded-lg bg-background p-3"
         :class="[
           expandDirection === 'left' ? 'left-0 origin-top-left' : 'right-0 origin-top-right',
-          isExpanded ? 'h-fit w-[290px]' : 'size-0 opacity-0',
+          isExpanded ? 'h-fit w-32' : 'size-0 opacity-0',
         ]"
       >
         <!-- Close button -->
-        <button class="absolute right-2 top-2" @click="handleClose">
+        <button class="absolute right-1 top-1" @click="handleClose">
           <Icon name="gnome:close" size="22" class="transition-colors duration-200 hover:text-muted-foreground" />
         </button>
 
-        <!--  -->
-        <div class="flex flex-col gap-2">
-          <span class="font-bold">{{ t("about_project") }}:</span>
-          <p class="text-sm font-medium text-muted-foreground">
-            {{ t("about_project_description") }}
-          </p>
-        </div>
-
-        <!-- Quick links -->
-        <div class="flex items-center justify-evenly">
+        <div class="grid grid-cols-2 gap-2">
           <TooltipProvider
             v-for="social in socialLinks"
             :key="social.name"
@@ -118,7 +113,7 @@ const socialLinks = [
                   :external="true"
                   :title="social.name"
                   target="_blank"
-                  class="grid place-content-center"
+                  class="grid place-content-center first:col-span-2"
                 >
                   <Icon
                     class="rounded-[calc(var(--radius)+0.5px)]"
@@ -166,5 +161,9 @@ const socialLinks = [
 .v-leave-from {
   transform: scale(1);
   opacity: 1;
+}
+
+.share-button {
+  animation-duration: 4000ms;
 }
 </style>

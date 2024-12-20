@@ -21,7 +21,7 @@ const { renamePopoverPosition } = storeToRefs(useContextMenuStore());
       <LazyOverlayAppsList v-if="isShowAppsOverlayVisible" />
     </Transition>
 
-    <DesktopProjectInfo />
+    <DesktopSocials />
 
     <!-- Desktop -->
     <div class="relative max-h-svh max-w-[100svw]">

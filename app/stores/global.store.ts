@@ -12,6 +12,10 @@ export const useGlobalStore = defineStore({
   id: "globalStore",
   state: (): GlobalStore => ({
     // General
+    isUserDesktopFirstTime: useCookie("isUserDesktopFirstTime", {
+      maxAge: 365 * 24 * 60 * 60 * 10,
+      default: () => true,
+    }).value,
     isUserFirstTime: useCookie("isUserFirstTime", {
       maxAge: 365 * 24 * 60 * 60 * 10,
       default: () => true,
@@ -178,8 +182,16 @@ export const useGlobalStore = defineStore({
       isAuthenticatedCookie.value = value.toString();
     },
 
+    setUserDesktopFirstTime(value: boolean) {
+      this.isUserDesktopFirstTime = false;
+      const isUserDesktopFirstTimeCookie = useCookie("isUserDesktopFirstTime", {
+        maxAge: 30 * 24 * 60 * 60,
+      });
+      isUserDesktopFirstTimeCookie.value = value.toString();
+    },
+
     setUserFirstTime(value: boolean) {
-      this.isUserFirstTime = false;
+      this.isUserFirstTime = value;
       const isUserFirstTimeCookie = useCookie("isUserFirstTime", {
         maxAge: 30 * 24 * 60 * 60,
       });
@@ -220,6 +232,7 @@ export const useGlobalStore = defineStore({
 // Define the type for the state
 interface GlobalStore {
   // General
+  isUserDesktopFirstTime: boolean;
   isUserFirstTime: boolean;
   desktopEnvironment: string;
   isWiredEnabled: boolean;

@@ -15,14 +15,14 @@ export default antfu({
   vue: true,
 
   rules: {
-    "vue/no-v-for-template-key": "off",
-    "vue/multi-word-component-names": "off",
-    "regexp/no-obscure-range": "off",
-    "no-multiple-empty-lines": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "node/prefer-global/process": "off",
+    "vue/no-v-for-template-key": "off",
+    "vue/multi-word-component-names": "off",
     "symbol-description": "off",
+    "regexp/no-obscure-range": "off",
+    "no-multiple-empty-lines": "error",
+    "node/prefer-global/process": "off",
   },
 }, ...compat.config({
   extends: ["plugin:tailwindcss/recommended"],

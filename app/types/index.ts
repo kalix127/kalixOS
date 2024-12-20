@@ -81,11 +81,16 @@ export interface Process {
   command: string;
 }
 
+export interface PositionalArg {
+  name: string;
+  required: boolean;
+}
+
 export interface CommandSpec {
   acceptsFlags: string[];
   flagAliases: { [alias: string]: string };
   flagsWithValues?: string[];
-  positionalArgs?: { name: string; required: boolean }[];
+  positionalArgs: PositionalArg[];
 }
 
 export interface ParsedArgs {
@@ -93,7 +98,6 @@ export interface ParsedArgs {
   flagValues: { [key: string]: string };
   positionalArgs: string[];
 }
-
 export interface Notification {
   id: string;
   title: string;

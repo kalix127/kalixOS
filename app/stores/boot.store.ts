@@ -74,7 +74,7 @@ export const useBootStore = defineStore({
       const randomDelays = generateRandomDelays(logs.length, totalTime);
 
       for (let i = 0; i < logs.length; i++) {
-        await this.addSystemLogWithDelay(logs[i], randomDelays[i]);
+        await this.addSystemLogWithDelay(logs[i]!, randomDelays[i]!); // Add non-null assertion since we know logs[i] exists
       }
     },
 

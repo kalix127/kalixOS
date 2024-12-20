@@ -146,7 +146,18 @@ export function handleLn(
     return false;
   }
 
-  const [targetPath, linkPath] = positionalArgs;
+  if (positionalArgs.length < 2) {
+    term.write("\r\nln: missing operand");
+    return false;
+  }
+
+  const targetPath = positionalArgs[0];
+  const linkPath = positionalArgs[1];
+
+  if (!targetPath || !linkPath) {
+    term.write("\r\nln: missing operand");
+    return false;
+  }
 
   // Resolve target path
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
@@ -213,12 +224,16 @@ export function handleTree(
     while (i < args.length) {
       const arg = args[i];
       if (arg === "-L") {
+        const levelArg = args[i + 1];
+        if (!levelArg) {
+          term.write(`\r\ntree: option requires an argument -- 'L'`);
+          return false;
+        }
         // Ensure the next argument exists
         if (i + 1 >= args.length) {
           term.write(`\r\ntree: option requires an argument -- 'L'`);
           return false;
         }
-        const levelArg = args[i + 1];
         const parsedLevel = Number.parseInt(levelArg, 10);
 
         // Validate the level argument
@@ -230,12 +245,12 @@ export function handleTree(
         level = parsedLevel;
         i += 2; // Skip the flag and its value
       }
-      else if (arg.startsWith("-")) {
+      else if (arg?.startsWith("-")) {
         // Handle unknown flags
         term.write(`\r\ntree: unknown option '${arg}'`);
         return false;
       }
-      else {
+      else if (arg) {
         // Positional argument (path)
         targetPath = arg;
         i += 1;
@@ -300,13 +315,18 @@ export function handleChown(
   currentDirectoryNode: Node,
 ): boolean {
   const { positionalArgs } = parsedArgs;
-
   if (positionalArgs.length < 2) {
     term.write(`\r\nchown: missing operand`);
     return false;
   }
 
-  const [userGroup, targetPath] = positionalArgs;
+  const userGroup = positionalArgs[0];
+  const targetPath = positionalArgs[1];
+  if (!userGroup || !targetPath) {
+    term.write(`\r\nchown: missing operand`);
+    return false;
+  }
+
   const [user, group] = userGroup.split(":");
 
   if (!user || !group) {
@@ -346,7 +366,13 @@ export function handleChmod(
     return false;
   }
 
-  const [mode, targetPath] = positionalArgs;
+  const mode = positionalArgs[0];
+  const targetPath = positionalArgs[1];
+  if (!mode || !targetPath) {
+    term.write("\r\nchmod: missing operand");
+    return false;
+  }
+
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
   if (!targetNode) {
     term.write(
@@ -358,8 +384,7 @@ export function handleChmod(
   if (/^[ugoa]*[+-=][rwx]+$/.test(mode)) {
     const permissions = { ...targetNode.permissions };
     const targets: Array<"owner" | "group" | "others"> = [];
-
-    if (!/[ugo]/.test(mode[0]) || mode.startsWith("a")) {
+    if (!/[ugo]/.test(mode.charAt(0)) || mode.startsWith("a")) {
       targets.push("owner", "group", "others");
     }
     else {
@@ -372,7 +397,12 @@ export function handleChmod(
     }
 
     const operation = mode.match(/[+-=]/)?.[0];
-    const permissionTypes = mode.match(/[rwx]+/)?.[0].split("") ?? [];
+    const permissionTypes = mode.match(/[rwx]+/)?.[0]?.split("") ?? [];
+
+    if (!operation) {
+      term.write(`\r\nchmod: invalid mode: '${mode}'`);
+      return false;
+    }
 
     targets.forEach((target) => {
       permissionTypes.forEach((perm) => {
@@ -408,19 +438,19 @@ export function handleChmod(
     const values = mode.split("").map(char => Number.parseInt(char, 8));
     const newPermissions: PermissionsNode = {
       owner: {
-        read: !!(values[0] & 4),
-        write: !!(values[0] & 2),
-        execute: !!(values[0] & 1),
+        read: Boolean((values[0] ?? 0) & 4),
+        write: Boolean((values[0] ?? 0) & 2),
+        execute: Boolean((values[0] ?? 0) & 1),
       },
       group: {
-        read: !!(values[1] & 4),
-        write: !!(values[1] & 2),
-        execute: !!(values[1] & 1),
+        read: Boolean((values[1] ?? 0) & 4),
+        write: Boolean((values[1] ?? 0) & 2),
+        execute: Boolean((values[1] ?? 0) & 1),
       },
       others: {
-        read: !!(values[2] & 4),
-        write: !!(values[2] & 2),
-        execute: !!(values[2] & 1),
+        read: Boolean((values[2] ?? 0) & 4),
+        write: Boolean((values[2] ?? 0) & 2),
+        execute: Boolean((values[2] ?? 0) & 1),
       },
     };
 
@@ -439,7 +469,6 @@ export function handleChmod(
     return false;
   }
 }
-
 export function handleTouch(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -454,6 +483,11 @@ export function handleTouch(
   }
 
   const filePath = positionalArgs[0];
+  if (!filePath) {
+    term.write(`\r\ntouch: missing file operand`);
+    return false;
+  }
+
   const pathParts = splitPath(filePath);
   const fileName = pathParts.pop() || "";
   const dirPath = pathParts.join("/");
@@ -498,7 +532,6 @@ export function handleTouch(
 
   return true;
 }
-
 export function handleMkdir(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -513,6 +546,11 @@ export function handleMkdir(
   }
 
   const dirPath = positionalArgs[0];
+  if (!dirPath) {
+    term.write(`\r\nmkdir: missing directory operand`);
+    return false;
+  }
+
   const pathParts = splitPath(dirPath);
   const dirName = pathParts.pop() || "";
   const parentPath = pathParts.join("/");
@@ -563,7 +601,6 @@ export function handleMkdir(
 
   return true;
 }
-
 export function handleMv(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -579,6 +616,11 @@ export function handleMv(
 
   const sourcePath = positionalArgs[0];
   const targetPath = positionalArgs[1];
+
+  if (!sourcePath || !targetPath) {
+    term.write("\r\nmv: missing file operand");
+    return false;
+  }
 
   // Find source node
   const sourceNode = resolvePath(fileSystem, currentDirectoryNode, sourcePath);
@@ -599,7 +641,7 @@ export function handleMv(
     const parentNode = resolvePath(
       fileSystem,
       currentDirectoryNode,
-      parentPath,
+      parentPath || ".",
     );
     if (!parentNode || parentNode.type !== "folder") {
       term.write(
@@ -632,7 +674,6 @@ export function handleMv(
   term.write(`\r\nmv: cannot overwrite '${targetPath}'`);
   return false;
 }
-
 export function handleRm(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -648,6 +689,11 @@ export function handleRm(
 
   const recursiveDelete = flags.includes("-r");
   const targetPath = positionalArgs[0];
+
+  if (!targetPath) {
+    term.write("\r\nrm: missing operand");
+    return false;
+  }
 
   // Resolve target node
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
@@ -690,7 +736,6 @@ export function handleRm(
 
   return true;
 }
-
 export function handleCat(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -705,6 +750,11 @@ export function handleCat(
   }
 
   const filePath = positionalArgs[0];
+  if (!filePath) {
+    term.write(`\r\ncat: missing operand`);
+    return false;
+  }
+
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, filePath);
 
   if (!targetNode) {
@@ -720,7 +770,6 @@ export function handleCat(
   term.write(`\r\n${targetNode.content || ""}`);
   return true;
 }
-
 export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const { positionalArgs } = parsedArgs;
 
@@ -735,10 +784,10 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const headerLine = headers
     .map((header, idx) => {
       if (idx === 0) {
-        return header.padStart(widths[idx]);
+        return header.padStart(widths[idx] as number);
       }
       else {
-        return header.padEnd(widths[idx]);
+        return header.padEnd(widths[idx] as number);
       }
     })
     .join("  ");
@@ -767,12 +816,16 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
   term.write(`\r\n${output}`);
   return true;
 }
-
 export function handleKill(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const { positionalArgs } = parsedArgs;
 
   if (positionalArgs.length !== 1) {
     term.write("\r\nkill: usage: kill <pid>");
+    return false;
+  }
+
+  if (!positionalArgs[0]) {
+    term.write("\r\nkill: missing pid argument");
     return false;
   }
 
@@ -806,6 +859,11 @@ export function handlePkill(term: Terminal, parsedArgs: ParsedArgs): boolean {
     return false;
   }
 
+  if (!positionalArgs[0]) {
+    term.write("\r\npkill: missing command argument");
+    return false;
+  }
+
   const command = positionalArgs[0].toLowerCase();
   const desktopStore = useDesktopStore();
   const { processes } = storeToRefs(desktopStore);
@@ -822,7 +880,6 @@ export function handlePkill(term: Terminal, parsedArgs: ParsedArgs): boolean {
   closeApp(process.appId);
   return true;
 }
-
 export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const { flags, positionalArgs } = parsedArgs;
 
@@ -869,7 +926,7 @@ export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   ];
   const widths = [10, 10, 10, 10, 15, 15];
   const headerLine = headers
-    .map((header, idx) => header.padStart(widths[idx]))
+    .map((header, idx) => header.padStart(widths[idx] as number))
     .join("  ");
   const fullHeader = `       ${headerLine}\n`;
 
@@ -904,11 +961,11 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
     .map((header, idx) => {
       if (idx === 0 || idx === headers.length - 1) {
         // Left-align 'Filesystem' and 'Mounted on'
-        return header.padEnd(widths[idx]);
+        return header.padEnd(widths[idx] as number);
       }
       else {
         // Right-align numeric headers
-        return header.padStart(widths[idx]);
+        return header.padStart(widths[idx] as number);
       }
     })
     .join("  ");
@@ -1035,8 +1092,8 @@ export function parseArguments(
   while (i < args.length) {
     const arg = args[i];
 
-    if (arg.startsWith("-")) {
-      if (arg.startsWith("--")) {
+    if (arg?.startsWith("-")) {
+      if (arg?.startsWith("--")) {
         const alias = commandSpec.flagAliases[arg];
         if (alias) {
           if (commandSpec.flagsWithValues?.includes(alias)) {
@@ -1067,7 +1124,11 @@ export function parseArguments(
                 value = chars.slice(j + 1).join("");
               }
               else {
-                value = args[++i];
+                const nextArg = args[++i];
+                if (nextArg === undefined) {
+                  throw new Error(`Option '${flag}' requires a value`);
+                }
+                value = nextArg;
               }
               if (!value) {
                 throw new Error(`Option '${flag}' requires a value`);
@@ -1090,12 +1151,14 @@ export function parseArguments(
       }
     }
     else {
+      if (arg === undefined) {
+        throw new Error("Unexpected undefined argument");
+      }
       positionalArgs.push(arg);
     }
 
     i++;
   }
-
   // If help flag is present, skip positional args check
   if (flags.includes("--help")) {
     return { flags, flagValues, positionalArgs };
@@ -1109,8 +1172,12 @@ export function parseArguments(
   const requiredArgs
     = commandSpec.positionalArgs?.filter(arg => arg.required) || [];
   if (positionalArgs.length < requiredArgs.length) {
+    const missingArg = requiredArgs[positionalArgs.length];
+    if (!missingArg) {
+      throw new Error("Invalid argument index");
+    }
     throw new Error(
-      `${requiredArgs[positionalArgs.length].name}: missing required argument`,
+      `${missingArg.name}: missing required argument`,
     );
   }
 
@@ -1235,7 +1302,12 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
   // Ensure index does not exceed the sizes array
   const index = i < sizes.length ? i : sizes.length - 1;
 
-  return Number.parseFloat((bytes / k ** index).toFixed(dm)) + sizes[index];
+  const size = sizes[index];
+  if (!size) {
+    return "0B";
+  }
+
+  return Number.parseFloat((bytes / k ** index).toFixed(dm)) + size;
 }
 
 /**
@@ -1330,10 +1402,10 @@ function formatFreeRow(
   const formattedValues = values
     .map((val, idx) => {
       if (humanReadable) {
-        return formatBytes(val, 1).padStart(widths[idx]);
+        return formatBytes(val, 1).padStart(widths[idx] as number);
       }
       else {
-        return val.toString().padStart(widths[idx]);
+        return val.toString().padStart(widths[idx] as number);
       }
     })
     .join("  ");
@@ -1364,22 +1436,22 @@ function formatDfRow(
   widths: number[],
 ): string {
   // Left-align 'Filesystem' and 'Mounted on'
-  const filesystemPadded = filesystem.padEnd(widths[0]);
-  const mountedOnPadded = mountedOn.padEnd(widths[5]);
+  const filesystemPadded = filesystem.padEnd(widths[0] as number);
+  const mountedOnPadded = mountedOn.padEnd(widths[5] as number);
 
   // Right-align numeric columns
   const sizeFormatted = humanReadable
     ? formatBytes(Number.parseInt(size) * 1024)
-    : size.padStart(widths[1]);
+    : size.padStart(widths[1] as number);
   const usedFormatted = humanReadable
     ? formatBytes(Number.parseInt(used) * 1024)
-    : used.padStart(widths[2]);
+    : used.padStart(widths[2] as number);
   const availFormatted = humanReadable
     ? formatBytes(Number.parseInt(avail) * 1024)
-    : avail.padStart(widths[3]);
-  const usePercentFormatted = usePercent.padStart(widths[4]);
+    : avail.padStart(widths[3] as number);
+  const usePercentFormatted = usePercent.padStart(widths[4] as number);
 
-  return `${filesystemPadded}  ${sizeFormatted.padStart(widths[1])}  ${usedFormatted.padStart(widths[2])}  ${availFormatted.padStart(widths[3])}  ${usePercentFormatted}  ${mountedOnPadded}`;
+  return `${filesystemPadded}  ${sizeFormatted.padStart(widths[1] as number)}  ${usedFormatted.padStart(widths[2] as number)}  ${availFormatted.padStart(widths[3] as number)}  ${usePercentFormatted}  ${mountedOnPadded}`;
 }
 
 /**
@@ -1398,9 +1470,9 @@ function formatPsRow(
   cmd: string,
   widths: number[],
 ): string {
-  const pidPadded = pid.toString().padStart(widths[0]);
-  const ttyPadded = tty.padEnd(widths[1]);
-  const timePadded = time.padEnd(widths[2]);
-  const cmdPadded = cmd.padEnd(widths[3]);
+  const pidPadded = pid.toString().padStart(widths[0] as number);
+  const ttyPadded = tty.padEnd(widths[1] as number);
+  const timePadded = time.padEnd(widths[2] as number);
+  const cmdPadded = cmd.padEnd(widths[3] as number);
   return `${pidPadded}  ${ttyPadded}  ${timePadded}  ${cmdPadded}`;
 }

@@ -11,8 +11,6 @@ export const useFilesStore = defineStore("files", {
   }),
   getters: {
     openedNode(state) {
-      if (!state.openedNodeId)
-        return null;
       const { nodeMap } = storeToRefs(useDesktopStore());
       return nodeMap.value.get(state.openedNodeId) as FolderNode;
     },
@@ -44,13 +42,13 @@ export const useFilesStore = defineStore("files", {
     moveBack() {
       if (this.currentHistoryIndex > 0) {
         this.currentHistoryIndex--;
-        this.openedNodeId = this.history[this.currentHistoryIndex];
+        this.openedNodeId = this.history[this.currentHistoryIndex] || "home";
       }
     },
     moveForward() {
       if (this.currentHistoryIndex < this.history.length - 1) {
         this.currentHistoryIndex++;
-        this.openedNodeId = this.history[this.currentHistoryIndex];
+        this.openedNodeId = this.history[this.currentHistoryIndex] || "home";
       }
     },
     toggleGridView() {

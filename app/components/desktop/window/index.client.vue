@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* tslint:disable */
 import type { AppNode } from "@/types";
 import { useThrottleFn } from "@vueuse/core";
 import Vue3DraggableResizable from "vue3-draggable-resizable";
@@ -38,6 +39,7 @@ provide("app", app);
 </script>
 
 <template>
+  <!-- @ts-ignore -->
   <Vue3DraggableResizable
     v-model:w="localWidth"
     v-model:h="localHeight"

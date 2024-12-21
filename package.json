@@ -32,6 +32,7 @@
     "nuxt": "^3.14.1592",
     "nuxt-zod-i18n": "^1.10.0",
     "pinia": "^2.2.3",
+    "qss": "^3.0.0",
     "radix-vue": "^1.9.6",
     "shadcn-nuxt": "^0.10.4",
     "tailwind-merge": "^2.5.2",

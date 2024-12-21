@@ -36,6 +36,7 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
     public: {
+      portfolioUrl: process.env.PORTFOLIO_URL,
       repositoryUrl: process.env.SOCIAL_REPOSITORY_URL,
       githubUrl: process.env.SOCIAL_GITHUB_URL,
       linkedinUrl: process.env.SOCIAL_LINKEDIN_URL,

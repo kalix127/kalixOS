@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       time: "00:00"
     commit-message:
       prefix: "npm"
@@ -11,6 +11,3 @@ updates:
       all:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "shadcn-nuxt"
-        versions: ["^0.10.4"]

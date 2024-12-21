@@ -11,6 +11,6 @@ updates:
       all:
         patterns:
           - "*"
-ignore:
-  - dependency-name: shadcn-nuxt
-    update-types: ["version-update:semver-patch"]
+    ignore:
+      - dependency-name: "shadcn-nuxt"
+        update-types: ["version-update:semver-patch"]

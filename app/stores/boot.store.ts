@@ -4,7 +4,7 @@ import {
   powerOffSystemLogs,
   powerUpSystemLogs,
 } from "@/constants";
-import { generateRandomDelays } from "@/lib/utils";
+import { generateRandomDelays } from "@/helpers";
 
 export const useBootStore = defineStore({
   id: "bootStore",

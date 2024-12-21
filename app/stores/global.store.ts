@@ -5,7 +5,7 @@ import {
   defaultUsername,
   desktopEnvironments,
 } from "@/constants";
-import { generateRandomDelays } from "@/lib/utils";
+import { generateRandomDelays } from "@/helpers";
 import { useIdle, watchOnce } from "@vueuse/core";
 
 export const useGlobalStore = defineStore({

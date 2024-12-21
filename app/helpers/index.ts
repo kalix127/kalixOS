@@ -336,3 +336,13 @@ export function formatNodeSize(chars: number, decimals: number = 1): string {
     `${Number.parseFloat((chars / k ** index).toFixed(dm))} ${sizes[index]}`
   );
 }
+
+export function generateRandomDelays(
+  count: number,
+  totalTime: number,
+): number[] {
+  const randomNumbers = Array.from({ length: count }, () => Math.random());
+  const sumOfRandoms = randomNumbers.reduce((acc, num) => acc + num, 0);
+  // Normalize the random numbers so that their sum equals totalTime
+  return randomNumbers.map(random => (random / sumOfRandoms) * totalTime);
+}

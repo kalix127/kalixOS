@@ -1,7 +1,19 @@
 {
-  "name": "nuxt-app",
+  "name": "kalixos",
   "type": "module",
   "private": true,
+  "description": "A modern web-based operating system that simulates a desktop environment in your browser.",
+  "author": "Gianluca Iavicoli",
+  "license": "MIT",
+  "homepage": "https://gianlucaiavicoli.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kalix127/kalixOS"
+  },
+  "bugs": {
+    "url": "https://github.com/kalix127/kalixOS/issues",
+    "email": "info@gianlucaiavicoli.dev"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --host",

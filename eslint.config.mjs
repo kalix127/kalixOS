@@ -23,6 +23,7 @@ export default antfu({
     "regexp/no-obscure-range": "off",
     "no-multiple-empty-lines": "error",
     "node/prefer-global/process": "off",
+    "yaml/plain-scalar": "off",
   },
 }, ...compat.config({
   extends: ["plugin:tailwindcss/recommended"],

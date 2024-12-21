@@ -13,4 +13,4 @@ updates:
           - "*"
     ignore:
       - dependency-name: "shadcn-nuxt"
-        update-types: ["version-update:semver-patch"]
+        versions: ["^0.10.4"]

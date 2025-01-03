@@ -398,9 +398,8 @@ export const useDesktopStore = defineStore({
       }
 
       // Update icon for files based on extension
-      if (node.type === "file" && node.name) {
-        const extension = node.name.split(".").pop() || "";
-        updatedData.icon = getNodeIcon(node.type, extension);
+      if (node.type === "file" && updatedData?.name) {
+        updatedData.icon = getNodeIcon(node.type, updatedData.name);
       }
 
       Object.assign(node, updatedData);

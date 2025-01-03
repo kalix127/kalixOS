@@ -1,8 +1,7 @@
-const typography = require("@tailwindcss/typography");
-const animate = require("tailwindcss-animate");
+import typography from "@tailwindcss/typography";
+import animate from "tailwindcss-animate";
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",

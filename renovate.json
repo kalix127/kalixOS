@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>nuxt/renovate-config-nuxt",
+    "schedule:weekly"
+  ],
+  "ignoreDeps": [
+    "vitest",
+    "vue"
+  ],
+  "assignees": [
+    "@kalix127"
+  ],
+  "npm": {
+    "minimumReleaseAge": "7 days"
+  },
+  "dependencyDashboard": false
+}

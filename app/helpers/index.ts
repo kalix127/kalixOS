@@ -84,24 +84,20 @@ export function resolvePath(
   for (const part of parts) {
     if (part === ".") {
       continue; // Current directory, no change
-    }
-    else if (part === "..") {
+    } else if (part === "..") {
       if (node.parentId) {
         const parentNode = findNodeByIdRecursive(fileSystem, node.parentId);
         if (parentNode) {
           node = parentNode;
-        }
-        else {
+        } else {
           // Parent node not found
           return null;
         }
-      }
-      else {
+      } else {
         // Already at root
         return null;
       }
-    }
-    else {
+    } else {
       if (node.type !== "folder" || !node.children) {
         return null; // Cannot traverse further
       }
@@ -109,8 +105,7 @@ export function resolvePath(
       const found = node.children.find(child => child.name === part);
       if (found) {
         node = found;
-      }
-      else {
+      } else {
         return null; // Path does not exist
       }
     }
@@ -210,8 +205,7 @@ export function getNodeFullPath(root: Node, node: Node): { absolutePath: string;
     nodes.unshift(current);
     if (current.parentId) {
       current = findNodeByIdRecursive(root, current.parentId);
-    }
-    else {
+    } else {
       current = null;
     }
   }

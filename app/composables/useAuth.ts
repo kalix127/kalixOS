@@ -22,8 +22,7 @@ export function useAuth() {
       await navigateTo("/desktop");
       isLoading.value = false;
       return true;
-    }
-    else {
+    } else {
       isLoading.value = false;
       return false;
     }
@@ -45,8 +44,7 @@ export function useAuth() {
       isLocked.value = false;
       isLoading.value = false;
       return true;
-    }
-    else {
+    } else {
       isLoading.value = false;
       return false;
     }

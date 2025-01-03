@@ -244,13 +244,11 @@ export function handleTree(
 
         level = parsedLevel;
         i += 2; // Skip the flag and its value
-      }
-      else if (arg?.startsWith("-")) {
+      } else if (arg?.startsWith("-")) {
         // Handle unknown flags
         term.write(`\r\ntree: unknown option '${arg}'`);
         return false;
-      }
-      else if (arg) {
+      } else if (arg) {
         // Positional argument (path)
         targetPath = arg;
         i += 1;
@@ -277,8 +275,7 @@ export function handleTree(
     // Add the root node
     if (targetPath === "." || targetPath === "") {
       lines.push(".");
-    }
-    else {
+    } else {
       lines.push(formatNodeName(targetNode));
     }
 
@@ -300,8 +297,7 @@ export function handleTree(
     });
 
     return true;
-  }
-  catch (error) {
+  } catch (error) {
     term.write(`\r\ntree: an unexpected error occurred.`);
     console.error("Error in handleTree:", error);
     return false;
@@ -388,8 +384,7 @@ export function handleChmod(
     const targets: Array<"owner" | "group" | "others"> = [];
     if (!/[ugo]/.test(mode.charAt(0)) || mode.startsWith("a")) {
       targets.push("owner", "group", "others");
-    }
-    else {
+    } else {
       if (mode.includes("u"))
         targets.push("owner");
       if (mode.includes("g"))
@@ -438,10 +433,9 @@ export function handleChmod(
     }
 
     return true;
-  }
-  // Matches octal mode format - exactly 3 digits between 0-7
-  // Example: "644" - rw-r--r-- (owner: rw-, group: r--, others: r--)
-  else if (/^[0-7]{3}$/.test(mode)) {
+    // Matches octal mode format - exactly 3 digits between 0-7
+    // Example: "644" - rw-r--r-- (owner: rw-, group: r--, others: r--)
+  } else if (/^[0-7]{3}$/.test(mode)) {
     // Split the octal mode string into array of numbers and convert each to base-8 integer
     const values = mode.split("").map(char => Number.parseInt(char, 8));
 
@@ -474,8 +468,7 @@ export function handleChmod(
     }
 
     return true;
-  }
-  else {
+  } else {
     term.write(`\r\nchmod: invalid mode: '${mode}'`);
     return false;
   }
@@ -604,8 +597,7 @@ export function handleMkdir(
       );
       return false;
     }
-  }
-  else {
+  } else {
     term.write(`\r\nmkdir: cannot create directory '${dirPath}': File exists`);
     return false;
   }
@@ -796,8 +788,7 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
     .map((header, idx) => {
       if (idx === 0) {
         return header.padStart(widths[idx] as number);
-      }
-      else {
+      } else {
         return header.padEnd(widths[idx] as number);
       }
     })
@@ -973,8 +964,7 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
       if (idx === 0 || idx === headers.length - 1) {
         // Left-align 'Filesystem' and 'Mounted on'
         return header.padEnd(widths[idx] as number);
-      }
-      else {
+      } else {
         // Right-align numeric headers
         return header.padStart(widths[idx] as number);
       }
@@ -1113,16 +1103,13 @@ export function parseArguments(
               throw new Error(`Option '${arg}' requires a value`);
             }
             flagValues[alias] = value;
-          }
-          else {
+          } else {
             flags.push(alias);
           }
-        }
-        else {
+        } else {
           throw new Error(`Unknown option '${arg}'`);
         }
-      }
-      else {
+      } else {
         const chars = arg.slice(1).split("");
         let consumedValue = false;
         for (let j = 0; j < chars.length; j++) {
@@ -1133,8 +1120,7 @@ export function parseArguments(
               let value = "";
               if (j < chars.length - 1) {
                 value = chars.slice(j + 1).join("");
-              }
-              else {
+              } else {
                 const nextArg = args[++i];
                 if (nextArg === undefined) {
                   throw new Error(`Option '${flag}' requires a value`);
@@ -1147,12 +1133,10 @@ export function parseArguments(
               flagValues[flag] = value;
               consumedValue = true;
               break;
-            }
-            else {
+            } else {
               flags.push(flag);
             }
-          }
-          else {
+          } else {
             throw new Error(`Unknown option '-${char}'`);
           }
         }
@@ -1160,8 +1144,7 @@ export function parseArguments(
           break;
         }
       }
-    }
-    else {
+    } else {
       if (arg === undefined) {
         throw new Error("Unexpected undefined argument");
       }
@@ -1414,8 +1397,7 @@ function formatFreeRow(
     .map((val, idx) => {
       if (humanReadable) {
         return formatBytes(val, 1).padStart(widths[idx] as number);
-      }
-      else {
+      } else {
         return val.toString().padStart(widths[idx] as number);
       }
     })

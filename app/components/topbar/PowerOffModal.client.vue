@@ -38,8 +38,7 @@ watch(
 
       // Start the countdown
       start();
-    }
-    else {
+    } else {
       // Stop the countdown if the modal is closed
       stop();
     }

@@ -123,8 +123,7 @@ export const useDesktopStore = defineStore({
       // Reset filesystem if username doesn't match home directory
       if (homeNode && homeNode.name.toLowerCase() !== username.toLowerCase()) {
         this.resetDesktopEnv();
-      }
-      else {
+      } else {
         this.initializeNodeMap(this.fileSystem as FolderNode);
       }
 

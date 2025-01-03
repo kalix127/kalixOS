@@ -81,14 +81,12 @@ export function useTerminal(terminalElement: HTMLElement) {
     // If the current directory is the home directory, show '~/' instead of the full path
     if (currentDirectory.value === `/home/${username}`) {
       textLine += `\x1B[1;34m ~ \x1B[1;37m$ `;
-    }
-    else if (currentDirectory.value.startsWith(`/home/${username}/`)) {
+    } else if (currentDirectory.value.startsWith(`/home/${username}/`)) {
       const relativePath = currentDirectory.value.substring(
         `/home/${username}/`.length,
       );
       textLine += ` \x1B[1;34m~/${relativePath}\x1B[1;37m $ `;
-    }
-    else {
+    } else {
       textLine += ` \x1B[1;34m${currentDirectory.value}\x1B[1;37m $ `;
     }
 
@@ -210,9 +208,8 @@ export function useTerminal(terminalElement: HTMLElement) {
             term.write("\r\x1B[K"); // Clear current line
             term.write(`${newLine.value}`);
             term.write(command.value);
-          }
-          // Clear command when reaching end of history
-          else if (
+            // Clear command when reaching end of history
+          } else if (
             commandHistoryIndex.value
             === commandHistory.value.length - 1
           ) {
@@ -289,8 +286,7 @@ export function useTerminal(terminalElement: HTMLElement) {
     let parsedArgs;
     try {
       parsedArgs = parseArguments(exec, args.slice(1), commandSpec);
-    }
-    catch (error: any) {
+    } catch (error: any) {
       term.write(`\r\n${error.message}`);
       return false;
     }
@@ -487,8 +483,7 @@ export function useTerminal(terminalElement: HTMLElement) {
           command.value += completion;
           cursorPosition.value += completion.length;
           term.write(completion);
-        }
-        else if (matchingCommands.length > 1) {
+        } else if (matchingCommands.length > 1) {
           // show completions
           term.write("\r\n");
           const output = matchingCommands
@@ -502,8 +497,7 @@ export function useTerminal(terminalElement: HTMLElement) {
           term.write(`\r\n${newLine.value}${command.value}`);
         }
       }
-    }
-    else {
+    } else {
       // autocomplete file paths
       let pathToComplete = lastToken;
       if (!pathToComplete) {
@@ -537,8 +531,7 @@ export function useTerminal(terminalElement: HTMLElement) {
             cursorPosition.value += completion.length + appendChar.length;
             term.write(completion + appendChar);
           }
-        }
-        else if (matchingNodes.length > 1) {
+        } else if (matchingNodes.length > 1) {
           // show completions
           term.write("\r\n");
           const output = matchingNodes
@@ -565,8 +558,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         dir: "",
         incomplete: path,
       };
-    }
-    else {
+    } else {
       const dir = path.substring(0, lastSlashIndex + 1);
       const incomplete = path.substring(lastSlashIndex + 1);
       return {

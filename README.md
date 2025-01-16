@@ -10,7 +10,7 @@
         <a href="https://github.com/kalix127/kalixOS/issues/new?labels=feature&template=feature_request.md" target="_blank">Request Feature</a>
     </p>
     <video width="100%" autoplay loop muted playsinline>
-        <source src="./.github/readme/preview.mp4" type="video/mp4" loop>
+        <source src="./.github/readme/preview.gif" type="video/gif" loop>
     </video>
 </div>
 

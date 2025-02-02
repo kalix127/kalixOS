@@ -12,7 +12,7 @@ defineEmits<{
   (e: "fullscreen"): void;
 }>();
 
-const { repositoryUrl } = useRuntimeConfig().public;
+const { repositoryVscodeUrl } = useRuntimeConfig().public;
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const { repositoryUrl } = useRuntimeConfig().public;
 
     <!-- VsCode -->
     <iframe
-      :src="repositoryUrl"
+      :src="repositoryVscodeUrl"
       :class="cn('h-full w-full bg-background', $props.class)"
       sandbox="allow-scripts allow-same-origin allow-forms"
       referrerpolicy="no-referrer"

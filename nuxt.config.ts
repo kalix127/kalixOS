@@ -37,7 +37,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       portfolioUrl: process.env.PORTFOLIO_URL,
-      repositoryUrl: process.env.SOCIAL_REPOSITORY_URL,
+      repositoryVscodeUrl: process.env.REPOSITORY_VSCODE_URL,
+      repositoryUrl: process.env.REPOSITORY_URL,
       githubUrl: process.env.SOCIAL_GITHUB_URL,
       linkedinUrl: process.env.SOCIAL_LINKEDIN_URL,
       twitterUrl: process.env.SOCIAL_TWITTER_URL,

@@ -26,7 +26,7 @@
 
 ## About The Project
 
-**KalixOS** brings the full experience of a Linux desktop environment to the browser, inspired by the functionality and aesthetics of the Manjaro operating system. It features a responsive, interactive, and immersive web app designed to mimic a real OS.
+**KalixOS** brings the full experience of a Linux desktop environment to the browser, inspired by the functionality and aesthetics of the Manjaro operating system. It features a responsive, interactive, and immersive web app that mimics a real OS.
 
 The application offers a nearly complete Linux filesystem logic, allowing you to create, modify, and delete directories and files seamlessly. Users can browse the web using the built-in web browser or interact with a terminal that supports a variety of Linux commands, offering an authentic command-line experience.
 
@@ -37,7 +37,7 @@ This web-based OS includes several OS-like features to enhance the realism and s
 - **WiFi Manager**: A simulated WiFi list to replicate network connection management.
 - **Built-in Apps**: Functional applications such as a built-in version of **VS Code**, **Kate** for modifying files and system settings, alongside others, designed primarily to showcase functionality rather than for regular daily use.
 
-Designed for both functionality and portability, this project serves as a powerful demonstration of what can be achieved with modern web development frameworks. Whether you're a developer looking for inspiration or an enthusiast exploring new technologies, this project showcases the best of Linux OS simulation in a browser.
+Designed for both functionality and portability, this project is a powerful demonstration of what can be achieved with modern web development frameworks. Whether you're a developer looking for inspiration or an enthusiast exploring new technologies, this project showcases the best of Linux OS simulation in a browser.
 
 ### Key Features:
 
@@ -90,7 +90,7 @@ Feel free to experiment with all the features described above, from basic file o
 
 Please check out our [Contributing Guidelines](CONTRIBUTING.md) for detailed information about how to contribute to this project.
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "feature". Don't forget to give the project a star!
 

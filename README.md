@@ -135,4 +135,4 @@ Gianluca Iavicoli - [LinkedIn](https://www.linkedin.com/in/gianluca-iavicoli-684
 - [adw-gtk3 GTK Theme](https://github.com/lassekongo83/adw-gtk3)
 - [Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)
 
-([back to top](#readme-top))
+([back to top](#top))

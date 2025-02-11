@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/i18n",
+    "nuxt-umami",
   ],
   components: {
     dirs: [
@@ -107,5 +108,12 @@ export default defineNuxtConfig({
   },
   zodI18n: {
     useModuleLocale: false,
+  },
+  umami: {
+    id: "418e3a40-ad5d-456f-aaa6-f34ef1d5bfec",
+    host: "https://cloud.umami.is",
+    autoTrack: true,
+    logErrors: true,
+    useDirective: true,
   },
 });

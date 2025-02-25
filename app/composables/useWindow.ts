@@ -4,7 +4,7 @@ import type { Component } from "vue";
 // WARNING (DEV only): The first time an app opens, there will be a 1-2 second delay
 // due to Monaco editor initialization boilerplate code
 
-import DesktopAppBrave from "@/components/desktop/app/Brave.vue";
+import DesktopAppChrome from "@/components/desktop/app/Chrome.vue";
 import DesktopAppFiles from "@/components/desktop/app/files/index.vue";
 import DesktopAppKate from "@/components/desktop/app/Kate.vue";
 import Settings from "@/components/desktop/app/settings/index.vue";
@@ -15,7 +15,7 @@ import { defaultFullscreenApps } from "@/constants";
 const appComponents: Record<string, Component> = {
   settings: Settings,
   code: DesktopAppVSCode,
-  brave: DesktopAppBrave,
+  chrome: DesktopAppChrome,
   terminal: DesktopAppTerminal,
   kate: DesktopAppKate,
   files: DesktopAppFiles,

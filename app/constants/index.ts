@@ -28,7 +28,7 @@ export const defaultBackgroundImages: BackgroundImage[] = [
   defaultBackgroundImage,
 ];
 
-export const defaultFullscreenApps = ["brave", "code"];
+export const defaultFullscreenApps = ["chrome", "code"];
 
 export const desktopEnvironments = [
   "gnome",
@@ -188,10 +188,10 @@ export const defaultApps: AppNode[] = [
     icon: "app:terminal",
   },
   {
-    id: "brave",
-    name: "Brave",
+    id: "chrome",
+    name: "Google Chrome",
     type: "app",
-    icon: "app:brave",
+    icon: "app:chrome",
   },
   {
     id: "code",

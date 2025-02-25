@@ -22,7 +22,7 @@ defineEmits<{
       @close="() => $emit('close')"
     />
 
-    <!-- Brave -->
+    <!-- Google -->
     <iframe
       src="https://www.google.com/webhp?igu=1"
       :class="cn('h-full w-full bg-background', $props.class)"
@@ -32,7 +32,7 @@ defineEmits<{
       width="100%"
       height="100%"
       allow="clipboard-read; clipboard-write;"
-      title="Brave"
+      title="Google chrome"
     />
   </div>
 </template>

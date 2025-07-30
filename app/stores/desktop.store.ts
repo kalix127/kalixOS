@@ -8,14 +8,6 @@ import type {
   ShortcutNode,
 } from "@/types";
 import {
-  defaultApps,
-  defaultBackgroundImage,
-  defaultBackgroundImages,
-  defaultBookmarks,
-  defaultFileSystem,
-} from "@/constants";
-import { assignDefaultProperties, findNodeByIdRecursive, getNextPid, getNodeIcon } from "@/helpers";
-import {
   breakpointsTailwind,
   useBreakpoints,
   useIdle,
@@ -23,6 +15,14 @@ import {
   useTimeoutFn,
   useTimestamp,
 } from "@vueuse/core";
+import {
+  defaultApps,
+  defaultBackgroundImage,
+  defaultBackgroundImages,
+  defaultBookmarks,
+  defaultFileSystem,
+} from "@/constants";
+import { assignDefaultProperties, findNodeByIdRecursive, getNextPid, getNodeIcon } from "@/helpers";
 
 export const useDesktopStore = defineStore({
   id: "desktopStore",

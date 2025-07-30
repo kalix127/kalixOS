@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { AppNode } from "@/types";
 import type { HTMLAttributes } from "vue";
+import type { AppNode } from "@/types";
 import { cn } from "@/lib/utils";
 
 defineProps<{

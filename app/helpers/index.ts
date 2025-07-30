@@ -1,11 +1,11 @@
 import type { FolderNode, Node, PermissionsNode, Process } from "@/types";
+import { v4 as uuidv4 } from "uuid";
 import {
   defaultAppPermissions,
   defaultFilePermissions,
   defaultFolderPermissions,
   defaultShortcutPermissions,
 } from "@/constants";
-import { v4 as uuidv4 } from "uuid";
 
 export function assignDefaultProperties(node: Node, username: string, parentId: string | null = null): Node {
   const createdAt = new Date();

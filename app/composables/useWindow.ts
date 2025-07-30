@@ -1,5 +1,5 @@
-import type { AppNode } from "@/types";
 import type { Component } from "vue";
+import type { AppNode } from "@/types";
 
 // WARNING (DEV only): The first time an app opens, there will be a 1-2 second delay
 // due to Monaco editor initialization boilerplate code

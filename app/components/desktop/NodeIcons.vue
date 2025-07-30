@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Node } from "@/types";
 import type { HTMLAttributes } from "vue";
+import type { Node } from "@/types";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{ class?: HTMLAttributes["class"]; item: Node }>();

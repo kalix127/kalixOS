@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { AppNode } from "@/types";
-import { defaultApps } from "@/constants";
 import { useMagicKeys } from "@vueuse/core";
+import { defaultApps } from "@/constants";
 
 const { isShowAppsOverlayVisible } = storeToRefs(useDesktopStore());
 const { openApp } = useDesktopStore();

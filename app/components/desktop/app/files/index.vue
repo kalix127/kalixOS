@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Node } from "@/types";
 import type { HTMLAttributes } from "vue";
+import type { Node } from "@/types";
 import { dragAndDrop } from "@formkit/drag-and-drop/vue";
 import { until } from "@vueuse/core";
 import { storeToRefs } from "pinia";

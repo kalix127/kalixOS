@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Notification } from "@/types";
 import type { HTMLAttributes } from "vue";
+import type { Notification } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface Props {

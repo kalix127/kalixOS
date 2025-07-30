@@ -15,8 +15,7 @@ useHead({
 });
 
 const desktopStore = useDesktopStore();
-const { desktopItems, openApps, desktopRef, nodeMap }
-  = storeToRefs(desktopStore);
+const { desktopItems, openApps, desktopRef, nodeMap } = storeToRefs(desktopStore);
 const { init, moveNode, updateDesktopItems } = desktopStore;
 
 const isMobileOrTablet = useBreakpoints(breakpointsTailwind).smaller("lg");
@@ -118,10 +117,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main
-    ref="desktopRef"
-    class="relative select-none"
-  >
+  <main ref="desktopRef" class="relative select-none">
     <!-- Apps -->
     <TransitionGroup name="apps">
       <LazyDesktopWindow

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { cn } from "@/lib/utils";
 import {
   CalendarRoot,
   type CalendarRootEmits,
@@ -7,6 +6,7 @@ import {
   useForwardPropsEmits,
 } from "radix-vue";
 import { computed, type HTMLAttributes } from "vue";
+import { cn } from "@/lib/utils";
 import {
   CalendarCell,
   CalendarCellTrigger,

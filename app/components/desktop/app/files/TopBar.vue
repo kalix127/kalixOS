@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
 
-import { getNodeFullPath } from "@/helpers";
-import { cn } from "@/lib/utils";
 import { vOnClickOutside } from "@vueuse/components";
 import { useClipboard } from "@vueuse/core";
+import { getNodeFullPath } from "@/helpers";
+import { cn } from "@/lib/utils";
 
 defineProps<{
   class?: HTMLAttributes["class"];

@@ -1,3 +1,5 @@
+import { WebLinksAddon } from "@xterm/addon-web-links";
+import { Terminal } from "@xterm/xterm";
 import { commandSpecs } from "@/constants";
 import { helpMessages } from "@/constants/helpMessages";
 import { findNodeByPath, resolvePath } from "@/helpers";
@@ -23,8 +25,6 @@ import {
   handleTree,
   parseArguments,
 } from "@/helpers/terminal";
-import { WebLinksAddon } from "@xterm/addon-web-links";
-import { Terminal } from "@xterm/xterm";
 
 export function useTerminal(terminalElement: HTMLElement) {
   const terminalStore = useTerminalStore();

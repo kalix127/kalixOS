@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { AppNode } from "@/types";
 import type { HTMLAttributes } from "vue";
-import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
+import type { AppNode } from "@/types";
 import { watchThrottled } from "@vueuse/core";
 import * as monaco from "monaco-editor";
+import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
 import "@/assets/js/monacoWorker";
 
 defineProps<{

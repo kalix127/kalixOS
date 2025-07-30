@@ -1,3 +1,4 @@
+import type { Terminal } from "@xterm/xterm";
 import type {
   CommandSpec,
   FolderNode,
@@ -6,7 +7,7 @@ import type {
   PermissionsNode,
   ShortcutNode,
 } from "@/types";
-import type { Terminal } from "@xterm/xterm";
+import { useTimestamp, useWindowSize } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
 import { helpMessages } from "@/constants/helpMessages";
 import {
@@ -15,7 +16,6 @@ import {
   resolvePath,
   splitPath,
 } from "@/helpers";
-import { useTimestamp, useWindowSize } from "@vueuse/core";
 
 const { editNode, createNode, moveNode, deleteNode, createNodeShortcut }
   = useDesktopStore();

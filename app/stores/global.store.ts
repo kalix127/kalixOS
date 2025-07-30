@@ -1,4 +1,5 @@
 import type { WifiNetwork } from "@/types";
+import { useIdle, watchOnce } from "@vueuse/core";
 import {
   defaultDimScreenThreshold,
   defaultNetworks,
@@ -6,7 +7,6 @@ import {
   desktopEnvironments,
 } from "@/constants";
 import { generateRandomDelays } from "@/helpers";
-import { useIdle, watchOnce } from "@vueuse/core";
 
 export const useGlobalStore = defineStore({
   id: "globalStore",

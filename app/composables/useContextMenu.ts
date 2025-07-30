@@ -6,11 +6,11 @@ import type {
   Node,
   ShortcutNode,
 } from "@/types";
-import { findNodeByIdRecursive } from "@/helpers";
 import { useEventListener } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { findNodeByIdRecursive } from "@/helpers";
 
 export function useContextMenu() {
   const { t } = useI18n();

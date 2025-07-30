@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ContextMenuTargetType, FileNode, FolderNode, Node } from "@/types";
 import type { HTMLAttributes } from "vue";
+import type { ContextMenuTargetType, FileNode, FolderNode, Node } from "@/types";
+import { useElementBounding } from "@vueuse/core";
+import { toRefs } from "vue";
 import TableRow from "@/components/ui/table/TableRow.vue";
 import { formatNodeSize } from "@/helpers";
 import { cn } from "@/lib/utils";
-import { useElementBounding } from "@vueuse/core";
-import { toRefs } from "vue";
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];

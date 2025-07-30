@@ -1,5 +1,5 @@
-import en from "./app/locales/en-US.json";
-import it from "./app/locales/it-IT.json";
+import en from "../app/locales/en-US.json";
+import it from "../app/locales/it-IT.json";
 
 export default defineI18nConfig(() => ({
   strategy: "no_prefix",
@@ -8,5 +8,7 @@ export default defineI18nConfig(() => ({
   messages: {
     "en-US": en,
     "it-IT": it,
+    "en": en,
+    "it": it,
   },
 }));

@@ -28,7 +28,7 @@
   "dependencies": {
     "@formkit/drag-and-drop": "^0.5.3",
     "@nuxt/fonts": "^0.11.4",
-    "@nuxt/icon": "^1.15.0",
+    "@nuxt/icon": "^2.0.0",
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/i18n": "^10.0.6",

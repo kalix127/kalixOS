@@ -31,7 +31,7 @@ importers:
         version: 6.14.0(magicast@0.3.5)
       '@pinia/nuxt':
         specifier: ^0.11.2
-        version: 0.11.2(magicast@0.3.5)(pinia@2.3.1(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)))
+        version: 0.11.2(magicast@0.3.5)(pinia@3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)))
       '@vee-validate/zod':
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.21(typescript@5.9.2))(zod@3.25.76)
@@ -72,8 +72,8 @@ importers:
         specifier: ^1.12.1
         version: 1.12.1(magicast@0.3.5)
       pinia:
-        specifier: ^2.3.1
-        version: 2.3.1(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
+        specifier: ^3.0.3
+        version: 3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
       qss:
         specifier: ^3.0.0
         version: 3.0.0
@@ -4871,8 +4871,8 @@ packages:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
 
-  pinia@2.3.1:
-    resolution: {integrity: sha512-khUlZSwt9xXCaTbbxFYBKDc/bWAGWJjOgvxETwkTN7KRm66EeT1ZdZj6i2ceh9sP2Pzqsbc704r2yngBrxBVug==}
+  pinia@3.0.3:
+    resolution: {integrity: sha512-ttXO/InUULUXkMHpTdp9Fj4hLpD/2AoJdmAbAeW2yu1iy1k+pkFekQXw5VpC0/5p51IOR/jDaDRfRWRnMMsGOA==}
     peerDependencies:
       typescript: '>=4.4.4'
       vue: ^2.7.0 || ^3.5.11
@@ -7941,10 +7941,10 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.1
       '@parcel/watcher-win32-x64': 2.5.1
 
-  '@pinia/nuxt@0.11.2(magicast@0.3.5)(pinia@2.3.1(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)))':
+  '@pinia/nuxt@0.11.2(magicast@0.3.5)(pinia@3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)))':
     dependencies:
       '@nuxt/kit': 3.18.0(magicast@0.3.5)
-      pinia: 2.3.1(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
+      pinia: 3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
     transitivePeerDependencies:
       - magicast
 
@@ -8606,7 +8606,7 @@ snapshots:
       '@volar/language-core': 2.4.15
       '@vue/compiler-dom': 3.5.21
       '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.20
+      '@vue/shared': 3.5.21
       alien-signals: 1.0.13
       minimatch: 9.0.5
       muggle-string: 0.4.1
@@ -11868,15 +11868,12 @@ snapshots:
 
   pify@2.3.0: {}
 
-  pinia@2.3.1(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)):
+  pinia@3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2)):
     dependencies:
-      '@vue/devtools-api': 6.6.4
+      '@vue/devtools-api': 7.7.7
       vue: 3.5.21(typescript@5.9.2)
-      vue-demi: 0.14.10(vue@3.5.21(typescript@5.9.2))
     optionalDependencies:
       typescript: 5.9.2
-    transitivePeerDependencies:
-      - '@vue/composition-api'
 
   pirates@4.0.7: {}
 

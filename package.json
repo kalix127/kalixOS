@@ -44,7 +44,7 @@
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.544.0",
     "monaco-editor": "^0.53.0",
-    "nuxt": "^4.0.3",
+    "nuxt": "^4.1.2",
     "nuxt-umami": "3.2.0",
     "nuxt-zod-i18n": "^1.12.1",
     "pinia": "^3.0.3",

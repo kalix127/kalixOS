@@ -57,7 +57,7 @@
     "vee-validate": "^4.15.1",
     "vue": "latest",
     "vue-router": "latest",
-    "vue-sonner": "^1.3.2",
+    "vue-sonner": "^2.0.8",
     "vue3-draggable-resizable": "^1.6.5",
     "zod": "^3.25.76"
   },

@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+  devtools: { enabled: true },
   modules: [
     "nuxt-zod-i18n",
     "@nuxtjs/tailwindcss",
@@ -23,7 +24,6 @@ export default defineNuxtConfig({
       "~/components",
     ],
   },
-  devtools: { enabled: true },
   app: {
     head: {
       htmlAttrs: {
@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     ],
   },
   i18n: {
+    defaultLocale: "en-US",
     vueI18n: "./i18n.config.ts",
   },
   icon: {

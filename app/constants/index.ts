@@ -20,7 +20,7 @@ export const defaultDimScreenThreshold = "300000"; // 5 minutes
 export const defaultBookmarks = [];
 
 export const defaultBackgroundImage: BackgroundImage = {
-  url: "img/bg-desktop.jpg",
+  url: "img/bg-desktop.webp",
   name: "default",
 };
 

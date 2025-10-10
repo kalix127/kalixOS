@@ -71,11 +71,11 @@ function handleBackgroundChange(event: Event) {
                 class="place-items-cente relative grid"
                 @click="() => setBackgroundImage(image)"
               >
-                <LazyNuxtImg
+                <img
                   class="h-28 w-36 rounded-md"
                   :src="image.url"
                   :alt="image.name"
-                />
+                >
 
                 <!-- Delete button -->
                 <button

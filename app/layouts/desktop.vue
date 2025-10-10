@@ -28,15 +28,14 @@ const { renamePopoverPosition } = storeToRefs(useContextMenuStore());
       <Topbar class="absolute left-0 top-0 w-full" />
       <!-- Background image -->
       <Transition name="background">
-        <NuxtImg
+        <img
           :key="backgroundImage.name"
           :alt="backgroundImage.name"
           :src="backgroundImage.url"
           class="absolute size-full object-cover"
           sizes="sm:1000px md:1200px lg:1400px xl:1800px"
           style="-webkit-user-drag: none"
-          format="webp"
-        />
+        >
       </Transition>
       <slot />
     </div>

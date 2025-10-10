@@ -70,7 +70,7 @@ const socialLinks = [
   <div ref="el" :style="style" class="fixed z-[100000] grid size-[50px] cursor-move select-none place-items-center rounded-full">
     <!-- Trigger -->
     <template v-if="!isExpanded">
-      <NuxtImg src="/img/avatar.png" style="touch-action:none;" class="rounded-full border border-background" alt="Gianluca Iavicoli" width="60" height="60" />
+      <img src="/img/avatar.png" style="touch-action:none;" class="rounded-full border border-background" alt="Gianluca Iavicoli" width="60" height="60">
 
       <button class="share-button absolute -bottom-2 -right-1 z-10 grid place-items-center rounded-full bg-background p-1 hover:ring-2 hover:ring-primary/75" @click="handleOpen">
         <Icon

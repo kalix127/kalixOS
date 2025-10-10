@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/fonts",
     "@pinia/nuxt",
-    "@nuxt/image",
     "@nuxtjs/i18n",
     "nuxt-umami",
   ],
@@ -97,6 +96,7 @@ export default defineNuxtConfig({
     },
   },
   image: {
+    provider: "none",
     format: ["webp"],
   },
   pinia: {

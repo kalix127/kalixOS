@@ -8,8 +8,7 @@ import {
 } from "@/constants";
 import { generateRandomDelays } from "@/helpers";
 
-export const useGlobalStore = defineStore({
-  id: "globalStore",
+export const useGlobalStore = defineStore("globalStore", {
   state: (): GlobalStore => ({
     // General
     isUserDesktopFirstTime: useCookie("isUserDesktopFirstTime", {

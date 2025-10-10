@@ -24,8 +24,7 @@ import {
 } from "@/constants";
 import { assignDefaultProperties, findNodeByIdRecursive, getNextPid, getNodeIcon } from "@/helpers";
 
-export const useDesktopStore = defineStore({
-  id: "desktopStore",
+export const useDesktopStore = defineStore("desktopStore", {
   state: (): DesktopStore => ({
     // Filesystem
     fileSystem: defaultFileSystem(

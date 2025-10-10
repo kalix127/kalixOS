@@ -6,8 +6,7 @@ import {
 } from "@/constants";
 import { generateRandomDelays } from "@/helpers";
 
-export const useBootStore = defineStore({
-  id: "bootStore",
+export const useBootStore = defineStore("bootStore", {
   state: (): BootStore => ({
     isBooting: false,
     isPowerOffModalOpen: false,

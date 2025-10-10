@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-const { isAboutToSuspend, isSuspended } = storeToRefs(useGlobalStore());
+const globalStore = useGlobalStore();
+const { isAboutToSuspend, isSuspended } = storeToRefs(globalStore);
 </script>
 
 <template>

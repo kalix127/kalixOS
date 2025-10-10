@@ -9,7 +9,5 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (!isAuthenticated.value) {
     return navigateTo("/login", { redirectCode: 302 });
-  } else {
-    return navigateTo("/desktop", { redirectCode: 302 });
   }
 });

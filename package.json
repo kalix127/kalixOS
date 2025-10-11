@@ -2,7 +2,7 @@
   "name": "kalixos",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.18.0",
   "description": "A modern web-based operating system that simulates a desktop environment in your browser.",
   "author": "Gianluca Iavicoli",
   "license": "MIT",

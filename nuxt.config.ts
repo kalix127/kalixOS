@@ -100,7 +100,11 @@ export default defineNuxtConfig({
     format: ["webp"],
   },
   pinia: {
-    storesDirs: ["./app/stores/**"],
+    storesDirs: [
+      "./stores/**",
+      "./app/stores/**",
+      "**/stores/**"
+    ],
   },
 
   shadcn: {

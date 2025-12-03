@@ -57,7 +57,7 @@
     "vue-router": "latest",
     "vue-sonner": "^2.0.9",
     "vue3-draggable-resizable": "^1.6.5",
-    "zod": "^3.25.76"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.16.0",

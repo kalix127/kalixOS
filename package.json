@@ -48,7 +48,7 @@
     "pinia": "^3.0.4",
     "qss": "^3.0.0",
     "radix-vue": "^1.9.17",
-    "shadcn-nuxt": "^2.3.3",
+    "shadcn-nuxt": "^2.4.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^13.0.0",

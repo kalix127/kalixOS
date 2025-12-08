@@ -60,7 +60,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.16.0",
+    "@antfu/eslint-config": "^6.2.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/uuid": "^10.0.0",
     "eslint": "^9.39.1",

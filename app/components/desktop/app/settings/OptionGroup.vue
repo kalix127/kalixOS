@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type HTMLAttributes, provide } from "vue";
+import type { HTMLAttributes } from "vue";
+import { provide } from "vue";
 import { cn } from "@/lib/utils";
 
 defineProps<{

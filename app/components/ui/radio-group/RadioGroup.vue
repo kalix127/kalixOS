@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { RadioGroupRootEmits, RadioGroupRootProps } from "radix-vue";
+import type { HTMLAttributes } from "vue";
 import {
   RadioGroupRoot,
-  type RadioGroupRootEmits,
-  type RadioGroupRootProps,
+
   useForwardPropsEmits,
 } from "radix-vue";
-import { computed, type HTMLAttributes } from "vue";
+import { computed } from "vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<

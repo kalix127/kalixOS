@@ -52,13 +52,13 @@ export interface ShortcutNode extends BaseNode {
   targetType: "app" | "folder" | "file";
 }
 
-export type ContextMenuTargetType =
-  | "desktop"
-  | "dock"
-  | "folder"
-  | "file"
-  | "app"
-  | "shortcut";
+export type ContextMenuTargetType
+  = | "desktop"
+    | "dock"
+    | "folder"
+    | "file"
+    | "app"
+    | "shortcut";
 
 // Union type for all node types
 export type Node = FolderNode | FileNode | AppNode | ShortcutNode;

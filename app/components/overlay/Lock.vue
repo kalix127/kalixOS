@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type LoginForm, loginSchema } from "@/validations/auth.schema";
+import type { LoginForm } from "@/validations/auth.schema";
+import { loginSchema } from "@/validations/auth.schema";
 
 const { isLoading, handleUnlock } = useAuth();
 const { username } = storeToRefs(useGlobalStore());

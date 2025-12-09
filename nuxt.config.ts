@@ -102,7 +102,7 @@ export default defineNuxtConfig({
     storesDirs: [
       "./stores/**",
       "./app/stores/**",
-      "**/stores/**"
+      "**/stores/**",
     ],
   },
 

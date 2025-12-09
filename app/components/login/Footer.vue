@@ -5,7 +5,7 @@ const globalStore = useGlobalStore();
 const { loginView, desktopEnvironment } = storeToRefs(globalStore);
 
 const { t } = useI18n();
-const { githubUrl, linkedinUrl, repositoryUrl, twitterUrl, redditUrl }
+const { githubUrl, linkedinUrl, repositoryUrl, twitterUrl }
   = useRuntimeConfig().public;
 
 const socialLinks = [
@@ -28,11 +28,6 @@ const socialLinks = [
     name: t("my_twitter_profile"),
     icon: "logo:twitter",
     url: twitterUrl,
-  },
-  {
-    name: t("my_reddit_profile"),
-    icon: "logo:reddit",
-    url: redditUrl,
   },
 ];
 </script>

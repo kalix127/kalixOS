@@ -42,7 +42,6 @@ export default defineNuxtConfig({
       githubUrl: process.env.SOCIAL_GITHUB_URL,
       linkedinUrl: process.env.SOCIAL_LINKEDIN_URL,
       twitterUrl: process.env.SOCIAL_TWITTER_URL,
-      redditUrl: process.env.SOCIAL_REDDIT_URL,
     },
   },
   future: {

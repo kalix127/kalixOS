@@ -42,7 +42,7 @@
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.555.0",
     "monaco-editor": "^0.55.1",
-    "nuxt": "^4.2.1",
+    "nuxt": "^4.2.2",
     "nuxt-umami": "3.2.1",
     "nuxt-zod-i18n": "^1.12.1",
     "pinia": "^3.0.4",

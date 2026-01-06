@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { HTMLAttributes } from "vue";
 import type * as Monaco from "monaco-editor";
+import type { HTMLAttributes } from "vue";
 import type { AppNode } from "@/types";
 import { watchThrottled } from "@vueuse/core";
 import { monacoEditorLanguageMap, monacoTheme } from "@/constants";

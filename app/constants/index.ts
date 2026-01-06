@@ -12,6 +12,7 @@ import { assignDefaultProperties } from "@/helpers";
 /* General */
 
 export const defaultUsername = "kalix";
+export const terminalHostname = "gianlucaiavicoli.dev";
 
 export const defaultBootDuration = 5000;
 
@@ -413,6 +414,21 @@ export function defaultFileSystem(username: string): Node {
           icon: "folder:folder",
           children: [
             {
+              name: "bash",
+              type: "file",
+              icon: "file:bin",
+            },
+            {
+              name: "zsh",
+              type: "file",
+              icon: "file:bin",
+            },
+            {
+              name: "dash",
+              type: "file",
+              icon: "file:bin",
+            },
+            {
               id: "cd",
               name: "cd",
               type: "file",
@@ -538,6 +554,16 @@ export function defaultFileSystem(username: string): Node {
               type: "file",
               icon: "file:bash",
             },
+            {
+              name: "busybox",
+              type: "file",
+              icon: "file:bin",
+            },
+            {
+              name: "strace",
+              type: "file",
+              icon: "file:bin",
+            },
           ],
         },
         {
@@ -559,10 +585,20 @@ export function defaultFileSystem(username: string): Node {
               name: "hostname",
               type: "file",
               icon: "file:text",
-              content: "kalix-laptop",
+              content: terminalHostname,
             },
             {
               name: "hosts",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "fstab",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "os-release",
               type: "file",
               icon: "file:text",
             },
@@ -675,13 +711,37 @@ export function defaultFileSystem(username: string): Node {
           name: "lib",
           type: "folder",
           icon: "folder:folder",
-          children: [],
+          children: [
+            {
+              name: "firmware",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "modules",
+              type: "folder",
+              icon: "folder:folder",
+              children: [],
+            },
+            {
+              name: "libc.so.6",
+              type: "file",
+              icon: "file:bin",
+            },
+          ],
         },
         {
           name: "opt",
           type: "folder",
           icon: "folder:folder",
-          children: [],
+          children: [
+            {
+              name: "README.txt",
+              type: "file",
+              icon: "file:text",
+            },
+          ],
         },
         {
           name: "var",
@@ -700,6 +760,16 @@ export function defaultFileSystem(username: string): Node {
                 },
                 {
                   name: "auth.log",
+                  type: "file",
+                  icon: "file:text",
+                },
+                {
+                  name: "kern.log",
+                  type: "file",
+                  icon: "file:text",
+                },
+                {
+                  name: "journal.log",
                   type: "file",
                   icon: "file:text",
                 },
@@ -736,7 +806,50 @@ export function defaultFileSystem(username: string): Node {
               type: "folder",
               icon: "folder:folder",
               isProtected: true,
-              children: [],
+              children: [
+                {
+                  name: "EFI",
+                  type: "folder",
+                  icon: "folder:folder",
+                  isProtected: true,
+                  children: [
+                    {
+                      name: "BOOT",
+                      type: "folder",
+                      icon: "folder:folder",
+                      children: [
+                        {
+                          name: "BOOTX64.EFI",
+                          type: "file",
+                          icon: "file:bin",
+                        },
+                      ],
+                    },
+                    {
+                      name: "Manjaro",
+                      type: "folder",
+                      icon: "folder:folder",
+                      children: [
+                        {
+                          name: "grubx64.efi",
+                          type: "file",
+                          icon: "file:bin",
+                        },
+                        {
+                          name: "mokmanager.efi",
+                          type: "file",
+                          icon: "file:bin",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: "startup.nsh",
+                  type: "file",
+                  icon: "file:text",
+                },
+              ],
             },
             {
               name: "grub",
@@ -793,6 +906,16 @@ export function defaultFileSystem(username: string): Node {
               name: "vmlinuz-6.10.13-3-x86_64",
               type: "file",
               icon: "file:binary",
+            },
+            {
+              name: "System.map-6.10.13-3-x86_64",
+              type: "file",
+              icon: "file:text",
+            },
+            {
+              name: "config-6.10.13-3-x86_64",
+              type: "file",
+              icon: "file:text",
             },
           ],
         },

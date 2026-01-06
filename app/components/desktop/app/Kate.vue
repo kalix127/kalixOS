@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import type { HTMLAttributes } from "vue";
+import type * as Monaco from "monaco-editor";
 import type { AppNode } from "@/types";
 import { watchThrottled } from "@vueuse/core";
-import * as monaco from "monaco-editor";
 import { monacoEditorLanguageMap, monacoTheme } from "@/constants";
-import "@/assets/js/monacoWorker";
 
 defineProps<{
   class?: HTMLAttributes["class"];
@@ -24,7 +23,9 @@ const textEditorStore = useKateStore();
 const { openedNode } = storeToRefs(textEditorStore);
 const { updateApp } = useDesktopStore();
 
-let editorObj: monaco.editor.IEditor | undefined;
+let monaco: typeof import("monaco-editor") | null = null;
+let editorObj: Monaco.editor.IEditor | undefined;
+let editorModel: Monaco.editor.ITextModel | null = null;
 
 function getLanguage(name: string | undefined): string {
   if (!name)
@@ -34,7 +35,13 @@ function getLanguage(name: string | undefined): string {
   return language;
 }
 
-onMounted(() => {
+onMounted(async () => {
+  monaco = await import("monaco-editor");
+  await import("@/assets/js/monacoWorker");
+
+  if (!monaco)
+    return;
+
   // @ts-ignore
   monaco.editor.defineTheme("github-custom", monacoTheme);
 
@@ -49,11 +56,11 @@ onMounted(() => {
   });
 
   // Update the content
-  const model = editorObj.getModel() as monaco.editor.ITextModel;
-  model.onDidChangeContent(() => {
+  editorModel = editorObj.getModel() as Monaco.editor.ITextModel;
+  editorModel.onDidChangeContent(() => {
     if (!openedNode.value)
       return;
-    const content = model.getValue();
+    const content = editorModel?.getValue() || "";
     openedNode.value.content = content;
   });
 
@@ -76,8 +83,11 @@ onMounted(() => {
   watch(
     openedNode,
     (newOpenedNode) => {
+      if (!monaco || !editorModel)
+        return;
+
       const language = getLanguage(newOpenedNode?.name);
-      monaco.editor.setModelLanguage(model, language);
+      monaco.editor.setModelLanguage(editorModel, language);
 
       // Update the App's title
       if (app.value.title !== newOpenedNode?.name) {
@@ -85,8 +95,8 @@ onMounted(() => {
       }
 
       // Update the editor's text value when the user open another file
-      if (model.getValue() !== newOpenedNode?.content) {
-        model.setValue(newOpenedNode?.content || "");
+      if (editorModel.getValue() !== newOpenedNode?.content) {
+        editorModel.setValue(newOpenedNode?.content || "");
       }
     },
     { deep: true, immediate: true },

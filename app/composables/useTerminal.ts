@@ -1,6 +1,6 @@
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { Terminal } from "@xterm/xterm";
-import { commandSpecs } from "@/constants";
+import { commandSpecs, terminalHostname } from "@/constants";
 import { helpMessages } from "@/constants/helpMessages";
 import { findNodeByPath, resolvePath } from "@/helpers";
 import {
@@ -73,9 +73,9 @@ export function useTerminal(terminalElement: HTMLElement) {
   term.loadAddon(webLinksAddon);
   term.onKey(data => onKey(data));
 
-  // Default new line in the format -> <user>@<user>: <current-directory> $
+  // Default new line in the format -> <user>@<hostname>: <current-directory> $
   const newLine = computed(() => {
-    let textLine = `\x1B[1;32m${username}@${username}\x1B[1;37m`;
+    let textLine = `\x1B[1;32m${username}@${terminalHostname}\x1B[1;37m`;
     textLine += ":";
 
     // If the current directory is the home directory, show '~/' instead of the full path
@@ -94,7 +94,7 @@ export function useTerminal(terminalElement: HTMLElement) {
   });
 
   // Show neofetch on startup
-  handleNeofetch(term, username);
+  handleNeofetch(term, username, terminalHostname);
   term.write(newLine.value);
 
   // Update the current newline with a new path
@@ -437,7 +437,7 @@ export function useTerminal(terminalElement: HTMLElement) {
         break;
 
       case "neofetch":
-        handleNeofetch(term, username);
+        handleNeofetch(term, username, terminalHostname);
         shouldAddToHistory = true;
         break;
 

@@ -1020,7 +1020,11 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
   return true;
 }
 
-export function handleNeofetch(term: Terminal, username: string): void {
+export function handleNeofetch(
+  term: Terminal,
+  username: string,
+  hostname: string,
+): void {
   // Get uptime
   const { uptime } = storeToRefs(useDesktopStore());
   const readableUptime = formatUptime(uptime.value);
@@ -1047,11 +1051,11 @@ export function handleNeofetch(term: Terminal, username: string): void {
   );
 
   const neoFetch = `
-  \x1B[1;36m                    -'                    ${username}\x1B[1;37m@\x1B[1;36m${username}
+  \x1B[1;36m                    -'                    ${username}\x1B[1;37m@\x1B[1;36m${hostname}
   \x1B[1;36m                   .o+'                   \x1B[1;37m-------------------
   \x1B[1;36m                  'ooo/                   Author:\x1B[1;37m ${authorLink}
   \x1B[1;36m                 '+oooo:                  OS:\x1B[1;37m Manjaro Linux x86_64 
-  \x1B[1;36m                '+oooooo:                 Host:\x1B[1;37m Laptop A6
+  \x1B[1;36m                '+oooooo:                 Host:\x1B[1;37m ${hostname}
   \x1B[1;36m                -+oooooo+:                Kernel:\x1B[1;37m 6.10.13-3-MANJARO
   \x1B[1;36m              '/:-:++oooo+:               Uptime:\x1B[1;37m ${readableUptime}
   \x1B[1;36m             '/++++/+++++++:              Packages:\x1B[1;37m 782 (pacman)

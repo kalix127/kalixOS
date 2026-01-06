@@ -6,7 +6,9 @@
   ],
   "ignoreDeps": [
     "vitest",
-    "vue"
+    "vue",
+    "zod",
+    "@vee-validate/zod"
   ],
   "assignees": [
     "@kalix127"

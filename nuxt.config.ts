@@ -1,5 +1,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  vite: {
+    optimizeDeps: {
+      exclude: ["monaco-editor"],
+    },
+  },
   modules: [
     "nuxt-zod-i18n",
     "@nuxtjs/tailwindcss",

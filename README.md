@@ -26,20 +26,20 @@
 
 ## About The Project
 
-**KalixOS** brings the full experience of a Linux desktop environment to the browser, inspired by the functionality and aesthetics of the Manjaro operating system. It features a responsive, interactive, and immersive web app that mimics a real OS.
+**KalixOS** is my take on a Linux desktop in the browser, inspired by the look and flow of Manjaro. The goal is simple: make it feel like an OS, not just a demo page. It is responsive, interactive, and built to be explored.
 
-The application offers a nearly complete Linux filesystem logic, allowing you to create, modify, and delete directories and files seamlessly. Users can browse the web using the built-in web browser or interact with a terminal that supports a variety of Linux commands, offering an authentic command-line experience.
+Under the hood there is a lightweight filesystem model, so you can create, rename, and delete files and folders like you would on a real machine. There is also a terminal with a growing set of familiar commands, plus a browser app so you can jump out to the web from inside the desktop.
 
-This web-based OS includes several OS-like features to enhance the realism and showcase its capabilities:
+Here are a few of the OS-like touches that make it feel real:
 
-- **System Operations**: Realistic shutdown and restart functionality, complete with viewable startup logs for a genuine Linux experience.
-- **Settings Menu**: A fully interactive settings menu for customizing the environment.
-- **WiFi Manager**: A simulated WiFi list to replicate network connection management.
-- **Built-in Apps**: Functional applications such as a built-in version of **VS Code**, **Kate** for modifying files and system settings, alongside others, designed primarily to showcase functionality rather than for regular daily use.
+- **System Operations**: Shutdown and restart are simulated, with boot logs you can actually read.
+- **Settings Menu**: A real settings panel for tweaking the environment.
+- **WiFi Manager**: A mock network list to mirror connection management.
+- **Built-in Apps**: Apps like a browser, a VS Code-inspired editor, and Kate for files and settings. They are here to show what the UI can do, not to replace your daily tools.
 
-Designed for both functionality and portability, this project is a powerful demonstration of what can be achieved with modern web development frameworks. Whether you're a developer looking for inspiration or an enthusiast exploring new technologies, this project showcases the best of Linux OS simulation in a browser.
+If you are into web UI, OS design, or just want to poke around a fake Linux box in the browser, this project is for you.
 
-### Key Features:
+### Key Features
 
 - **Linux Filesystem**: Create, modify, delete, and manage files and directories.
 - **Web Browser**: Functional for browsing the internet.
@@ -49,7 +49,7 @@ Designed for both functionality and portability, this project is a powerful demo
 - **Multi-Language Support**: Full support for both English and Italian languages throughout the interface.
 - **Localized Content**: All menus and application interfaces are properly translated both in English and Italian.
 
-### Terminal Commands and Features:
+### Terminal Commands and Features
 
 - **Supported Commands**:
     - `ls`: List information about files in the current directory.
@@ -76,26 +76,25 @@ Designed for both functionality and portability, this project is a powerful demo
     - **Bash History**: Easily recall previously executed commands.
     - **Tab Autocomplete**: Quickly autocomplete filenames, directories, or commands for a smooth user experience.
 
-### Built With:
+### Built With
 
 <img src="https://skills-icons.vercel.app/api/icons?theme=dark&i=nuxt,pinia,ts,css,tailwind,arch,neovim" alt="Built with">
 
 ## Usage
 
-You can try out kalixOS right now by visiting [os.gianlucaiavicoli.dev](https://os.gianlucaiavicoli.dev). The web-based OS is ready to use with no installation required - simply open it in your browser to start exploring the Linux desktop environment, try out the terminal commands, browse files, and test the built-in applications.
+Open [os.gianlucaiavicoli.dev](https://os.gianlucaiavicoli.dev) and start clicking around. There is nothing to install; it runs entirely in the browser. Try the terminal, create a few files, and launch the built-in apps.
 
-Feel free to experiment with all the features described above, from basic file operations to advanced terminal commands. The environment is reset on page refresh, so you can't break anything!
+Everything resets on refresh, so do not worry about breaking anything.
 
 ## Contributing
 
-Please check out our [Contributing Guidelines](CONTRIBUTING.md) for detailed information about how to contribute to this project.
+Please read the [Contributing Guidelines](CONTRIBUTING.md) before sending changes.
 
-Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+If you want to help, the easiest path is to fork the repo and open a PR. You can also open an issue with a clear description of the idea or bug.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "feature". Don't forget to give the project a star!
+This project uses pnpm. If you need it, see the [installation guide](https://pnpm.io/installation).
 
-This project uses pnpm as the package manager. If you don't have it installed, please follow the [official installation guide](https://pnpm.io/installation).
-To contribute:
+Quick start:
 
 1.  Fork the Project
 2.  Clone your fork. Remember to replace `<your-username>` with your actual GitHub username :)
@@ -122,7 +121,7 @@ To contribute:
 
 ## License
 
-[LICENSE](LICENSE)
+See [LICENSE](LICENSE).
 
 ## Contact
 

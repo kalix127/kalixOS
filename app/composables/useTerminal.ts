@@ -40,16 +40,13 @@ export function useTerminal(terminalElement: HTMLElement) {
   const username = storeToRefs(useGlobalStore()).username.value.toLowerCase();
   const { homeNode } = storeToRefs(useDesktopStore());
 
-  // If not already set, Set the initial directories
   if (!currentDirectoryNode.value) {
     setCurrentDirectory(homeNode.value!);
   }
 
-  // Set the user first time avoiding the terminal to start on the next Boot
   const { setUserDesktopFirstTime } = useGlobalStore();
   setUserDesktopFirstTime(false);
 
-  // Init terminal and addons
   const webLinksAddon = new WebLinksAddon();
   const term = new Terminal({
     convertEol: true,
@@ -93,11 +90,9 @@ export function useTerminal(terminalElement: HTMLElement) {
     return textLine;
   });
 
-  // Show neofetch on startup
   handleNeofetch(term, username, terminalHostname);
   term.write(newLine.value);
 
-  // Update the current newline with a new path
   watch(currentDirectoryNode, () => deleteAndPrintNewLine());
 
   function resetCommandAndCursor() {
@@ -128,7 +123,6 @@ export function useTerminal(terminalElement: HTMLElement) {
     switch (key) {
       // Enter
       case "\r":
-        // If the command is not empty, handle it
         if (command.value.trim() !== "") {
           shouldAddToHistory = handleCommand();
         }
@@ -141,7 +135,6 @@ export function useTerminal(terminalElement: HTMLElement) {
       // Backspace/Delete
       case "\x7F":
         if (cursorPosition.value > 0) {
-          // If the cursor is at the end of the command
           if (cursorPosition.value === command.value.length) {
             command.value = command.value.slice(0, -1);
             cursorPosition.value -= 1;
@@ -166,15 +159,12 @@ export function useTerminal(terminalElement: HTMLElement) {
         navigator.clipboard
           .readText()
           .then((clipText) => {
-            // Update the terminal with the clipboard content
             term.write(clipText);
 
-            // Update the command and cursor position
             command.value += clipText;
             cursorPosition.value += clipText.length;
           })
           .catch(() => {
-            // Clipboard not supported or permission denied
             console.warn("Clipboard paste not supported.");
           });
         break;
@@ -182,7 +172,6 @@ export function useTerminal(terminalElement: HTMLElement) {
       // Arrow Up
       case "\u001B[A":
         if (commandHistory.value.length > 0) {
-          // If at start, begin from end of history
           if (commandHistoryIndex.value === 0) {
             commandHistoryIndex.value = commandHistory.value.length;
           }
@@ -208,7 +197,6 @@ export function useTerminal(terminalElement: HTMLElement) {
             term.write("\r\x1B[K"); // Clear current line
             term.write(`${newLine.value}`);
             term.write(command.value);
-            // Clear command when reaching end of history
           } else if (
             commandHistoryIndex.value
             === commandHistory.value.length - 1
@@ -232,19 +220,25 @@ export function useTerminal(terminalElement: HTMLElement) {
       default:
         // Invalidate specific keys and combinations
         if (key === "\u001B[D")
-          break; // Arrow left
+          break;
+        // \u001b[c arrow right
         if (key === "\u001B[C")
-          break; // Arrow right
+          break;
+        // \u001b[1;5a ctrl + arrow up
         if (key === "\u001B[1;5A")
-          break; // Ctrl + Arrow up
+          break;
+        // \u001b[1;5b ctrl + arrow down
         if (key === "\u001B[1;5B")
-          break; // Ctrl + Arrow down
+          break;
+        // \u001b[1;5d ctrl + arrow left
         if (key === "\u001B[1;5D")
-          break; // Ctrl + Arrow left
+          break;
+        // \u001b[1;5c ctrl + arrow right
         if (key === "\u001B[1;5C")
-          break; // Ctrl + Arrow right
+          break;
+        // ctrl + backspace
         if (domEvent.ctrlKey && domEvent.key === "Backspace")
-          break; // Ctrl + Backspace
+          break;
 
         term.write(key);
         command.value += key;
@@ -258,9 +252,6 @@ export function useTerminal(terminalElement: HTMLElement) {
     }
   }
 
-  /**
-   * Main command handler that delegates to specific command functions.
-   */
   function handleCommand(): boolean {
     const trimmedCommand = command.value.trim();
     const args = trimmedCommand.split(" ");
@@ -269,7 +260,6 @@ export function useTerminal(terminalElement: HTMLElement) {
 
     let shouldAddToHistory = false;
 
-    // Check if the file bin node for the command exists.
     if (!findNodeByPath(fileSystem, ["bin", exec])) {
       term.write(`\r\nzsh: command not found: ${exec}`);
       term.write("\r\nType 'help' to see available commands");
@@ -286,12 +276,12 @@ export function useTerminal(terminalElement: HTMLElement) {
     let parsedArgs;
     try {
       parsedArgs = parseArguments(exec, args.slice(1), commandSpec);
-    } catch (error: any) {
-      term.write(`\r\n${error.message}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "invalid command";
+      term.write(`\r\n${message}`);
       return false;
     }
 
-    // Handle help commands
     if (exec === "help") {
       shouldAddToHistory = handleHelp(term);
       return shouldAddToHistory;
@@ -470,7 +460,6 @@ export function useTerminal(terminalElement: HTMLElement) {
       : commandTokens[commandTokens.length - 1] || "";
 
     if (tokensLength === 1 && !isTrailingSpace) {
-      // autocomplete binaries
       const binNode = findNodeByPath(fileSystem, ["bin"]);
       if (binNode && binNode.type === "folder") {
         const commandNodes = binNode.children || [];
@@ -478,13 +467,11 @@ export function useTerminal(terminalElement: HTMLElement) {
           .filter(node => node.name?.startsWith(lastToken))
           .map(node => node.name);
         if (matchingCommands.length === 1) {
-          // autocomplete the command
           const completion = matchingCommands[0]?.substring(lastToken.length) || "";
           command.value += completion;
           cursorPosition.value += completion.length;
           term.write(completion);
         } else if (matchingCommands.length > 1) {
-          // show completions
           term.write("\r\n");
           const output = matchingCommands
             .map((cmd) => {
@@ -493,12 +480,10 @@ export function useTerminal(terminalElement: HTMLElement) {
             })
             .join("  ");
           term.write(output);
-          // re-show the prompt and command
           term.write(`\r\n${newLine.value}${command.value}`);
         }
       }
     } else {
-      // autocomplete file paths
       let pathToComplete = lastToken;
       if (!pathToComplete) {
         pathToComplete = "";
@@ -517,9 +502,7 @@ export function useTerminal(terminalElement: HTMLElement) {
           .map(node => node.name);
 
         if (matchingNodes.length === 1) {
-          // autocomplete the path
           const completion = matchingNodes[0]?.substring(incomplete.length) || "";
-          // append a '/' if the node is a folder
           const matchedNode = childNodes.find(
             node => node.name === matchingNodes[0],
           );
@@ -532,7 +515,6 @@ export function useTerminal(terminalElement: HTMLElement) {
             term.write(completion + appendChar);
           }
         } else if (matchingNodes.length > 1) {
-          // show completions
           term.write("\r\n");
           const output = matchingNodes
             .map((name) => {
@@ -541,7 +523,6 @@ export function useTerminal(terminalElement: HTMLElement) {
             })
             .join("  ");
           term.write(output);
-          // re-show the prompt and command
           term.write(`\r\n${newLine.value}${command.value}`);
         }
       }

@@ -23,7 +23,6 @@ export const useTerminalStore = defineStore("terminal", {
     },
 
     addCommandHistory(command: string) {
-      // If the command is already in the history, re-insert it at the new index
       const existingIndex = this.commandHistory.findIndex(
         cmd => cmd === command,
       );

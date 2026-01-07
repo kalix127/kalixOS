@@ -10,7 +10,6 @@ import { generateRandomDelays } from "@/helpers";
 
 export const useGlobalStore = defineStore("globalStore", {
   state: (): GlobalStore => ({
-    // General
     isUserDesktopFirstTime: useCookie("isUserDesktopFirstTime", {
       maxAge: 365 * 24 * 60 * 60 * 10,
       default: () => true,
@@ -19,7 +18,7 @@ export const useGlobalStore = defineStore("globalStore", {
       maxAge: 365 * 24 * 60 * 60 * 10,
       default: () => true,
     }).value,
-    desktopEnvironment: desktopEnvironments[0] as string,
+    desktopEnvironment: desktopEnvironments[0] ?? "",
     isWiredEnabled: true,
     isWifiEnabled: false,
     isBluetoothEnabled: false,
@@ -29,30 +28,25 @@ export const useGlobalStore = defineStore("globalStore", {
     isLocked: false,
     isShowBatteryPercentageEnabled: false,
 
-    // Suspend
     isSuspended: false,
     isAboutToSuspend: false,
     suspendedPercentage: 0,
     isDimScreenEnabled: true,
     dimScreenThreshold: defaultDimScreenThreshold,
 
-    // Topbar Menus
     isLanguageMenuOpen: false,
     isPowerOffMenuOpen: false,
     isWifiMenuOpen: false,
     isBluetoothMenuOpen: false,
     isWiredMenuOpen: false,
 
-    // Wifi
     connectedWifiNetwork: null,
     availableWifiNetworks: [],
     isConnectingToWifi: false,
     isSearchingWifiNetworks: false,
 
-    // Settings
     currentSettingsTab: null,
 
-    // Auth
     loginView: "selectUser",
     username: useCookie("username", {
       maxAge: 30 * 24 * 60 * 60,
@@ -63,11 +57,9 @@ export const useGlobalStore = defineStore("globalStore", {
       default: () => false,
     }).value,
 
-    // Terminal
     memoryUsedPercentage: 0,
   }),
   actions: {
-    // Toggles
     toggleWired() {
       this.isWiredEnabled = !this.isWiredEnabled;
     },
@@ -95,27 +87,23 @@ export const useGlobalStore = defineStore("globalStore", {
       this.connectedWifiNetwork = null;
     },
 
-    // Wifi
     async searchWifiNetworks() {
       this.isSearchingWifiNetworks = true;
-      const totalTime = 5000; // 5 seconds in total to add all the networks
-
-      // Generate random delays for each network
+      const totalTime = 5000;
       const randomDelays = generateRandomDelays(
         defaultNetworks.length,
         totalTime,
       );
 
-      for (let i = 0; i < defaultNetworks.length; i++) {
-        // Stop if Wi-Fi gets disabled during the process
+      for (const [index, network] of defaultNetworks.entries()) {
         if (!this.isWifiEnabled) {
           this.isSearchingWifiNetworks = false;
           this.availableWifiNetworks = [];
           return;
         }
         await this.addNetworkWithDelay(
-          defaultNetworks[i] as WifiNetwork,
-          randomDelays[i] as number,
+          network,
+          randomDelays[index] ?? 0,
         );
       }
       this.isSearchingWifiNetworks = false;
@@ -124,12 +112,10 @@ export const useGlobalStore = defineStore("globalStore", {
     addNetworkWithDelay(network: WifiNetwork, delay: number) {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
-          // Check if the network is already present in the available list
           const isNetworkAlreadyAdded = this.availableWifiNetworks.some(
             n => n.id === network.id,
           );
 
-          // If the network is not already added, add it to the list
           if (!isNetworkAlreadyAdded) {
             this.availableWifiNetworks.push(network);
           }
@@ -139,7 +125,6 @@ export const useGlobalStore = defineStore("globalStore", {
       });
     },
 
-    // General handlers
     async handleLock() {
       this.isLocked = true;
     },
@@ -152,19 +137,12 @@ export const useGlobalStore = defineStore("globalStore", {
       const { idle } = useIdle(0);
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Start watching after 1 seconds
       watchOnce(idle, () => {
         this.isSuspended = false;
         this.isAboutToSuspend = false;
         this.suspendedPercentage = 0;
       });
     },
-    // Auth
-
-    /**
-     * Sets the username and updates the corresponding cookie.
-     * @param newUsername - The new username to set.
-     */
     setUsername(newUsername: string) {
       this.username = newUsername;
       const usernameCookie = useCookie("username", {
@@ -197,7 +175,6 @@ export const useGlobalStore = defineStore("globalStore", {
       isUserFirstTimeCookie.value = value.toString();
     },
 
-    // Settings
     setSettingsTab(tab: GlobalStore["currentSettingsTab"]) {
       this.currentSettingsTab = tab;
     },
@@ -228,9 +205,7 @@ export const useGlobalStore = defineStore("globalStore", {
   },
 });
 
-// Define the type for the state
 interface GlobalStore {
-  // General
   isUserDesktopFirstTime: boolean;
   isUserFirstTime: boolean;
   desktopEnvironment: string;
@@ -243,34 +218,28 @@ interface GlobalStore {
   isLocked: boolean;
   isShowBatteryPercentageEnabled: boolean;
 
-  // Suspend
   isSuspended: boolean;
   isAboutToSuspend: boolean;
   suspendedPercentage: number;
   isDimScreenEnabled: boolean;
   dimScreenThreshold: string;
 
-  // Topbar Menus
   isLanguageMenuOpen: boolean;
   isPowerOffMenuOpen: boolean;
   isWifiMenuOpen: boolean;
   isBluetoothMenuOpen: boolean;
   isWiredMenuOpen: boolean;
 
-  // Wifi
   connectedWifiNetwork: WifiNetwork | null;
   availableWifiNetworks: WifiNetwork[];
   isConnectingToWifi: boolean;
   isSearchingWifiNetworks: boolean;
 
-  // Settings
   currentSettingsTab: string | null | undefined;
 
-  // Auth
   loginView: "selectUser" | "enterPassword" | "addUser";
   username: string;
   isAuthenticated: boolean;
 
-  // Terminal
   memoryUsedPercentage: number;
 }

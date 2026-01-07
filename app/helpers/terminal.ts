@@ -1,11 +1,9 @@
 import type { Terminal } from "@xterm/xterm";
 import type {
   CommandSpec,
-  FolderNode,
   Node,
   ParsedArgs,
   PermissionsNode,
-  ShortcutNode,
 } from "@/types";
 import { useTimestamp, useWindowSize } from "@vueuse/core";
 import { defaultFilePermissions, defaultFolderPermissions } from "@/constants";
@@ -21,15 +19,9 @@ const { editNode, createNode, moveNode, deleteNode, createNodeShortcut }
   = useDesktopStore();
 const { setCurrentDirectory } = useTerminalStore();
 
-// Command handlers
-
 export function handleCd(
   term: Terminal,
-  parsedArgs: {
-    flags: string[];
-    flagValues: { [key: string]: string };
-    positionalArgs: string[];
-  },
+  parsedArgs: ParsedArgs,
   fileSystem: Node,
   currentDirectoryNode: Node,
 ): boolean {
@@ -38,7 +30,9 @@ export function handleCd(
 
   if (!toDir) {
     const { homeNode } = storeToRefs(useDesktopStore());
-    setCurrentDirectory(homeNode.value as FolderNode);
+    if (homeNode.value) {
+      setCurrentDirectory(homeNode.value);
+    }
     return true;
   }
 
@@ -159,7 +153,6 @@ export function handleLn(
     return false;
   }
 
-  // Resolve target path
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
   if (!targetNode) {
     term.write(
@@ -168,13 +161,11 @@ export function handleLn(
     return false;
   }
 
-  // Resolve link path
   const linkPathSegments = splitPath(linkPath);
   const linkName = linkPathSegments.pop()!;
   const linkParentPath
     = linkPathSegments.length > 0 ? linkPathSegments.join("/") : "./";
 
-  // Check if link already exists at destination
   const linkNode = resolvePath(fileSystem, currentDirectoryNode, linkPath);
   if (linkNode) {
     term.write(
@@ -183,7 +174,6 @@ export function handleLn(
     return false;
   }
 
-  // Get parent folder node where link will be created
   const linkParentNode = resolvePath(
     fileSystem,
     currentDirectoryNode,
@@ -195,7 +185,6 @@ export function handleLn(
     return false;
   }
 
-  // Create the symbolic link
   const [success, message] = createNodeShortcut(
     targetNode,
     linkParentNode,
@@ -215,11 +204,9 @@ export function handleTree(
   currentDirectoryNode: Node,
 ): boolean {
   try {
-    // Initialize default values
-    let level = 1; // Default depth
-    let targetPath = "."; // Default to current directory
+    let level = 1;
+    let targetPath = ".";
 
-    // Iterate over the arguments
     let i = 0;
     while (i < args.length) {
       const arg = args[i];
@@ -229,33 +216,28 @@ export function handleTree(
           term.write(`\r\ntree: option requires an argument -- 'L'`);
           return false;
         }
-        // Ensure the next argument exists
         if (i + 1 >= args.length) {
           term.write(`\r\ntree: option requires an argument -- 'L'`);
           return false;
         }
         const parsedLevel = Number.parseInt(levelArg, 10);
 
-        // Validate the level argument
         if (Number.isNaN(parsedLevel) || parsedLevel < 1) {
           term.write(`\r\ntree: invalid level: '${levelArg}'`);
           return false;
         }
 
         level = parsedLevel;
-        i += 2; // Skip the flag and its value
+        i += 2;
       } else if (arg?.startsWith("-")) {
-        // Handle unknown flags
         term.write(`\r\ntree: unknown option '${arg}'`);
         return false;
       } else if (arg) {
-        // Positional argument (path)
         targetPath = arg;
         i += 1;
       }
     }
 
-    // Resolve the target path
     const targetNode = resolvePath(
       fileSystem,
       currentDirectoryNode,
@@ -269,17 +251,14 @@ export function handleTree(
       return false;
     }
 
-    // Initialize the lines array with the root node
     const lines: string[] = [];
 
-    // Add the root node
     if (targetPath === "." || targetPath === "") {
       lines.push(".");
     } else {
       lines.push(formatNodeName(targetNode));
     }
 
-    // Traverse the tree and populate the lines array
     if (
       targetNode.type === "folder"
       && targetNode.children
@@ -287,11 +266,10 @@ export function handleTree(
     ) {
       targetNode.children.forEach((child, index) => {
         const isLastChild = index === targetNode.children!.length - 1;
-        traverseTree(child, "", isLastChild, level, 1, lines); // Start at depth 1
+        traverseTree(child, "", isLastChild, level, 1, lines);
       });
     }
 
-    // Write the lines to the terminal
     lines.forEach((line) => {
       term.write(`\r\n${line}`);
     });
@@ -349,6 +327,17 @@ export function handleChown(
   return true;
 }
 
+function getPermissionKey(flag: string): "read" | "write" | "execute" {
+  switch (flag) {
+    case "r":
+      return "read";
+    case "w":
+      return "write";
+    default:
+      return "execute";
+  }
+}
+
 export function handleChmod(
   term: Terminal,
   parsedArgs: ParsedArgs,
@@ -377,8 +366,6 @@ export function handleChmod(
     return false;
   }
 
-  // Matches symbolic mode format like "u+rwx", "g-w", "o=x", "a+r"
-  // Example: "u+rwx" - adds read, write, execute permissions for user
   if (/^[ugoa]*[+-=][rwx]+$/.test(mode)) {
     const permissions = { ...targetNode.permissions };
     const targets: Array<"owner" | "group" | "others"> = [];
@@ -393,10 +380,7 @@ export function handleChmod(
         targets.push("others");
     }
 
-    // Matches the operation symbol (+, -, =)
     const operation = mode.match(/[+-=]/)?.[0];
-    // Matches the permission flags after the operation
-    // Example: In "u+rwx", matches and splits "rwx" into ["r", "w", "x"]
     const permissionTypes = mode.match(/[rwx]+/)?.[0]?.split("") ?? [];
 
     if (!operation) {
@@ -406,9 +390,7 @@ export function handleChmod(
 
     targets.forEach((target) => {
       permissionTypes.forEach((perm) => {
-        const permKey = (
-          perm === "r" ? "read" : perm === "w" ? "write" : "execute"
-        ) as keyof PermissionsNode[typeof target];
+        const permKey = getPermissionKey(perm);
         switch (operation) {
           case "+":
             permissions[target][permKey] = true;
@@ -433,14 +415,9 @@ export function handleChmod(
     }
 
     return true;
-    // Matches octal mode format - exactly 3 digits between 0-7
-    // Example: "644" - rw-r--r-- (owner: rw-, group: r--, others: r--)
   } else if (/^[0-7]{3}$/.test(mode)) {
-    // Split the octal mode string into array of numbers and convert each to base-8 integer
     const values = mode.split("").map(char => Number.parseInt(char, 8));
 
-    // Each octal digit represents read (4), write (2), and execute (1) permissions
-    // Using bitwise AND (&) to check if each permission bit is set
     const newPermissions: PermissionsNode = {
       owner: {
         read: Boolean((values[0] ?? 0) & 4),
@@ -514,13 +491,12 @@ export function handleTouch(
     return false;
   }
 
-  const folderNode = targetDirectory as FolderNode;
-  const existingNode = folderNode.children.find(
+  const existingNode = targetDirectory.children.find(
     child => child.name === fileName,
   );
 
   if (!existingNode) {
-    const newNode = createNode(folderNode.id, {
+    const newNode = createNode(targetDirectory.id, {
       name: fileName,
       type: "file",
       permissions: defaultFilePermissions,
@@ -579,13 +555,12 @@ export function handleMkdir(
     return false;
   }
 
-  const folderNode = targetDirectory as FolderNode;
-  const existingNode = folderNode.children.find(
+  const existingNode = targetDirectory.children.find(
     child => child.name === dirName,
   );
 
   if (!existingNode) {
-    const newNode = createNode(folderNode.id, {
+    const newNode = createNode(targetDirectory.id, {
       name: dirName,
       type: "folder",
       permissions: defaultFolderPermissions,
@@ -625,7 +600,6 @@ export function handleMv(
     return false;
   }
 
-  // Find source node
   const sourceNode = resolvePath(fileSystem, currentDirectoryNode, sourcePath);
   if (!sourceNode) {
     term.write(
@@ -634,7 +608,6 @@ export function handleMv(
     return false;
   }
 
-  // Find target node
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
 
   if (!targetNode) {
@@ -698,7 +671,6 @@ export function handleRm(
     return false;
   }
 
-  // Resolve target node
   const targetNode = resolvePath(fileSystem, currentDirectoryNode, targetPath);
 
   if (!targetNode) {
@@ -708,13 +680,11 @@ export function handleRm(
     return false;
   }
 
-  // Check if trying to delete a folder without -r flag
   if (targetNode.type === "folder" && !recursiveDelete) {
     term.write(`\r\nrm: cannot remove '${targetPath}': Is a directory`);
     return false;
   }
 
-  // Resolve parent node
   if (!targetNode.parentId) {
     term.write(
       `\r\nrm: cannot remove '${targetPath}': No such file or directory`,
@@ -730,7 +700,6 @@ export function handleRm(
     return false;
   }
 
-  // Delete the item
   const success = deleteNode(targetNode.id);
   if (!success) {
     term.write(`\r\nrm: cannot remove '${targetPath}': Permission denied`);
@@ -786,11 +755,11 @@ export function handlePs(term: Terminal, parsedArgs: ParsedArgs): boolean {
 
   const headerLine = headers
     .map((header, idx) => {
+      const width = widths[idx] ?? 0;
       if (idx === 0) {
-        return header.padStart(widths[idx] as number);
-      } else {
-        return header.padEnd(widths[idx] as number);
+        return header.padStart(width);
       }
+      return header.padEnd(width);
     })
     .join("  ");
 
@@ -897,23 +866,18 @@ export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   const used = Math.round((memoryUsedPercentage.value / 100) * total);
   const remaining = total - used;
 
-  // Generate 'shared' memory (up to 5% of remaining or 10% of used)
   const maxShared = Math.min(remaining * 0.05, used * 0.1);
   const shared = Math.round(getRandomInt(0, Math.floor(maxShared)));
 
   const remainingAfterShared = remaining - shared;
 
-  // Generate 'free' memory (up to 60% of remaining after shared)
   const maxFree = Math.floor(remainingAfterShared * 0.6);
   const free = Math.round(getRandomInt(0, maxFree));
 
-  // 'buff/cache' is the rest
   const buffCache = remainingAfterShared - free;
 
-  // 'available' memory is 'free' + 'buff/cache'
   const available = free + buffCache;
 
-  // Swap is fixed at 0
   const swapTotal = 0;
   const swapUsed = 0;
   const swapFree = 0;
@@ -928,7 +892,7 @@ export function handleFree(term: Terminal, parsedArgs: ParsedArgs): boolean {
   ];
   const widths = [10, 10, 10, 10, 15, 15];
   const headerLine = headers
-    .map((header, idx) => header.padStart(widths[idx] as number))
+    .map((header, idx) => header.padStart(widths[idx] ?? 0))
     .join("  ");
   const fullHeader = `       ${headerLine}\n`;
 
@@ -954,26 +918,21 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
 
   const humanReadable = flags.includes("-h");
 
-  // Define column headers and widths
   const headers = ["Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on"];
   const widths = [20, 10, 10, 10, 6, 25];
 
-  // Construct the header line with proper alignment
   const headerLine = headers
     .map((header, idx) => {
+      const width = widths[idx] ?? 0;
       if (idx === 0 || idx === headers.length - 1) {
-        // Left-align 'Filesystem' and 'Mounted on'
-        return header.padEnd(widths[idx] as number);
-      } else {
-        // Right-align numeric headers
-        return header.padStart(widths[idx] as number);
+        return header.padEnd(width);
       }
+      return header.padStart(width);
     })
     .join("  ");
 
   const fullHeader = `${headerLine}\n`;
 
-  // Total size of approximately 1 TB
   const mockFilesystems = [
     { filesystem: "/dev/nvme0n1p5", mountedOn: "/", size: 1018176000 },
     { filesystem: "/dev/nvme0n1p1", mountedOn: "/boot/efi", size: 96000 },
@@ -984,7 +943,6 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
     { filesystem: "tmpfs", mountedOn: "/dev/shm", size: 7600000 },
   ];
 
-  // Generate disk usage data with random values
   const dfData = mockFilesystems.map((fs) => {
     const total = fs.size;
     const used = getRandomInt(0, total);
@@ -1001,7 +959,6 @@ export function handleDf(term: Terminal, parsedArgs: ParsedArgs): boolean {
     };
   });
 
-  // Prepare disk usage lines
   const dfLines = dfData.map((fs) => {
     return formatDfRow(
       fs.filesystem,
@@ -1025,21 +982,17 @@ export function handleNeofetch(
   username: string,
   hostname: string,
 ): void {
-  // Get uptime
   const { uptime } = storeToRefs(useDesktopStore());
   const readableUptime = formatUptime(uptime.value);
 
-  // Get resolution
   const { width, height } = useWindowSize();
   const resolution = `${width.value}x${height.value}`;
 
-  // Get memory
   const { memoryUsedPercentage } = storeToRefs(useGlobalStore());
   const memoryUsed = Math.round((memoryUsedPercentage.value / 100) * 15406);
 
   const { githubUrl } = useRuntimeConfig().public;
 
-  // Links
   const authorLink = generateLink(githubUrl, "@kalix127");
   const themeLink = generateLink(
     "https://github.com/lassekongo83/adw-gtk3",
@@ -1081,8 +1034,6 @@ export function handleHelp(term: Terminal): boolean {
   term.write(`\r\n${generalHelp}`);
   return true;
 }
-
-/* Utility functions */
 
 export function parseArguments(
   commandName: string,
@@ -1157,12 +1108,10 @@ export function parseArguments(
 
     i++;
   }
-  // If help flag is present, skip positional args check
   if (flags.includes("--help")) {
     return { flags, flagValues, positionalArgs };
   }
 
-  // For df and free commands, treat -h as a normal flag
   if (commandName !== "df" && commandName !== "free" && flags.includes("-h")) {
     return { flags, flagValues, positionalArgs };
   }
@@ -1198,18 +1147,11 @@ export function formatNodeName(
   longFormat: boolean = false,
 ): string {
   let displayName = node.name;
-  if (node.type === "shortcut" && longFormat) {
-    const shortcutNode = node as ShortcutNode;
-    const targetNode = findNodeByIdRecursive(
-      fileSystem!,
-      shortcutNode.targetId,
-    );
+  if (node.type === "shortcut" && longFormat && fileSystem) {
+    const targetNode = findNodeByIdRecursive(fileSystem, node.targetId);
     if (targetNode) {
-      // shortcut name in cyan
       displayName = `\x1B[1;36m${displayName}\x1B[0m`;
-      // Add arrow
       displayName += ` -> `;
-      // target color based on its type
       switch (targetNode.type) {
         case "folder":
           displayName += `\x1B[1;34m${targetNode.name}\x1B[0m`;
@@ -1236,19 +1178,11 @@ export function formatNodeName(
   }
 }
 
-/**
- * Converts a timestamp or duration into "HH:MM:SS" format.
- * @param timestamp The timestamp in milliseconds.
- * @returns The formatted time string.
- */
 function formatPsTime(timestamp: number): string {
-  // Get current timestamp
   const now = Date.now();
 
-  // Calculate elapsed time in seconds
   const elapsedSeconds = Math.floor((now - timestamp) / 1000);
 
-  // Calculate hours, minutes, seconds
   const hours = Math.floor(elapsedSeconds / 3600)
     .toString()
     .padStart(2, "0");
@@ -1268,22 +1202,10 @@ export function formatLsDate(date: Date): string {
   return `${month} ${day} ${hours}:${minutes}`;
 }
 
-/**
- * Generates a random integer between min and max (inclusive).
- * @param min The minimum integer value.
- * @param max The maximum integer value.
- * @returns A random integer between min and max.
- */
 function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Formats a number of kilobytes into a human-readable string with units.
- * @param kilobytes The number of kilobytes.
- * @param decimals The number of decimal places to include.
- * @returns The formatted string (e.g., "15GiB").
- */
 function formatBytes(kilobytes: number, decimals: number = 1): string {
   if (kilobytes === 0)
     return "0B";
@@ -1292,12 +1214,10 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
   const dm = decimals < 0 ? 0 : decimals;
   const sizes = ["KiB", "MiB", "GiB", "TiB", "PiB"];
 
-  // Convert kilobytes to bytes
   const bytes = kilobytes * 1024;
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  // Ensure index does not exceed the sizes array
   const index = i < sizes.length ? i : sizes.length - 1;
 
   const size = sizes[index];
@@ -1308,15 +1228,6 @@ function formatBytes(kilobytes: number, decimals: number = 1): string {
   return Number.parseFloat((bytes / k ** index).toFixed(dm)) + size;
 }
 
-/**
- * Recursively traverses the file system and builds the tree structure.
- * @param node The current Node.
- * @param prefix The string prefix for the current level (e.g., "│   ", "    ").
- * @param isLast Indicates if the current node is the last child of its parent.
- * @param depth The maximum depth to traverse.
- * @param currentDepth The current depth in the traversal.
- * @param lines An array to accumulate the tree lines.
- */
 function traverseTree(
   node: Node,
   prefix: string,
@@ -1328,16 +1239,12 @@ function traverseTree(
   if (currentDepth > depth)
     return;
 
-  // Determine the connector based on whether it's the last child
   const connector = isLast ? "└── " : "├── ";
 
-  // Construct the current line with prefix and connector
   const line = `${prefix}${connector}${formatNodeName(node)}`;
   lines.push(line);
 
-  // If the node is a folder and has children, traverse them
   if (node.type === "folder" && node.children && node.children.length > 0) {
-    // Update the prefix for child nodes
     const newPrefix = prefix + (isLast ? "    " : "│   ");
 
     node.children!.forEach((child, index) => {
@@ -1355,11 +1262,7 @@ function traverseTree(
 }
 
 function formatPermissions(type: string, permissions: PermissionsNode): string {
-  const permissionString = (perm: {
-    read: boolean;
-    write: boolean;
-    execute: boolean;
-  }) =>
+  const permissionString = (perm: PermissionsNode["owner"]) =>
     `${perm.read ? "r" : "-"}${perm.write ? "w" : "-"}${perm.execute ? "x" : "-"}`;
 
   let typeChar = "-";
@@ -1381,16 +1284,6 @@ function formatPermissions(type: string, permissions: PermissionsNode): string {
   );
 }
 
-/* Row Formatters */
-
-/**
- * Formats a row with a label and corresponding values.
- * @param label The label for the row (e.g., 'Mem:', 'Swap:').
- * @param values The array of values corresponding to each column.
- * @param humanReadable Whether to format the numbers in a human-readable format.
- * @param widths The array of column widths.
- * @returns The formatted row string.
- */
 function formatFreeRow(
   label: string,
   values: number[],
@@ -1399,29 +1292,17 @@ function formatFreeRow(
 ): string {
   const formattedValues = values
     .map((val, idx) => {
+      const width = widths[idx] ?? 0;
       if (humanReadable) {
-        return formatBytes(val, 1).padStart(widths[idx] as number);
-      } else {
-        return val.toString().padStart(widths[idx] as number);
+        return formatBytes(val, 1).padStart(width);
       }
+      return val.toString().padStart(width);
     })
     .join("  ");
 
   return `${label.padEnd(6)} ${formattedValues}`;
 }
 
-/**
- * Formats a row for the 'df' command.
- * @param filesystem The name of the filesystem.
- * @param size The total size of the filesystem.
- * @param used The used space of the filesystem.
- * @param avail The available space of the filesystem.
- * @param usePercent The usage percentage of the filesystem.
- * @param mountedOn The mount point of the filesystem.
- * @param humanReadable Whether to format the numbers in a human-readable format.
- * @param widths The array of column widths.
- * @returns The formatted row string.
- */
 function formatDfRow(
   filesystem: string,
   size: string,
@@ -1432,34 +1313,29 @@ function formatDfRow(
   humanReadable: boolean,
   widths: number[],
 ): string {
-  // Left-align 'Filesystem' and 'Mounted on'
-  const filesystemPadded = filesystem.padEnd(widths[0] as number);
-  const mountedOnPadded = mountedOn.padEnd(widths[5] as number);
+  const filesystemWidth = widths[0] ?? 0;
+  const sizeWidth = widths[1] ?? 0;
+  const usedWidth = widths[2] ?? 0;
+  const availWidth = widths[3] ?? 0;
+  const usePercentWidth = widths[4] ?? 0;
+  const mountedOnWidth = widths[5] ?? 0;
+  const filesystemPadded = filesystem.padEnd(filesystemWidth);
+  const mountedOnPadded = mountedOn.padEnd(mountedOnWidth);
 
-  // Right-align numeric columns
   const sizeFormatted = humanReadable
     ? formatBytes(Number.parseInt(size) * 1024)
-    : size.padStart(widths[1] as number);
+    : size.padStart(sizeWidth);
   const usedFormatted = humanReadable
     ? formatBytes(Number.parseInt(used) * 1024)
-    : used.padStart(widths[2] as number);
+    : used.padStart(usedWidth);
   const availFormatted = humanReadable
     ? formatBytes(Number.parseInt(avail) * 1024)
-    : avail.padStart(widths[3] as number);
-  const usePercentFormatted = usePercent.padStart(widths[4] as number);
+    : avail.padStart(availWidth);
+  const usePercentFormatted = usePercent.padStart(usePercentWidth);
 
-  return `${filesystemPadded}  ${sizeFormatted.padStart(widths[1] as number)}  ${usedFormatted.padStart(widths[2] as number)}  ${availFormatted.padStart(widths[3] as number)}  ${usePercentFormatted}  ${mountedOnPadded}`;
+  return `${filesystemPadded}  ${sizeFormatted.padStart(sizeWidth)}  ${usedFormatted.padStart(usedWidth)}  ${availFormatted.padStart(availWidth)}  ${usePercentFormatted}  ${mountedOnPadded}`;
 }
 
-/**
- * Formats a row for the 'ps' command.
- * @param pid The Process ID.
- * @param tty The terminal associated with the process.
- * @param time The cumulative CPU time the process has used.
- * @param cmd The command that initiated the process.
- * @param widths The array of column widths.
- * @returns The formatted row string.
- */
 function formatPsRow(
   pid: number,
   tty: string,
@@ -1467,9 +1343,9 @@ function formatPsRow(
   cmd: string,
   widths: number[],
 ): string {
-  const pidPadded = pid.toString().padStart(widths[0] as number);
-  const ttyPadded = tty.padEnd(widths[1] as number);
-  const timePadded = time.padEnd(widths[2] as number);
-  const cmdPadded = cmd.padEnd(widths[3] as number);
+  const pidPadded = pid.toString().padStart(widths[0] ?? 0);
+  const ttyPadded = tty.padEnd(widths[1] ?? 0);
+  const timePadded = time.padEnd(widths[2] ?? 0);
+  const cmdPadded = cmd.padEnd(widths[3] ?? 0);
   return `${pidPadded}  ${ttyPadded}  ${timePadded}  ${cmdPadded}`;
 }

@@ -1,24 +1,22 @@
-// @ts-nocheck
 import type {
   AppNode,
   BackgroundImage,
   CommandSpec,
   Node,
+  PermissionsNode,
   SystemLog,
   WifiNetwork,
 } from "@/types";
 import { assignDefaultProperties } from "@/helpers";
-
-/* General */
 
 export const defaultUsername = "kalix";
 export const terminalHostname = "gianlucaiavicoli.dev";
 
 export const defaultBootDuration = 5000;
 
-export const defaultDimScreenThreshold = "300000"; // 5 minutes
+export const defaultDimScreenThreshold = "300000";
 
-export const defaultBookmarks = [];
+export const defaultBookmarks: string[] = [];
 
 export const defaultBackgroundImage: BackgroundImage = {
   url: "img/bg-desktop.webp",
@@ -90,9 +88,7 @@ export const defaultNetworks: WifiNetwork[] = [
   },
 ];
 
-/* File system */
-
-export const defaultFolders = [
+export const defaultFolders: Array<{ id: string; name: string; icon: string }> = [
   {
     id: "home",
     name: "Home",
@@ -145,25 +141,25 @@ export const defaultFolders = [
   },
 ];
 
-export const defaultFilePermissions = {
+export const defaultFilePermissions: PermissionsNode = {
   owner: { read: true, write: true, execute: false },
   group: { read: true, write: false, execute: false },
   others: { read: true, write: false, execute: false },
 };
 
-export const defaultFolderPermissions = {
+export const defaultFolderPermissions: PermissionsNode = {
   owner: { read: true, write: true, execute: true },
   group: { read: true, write: false, execute: true },
   others: { read: true, write: false, execute: true },
 };
 
-export const defaultShortcutPermissions = {
+export const defaultShortcutPermissions: PermissionsNode = {
   owner: { read: true, write: true, execute: true },
   group: { read: true, write: true, execute: true },
   others: { read: true, write: true, execute: true },
 };
 
-export const defaultAppPermissions = {
+export const defaultAppPermissions: PermissionsNode = {
   owner: { read: true, write: true, execute: true },
   group: { read: true, write: true, execute: true },
   others: { read: true, write: true, execute: true },
@@ -213,14 +209,22 @@ export const defaultApps: AppNode[] = [
     icon: "gnome:grid",
     isTranslated: true,
   },
-].map(app => ({
-  ...app,
-  title: "",
-  isOpen: false,
-  isMinimized: false,
-  isFullscreen: false,
-  isDropdownOpen: false,
-}));
+].map((app) => {
+  const createdAt = new Date();
+  return {
+    ...app,
+    title: "",
+    isOpen: false,
+    isMinimized: false,
+    isFullscreen: false,
+    isDropdownOpen: false,
+    isActive: false,
+    permissions: defaultAppPermissions,
+    owner: defaultUsername.toLowerCase(),
+    group: defaultUsername.toLowerCase(),
+    createdAt,
+  };
+});
 
 export function defaultFileSystem(username: string): Node {
   return assignDefaultProperties(
@@ -256,9 +260,8 @@ export function defaultFileSystem(username: string): Node {
                       name: "Trash",
                       type: "shortcut",
                       icon: "app:trash",
-                      isShortcut: true,
                       targetId: "trash",
-                      children: [],
+                      targetType: "folder",
                       isProtected: true,
                       permissions: defaultShortcutPermissions,
                     },
@@ -925,8 +928,6 @@ export function defaultFileSystem(username: string): Node {
   );
 }
 
-/* Terminal */
-
 export const commandSpecs: { [commandName: string]: CommandSpec } = {
   cd: {
     acceptsFlags: ["-h"],
@@ -1096,8 +1097,6 @@ export const commandSpecs: { [commandName: string]: CommandSpec } = {
     positionalArgs: [],
   },
 };
-
-/* System Logs */
 
 export const powerUpSystemLogs: SystemLog[] = [
   {
@@ -1840,205 +1839,125 @@ export const powerOffSystemLogs: SystemLog[] = [
 ];
 
 export const monacoEditorLanguageMap: { [extension: string]: string } = {
-  // ABAP
   abap: "abap",
-  // Apex
   cls: "apex",
-  // Azure CLI
   azcli: "azcli",
-  // Batch
   bat: "bat",
   cmd: "bat",
-  // Bicep
   bicep: "bicep",
-  // Cameligo
   mligo: "cameligo",
-  // Clojure
   clj: "clojure",
   cljs: "clojure",
   cljc: "clojure",
   edn: "clojure",
-  // CoffeeScript
   coffee: "coffeescript",
   litcoffee: "coffeescript",
-  // C/C++
   c: "cpp",
   h: "cpp",
   cpp: "cpp",
   hh: "cpp",
   hpp: "cpp",
   cc: "cpp",
-  // C#
   cs: "csharp",
   csx: "csharp",
-  // CSP
   csp: "csp",
-  // CSS
   css: "css",
-  // Cypher
   cql: "cypher",
-  // Dart
   dart: "dart",
-  // Dockerfile
   dockerfile: "dockerfile",
   Dockerfile: "dockerfile",
-  // ECL
   ecl: "ecl",
-  // Elixir
   ex: "elixir",
   exs: "elixir",
-  // Flow9
   flow: "flow9",
-  // F#
   fs: "fsharp",
   fsi: "fsharp",
   fsx: "fsharp",
-  // Freemarker2
   ftl: "freemarker2",
-  // Go
   go: "go",
-  // GraphQL
   graphql: "graphql",
   gql: "graphql",
-  // Handlebars
   hbs: "handlebars",
-  // HCL
   hcl: "hcl",
   tf: "hcl",
-  // HTML
   html: "html",
   htm: "html",
-  // INI
   ini: "ini",
   cfg: "ini",
-  // Java
   java: "java",
-  // JavaScript
   js: "javascript",
   cjs: "javascript",
   mjs: "javascript",
-  // Julia
   jl: "julia",
-  // Kotlin
   kt: "kotlin",
   kts: "kotlin",
-  // Less
   less: "less",
-  // Lexon
   lex: "lexon",
-  // Lua
   lua: "lua",
-  // Liquid
   liquid: "liquid",
-  // M3
   m3: "m3",
-  // Markdown
   md: "markdown",
   markdown: "markdown",
-  // MDX
   mdx: "mdx",
-  // MIPS
   s: "mips",
   asm: "mips",
-  // MS DAX
   dax: "msdax",
-  // Pascal
   pas: "pascal",
   pp: "pascal",
-  // Pascaligo
   ligolang: "pascaligo",
-  // Perl
   pl: "perl",
   pm: "perl",
-  // PostgreSQL
   psql: "pgsql",
-  // PHP
   php: "php",
-  // PLA
   pla: "pla",
-  // Postiats
   dats: "postiats",
   sats: "postiats",
   hats: "postiats",
-  // Power Query
   pq: "powerquery",
   m: "powerquery",
-  // PowerShell
   ps1: "powershell",
   psm1: "powershell",
   psd1: "powershell",
-  // Protobuf
   proto: "protobuf",
-  // Pug
   pug: "pug",
   jade: "pug",
-  // Python
   py: "python",
   pyw: "python",
-  // Q#
   qs: "qsharp",
-  // R
   r: "r",
-  // Razor
   cshtml: "razor",
-  // Redis
   redis: "redis",
-  // Redshift
   redshift: "redshift",
-  // reStructuredText
   rst: "restructuredtext",
-  // Ruby
   rb: "ruby",
-  // Rust
   rs: "rust",
-  // SB
   sb: "sb",
-  // Scala
   scala: "scala",
   sc: "scala",
-  // Scheme
   scm: "scheme",
-  // SCSS
   scss: "scss",
-  // Shell
   sh: "shell",
   bash: "shell",
   zsh: "shell",
-  // Solidity
   sol: "solidity",
-  // Sophia
   aes: "sophia",
-  // Sparql
   rq: "sparql",
-  // SQL
   sql: "sql",
-  // ST
   st: "st",
-  // Swift
   swift: "swift",
-  // SystemVerilog
   sv: "systemverilog",
   svh: "systemverilog",
-  // Tcl
   tcl: "tcl",
-  // Twig
   twig: "twig",
-  // TypeScript
   ts: "typescript",
-  // TypeSpec
   cadl: "typespec",
-  // Visual Basic
   vb: "vb",
-  // WGSL
   wgsl: "wgsl",
-  // XML
   xml: "xml",
   xsd: "xml",
   svg: "xml",
-  // YAML
   yaml: "yaml",
   yml: "yaml",
-  // Plain Text (fallback)
   txt: "plaintext",
   text: "plaintext",
   log: "plaintext",

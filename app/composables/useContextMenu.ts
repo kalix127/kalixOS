@@ -57,8 +57,6 @@ export function useContextMenu() {
     left: `${x.value}px`,
   }));
 
-  // Handlers
-
   const createNewFolder = () => {
     if (desktopNode.value) {
       createNode(
@@ -186,7 +184,6 @@ export function useContextMenu() {
     closeContextMenu();
   };
 
-  /* Menu options based on type */
   const getDesktopOptions = () => [
     { label: t("new_folder"), action: () => createNewFolder() },
     { label: t("new_document"), action: () => createNewDocument() },
@@ -305,7 +302,6 @@ export function useContextMenu() {
       return [];
     }
 
-    // Add open option if app is not open
     if (!node.isOpen) {
       options.push(
         { isSeparator: true },
@@ -318,7 +314,6 @@ export function useContextMenu() {
       );
     }
 
-    // Add quit option if app is open
     if (node.isOpen) {
       options.push(
         { isSeparator: true },
@@ -351,12 +346,8 @@ export function useContextMenu() {
     const actualTargetType: ContextMenuTargetType | null = targetType.value;
     const actualTargetNode: Node | null = targetNode.value;
 
-    // Handle shortcuts
-    if (
-      targetType.value === "shortcut"
-      && (targetNode.value as ShortcutNode).targetId
-    ) {
-      const shortcut = targetNode.value as ShortcutNode;
+    if (actualTargetType === "shortcut" && actualTargetNode?.type === "shortcut") {
+      const shortcut = actualTargetNode;
       const target = findNodeByIdRecursive(
         desktopStore.fileSystem,
         shortcut.targetId,
@@ -380,13 +371,21 @@ export function useContextMenu() {
       case "desktop":
         return getDesktopOptions();
       case "file":
-        return getFileOptions(actualTargetNode as FileNode);
+        return actualTargetNode?.type === "file"
+          ? getFileOptions(actualTargetNode)
+          : [];
       case "folder":
-        return getFolderOptions(actualTargetNode as FolderNode);
+        return actualTargetNode?.type === "folder"
+          ? getFolderOptions(actualTargetNode)
+          : [];
       case "dock":
-        return getDockOptions(actualTargetNode as AppNode);
+        return actualTargetNode?.type === "app"
+          ? getDockOptions(actualTargetNode)
+          : [];
       case "app":
-        return getAppOptions(actualTargetNode as AppNode);
+        return actualTargetNode?.type === "app"
+          ? getAppOptions(actualTargetNode)
+          : [];
       default:
         return [];
     }

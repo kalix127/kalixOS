@@ -6,11 +6,12 @@ export const useKateStore = defineStore("kate", {
     openedNodeId: null,
   }),
   getters: {
-    openedNode(state) {
+    openedNode(state): FileNode | null {
       if (!state.openedNodeId)
         return null;
       const { nodeMap } = storeToRefs(useDesktopStore());
-      return nodeMap.value.get(state.openedNodeId) as FileNode;
+      const node = nodeMap.value.get(state.openedNodeId);
+      return node && node.type === "file" ? node : null;
     },
     editorLanguage(): string {
       if (this.openedNode && this.openedNode.type === "file") {

@@ -10,9 +10,10 @@ export const useFilesStore = defineStore("files", {
     isSearching: false,
   }),
   getters: {
-    openedNode(state) {
+    openedNode(state): FolderNode | null {
       const { nodeMap } = storeToRefs(useDesktopStore());
-      return nodeMap.value.get(state.openedNodeId) as FolderNode;
+      const node = nodeMap.value.get(state.openedNodeId);
+      return node && node.type === "folder" ? node : null;
     },
     canMoveBack(state) {
       return state.currentHistoryIndex > 0;

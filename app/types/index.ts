@@ -5,11 +5,25 @@ export interface WifiNetwork {
   isProtected: boolean;
 }
 
+export type NodeType = "folder" | "file" | "app" | "shortcut";
+
+interface PermissionBits {
+  read: boolean;
+  write: boolean;
+  execute: boolean;
+};
+
+export interface PermissionsNode {
+  owner: PermissionBits;
+  group: PermissionBits;
+  others: PermissionBits;
+}
+
 interface BaseNode {
   id: string;
   name: string;
   icon: string;
-  type: string;
+  type: NodeType;
   permissions: PermissionsNode;
   owner: string;
   group: string;
@@ -19,12 +33,6 @@ interface BaseNode {
   isProtected?: boolean;
   isRenaming?: boolean;
   isTranslated?: boolean;
-}
-
-export interface PermissionsNode {
-  owner: { read: boolean; write: boolean; execute: boolean };
-  group: { read: boolean; write: boolean; execute: boolean };
-  others: { read: boolean; write: boolean; execute: boolean };
 }
 
 export interface FolderNode extends BaseNode {
@@ -49,7 +57,7 @@ export interface AppNode extends BaseNode {
 export interface ShortcutNode extends BaseNode {
   type: "shortcut";
   targetId: string;
-  targetType: "app" | "folder" | "file";
+  targetType: Exclude<NodeType, "shortcut">;
 }
 
 export type ContextMenuTargetType
@@ -60,8 +68,32 @@ export type ContextMenuTargetType
     | "app"
     | "shortcut";
 
-// Union type for all node types
 export type Node = FolderNode | FileNode | AppNode | ShortcutNode;
+
+export interface NodeSeed {
+  id?: string;
+  name: string;
+  icon: string;
+  type: NodeType;
+  permissions?: PermissionsNode;
+  owner?: string;
+  group?: string;
+  createdAt?: Date;
+  content?: string;
+  parentId?: string | null;
+  isProtected?: boolean;
+  isRenaming?: boolean;
+  isTranslated?: boolean;
+  children?: NodeSeed[];
+  title?: string;
+  isOpen?: boolean;
+  isMinimized?: boolean;
+  isFullscreen?: boolean;
+  isDropdownOpen?: boolean;
+  isActive?: boolean;
+  targetId?: string;
+  targetType?: Exclude<NodeType, "shortcut">;
+}
 
 export interface SystemLog {
   ok?: boolean;

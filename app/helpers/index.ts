@@ -1,4 +1,4 @@
-import type { FolderNode, Node, PermissionsNode, Process } from "@/types";
+import type { Node, NodeSeed, NodeType, PermissionsNode, Process } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import {
   defaultAppPermissions,
@@ -7,7 +7,7 @@ import {
   defaultShortcutPermissions,
 } from "@/constants";
 
-export function assignDefaultProperties(node: Node, username: string, parentId: string | null = null): Node {
+export function assignDefaultProperties(node: NodeSeed, username: string, parentId: string | null = null): Node {
   const createdAt = new Date();
 
   const newNode: Node = {
@@ -18,33 +18,23 @@ export function assignDefaultProperties(node: Node, username: string, parentId: 
     group: node.group || username.toLowerCase(),
     createdAt: node.createdAt || createdAt,
     parentId,
-  };
+  } as Node;
 
-  // Assign children for folders
   if (newNode.type === "folder") {
-    (newNode as FolderNode).children = (node as FolderNode).children || [];
-  }
-
-  // Assign content for files
-  if (newNode.type === "file") {
-    newNode.content = node.content || "";
-  }
-
-  // Recursively assign default properties for every children
-  if (
-    newNode.type === "folder"
-    && newNode.children
-    && newNode.children.length > 0
-  ) {
-    newNode.children = newNode.children.map(child =>
+    const seedChildren = node.type === "folder" ? node.children || [] : [];
+    newNode.children = seedChildren.map(child =>
       assignDefaultProperties(child, username.toLowerCase(), newNode.id),
     );
+  }
+
+  if (newNode.type === "file") {
+    newNode.content = node.content || "";
   }
 
   return newNode;
 }
 
-export function defaultPermissionsForType(type: string): PermissionsNode {
+export function defaultPermissionsForType(type: NodeType): PermissionsNode {
   switch (type) {
     case "folder":
       return defaultFolderPermissions;
@@ -83,30 +73,28 @@ export function resolvePath(
 
   for (const part of parts) {
     if (part === ".") {
-      continue; // Current directory, no change
+      continue;
     } else if (part === "..") {
       if (node.parentId) {
         const parentNode = findNodeByIdRecursive(fileSystem, node.parentId);
         if (parentNode) {
           node = parentNode;
         } else {
-          // Parent node not found
           return null;
         }
       } else {
-        // Already at root
         return null;
       }
     } else {
       if (node.type !== "folder" || !node.children) {
-        return null; // Cannot traverse further
+        return null;
       }
 
       const found = node.children.find(child => child.name === part);
       if (found) {
         node = found;
       } else {
-        return null; // Path does not exist
+        return null;
       }
     }
   }
@@ -114,23 +102,10 @@ export function resolvePath(
   return node;
 }
 
-/**
- * Checks if a given path is valid in the file system.
- * @param root The root Node of the file system.
- * @param currentDirectoryNode The current directory Node.
- * @param path The path to validate.
- * @returns True if the path is valid, false otherwise.
- */
 export function isPathValid(root: Node, currentDirectoryNode: Node, path: string): boolean {
   return !!resolvePath(root, currentDirectoryNode, path);
 }
 
-/**
- * Recursively finds a node by its ID starting from a node.
- * @param node The current Node.
- * @param id The ID to search for.
- * @returns The Node if found, otherwise null.
- */
 export function findNodeByIdRecursive(node: Node, id: string): Node | null {
   if (node.id === id)
     return node;
@@ -144,12 +119,6 @@ export function findNodeByIdRecursive(node: Node, id: string): Node | null {
   return null;
 }
 
-/**
- * Finds a node based on the provided path segments.
- * @param node The current Node.
- * @param pathSegments The remaining segments of the path.
- * @returns The Node if found, otherwise null.
- */
 export function findNodeByPath(node: Node, pathSegments: string[]): Node | null {
   if (pathSegments.length === 0) {
     return node;
@@ -169,12 +138,6 @@ export function findNodeByPath(node: Node, pathSegments: string[]): Node | null 
   return findNodeByPath(child, remainingSegments);
 }
 
-/**
- * Finds a node by its absolute path.
- * @param root The root Node.
- * @param path The absolute path string (e.g., "/home/user/Desktop").
- * @returns The Node if found, otherwise null.
- */
 export function findNodeByAbsolutePath(root: Node, path: string): Node | null {
   if (path === "/") {
     return root;
@@ -184,11 +147,6 @@ export function findNodeByAbsolutePath(root: Node, path: string): Node | null {
   return findNodeByPath(root, pathSegments);
 }
 
-/**
- * Gets the full path and ordered list of nodes of a node by traversing up to the root.
- * @param root The root Node to traverse up to.
- * @param node The Node to get the path and nodes for.
- */
 export function getNodeFullPath(root: Node, node: Node): { absolutePath: string; nodes: Node[] } {
   const pathParts: string[] = [];
   const nodes: Node[] = [];
@@ -216,21 +174,10 @@ export function getNodeFullPath(root: Node, node: Node): { absolutePath: string;
   };
 }
 
-/**
- * Splits a UNIX-like path into its components.
- * @param path The path string (e.g., "/home/user/Desktop").
- * @returns An array of path segments.
- */
 export function splitPath(path: string): string[] {
   return path.split("/").filter(segment => segment.length > 0);
 }
 
-/**
- * Gets the appropriate icon for a node based on its type and name.
- * @param type The node type (e.g. 'file', 'folder', etc).
- * @param name The node name.
- * @returns A string representing the icon name.
- */
 export function getNodeIcon(type: string, name: string): string {
   if (type === "folder") {
     return "folder:folder";
@@ -309,12 +256,6 @@ export function getNextPid(processes: Process[]): number {
   return highestPid + randomIncrement;
 }
 
-/**
- * Formats a number of bytes into a human-readable string with units.
- * @param chars The length of the file in characters (bytes).
- * @param decimals The number of decimal places to include.
- * @returns The formatted string (e.g., "15 GiB").
- */
 export function formatNodeSize(chars: number, decimals: number = 1): string {
   if (chars === 0)
     return "0 B";
@@ -337,6 +278,5 @@ export function generateRandomDelays(
 ): number[] {
   const randomNumbers = Array.from({ length: count }, () => Math.random());
   const sumOfRandoms = randomNumbers.reduce((acc, num) => acc + num, 0);
-  // Normalize the random numbers so that their sum equals totalTime
   return randomNumbers.map(random => (random / sumOfRandoms) * totalTime);
 }

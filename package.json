@@ -64,7 +64,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/uuid": "^11.0.0",
     "eslint": "^10.0.0",
-    "eslint-plugin-format": "^1.4.0",
+    "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-tailwindcss": "^3.18.2",
     "typescript": "^5.9.3"
   },

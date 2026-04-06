@@ -40,7 +40,7 @@
     "@xterm/xterm": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-vue-next": "^0.577.0",
+    "lucide-vue-next": "^1.0.0",
     "monaco-editor": "^0.55.1",
     "nuxt": "^4.4.2",
     "nuxt-umami": "3.2.1",

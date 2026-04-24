@@ -48,7 +48,7 @@
     "pinia": "^3.0.4",
     "qss": "^3.0.0",
     "radix-vue": "^1.9.17",
-    "shadcn-nuxt": "^2.5.1",
+    "shadcn-nuxt": "^2.6.2",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^13.0.0",
@@ -60,13 +60,13 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^8.0.0",
+    "@antfu/eslint-config": "^8.2.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/uuid": "^11.0.0",
-    "eslint": "^10.2.0",
+    "eslint": "^10.2.1",
     "eslint-plugin-format": "^2.0.1",
-    "eslint-plugin-tailwindcss": "^3.18.2",
-    "typescript": "^6.0.2"
+    "eslint-plugin-tailwindcss": "^3.18.3",
+    "typescript": "^6.0.3"
   },
   "overrides": {
     "vue": "latest"

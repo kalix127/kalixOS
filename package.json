@@ -2,7 +2,7 @@
   "name": "kalixos",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@10.33.4",
   "description": "A modern web-based operating system that simulates a desktop environment in your browser.",
   "author": "Gianluca Iavicoli",
   "license": "MIT",
@@ -48,8 +48,8 @@
     "pinia": "^3.0.4",
     "qss": "^3.0.0",
     "radix-vue": "^1.9.17",
-    "shadcn-nuxt": "^2.6.2",
-    "tailwind-merge": "^3.5.0",
+    "shadcn-nuxt": "^2.7.1",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^13.0.0",
     "vee-validate": "^4.15.1",
@@ -60,7 +60,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^8.2.0",
+    "@antfu/eslint-config": "^8.3.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/uuid": "^11.0.0",
     "eslint": "^10.3.0",

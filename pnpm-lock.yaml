@@ -78,16 +78,16 @@ importers:
         specifier: ^1.9.17
         version: 1.9.17(vue@3.5.34(typescript@6.0.3))
       shadcn-nuxt:
-        specifier: ^2.6.2
+        specifier: ^2.7.3
         version: 2.7.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.3)
       tailwind-merge:
-        specifier: ^3.5.0
+        specifier: ^3.6.0
         version: 3.6.0
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.19(yaml@2.9.0))
       uuid:
-        specifier: ^13.0.0
+        specifier: ^13.0.2
         version: 13.0.2
       vee-validate:
         specifier: ^4.15.1
@@ -109,7 +109,7 @@ importers:
         version: 3.25.76
     devDependencies:
       '@antfu/eslint-config':
-        specifier: ^8.2.0
+        specifier: ^8.3.0
         version: 8.3.0(@typescript-eslint/rule-tester@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/typescript-estree@8.59.4(typescript@6.0.3))(@typescript-eslint/utils@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(@vue/compiler-sfc@3.5.34)(eslint-plugin-format@2.0.1(eslint@10.4.0(jiti@2.7.0)))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@tailwindcss/typography':
         specifier: ^0.5.19
@@ -118,7 +118,7 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0
       eslint:
-        specifier: ^10.3.0
+        specifier: ^10.4.0
         version: 10.4.0(jiti@2.7.0)
       eslint-plugin-format:
         specifier: ^2.0.1

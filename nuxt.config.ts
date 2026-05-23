@@ -1,8 +1,16 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   vite: {
     optimizeDeps: {
       exclude: ["monaco-editor"],
+      include: [
+        "@vueuse/core",
+        "class-variance-authority",
+        "clsx",
+        "radix-vue",
+        "tailwind-merge",
+        "uuid",
+      ],
     },
   },
   modules: [

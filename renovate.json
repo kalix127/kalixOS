@@ -8,7 +8,8 @@
     "vitest",
     "vue",
     "zod",
-    "@vee-validate/zod"
+    "@vee-validate/zod",
+    "@nuxtjs/i18n"
   ],
   "assignees": [
     "@kalix127"

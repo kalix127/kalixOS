@@ -28,6 +28,7 @@ export default antfu({
     "symbol-description": "off",
     "regexp/no-obscure-range": "off",
     "yaml/plain-scalar": "off",
+    "pnpm/yaml-enforce-settings": "off",
     "tailwind/classnames-order": ["warn"],
     "tailwind/enforces-negative-arbitrary-values": ["warn"],
     "tailwind/enforces-shorthand": ["error"],

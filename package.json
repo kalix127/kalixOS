@@ -48,10 +48,10 @@
     "pinia": "^3.0.4",
     "qss": "^3.0.0",
     "radix-vue": "^1.9.17",
-    "shadcn-nuxt": "^2.6.2",
-    "tailwind-merge": "^3.5.0",
+    "shadcn-nuxt": "^2.7.3",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^13.0.0",
+    "uuid": "^13.0.2",
     "vee-validate": "^4.15.1",
     "vue": "latest",
     "vue-router": "latest",
@@ -60,10 +60,10 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^8.2.0",
+    "@antfu/eslint-config": "^8.3.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/uuid": "^11.0.0",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-tailwindcss": "^3.18.3",
     "typescript": "^6.0.3"
